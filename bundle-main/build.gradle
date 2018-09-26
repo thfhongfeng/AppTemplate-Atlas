@@ -8,7 +8,7 @@ atlas {
     }
     buildTypes {
         debug {
-            baseApFile project.rootProject.file('app/build/outputs/apk/template-debug.ap')
+            baseApFile project.rootProject.file('app/build/outputs/apk/app-debug.ap')
         }
     }
 }
