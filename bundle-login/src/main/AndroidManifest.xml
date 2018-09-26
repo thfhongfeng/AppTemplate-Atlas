@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pine.login">
+
+    <application
+        android:name=".app.LoginApplication"
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <!-- atlas remote router begin -->
+        <meta-data
+            android:name="atlas.transaction.intent.action.login.LoginBundleRemoteAction"
+            android:value="com.pine.login.remote.atlas.LoginBundleRemote" />
+        <!-- atlas remote router end -->
+    </application>
+
+</manifest>

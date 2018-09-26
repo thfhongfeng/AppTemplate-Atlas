@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+// atlas配置 begin
+apply plugin: 'com.taobao.atlas'
+
+atlas {
+    bundleConfig {
+        awbBundle true
+    }
+    buildTypes {
+        debug {
+            baseApFile project.rootProject.file('app/build/outputs/apk/template-debug.ap')
+        }
+    }
+}
+// atlas配置 end
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "27.0.3"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.+'
+    testCompile 'junit:junit:4.12'
+
+    /**
+     * 主dex中已经打入了必要的公用代码，在runtime时，atlas框架会自动找到主dex中的class使用，所以可以使用providedCompile，表示不需要再重复打入
+     */
+    providedCompile project(':base')
+}

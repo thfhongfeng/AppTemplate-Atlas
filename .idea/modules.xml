@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AppTemplate.iml" filepath="$PROJECT_DIR$/AppTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-welcome/app-welcome.iml" filepath="$PROJECT_DIR$/app-welcome/app-welcome.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base-lib-immersionbar/base-lib-immersionbar.iml" filepath="$PROJECT_DIR$/base-lib-immersionbar/base-lib-immersionbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-businessa/bundle-businessa.iml" filepath="$PROJECT_DIR$/bundle-businessa/bundle-businessa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-businessb/bundle-businessb.iml" filepath="$PROJECT_DIR$/bundle-businessb/bundle-businessb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-login/bundle-login.iml" filepath="$PROJECT_DIR$/bundle-login/bundle-login.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-main/bundle-main.iml" filepath="$PROJECT_DIR$/bundle-main/bundle-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-user/bundle-user.iml" filepath="$PROJECT_DIR$/bundle-user/bundle-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/router/router.iml" filepath="$PROJECT_DIR$/router/router.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tool/tool.iml" filepath="$PROJECT_DIR$/tool/tool.iml" />
+    </modules>
+  </component>
+</project>

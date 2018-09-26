@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/base_bg_top_round_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/dp_10"
+            android:text="@string/base_cancel" />
+
+        <TextView
+            android:id="@+id/confirm_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/dp_10"
+            android:text="@string/base_confirm" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_5">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_one"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curtain="false"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/divider"
+            app:wheel_indicator_size="@dimen/dp_1"
+            app:wheel_item_space="@dimen/dp_3"
+            app:wheel_item_text_size="@dimen/sp_20"
+            app:wheel_selected_item_position="8"
+            app:wheel_selected_item_text_color="@color/dark_gray"
+            app:wheel_visible_item_count="9" />
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_two"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curtain="false"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/divider"
+            app:wheel_indicator_size="@dimen/dp_1"
+            app:wheel_item_space="@dimen/dp_3"
+            app:wheel_item_text_size="@dimen/sp_20"
+            app:wheel_selected_item_position="8"
+            app:wheel_selected_item_text_color="@color/dark_gray"
+            app:wheel_visible_item_count="9" />
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/wheel_three"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curtain="false"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/divider"
+            app:wheel_indicator_size="@dimen/dp_1"
+            app:wheel_item_space="@dimen/dp_3"
+            app:wheel_item_text_size="@dimen/sp_20"
+            app:wheel_selected_item_position="8"
+            app:wheel_selected_item_text_color="@color/dark_gray"
+            app:wheel_visible_item_count="9" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="new_version_available">发现新版本(%s)，是否要更新?</string>
+    <string name="version_update_fail">更新失败</string>
+    <string name="version_update_cancel">更新被取消</string>
+</resources>

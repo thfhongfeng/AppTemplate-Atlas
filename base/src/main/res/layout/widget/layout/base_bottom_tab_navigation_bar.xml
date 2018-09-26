@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_50"
+    android:background="@color/light_gray"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_0.5"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:layout_marginTop="@dimen/dp_5">
+
+    <LinearLayout
+        android:id="@+id/bottom_main_home_ll"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/bottom_main_home_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/base_selector_main_tab_home" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_6"
+            android:text="@string/base_main_tab_home"
+            android:textColor="#666666"
+            android:textSize="@dimen/sp_13"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_user_center_ll"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/bottom_user_center_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/base_selector_main_tab_mine" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_6"
+            android:text="@string/base_main_tab_mine"
+            android:textColor="#666666"
+            android:textSize="@dimen/sp_13"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="login_login_title">登录</string>
+    <string name="login_mobile_hint">手机号</string>
+    <string name="login_pwd_hint">密码</string>
+    <string name="login_forget_pwd">忘记密码？</string>
+    <string name="login_use_third_account_login">使用第三方账号登陆</string>
+    <string name="login_no_account">还没有账号？现在去</string>
+    <string name="login_free_register"><u>免费注册</u></string>
+    <string name="login_login_btn">登录</string>
+    <string name="login_input_empty_msg">手机号或密码不能为空</string>
+    <string name="login_mobile_incorrect_format">手机号格式不正确</string>
+</resources>

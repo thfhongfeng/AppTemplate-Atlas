@@ -1,0 +1,4 @@
+<resources>
+    <string name="router_bundle_not_ready">该业务尚未准备就绪！</string>
+    <string name="router_bundle_not_open">没有该业务权限！</string>
+</resources>
