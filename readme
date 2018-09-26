@@ -15,14 +15,14 @@ atlas的demo的github地址：https://github.com/alibaba/atlas/tree/master/atlas
 1. 推荐所有业务模块使用MVP架构模式。
 2. bundle业务模块所有的资源必须以bundle名小写开头，例如login模块的xxx资源必须写为"login_xxx"。
 3. bundle业务模块所有的类必须以bundle名首字母大写开头，例如login模块的类Xxx必须写为"LoginXxx"。
-4. 所有bundle间的通信必须要统一采用router进行。如何新增模块（结合atlas的通信方式说明文档来理解）：
+4. 所有bundle间的通信必须要统一采用router进行。如何新增模块通信（结合atlas的通信方式说明文档来理解）：
    a. 各自模块中的manifest文件中添加meta-data（可参考已有模块和atlas的通信方式说明文档）。
    b. 各自模块中编写XxxBundleRemote（可参考已有模块，基本内容都差不多）和XxxBundleRemoteService类（通信方法写在该类中，使用注解方式）。
    c. router模块中继承IRouterManager编写各自模块的通信管理类（可参考已有模块，基本内容都差不多）。
    d. 模块间通信使用方式：
       RouterFactory.getXxxBundleManager().callYyCommand(Activity activity, final String commandName, final Bundle args, final IRouterCallback callback);
 5. 所有业务模块必须使用atlas的gradle插件进行构建。
-6. 编码是特别是编写公共的类库时，请确认是否类库的共性：
+6. 编码时特别是编写公共类库时，请确认该类库的共性：
    a. 有项目共性，与具体业务无关的统一放在base模块中。
    b. 无项目共性，与业务无关的的统一放在tool模块中。
 7. 业务的Constants常量类请统一继承base模块的BaseConstants类。
