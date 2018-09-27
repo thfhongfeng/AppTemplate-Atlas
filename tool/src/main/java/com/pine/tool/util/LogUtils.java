@@ -25,6 +25,7 @@ public class LogUtils {
     private static boolean DEBUG = BuildConfig.DEBUG;
 
     public static void setDebuggable(boolean isDebuggable) {
+        Log.d("LogUtils", "setDebuggable isDebuggable:" + isDebuggable);
         DEBUG = isDebuggable;
     }
 

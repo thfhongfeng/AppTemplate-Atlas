@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 // atlas配置 begin
-version = getEnvValue("versionName", "1.0.1");
 def apVersion = getEnvValue("apVersion", "");
 apply plugin: 'com.taobao.atlas'
 // atlas配置 end
@@ -8,12 +7,23 @@ apply plugin: 'com.taobao.atlas'
 android {
     compileSdkVersion 26
     buildToolsVersion "27.0.3"
+    signingConfigs {
+        release {
+            storeFile file("../template.jks")
+            storePassword 'pine123'
+            keyAlias 'AppTemplate'
+            keyPassword 'pine123'
+        }
+    }
     defaultConfig {
-        applicationId "com.pine.template"
+        applicationId build_versions.application_id
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName version
+        versionCode build_versions.version_code
+        versionName build_versions.version_name
+
+        manifestPlaceholders = [app_name: build_versions.app_name]
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -21,17 +31,61 @@ android {
         enabled = true
     }
 
+    /**
+     * 不要使用多渠道和自定buildType方式，因为atlas对这块支持不完善
+     *
+     * 插件	                  productFlavors	      自定义buildType
+     * google插件	              支持	                支持
+     * atlasplugin 构建apk	      支持	               不支持
+     * atlasplugin 构建动态部署	 不支持	               不支持
+     **/
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
+            debuggable false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                // 显示app名称+当前版本号
+                def fileName = "${build_versions.apk_head_name}-V${variant.versionName}"
+//                // 加入打包时间
+//                fileName = fileName + "-${releaseTime()}"
+                // 如果是debug版本，加入beta版本号
+                if ('debug'.equals(variant.buildType.name)) {
+                    fileName = fileName + "-beta.apk"
+                } else {
+                    // 如果是release版本，直接显示
+                    fileName = fileName + "-release.apk"
+                }
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
         }
     }
 }
 
+//// 显示的时间格式，形如20171110
+//def releaseTime() {
+//    return new Date().format("yyyyMMdd", TimeZone.getDefault());
+//}
+
 // atlas配置 begin
 atlas {
     atlasEnabled true
+
+    manifestOptions {
+        removeCustomPermission false
+    }
 
     buildTypes {
         debug {

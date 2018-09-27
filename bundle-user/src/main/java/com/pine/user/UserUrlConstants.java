@@ -1,11 +1,11 @@
 package com.pine.user;
 
-import com.pine.base.UrlConstants;
+import com.pine.base.BaseUrlConstants;
 
 /**
  * Created by tanghongfeng on 2018/9/13
  */
 
-public interface UserUrlConstants extends UrlConstants {
+public interface UserUrlConstants extends BaseUrlConstants {
 
 }
