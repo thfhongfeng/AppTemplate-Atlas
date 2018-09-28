@@ -1,4 +1,4 @@
-package com.pine.base.widget.view;
+package com.pine.tool.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 
-import com.pine.base.R;
+import com.pine.tool.R;
 
 /**
  * Created by tanghongfeng on 2018/9/18
@@ -16,12 +16,15 @@ import com.pine.base.R;
 
 public class ThousandthNumberTextView extends android.support.v7.widget.AppCompatTextView {
 
-    private String spaceChar = ",";
-    private MaxLengthOverflowListener maxLengthOverflowListener = null;
-    private AfterTextChangedListener listener = null;
-    private int decimalNum;
-    private int numberMaxLength;
-    private boolean decimalAllow;
+    // 千分位分隔符
+    private String mSpaceChar = ",";
+    private AfterTextChangedListener mAfterTextChangedListener = null;
+    // 是否允许小数位
+    private boolean mDecimalAllow;
+    // 小数位数
+    private int mDecimalNum;
+    // 非小数位最大允许位数
+    private int mNumberMaxLength;
 
     public ThousandthNumberTextView(Context context) {
         super(context);
@@ -31,14 +34,14 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
         super(context, attrs);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ThousandthNumberTextView);
-        decimalNum = typedArray.getInteger(R.styleable.ThousandthNumberTextView_textView_decimalNum, 2);
-        numberMaxLength = typedArray.getInteger(R.styleable.ThousandthNumberTextView_textView_numberMaxLength, 99);
-        decimalAllow = typedArray.getBoolean(R.styleable.ThousandthNumberTextView_textView_decimalAllow, false);
-        spaceChar = typedArray.getString(R.styleable.ThousandthNumberTextView_textView_spaceChar);
-        if (TextUtils.isEmpty(spaceChar)) {
-            spaceChar = ",";
+        mDecimalNum = typedArray.getInteger(R.styleable.ThousandthNumberTextView_textView_decimalNum, 2);
+        mNumberMaxLength = typedArray.getInteger(R.styleable.ThousandthNumberTextView_textView_numberMaxLength, 99);
+        mDecimalAllow = typedArray.getBoolean(R.styleable.ThousandthNumberTextView_textView_decimalAllow, false);
+        mSpaceChar = typedArray.getString(R.styleable.ThousandthNumberTextView_textView_spaceChar);
+        if (TextUtils.isEmpty(mSpaceChar)) {
+            mSpaceChar = ",";
         }
-        if (decimalAllow) {
+        if (mDecimalAllow) {
             setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else {
             setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -62,17 +65,14 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
                 lastText = s.toString();
             }
 
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int length = s.length();
-
                 if (!isChange) {
-                    int selectIndex = getSelectionEnd();
                     if (lastLength < length) {
-                        String currentText = s.toString().replace(spaceChar, "");
+                        String currentText = s.toString().replace(mSpaceChar, "");
                         String[] splitArr = currentText.split("\\.", -1);
-                        if (splitArr[0].length() > numberMaxLength) {
+                        if (splitArr[0].length() > mNumberMaxLength) {
                             setText(lastText);
                             return;
                         }
@@ -92,18 +92,18 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
 
             private String addSpace(String currentText) {
                 StringBuffer sb = new StringBuffer("");
-                currentText = currentText.toString().replace(spaceChar, "");
+                currentText = currentText.toString().replace(mSpaceChar, "");
                 String[] splitArr = currentText.split("\\.", -1);
                 char[] charArray = splitArr[0].toCharArray();
                 int startCount = charArray.length % 3;
                 for (int i = 0; i < charArray.length; i++) {
                     if ((i - startCount) % 3 == 0 && i != 0) {
-                        sb.append(spaceChar);
+                        sb.append(mSpaceChar);
                     }
                     sb.append(charArray[i]);
                 }
-                if (splitArr.length > 1 && decimalAllow) {
-                    sb.append(".").append(splitArr[1].length() > decimalNum ? splitArr[1].substring(0, decimalNum) : splitArr[1]);
+                if (splitArr.length > 1 && mDecimalAllow) {
+                    sb.append(".").append(splitArr[1].length() > mDecimalNum ? splitArr[1].substring(0, mDecimalNum) : splitArr[1]);
                 }
                 return sb.toString();
             }
@@ -111,9 +111,8 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
             @Override
             public void afterTextChanged(Editable s) {
                 if (!isChange) {
-                    // 对回调方法进行调用，使监听回调的地方得到当前文本框中格式化以后的字符串结果
-                    if (listener != null) {
-                        listener.afterTextChanged(s.toString().replace(spaceChar, ""));
+                    if (mAfterTextChangedListener != null) {
+                        mAfterTextChangedListener.afterTextChanged(s.toString().replace(mSpaceChar, ""));
                     }
                 }
             }
@@ -121,8 +120,8 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
     }
 
     public void setDecimalAllow(boolean decimalAllow) {
-        this.decimalAllow = decimalAllow;
-        if (decimalAllow) {
+        mDecimalAllow = decimalAllow;
+        if (mDecimalAllow) {
             setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else {
             setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -130,28 +129,23 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
     }
 
     public void setDecimalNum(int decimalNum) {
-        this.decimalNum = decimalNum;
+        mDecimalNum = decimalNum;
     }
 
-    public void setNumberMaxLength(int numberMaxLength, MaxLengthOverflowListener lengthOverflowListener) {
-        this.numberMaxLength = numberMaxLength;
-        this.maxLengthOverflowListener = lengthOverflowListener;
+    public void setNumberMaxLength(int numberMaxLength) {
+        mNumberMaxLength = numberMaxLength;
     }
 
     public void setSpaceChar(String spaceChar) {
-        this.spaceChar = spaceChar;
+        mSpaceChar = spaceChar;
     }
 
     public void setAfterTextChangedListener(AfterTextChangedListener listener) {
-        this.listener = listener;
-    }
-
-    public void setMaxLengthOverflowListener(MaxLengthOverflowListener listener) {
-        this.maxLengthOverflowListener = listener;
+        mAfterTextChangedListener = listener;
     }
 
     public String getOriginalText() {
-        return getText().toString().replace(spaceChar, "");
+        return getText().toString().replace(mSpaceChar, "");
     }
 
     /**
@@ -159,9 +153,5 @@ public class ThousandthNumberTextView extends android.support.v7.widget.AppCompa
      */
     public interface AfterTextChangedListener {
         void afterTextChanged(String text);
-    }
-
-    public interface MaxLengthOverflowListener {
-        void onLengthOverflow();
     }
 }

@@ -1,0 +1,71 @@
+/**
+ * 编译打包参数
+ */
+def build_versions = [:]
+build_versions.compileSdkVersion = 26
+build_versions.buildToolsVersion = "27.0.3"
+build_versions.minSdkVersion = 21
+build_versions.targetSdkVersion = 26
+
+build_versions.storeFile = "../template.jks"
+build_versions.storePassword = "pine123"
+build_versions.keyAlias = "AppTemplate"
+build_versions.keyPassword = "pine123"
+
+build_versions.applicationId = "com.pine.template"
+build_versions.versionCode = 1
+build_versions.versionName = "1.0.1"
+
+build_versions.apk_head_name = "pine_app_template"
+build_versions.app_name = "App模板"
+ext.build_versions = build_versions
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * url地址
+ */
+def build_url = [:]
+build_url.base_url = "http://www.baidu.com/"
+ext.build_url = build_url
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * 第三方KEY
+ */
+def build_app_key = [:]
+ext.build_app_key = build_app_key
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * 依赖
+ */
+def build_dependency = [
+        // 测试 dependency
+        "test_espresso_core"    : 'com.android.support.test.espresso:espresso-core:2.2.2',
+        "test_junit"            : 'junit:junit:4.12',
+
+        // android官方 dependency
+        "appcompat_v7"          : 'com.android.support:appcompat-v7:26.+',
+        "constraint_layout"     : 'com.android.support.constraint:constraint-layout:1.0.2',
+        "support_design"        : 'com.android.support:design:26.+',
+
+        // 阿里atlas dependency
+        "atlas_core"            : 'com.taobao.android:atlas_core:5.0.8.0-rc7@aar',
+
+        // google官方 dependency
+        "google_gson"           : 'com.google.code.gson:gson:2.6.2',
+
+        // 第三方 dependency
+        "nohttp_okhttp"         : 'com.yanzhenjie.nohttp:okhttp:1.1.1',
+        "aigestudio_wheelpicker": 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
+]
+ext.build_dependency = build_dependency

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.R;
-import com.pine.base.widget.view.ThousandthNumberEditText;
+import com.pine.tool.widget.ThousandthNumberEditText;
 
 import java.util.ArrayList;
 import java.util.List;

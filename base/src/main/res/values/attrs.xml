@@ -3,18 +3,4 @@
     <declare-styleable name="BottomTabNavigationBar">
         <attr name="selectedItem" format="integer"></attr>
     </declare-styleable>
-
-    <declare-styleable name="ThousandthNumberTextView">
-        <attr name="textView_decimalNum" format="integer"></attr>
-        <attr name="textView_decimalAllow" format="boolean"></attr>
-        <attr name="textView_spaceChar" format="string"></attr>
-        <attr name="textView_numberMaxLength" format="integer"></attr>
-    </declare-styleable>
-
-    <declare-styleable name="ThousandthNumberEditText">
-        <attr name="editText_decimalNum" format="integer"></attr>
-        <attr name="editText_decimalAllow" format="boolean"></attr>
-        <attr name="editText_spaceChar" format="string"></attr>
-        <attr name="editText_numberMaxLength" format="integer"></attr>
-    </declare-styleable>
 </resources>

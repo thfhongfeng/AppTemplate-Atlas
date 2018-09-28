@@ -5,22 +5,22 @@ apply plugin: 'com.taobao.atlas'
 // atlas配置 end
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+    compileSdkVersion build_versions.compileSdkVersion
+    buildToolsVersion build_versions.buildToolsVersion
     signingConfigs {
         release {
-            storeFile file("../template.jks")
-            storePassword 'pine123'
-            keyAlias 'AppTemplate'
-            keyPassword 'pine123'
+            storeFile file(build_versions.storeFile)
+            storePassword build_versions.storePassword
+            keyAlias build_versions.keyAlias
+            keyPassword build_versions.keyPassword
         }
     }
     defaultConfig {
-        applicationId build_versions.application_id
-        minSdkVersion 21
-        targetSdkVersion 26
-        versionCode build_versions.version_code
-        versionName build_versions.version_name
+        applicationId build_versions.applicationId
+        minSdkVersion build_versions.minSdkVersion
+        targetSdkVersion build_versions.targetSdkVersion
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
 
         manifestPlaceholders = [app_name: build_versions.app_name]
 
@@ -110,12 +110,14 @@ String getEnvValue(key, defValue) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+    androidTestCompile(build_dependency["test_espresso_core"], {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    testCompile build_dependency["test_junit"]
+
+    compile build_dependency["appcompat_v7"]
+    compile build_dependency["constraint_layout"]
 
     // 主体基础模块 begin
     compile project(':base')
@@ -123,7 +125,7 @@ dependencies {
     // 主体基础模块 end
 
     // atlas配置 begin
-    compile('com.taobao.android:atlas_core:5.0.8.0-rc7@aar') {
+    compile(build_dependency["atlas_core"]) {
         transitive = true
     }
     // bundle模块 begin

@@ -82,7 +82,7 @@ public class LoadingActivity extends BaseNoActionBarActivity<ILoadingContract.Ui
             });
         }
         mUpdateConfirmDialog.show();
-        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(20000, 1000) {
 
             @Override
             public void onFinish() {
