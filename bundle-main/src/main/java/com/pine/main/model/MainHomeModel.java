@@ -35,8 +35,8 @@ public class MainHomeModel {
                 if (HTTP_REQUEST_QUERY_BUSINESS_LIST == what) {
                     ArrayList<MainHomeGridViewEntity> retList = new ArrayList<MainHomeGridViewEntity>();
                     // Test code begin
-                    res = "[{name:BusinessA,bundle:business_a_bundle,command:goBusinessAHomeActivity}," +
-                            "{name:BusinessB,bundle:business_b_bundle,command:goBusinessBHomeActivity}]";
+                    res = "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
+                            "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]";
                     // Text code end
                     retList = new Gson().fromJson(res, new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
                     }.getType());

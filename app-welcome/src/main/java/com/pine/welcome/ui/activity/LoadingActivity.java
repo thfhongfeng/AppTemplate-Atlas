@@ -8,13 +8,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.mvp.ui.activity.BaseNoActionBarActivity;
+import com.pine.base.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.base.util.DialogUtils;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.ILoadingContract;
 import com.pine.welcome.presenter.LoadingPresenter;
 
-public class LoadingActivity extends BaseNoActionBarActivity<ILoadingContract.Ui, LoadingPresenter>
+public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract.Ui, LoadingPresenter>
         implements ILoadingContract.Ui {
     private Dialog mUpdateConfirmDialog;
     private ProgressDialog mUpdateProgressDialog;
@@ -25,8 +25,9 @@ public class LoadingActivity extends BaseNoActionBarActivity<ILoadingContract.Ui
     }
 
     @Override
-    protected void initData() {
+    protected boolean initData() {
         mPresenter.setStartTime();
+        return true;
     }
 
     @Override

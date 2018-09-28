@@ -35,8 +35,8 @@ public class BundleSwitcherModel {
                 if (HTTP_REQUEST_QUERY_BUNDLE_SWITCHER == what) {
                     // Test code begin
                     res = "[{bundleKey:'login_bundle', open:true},{bundleKey:'main_bundle', open:true}," +
-                            "{bundleKey:'user_bundle', open:true},{bundleKey:'business_a_bundle', open:true}," +
-                            "{bundleKey:'business_b_bundle', open:true}]";
+                            "{bundleKey:'user_bundle', open:true},{bundleKey:'business_mvc_bundle', open:true}," +
+                            "{bundleKey:'business_mvp_bundle', open:true}]";
                     // Test code end
                     ArrayList<BundleSwitcherEntity> list = new Gson().fromJson(res, new TypeToken<ArrayList<BundleSwitcherEntity>>() {
                     }.getType());

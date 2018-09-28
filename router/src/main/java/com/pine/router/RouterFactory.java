@@ -1,7 +1,7 @@
 package com.pine.router;
 
-import com.pine.router.atlas.AtlasRouterBusinessAManager;
-import com.pine.router.atlas.AtlasRouterBusinessBManager;
+import com.pine.router.atlas.AtlasRouterBusinessMvcManager;
+import com.pine.router.atlas.AtlasRouterBusinessMvpManager;
 import com.pine.router.atlas.AtlasRouterLoginManager;
 import com.pine.router.atlas.AtlasRouterMainManager;
 import com.pine.router.atlas.AtlasRouterUserManager;
@@ -20,9 +20,9 @@ public class RouterFactory {
                 return getMainBundleManager();
             case RouterBundleKey.USER_BUNDLE_KEY:
                 return getUserBundleManager();
-            case RouterBundleKey.BUSINESS_A_BUNDLE_KEY:
+            case RouterBundleKey.BUSINESS_MVC_BUNDLE_KEY:
                 return getBusinessABundleManager();
-            case RouterBundleKey.BUSINESS_B_BUNDLE_KEY:
+            case RouterBundleKey.BUSINESS_MVP_BUNDLE_KEY:
                 return getBusinessBBundleManager();
             default:
                 return null;
@@ -42,10 +42,10 @@ public class RouterFactory {
     }
 
     public static IRouterManager getBusinessABundleManager() {
-        return AtlasRouterBusinessAManager.getInstance();
+        return AtlasRouterBusinessMvcManager.getInstance();
     }
 
     public static IRouterManager getBusinessBBundleManager() {
-        return AtlasRouterBusinessBManager.getInstance();
+        return AtlasRouterBusinessMvpManager.getInstance();
     }
 }

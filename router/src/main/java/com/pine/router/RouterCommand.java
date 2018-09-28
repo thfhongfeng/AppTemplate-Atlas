@@ -32,18 +32,26 @@ public interface RouterCommand {
      */
 
     /**
-     * Business a bundle remote command begin
+     * Business mvc bundle remote command begin
      */
-    String BUSINESS_goBusinessAHomeActivity = "goBusinessAHomeActivity";
+    String BUSINESS_goBusinessMvcHomeActivity = "goBusinessMvcHomeActivity";
     /**
-     * Business a bundle remote command end
+     * Business mvc bundle remote command end
      */
 
     /**
-     * Business b bundle remote command begin
+     * Business mvp bundle remote command begin
      */
-    String BUSINESS_goBusinessBHomeActivity = "goBusinessBHomeActivity";
+    String BUSINESS_goBusinessMvpHomeActivity = "goBusinessMvpHomeActivity";
     /**
-     * Business b bundle remote command end
+     * Business mvp bundle remote command end
+     */
+
+    /**
+     * Business mvvm bundle remote command begin
+     */
+    String BUSINESS_goBusinessMvvmHomeActivity = "goBusinessMvvmHomeActivity";
+    /**
+     * Business mvvm bundle remote command end
      */
 }

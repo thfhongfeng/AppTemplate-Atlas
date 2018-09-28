@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pine.base.mvp.ui.activity.BaseActionBarActivity;
+import com.pine.base.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.presenter.LoginPresenter;
@@ -15,7 +15,7 @@ import com.pine.login.presenter.LoginPresenter;
  * Created by tanghongfeng on 2018/9/11.
  */
 
-public class LoginActivity extends BaseActionBarActivity<ILoginContract.Ui, LoginPresenter>
+public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, LoginPresenter>
         implements ILoginContract.Ui, View.OnClickListener {
 
     private TextView login_btn_tv;
@@ -28,20 +28,8 @@ public class LoginActivity extends BaseActionBarActivity<ILoginContract.Ui, Logi
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
-        titleTv.setText(R.string.login_login_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
+    protected boolean initData() {
+        return true;
     }
 
     @Override
@@ -56,6 +44,18 @@ public class LoginActivity extends BaseActionBarActivity<ILoginContract.Ui, Logi
     @Override
     protected void afterInit() {
 
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+        titleTv.setText(R.string.login_login_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
     }
 
     @Override

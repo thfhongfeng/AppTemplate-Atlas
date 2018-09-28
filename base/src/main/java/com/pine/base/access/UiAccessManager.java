@@ -2,7 +2,7 @@ package com.pine.base.access;
 
 import android.content.Context;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by tanghongfeng on 2018/9/16
@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class UiAccessManager {
     private static volatile UiAccessManager mInstance;
-    private HashMap<String, IUiAccessInterceptor> mAccessInterceptorMap = new HashMap<String, IUiAccessInterceptor>();
+    private LinkedHashMap<String, IUiAccessExecutor> mAccessExecutorMap = new LinkedHashMap<String, IUiAccessExecutor>();
 
     private UiAccessManager() {
     }
@@ -26,19 +26,22 @@ public class UiAccessManager {
         return mInstance;
     }
 
-    public void addAccessInterceptor(String key, IUiAccessInterceptor accessInterceptor) {
-        mAccessInterceptorMap.put(key, accessInterceptor);
+    public void addAccessExecutor(String key, IUiAccessExecutor accessExecutor) {
+        mAccessExecutorMap.put(key, accessExecutor);
     }
 
-    public void removeAccessInterceptor(IUiAccessInterceptor accessInterceptor) {
-        mAccessInterceptorMap.remove(accessInterceptor);
+    public void removeAccessExecutor(IUiAccessExecutor accessExecutor) {
+        mAccessExecutorMap.remove(accessExecutor);
     }
 
-    public void clearAccessInterceptor() {
-        mAccessInterceptorMap.clear();
+    public void clearAccessExecutor() {
+        mAccessExecutorMap.clear();
     }
 
-    public boolean checkAccess(Context context) {
+    public boolean checkCanAccess(Context context) {
+        if (context == null) {
+            return false;
+        }
         UiAccessAnnotation annotation = context.getClass().getAnnotation(UiAccessAnnotation.class);
         if (annotation != null) {
             String[] types = annotation.AccessTypes();
@@ -47,7 +50,8 @@ public class UiAccessManager {
                 return false;
             }
             for (int i = 0; i < types.length; i++) {
-                if (mAccessInterceptorMap.get(types[i]) != null && mAccessInterceptorMap.get(types[i]).onInterceptor(context, levels[i])) {
+                if (mAccessExecutorMap.get(types[i]) != null &&
+                        !mAccessExecutorMap.get(types[i]).onExecute(context, levels[i])) {
                     return false;
                 }
             }

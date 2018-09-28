@@ -17,5 +17,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UiAccessAnnotation {
     String[] AccessTypes();
+
     int[] LevelValues();
 }

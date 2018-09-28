@@ -7,8 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/app-welcome/app-welcome.iml" filepath="$PROJECT_DIR$/app-welcome/app-welcome.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
       <module fileurl="file://$PROJECT_DIR$/base-lib-immersionbar/base-lib-immersionbar.iml" filepath="$PROJECT_DIR$/base-lib-immersionbar/base-lib-immersionbar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bundle-businessa/bundle-businessa.iml" filepath="$PROJECT_DIR$/bundle-businessa/bundle-businessa.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bundle-businessb/bundle-businessb.iml" filepath="$PROJECT_DIR$/bundle-businessb/bundle-businessb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-business-mvc/bundle-business-mvc.iml" filepath="$PROJECT_DIR$/bundle-business-mvc/bundle-business-mvc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bundle-business-mvp/bundle-business-mvp.iml" filepath="$PROJECT_DIR$/bundle-business-mvp/bundle-business-mvp.iml" />
       <module fileurl="file://$PROJECT_DIR$/bundle-login/bundle-login.iml" filepath="$PROJECT_DIR$/bundle-login/bundle-login.iml" />
       <module fileurl="file://$PROJECT_DIR$/bundle-main/bundle-main.iml" filepath="$PROJECT_DIR$/bundle-main/bundle-main.iml" />
       <module fileurl="file://$PROJECT_DIR$/bundle-user/bundle-user.iml" filepath="$PROJECT_DIR$/bundle-user/bundle-user.iml" />

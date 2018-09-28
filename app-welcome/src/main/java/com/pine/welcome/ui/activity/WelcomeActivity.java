@@ -1,11 +1,11 @@
 package com.pine.welcome.ui.activity;
 
-import com.pine.base.mvp.ui.activity.BaseNoActionBarActivity;
+import com.pine.base.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.IWelcomeContract;
 import com.pine.welcome.presenter.WelcomePresenter;
 
-public class WelcomeActivity extends BaseNoActionBarActivity<IWelcomeContract.Ui, WelcomePresenter>
+public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract.Ui, WelcomePresenter>
         implements IWelcomeContract.Ui {
 
     @Override
@@ -14,8 +14,8 @@ public class WelcomeActivity extends BaseNoActionBarActivity<IWelcomeContract.Ui
     }
 
     @Override
-    protected void initData() {
-
+    protected boolean initData() {
+        return true;
     }
 
     @Override

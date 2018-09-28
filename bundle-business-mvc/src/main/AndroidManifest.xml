@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pine.mvc">
+
+    <application
+        android:name=".app.MvcApplication"
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <activity
+            android:name=".ui.activity.MvcHomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <!-- atlas remote router begin -->
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.MvcBundleRemoteAction"
+            android:value="com.pine.mvc.remote.atlas.MvcBundleRemote" />
+        <!-- atlas remote router end -->
+    </application>
+</manifest>

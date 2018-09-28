@@ -7,7 +7,7 @@ atlas的demo的github地址：https://github.com/alibaba/atlas/tree/master/atlas
 3. base模块为主体基础模块，该模块放置了所有项目和业务通用基础库（与项目相关，但不与具体业务模块相关）。
 4. app为构建模块，主要用于项目初始化，构建和打包，与具体业务无关。
 5. app-welcome为入口模块，用于App入口界面的启动。主要包括loading界面（app初始数据的获取：例如版本更新情况等）和welcome界面。
-6. bundle-xxx为"xxx"业务模块。
+6. bundle-business-xxx为"xxx"业务模块。
 7. xxx-lib-yyy为 "xxx"模块对应的lib库"yyy"。
 
 

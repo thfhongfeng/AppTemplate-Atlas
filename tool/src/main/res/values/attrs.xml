@@ -27,4 +27,22 @@
         <attr name="scaleTextSize" format="dimension"></attr>
         <attr name="isTwoTextLine" format="boolean"></attr>
     </declare-styleable>
+
+    <declare-styleable name="ViewPagerTabLayout">
+        <attr name="tabLayout_divider" format="reference" />
+        <attr name="tabLayout_showDividers">
+            <flag name="none" value="0" />
+            <flag name="beginning" value="1" />
+            <flag name="middle" value="2" />
+            <flag name="end" value="4" />
+        </attr>
+        <attr name="tabLayout_margin" format="dimension" />
+        <attr name="tabLayout_marginLeft" format="dimension" />
+        <attr name="tabLayout_marginTop" format="dimension" />
+        <attr name="tabLayout_marginRight" format="dimension" />
+        <attr name="tabLayout_marginBottom" format="dimension" />
+        <attr name="tabLayout_marginStart" format="dimension" />
+        <attr name="tabLayout_marginEnd" format="dimension" />
+        <attr name="tabLayout_bottomDivider" format="reference" />
+    </declare-styleable>
 </resources>

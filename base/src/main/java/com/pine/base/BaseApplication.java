@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import com.pine.base.access.UiAccessInterceptorType;
 import com.pine.base.access.UiAccessManager;
-import com.pine.base.access.login.UiAccessLoginInterceptor;
+import com.pine.base.access.UiAccessType;
+import com.pine.base.access.executor.UiAccessLoginExecutor;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.tool.util.LogUtils;
 
@@ -16,8 +16,7 @@ import com.pine.tool.util.LogUtils;
 
 public class BaseApplication {
     private final static String TAG = LogUtils.makeLogTag(BaseApplication.class);
-    public static volatile Activity mLastCreatedActivity, mLastStartedActivity, mCurResumedActivity;
-    public static volatile Activity mLastPausedActivity, mLastStoppedActivity, mLastDestroyedActivity;
+    public static volatile Activity mCurResumedActivity;
     private static volatile boolean mIsLogin;
     private static Application mApplication;
 
@@ -36,7 +35,7 @@ public class BaseApplication {
 
         HttpRequestManagerProxy.init(application);
 
-        UiAccessManager.getInstance().addAccessInterceptor(UiAccessInterceptorType.LOGIN, new UiAccessLoginInterceptor());
+        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.LOGIN, new UiAccessLoginExecutor());
     }
 
     private static void registerActivity() {
@@ -44,13 +43,11 @@ public class BaseApplication {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 LogUtils.d(TAG, activity + " on created");
-                mLastCreatedActivity = activity;
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
                 LogUtils.d(TAG, activity + " on started");
-                mLastStartedActivity = activity;
             }
 
             @Override
@@ -62,13 +59,11 @@ public class BaseApplication {
             @Override
             public void onActivityPaused(Activity activity) {
                 LogUtils.d(TAG, activity + " on paused");
-                mLastPausedActivity = activity;
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
                 LogUtils.d(TAG, activity + " on stopped");
-                mLastStoppedActivity = activity;
             }
 
             @Override
@@ -79,7 +74,6 @@ public class BaseApplication {
             @Override
             public void onActivityDestroyed(Activity activity) {
                 LogUtils.d(TAG, activity + " on destroyed");
-                mLastDestroyedActivity = activity;
             }
         });
     }

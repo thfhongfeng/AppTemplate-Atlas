@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.pine.mvp.ui.activity.MvpHomeActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/dp_30"
+        android:text="Business Mvp Home" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_30">
+
+        <com.pine.tool.widget.ViewPagerTabLayout
+            android:id="@+id/view_pager_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/dark_red"
+            app:tabIndicatorHeight="@dimen/dp_2"
+            app:tabLayout_bottomDivider="@drawable/mvp_shape_dv_light_gray"
+            app:tabLayout_divider="@drawable/mvp_inset_shape_dv_light_gray"
+            app:tabLayout_marginEnd="@dimen/dp_10"
+            app:tabLayout_marginStart="@dimen/dp_10"
+            app:tabLayout_showDividers="middle"
+            app:tabSelectedTextColor="@color/dark_red"
+            app:tabTextColor="@color/dim_gray"></com.pine.tool.widget.ViewPagerTabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+</LinearLayout>
