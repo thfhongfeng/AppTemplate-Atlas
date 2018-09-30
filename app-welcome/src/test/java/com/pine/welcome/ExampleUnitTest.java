@@ -1,4 +1,4 @@
-package com.pine.template;
+package com.pine.welcome;
 
 import org.junit.Test;
 

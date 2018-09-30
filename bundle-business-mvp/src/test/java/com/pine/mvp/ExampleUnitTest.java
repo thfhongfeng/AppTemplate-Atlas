@@ -1,4 +1,4 @@
-package com.pine.businessA;
+package com.pine.mvp;
 
 import org.junit.Test;
 
