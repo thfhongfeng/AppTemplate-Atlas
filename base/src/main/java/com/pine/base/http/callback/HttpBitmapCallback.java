@@ -17,6 +17,6 @@ public abstract class HttpBitmapCallback extends HttpAbstractBaseCallback {
 
     public abstract void onResponse(int what, Bitmap bitmap);
 
-    public abstract boolean onError(int what, Exception exception);
+    public abstract boolean onError(int what, Exception e);
 
 }

@@ -6,10 +6,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OnKeyboardListener;
-import com.pine.base.BaseActivity;
 import com.pine.base.R;
 import com.pine.base.mvp.contract.IBaseContract;
 import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.ui.BaseActivity;
 
 public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P extends BasePresenter<V>>
         extends BaseActivity implements IBaseContract.Ui {

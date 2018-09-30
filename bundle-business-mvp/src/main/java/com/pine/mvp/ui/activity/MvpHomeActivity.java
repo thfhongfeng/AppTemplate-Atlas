@@ -12,6 +12,8 @@ import com.pine.mvp.contract.IMvpHomeContract;
 import com.pine.mvp.presenter.MvpHomePresenter;
 import com.pine.mvp.ui.fragment.MvpHomePartAFragment;
 import com.pine.mvp.ui.fragment.MvpHomePartBFragment;
+import com.pine.mvp.ui.fragment.MvpHomePartCFragment;
+import com.pine.mvp.ui.fragment.MvpHomePartDFragment;
 import com.pine.tool.adapter.TabFragmentPagerAdapter;
 import com.pine.tool.widget.ViewPagerTabLayout;
 
@@ -23,8 +25,6 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
         implements IMvpHomeContract.Ui {
     private ViewPagerTabLayout view_pager_tab_layout;
     private ViewPager view_pager;
-
-    private TabFragmentPagerAdapter mFragmentPagerAdapter;
 
     @Override
     protected int getActivityLayoutResId() {
@@ -41,9 +41,11 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
         view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
         view_pager = (ViewPager) findViewById(R.id.view_pager);
 
-        view_pager.setAdapter(mFragmentPagerAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager(),
-                new Fragment[]{new MvpHomePartAFragment(), new MvpHomePartBFragment()},
-                new String[]{"PartA", "PartB"}));
+        view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
+                new Fragment[]{
+                        new MvpHomePartAFragment(), new MvpHomePartBFragment(),
+                        new MvpHomePartCFragment(), new MvpHomePartDFragment()},
+                new String[]{"PartA", "PartB", "PartC", "PartD"}));
         view_pager_tab_layout.setupWithViewPager(view_pager);
     }
 

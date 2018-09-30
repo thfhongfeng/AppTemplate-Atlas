@@ -4,7 +4,7 @@ import com.pine.base.BaseApplication;
 import com.pine.base.http.HttpRequestBean;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.IHttpRequestManager;
-import com.pine.base.http.callback.HttpStringCallback;
+import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.login.LoginConstants;
 import com.pine.login.LoginUrlConstants;
 import com.pine.login.callback.LoginCallback;
@@ -36,7 +36,7 @@ public class LoginManager {
         params.put(LoginConstants.LOGIN_PASSWORD, password);
 
         HttpRequestManagerProxy.clearCookie();
-        HttpRequestManagerProxy.setStringRequest(mLoginUrl, params, TAG,
+        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.LOGIN_CODE, new LoginCallback(mobile, password, callback));
     }
 
@@ -54,7 +54,7 @@ public class LoginManager {
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
         HttpRequestManagerProxy.clearCookie();
-        HttpRequestManagerProxy.setStringRequest(mLoginUrl, params, TAG,
+        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.AUTO_LOGIN_CODE, new LoginCallback(mobile, password, callback));
     }
 
@@ -74,7 +74,7 @@ public class LoginManager {
         HttpRequestManagerProxy.clearCookie();
         mReLoginCount++;
         mIsReLoginProcessing = true;
-        HttpRequestManagerProxy.setStringRequest(mLoginUrl, params, TAG,
+        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.RE_LOGIN_CODE, new LoginCallback(mobile, password, null));
     }
 
@@ -91,7 +91,7 @@ public class LoginManager {
         if (bean == null) {
             return;
         }
-        HttpRequestManagerProxy.setStringRequest(bean, IHttpRequestManager.ActionType.RETRY_AFTER_RE_LOGIN);
+        HttpRequestManagerProxy.setJsonRequest(bean, IHttpRequestManager.ActionType.RETRY_AFTER_RE_LOGIN);
     }
 
     // 重新发起之前所有因401终止的请求
@@ -114,9 +114,9 @@ public class LoginManager {
             return;
         }
         if (bean.getResponse().isSucceed()) {
-            ((HttpStringCallback) bean.getCallBack()).onResponse(bean.getWhat(), bean.getResponse());
+            ((HttpJsonCallback) bean.getCallBack()).onResponse(bean.getWhat(), bean.getResponse());
         } else {
-            ((HttpStringCallback) bean.getCallBack()).onError(bean.getWhat(), bean.getResponse().getException());
+            ((HttpJsonCallback) bean.getCallBack()).onError(bean.getWhat(), bean.getResponse().getException());
         }
     }
 

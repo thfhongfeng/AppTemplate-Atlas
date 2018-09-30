@@ -32,7 +32,7 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
             public void onLoginResponse(boolean isSuccess, String msg) {
                 if (isUiAlive()) {
                     if (!isSuccess) {
-                        getUi().showLoginResultToast(getContext().getString(R.string.login_mobile_incorrect_format));
+                        getUi().showLoginResultToast(getContext().getString(R.string.login_login_fail));
                     } else {
                         finishUi();
                     }

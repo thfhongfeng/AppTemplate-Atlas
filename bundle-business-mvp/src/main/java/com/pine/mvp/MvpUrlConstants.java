@@ -7,5 +7,9 @@ import com.pine.base.BaseUrlConstants;
  */
 
 public interface MvpUrlConstants extends BaseUrlConstants {
+    String Query_HomePartAList_Data = BASE_URL + "";
+    String Query_HomePartBList_Data = BASE_URL + "";
+    String Query_HomePartCList_Data = BASE_URL + "";
 
+    String H5_HomePartD = "http://www.baidu.com";
 }

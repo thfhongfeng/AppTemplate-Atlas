@@ -7,5 +7,8 @@ import com.pine.tool.Constants;
  */
 
 public interface BaseConstants extends Constants {
-
+    String SUCCESS = "success";
+    String CODE = "code";
+    String MESSAGE = "message";
+    String DATA = "data";
 }

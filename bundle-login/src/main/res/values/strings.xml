@@ -9,4 +9,5 @@
     <string name="login_login_btn">登录</string>
     <string name="login_input_empty_msg">手机号或密码不能为空</string>
     <string name="login_mobile_incorrect_format">手机号格式不正确</string>
+    <string name="login_login_fail">登陆失败，请重试</string>
 </resources>

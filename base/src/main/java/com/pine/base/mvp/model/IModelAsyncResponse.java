@@ -7,5 +7,5 @@ package com.pine.base.mvp.model;
 public interface IModelAsyncResponse<T> {
     void onResponse(T t);
 
-    void onFail();
+    boolean onFail(Exception e);
 }

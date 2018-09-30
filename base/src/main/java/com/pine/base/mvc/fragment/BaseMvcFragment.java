@@ -2,7 +2,7 @@ package com.pine.base.mvc.fragment;
 
 import android.content.Context;
 
-import com.pine.base.BaseFragment;
+import com.pine.base.ui.BaseFragment;
 
 public abstract class BaseMvcFragment extends BaseFragment {
 

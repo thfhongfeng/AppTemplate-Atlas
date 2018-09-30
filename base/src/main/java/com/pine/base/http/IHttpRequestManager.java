@@ -16,7 +16,7 @@ public interface IHttpRequestManager {
 
     void init(Context context, HashMap<String, String> head);
 
-    void setStringRequest(HttpRequestBean requestBean, IHttpResponseListener.OnResponseListener listener);
+    void setJsonRequest(HttpRequestBean requestBean, IHttpResponseListener.OnResponseListener listener);
 
     void setDownloadRequest(HttpRequestBean requestBean, IHttpResponseListener.OnDownloadListener listener);
 
@@ -29,9 +29,9 @@ public interface IHttpRequestManager {
 
     void cancelAll();
 
-    void setSessionId(String sessionId);
-
     String getSessionId();
+
+    void setSessionId(String sessionId);
 
     enum RequestType {
         STRING, // stringRequest

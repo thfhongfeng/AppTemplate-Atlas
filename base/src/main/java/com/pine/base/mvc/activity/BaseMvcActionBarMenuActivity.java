@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OnKeyboardListener;
-import com.pine.base.BaseActivity;
 import com.pine.base.R;
+import com.pine.base.ui.BaseActivity;
 
 public abstract class BaseMvcActionBarMenuActivity extends BaseActivity {
     private ImmersionBar mImmersionBar;

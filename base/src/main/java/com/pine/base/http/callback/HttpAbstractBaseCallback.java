@@ -1,7 +1,5 @@
 package com.pine.base.http.callback;
 
-import com.pine.base.http.HttpResponse;
-
 /**
  * Created by tanghongfeng on 2018/9/10.
  */

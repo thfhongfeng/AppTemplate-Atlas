@@ -5,7 +5,7 @@ import android.content.Intent;
 import com.pine.base.BaseApplication;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.HttpResponse;
-import com.pine.base.http.callback.HttpStringCallback;
+import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.login.LoginConstants;
 import com.pine.login.manager.LoginManager;
 import com.pine.login.ui.activity.LoginActivity;
@@ -24,7 +24,7 @@ import static com.pine.base.http.IHttpRequestManager.SESSION_ID;
  * Created by tanghongfeng on 2018/9/10.
  */
 
-public class LoginCallback extends HttpStringCallback {
+public class LoginCallback extends HttpJsonCallback {
     public static final int LOGIN_CODE = 1;
     public static final int AUTO_LOGIN_CODE = 2;
     public static final int RE_LOGIN_CODE = 3;
@@ -51,47 +51,43 @@ public class LoginCallback extends HttpStringCallback {
     }
 
     @Override
-    public void onResponse(int what, String res) {
-        JSONObject jObj = null;
+    public void onResponse(int what, JSONObject jsonObject) {
+        // Test code begin
+        String res = "{success:true,code:200,message:'',data:{account:'" + mMobile + "', username:'pine', age:35}}";
         try {
-            // Test code begin
-//            jObj = new JSONObject(res);
-            jObj = new JSONObject();
-            jObj.put(LoginConstants.SUCCESS, true);
-            // Test code end
-            if (jObj == null || !jObj.optBoolean(LoginConstants.SUCCESS, false)) {
-                if (mCallback != null) {
-                    mCallback.onLoginResponse(false, "");
-                }
-                if (AUTO_LOGIN_CODE != what) {
-                    goLoginActivity();
-                }
-                return;
-            }
-            saveLoginInfo(jObj);
-            BaseApplication.setLogin(true);
-            if (RE_LOGIN_CODE == what) {
-                LoginManager.reloadAllNoAuthRequest();
-            }
-            if (mCallback != null) {
-                mCallback.onLoginResponse(true, "");
-            }
+            jsonObject = new JSONObject(res);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        // Test code end
+        if (jsonObject == null || !jsonObject.optBoolean(LoginConstants.SUCCESS, false)) {
+            BaseApplication.setLogin(false);
             if (mCallback != null) {
-                mCallback.onLoginResponse(false, e.toString());
+                mCallback.onLoginResponse(false, "");
             }
             if (AUTO_LOGIN_CODE != what) {
                 goLoginActivity();
             }
             return;
         }
+        saveLoginInfo(jsonObject);
+        BaseApplication.setLogin(true);
+        if (RE_LOGIN_CODE == what) {
+            LoginManager.reloadAllNoAuthRequest();
+        }
+        if (mCallback != null) {
+            mCallback.onLoginResponse(true, "");
+        }
     }
 
     @Override
-    public boolean onError(int what, Exception exception) {
+    public boolean onError(int what, Exception e) {
+        BaseApplication.setLogin(false);
         if (mCallback != null) {
-            mCallback.onLoginResponse(false, exception.toString());
+            mCallback.onLoginResponse(false, e.toString());
+        }
+        if (AUTO_LOGIN_CODE != what) {
+            goLoginActivity();
         }
         return false;
     }

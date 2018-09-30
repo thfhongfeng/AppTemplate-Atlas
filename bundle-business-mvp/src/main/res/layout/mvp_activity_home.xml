@@ -20,7 +20,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingTop="@dimen/dp_30">
+        android:paddingTop="@dimen/dp_10">
 
         <com.pine.tool.widget.ViewPagerTabLayout
             android:id="@+id/view_pager_tab_layout"

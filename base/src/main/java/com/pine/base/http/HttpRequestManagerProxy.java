@@ -9,7 +9,7 @@ import com.pine.base.http.IHttpRequestManager.RequestType;
 import com.pine.base.http.Interceptor.IHttpRequestInterceptor;
 import com.pine.base.http.Interceptor.IHttpResponseInterceptor;
 import com.pine.base.http.callback.HttpDownloadCallback;
-import com.pine.base.http.callback.HttpStringCallback;
+import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.base.http.callback.HttpUploadCallback;
 import com.pine.tool.util.AppUtils;
 import com.pine.tool.util.LogUtils;
@@ -78,48 +78,48 @@ public class HttpRequestManagerProxy {
 
     // 默认RequestMethod:POST
     // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setStringRequest(String url, Map<String, String> params, String moduleTag, HttpStringCallback callBack) {
-        setStringRequest(url, params, moduleTag, -1, RequestType.STRING, callBack);
+    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, HttpJsonCallback callBack) {
+        setJsonRequest(url, params, moduleTag, -1, RequestType.STRING, callBack);
     }
 
     // 默认RequestMethod:POST
     // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setStringRequest(String url, Map<String, String> params, String moduleTag, int what, HttpStringCallback callBack) {
-        setStringRequest(url, params, moduleTag, what, IHttpRequestManager.RequestType.STRING, callBack);
+    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, HttpJsonCallback callBack) {
+        setJsonRequest(url, params, moduleTag, what, IHttpRequestManager.RequestType.STRING, callBack);
     }
 
     // 默认RequestMethod:POST
     // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setStringRequest(String url, Map<String, String> params, String moduleTag, int what, boolean needLogin, HttpStringCallback callBack) {
-        setStringRequest(url, params, moduleTag, what, RequestType.STRING, needLogin, callBack);
+    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, boolean needLogin, HttpJsonCallback callBack) {
+        setJsonRequest(url, params, moduleTag, what, RequestType.STRING, needLogin, callBack);
     }
 
     // 默认RequestMethod:POST
-    public static void setStringRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, HttpStringCallback callBack) {
-        setStringRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, false, RequestType.STRING, callBack);
+    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, HttpJsonCallback callBack) {
+        setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, false, RequestType.STRING, callBack);
     }
 
     // 默认RequestMethod:POST
-    public static void setStringRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, boolean needLogin, HttpStringCallback callBack) {
-        setStringRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, needLogin, RequestType.STRING, callBack);
+    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, boolean needLogin, HttpJsonCallback callBack) {
+        setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, needLogin, RequestType.STRING, callBack);
     }
 
-    public static void setStringRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
-                                        int what, HttpStringCallback callBack) {
-        setStringRequest(url, method, params, moduleTag, what, null, false, RequestType.STRING, callBack);
+    public static void setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
+                                      int what, HttpJsonCallback callBack) {
+        setJsonRequest(url, method, params, moduleTag, what, null, false, RequestType.STRING, callBack);
     }
 
-    public static void setStringRequest(HttpRequestBean requestBean, ActionType actionType) {
+    public static void setJsonRequest(HttpRequestBean requestBean, ActionType actionType) {
         requestBean.setActionType(actionType);
-        setStringRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
+        setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
                 requestBean.getModuleTag(), requestBean.getWhat(), requestBean.getSign(), requestBean.isNeedLogin(),
-                requestBean.getRequestType(), (HttpStringCallback) requestBean.getCallBack());
+                requestBean.getRequestType(), (HttpJsonCallback) requestBean.getCallBack());
     }
 
-    public static void setStringRequest(HttpRequestBean requestBean) {
-        setStringRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
+    public static void setJsonRequest(HttpRequestBean requestBean) {
+        setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
                 requestBean.getModuleTag(), requestBean.getWhat(), requestBean.getSign(), requestBean.isNeedLogin(),
-                requestBean.getRequestType(), (HttpStringCallback) requestBean.getCallBack());
+                requestBean.getRequestType(), (HttpJsonCallback) requestBean.getCallBack());
     }
 
     /**
@@ -133,8 +133,8 @@ public class HttpRequestManagerProxy {
      * @param requestType 请求分类，目前只区分通用和登录
      * @param callBack    回调
      */
-    public static void setStringRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
-                                        int what, Object sign, boolean needLogin, RequestType requestType, HttpStringCallback callBack) {
+    public static void setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
+                                      int what, Object sign, boolean needLogin, RequestType requestType, HttpJsonCallback callBack) {
         //设置模块名
         callBack.setModuleTag(moduleTag);
         callBack.setUrlTag(url);
@@ -159,7 +159,7 @@ public class HttpRequestManagerProxy {
         mLoadingRequestMap.put(String.valueOf(callBack.hashCode()), requestBean);
         LogUtils.d(TAG, "Request in string queue - " + moduleTag +
                 "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
-        mRequestManager.setStringRequest(requestBean, getResponseListener(callBack));
+        mRequestManager.setJsonRequest(requestBean, getResponseListener(callBack));
     }
 
     // 下载文件
@@ -213,7 +213,7 @@ public class HttpRequestManagerProxy {
 
     public static void setPostFileRequest(String url, int what, Map<String, String> params,
                                           List<File> fileList, String fileKey, String moduleTag,
-                                          HttpUploadCallback processCallback, HttpStringCallback requestCallback) {
+                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         setPostFileRequest(url, what, params, fileList, fileKey, false, moduleTag, processCallback, requestCallback);
     }
 
@@ -232,7 +232,7 @@ public class HttpRequestManagerProxy {
      */
     public static void setPostFileRequest(String url, int what, Map<String, String> params, List<File> fileList,
                                           String fileKey, boolean needLogin, String moduleTag,
-                                          HttpUploadCallback processCallback, HttpStringCallback requestCallback) {
+                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         requestCallback.setModuleTag(moduleTag);
         requestCallback.setUrlTag(url);
 
@@ -272,7 +272,7 @@ public class HttpRequestManagerProxy {
      * @param callBack
      * @return
      */
-    public static IHttpResponseListener.OnResponseListener getResponseListener(final HttpStringCallback callBack) {
+    public static IHttpResponseListener.OnResponseListener getResponseListener(final HttpJsonCallback callBack) {
         return new IHttpResponseListener.OnResponseListener() {
             @Override
             public void onStart(int what) {
@@ -452,11 +452,11 @@ public class HttpRequestManagerProxy {
         bean.setActionType(ActionType.RETRY_WHEN_ERROR);
         if (bean.getRequestType() == RequestType.UPLOAD) {
             mRequestManager.setUploadRequest(bean, getUploadListener((HttpUploadCallback) bean.getCallBack()),
-                    getResponseListener((HttpStringCallback) bean.getCallBack()));
+                    getResponseListener((HttpJsonCallback) bean.getCallBack()));
         } else if (bean.getRequestType() == RequestType.DOWNLOAD) {
             mRequestManager.setDownloadRequest(bean, getDownloadListener((HttpDownloadCallback) bean.getCallBack()));
         } else {
-            mRequestManager.setStringRequest(bean, getResponseListener((HttpStringCallback) bean.getCallBack()));
+            mRequestManager.setJsonRequest(bean, getResponseListener((HttpJsonCallback) bean.getCallBack()));
         }
     }
 

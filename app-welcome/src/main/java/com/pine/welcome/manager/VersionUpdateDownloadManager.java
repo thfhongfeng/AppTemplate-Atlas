@@ -76,9 +76,9 @@ public class VersionUpdateDownloadManager {
                     }
 
                     @Override
-                    public boolean onError(int what, Exception exception) {
+                    public boolean onError(int what, Exception e) {
                         if (mListener != null) {
-                            mListener.onDownloadError(exception);
+                            mListener.onDownloadError(e);
                         }
                         return true;
                     }

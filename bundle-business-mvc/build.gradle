@@ -30,18 +30,24 @@ android {
     }
 }
 
+/**
+ * 主dex中已经打入了必要的公用代码，在runtime时，atlas框架会自动找到主dex中的class使用，可以使用providedCompile，表示不需要再重复打入
+ */
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    // 测试 dependency begin
     androidTestCompile(build_dependency["test_espresso_core"], {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile build_dependency["test_junit"]
+    // 测试 dependency end
 
+    // android官方 dependency begin
     compile build_dependency["appcompat_v7"]
+    // android官方 dependency end
 
-    /**
-     * 主dex中已经打入了必要的公用代码，在runtime时，atlas框架会自动找到主dex中的class使用，所以可以使用providedCompile，表示不需要再重复打入
-     */
+    // 主体基础模块 begin
     providedCompile project(':base')
+    // 主体基础模块 begin
 }

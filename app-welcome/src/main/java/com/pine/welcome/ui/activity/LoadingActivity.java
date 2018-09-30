@@ -83,7 +83,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
             });
         }
         mUpdateConfirmDialog.show();
-        CountDownTimer countDownTimer = new CountDownTimer(20000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(30000, 1000) {
 
             @Override
             public void onFinish() {

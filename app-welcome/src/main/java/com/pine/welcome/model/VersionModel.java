@@ -4,11 +4,15 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.pine.base.http.HttpRequestManagerProxy;
-import com.pine.base.http.callback.HttpStringCallback;
+import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.tool.util.LogUtils;
+import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.WelcomeUrlConstants;
 import com.pine.welcome.bean.VersionEntity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -22,34 +26,35 @@ public class VersionModel {
 
     public void requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
         String url = WelcomeUrlConstants.Query_Version_Data;
-        HttpStringCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setStringRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_VERSION_INFO, httpStringCallback);
+        HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
+        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_VERSION_INFO, httpStringCallback);
     }
 
-    private HttpStringCallback handleHttpResponse(final IModelAsyncResponse<VersionEntity> callback) {
-        return new HttpStringCallback() {
+    private HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<VersionEntity> callback) {
+        return new HttpJsonCallback() {
             @Override
-            public void onResponse(int what, String res) {
+            public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_REQUEST_QUERY_VERSION_INFO == what) {
                     // Test code begin
-                    res = "{'package':'com.pine.template', 'versionCode':2, " +
-                            "'versionName':'1.0.2','minSupportedVersion':1,'force':true, " +
-                            "'fileName':'template.apk', 'path':'https://www.baidu.com'}";
-
-                    res = "{\"package\":\"com.purang.bsd_purang\", \"versionCode\":2," +
-                            " \"versionName\":\"1.0.2\",\"minSupportedVersion\":1," +
-                            "\"force\":false, \"fileName\":\"bsd_purang.apk\", " +
-                            "\"path\":\"https://yanyangtian.purang.com/download/bsd_purang.apk\"}";
+                    String res = "{success:true,code:200,message:'',data:" +
+                            "{package:'com.pine.template', 'versionCode':2," +
+                            "versionName:'1.0.2',minSupportedVersion:1," +
+                            "force:false, fileName:'pine_app_template-V1.0.2-release.apk', " +
+                            "path:'https://yanyangtian.purang.com/download/bsd_purang.apk'}}";
+                    try {
+                        jsonObject = new JSONObject(res);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     // Test code end
-                    VersionEntity versionEntity = new Gson().fromJson(res, VersionEntity.class);
+                    VersionEntity versionEntity = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA), VersionEntity.class);
                     callback.onResponse(versionEntity);
                 }
             }
 
             @Override
-            public boolean onError(int what, Exception exception) {
-                callback.onFail();
-                return false;
+            public boolean onError(int what, Exception e) {
+                return callback.onFail(e);
             }
         };
     }

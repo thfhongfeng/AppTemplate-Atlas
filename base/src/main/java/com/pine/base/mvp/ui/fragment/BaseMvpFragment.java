@@ -2,9 +2,9 @@ package com.pine.base.mvp.ui.fragment;
 
 import android.content.Context;
 
-import com.pine.base.BaseFragment;
 import com.pine.base.mvp.contract.IBaseContract;
 import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.ui.BaseFragment;
 
 public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends BasePresenter<V>>
         extends BaseFragment implements IBaseContract.Ui {

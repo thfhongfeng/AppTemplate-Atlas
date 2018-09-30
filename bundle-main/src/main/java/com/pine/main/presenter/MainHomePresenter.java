@@ -47,8 +47,8 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
             }
 
             @Override
-            public void onFail() {
-
+            public boolean onFail(Exception e) {
+                return false;
             }
         });
     }

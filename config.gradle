@@ -28,7 +28,7 @@ ext.build_versions = build_versions
  * url地址
  */
 def build_url = [:]
-build_url.base_url = "http://www.baidu.com/"
+build_url.base_url = "https://suggest.taobao.com/sug?code=utf-8&q=android"
 ext.build_url = build_url
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +66,7 @@ def build_dependency = [
 
         // 第三方 dependency
         "nohttp_okhttp"         : 'com.yanzhenjie.nohttp:okhttp:1.1.1',
-        "aigestudio_wheelpicker": 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
+        "aigestudio_wheelpicker": 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2',
+        "safewebviewbridge"     : 'cn.pedant.safewebviewbridge:library:1.4'
 ]
 ext.build_dependency = build_dependency

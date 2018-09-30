@@ -73,6 +73,6 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
 
     @Override
     public void showLoginResultToast(String msg) {
-        Toast.makeText(this, getString(R.string.login_input_empty_msg), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

@@ -3,10 +3,10 @@ package com.pine.main.remote.atlas;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.pine.tool.util.AppUtils;
 import com.pine.main.ui.activity.MainHomeActivity;
 import com.pine.router.RouterCommand;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.tool.util.AppUtils;
 
 /**
  * Created by tanghongfeng on 2018/9/13

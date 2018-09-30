@@ -3,9 +3,9 @@ package com.pine.user.remote.atlas;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.pine.tool.util.AppUtils;
 import com.pine.router.RouterCommand;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.tool.util.AppUtils;
 import com.pine.user.ui.activity.UserHomeActivity;
 
 /**

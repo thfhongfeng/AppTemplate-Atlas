@@ -24,12 +24,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    // 测试 dependency begin
     androidTestCompile(build_dependency["test_espresso_core"], {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile build_dependency["test_junit"]
+    // 测试 dependency end
 
+    // android官方 dependency begin
     compile build_dependency["appcompat_v7"]
+    // android官方 dependency end
 
     // atlas配置 begin
     compile(build_dependency["atlas_core"]) {

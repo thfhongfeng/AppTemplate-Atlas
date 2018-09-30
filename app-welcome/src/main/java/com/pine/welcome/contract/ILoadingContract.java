@@ -1,7 +1,5 @@
 package com.pine.welcome.contract;
 
-import android.app.Activity;
-
 import com.pine.base.mvp.contract.IBaseContract;
 
 /**

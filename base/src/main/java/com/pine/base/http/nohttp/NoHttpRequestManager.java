@@ -194,7 +194,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     }
 
     @Override
-    public void setStringRequest(HttpRequestBean requestBean, IHttpResponseListener.OnResponseListener listener) {
+    public void setJsonRequest(HttpRequestBean requestBean, IHttpResponseListener.OnResponseListener listener) {
         IBasicRequest request = NoHttp.createStringRequest(requestBean.getUrl(), transferToNoHttpHttpMethod(requestBean.getRequestMethod()));
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());

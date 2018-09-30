@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pine.base.http.HttpRequestManagerProxy;
-import com.pine.base.http.callback.HttpStringCallback;
+import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.base.mvp.model.IModelAsyncResponse;
+import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
 import com.pine.main.bean.MainHomeGridViewEntity;
 import com.pine.tool.util.LogUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,29 +28,35 @@ public class MainHomeModel {
 
     public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
-        HttpStringCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setStringRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUSINESS_LIST, httpStringCallback);
+        HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
+        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
-    private HttpStringCallback handleHttpResponse(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
-        return new HttpStringCallback() {
+    private HttpJsonCallback handleHttpResponse(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
+        return new HttpJsonCallback() {
             @Override
-            public void onResponse(int what, String res) {
+            public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_REQUEST_QUERY_BUSINESS_LIST == what) {
                     ArrayList<MainHomeGridViewEntity> retList = new ArrayList<MainHomeGridViewEntity>();
                     // Test code begin
-                    res = "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
-                            "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]";
+                    String res = "{success:true,code:200,message:'',data:" +
+                            "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
+                            "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]}";
+                    try {
+                        jsonObject = new JSONObject(res);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     // Text code end
-                    retList = new Gson().fromJson(res, new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
+                    retList = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
                     }.getType());
                     callback.onResponse(retList);
                 }
             }
 
             @Override
-            public boolean onError(int what, Exception exception) {
-                return false;
+            public boolean onError(int what, Exception e) {
+                return callback.onFail(e);
             }
         };
     }

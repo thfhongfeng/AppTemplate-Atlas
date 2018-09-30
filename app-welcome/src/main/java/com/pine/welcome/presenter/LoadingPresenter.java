@@ -65,10 +65,11 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             }
 
             @Override
-            public void onFail() {
+            public boolean onFail(Exception e) {
                 if (isUiAlive()) {
                     checkVersion();
                 }
+                return false;
             }
         });
     }
@@ -197,10 +198,11 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             }
 
             @Override
-            public void onFail() {
+            public boolean onFail(Exception e) {
                 if (isUiAlive()) {
                     autoLogin();
                 }
+                return false;
             }
         });
     }

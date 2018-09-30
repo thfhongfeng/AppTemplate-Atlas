@@ -2,10 +2,14 @@
 <resources>
     <string name="base_network_err">网络错误，请重试</string>
     <string name="base_server_err">服务器错误，请稍后重试</string>
+    <string name="base_json_data_err">获取数据错误，请重试</string>
 
     <string name="base_loading"> 加载中...</string>
     <string name="base_downloading"> 正在下载...</string>
     <string name="base_uploading"> 正在上传...</string>
+
+    <string name="base_no_item"> 暂无数据哦</string>
+    <string name="base_item_footer">正在加载...</string>
 
     <string name="base_cancel">取消</string>
     <string name="base_done">完成</string>

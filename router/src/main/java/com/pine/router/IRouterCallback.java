@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 public interface IRouterCallback {
     void onSuccess(Bundle returnBundle);
+
     void onException(Bundle returnBundle);
 
     void onFail(String errorInfo);
