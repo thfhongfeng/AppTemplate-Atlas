@@ -137,7 +137,8 @@ public class HttpRequestManagerProxy {
                                       int what, Object sign, boolean needLogin, RequestType requestType, HttpJsonCallback callBack) {
         //设置模块名
         callBack.setModuleTag(moduleTag);
-        callBack.setUrlTag(url);
+        callBack.setUrl(url);
+        callBack.setWhat(what);
 
         HttpRequestBean requestBean = new HttpRequestBean(what, callBack);
         requestBean.setUrl(url);
@@ -156,7 +157,7 @@ public class HttpRequestManagerProxy {
                 }
             }
         }
-        mLoadingRequestMap.put(String.valueOf(callBack.hashCode()), requestBean);
+        mLoadingRequestMap.put(callBack.getKey(), requestBean);
         LogUtils.d(TAG, "Request in string queue - " + moduleTag +
                 "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
         mRequestManager.setJsonRequest(requestBean, getResponseListener(callBack));
@@ -182,7 +183,8 @@ public class HttpRequestManagerProxy {
                                           Object sign, int what, boolean needLogin, HttpDownloadCallback callBack) {
         //设置模块名
         callBack.setModuleTag(moduleTag);
-        callBack.setUrlTag(url);
+        callBack.setUrl(url);
+        callBack.setWhat(what);
 
         HttpRequestBean requestBean = new HttpRequestBean(what, callBack);
         requestBean.setUrl(url);
@@ -205,7 +207,7 @@ public class HttpRequestManagerProxy {
                 }
             }
         }
-        mLoadingRequestMap.put(String.valueOf(callBack.hashCode()), requestBean);
+        mLoadingRequestMap.put(callBack.getKey(), requestBean);
         LogUtils.d(TAG, "Request in download queue - " + moduleTag +
                 "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
         mRequestManager.setDownloadRequest(requestBean, getDownloadListener(callBack));
@@ -234,7 +236,8 @@ public class HttpRequestManagerProxy {
                                           String fileKey, boolean needLogin, String moduleTag,
                                           HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         requestCallback.setModuleTag(moduleTag);
-        requestCallback.setUrlTag(url);
+        requestCallback.setUrl(url);
+        requestCallback.setWhat(what);
 
         HttpRequestBean requestBean = new HttpRequestBean(what, requestCallback);
         requestBean.setUrl(url);
@@ -253,7 +256,7 @@ public class HttpRequestManagerProxy {
                 }
             }
         }
-        mLoadingRequestMap.put(String.valueOf(requestCallback.hashCode()), requestBean);
+        mLoadingRequestMap.put(requestCallback.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in upload queue - " + moduleTag +
                 "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
@@ -281,10 +284,10 @@ public class HttpRequestManagerProxy {
             @Override
             public void onSucceed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onSucceed in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 HttpRequestBean httpRequestBean = null;
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
-                    httpRequestBean = mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                    httpRequestBean = mLoadingRequestMap.remove(callBack.getKey());
                     httpRequestBean.setResponse(response);
                 }
                 if (mResponseInterceptorList != null) {
@@ -300,17 +303,17 @@ public class HttpRequestManagerProxy {
             @Override
             public void onFailed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onFailed in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 HttpRequestBean httpRequestBean = null;
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
                     }
-                    if (mErrorRequestMap.containsKey(callBack.getUrlTag())) {
-                        mErrorRequestMap.remove(callBack.getUrlTag());
+                    if (mErrorRequestMap.containsKey(callBack.getKey())) {
+                        mErrorRequestMap.remove(callBack.getKey());
                     }
-                    mErrorRequestMap.put(String.valueOf(callBack.hashCode()), mLoadingRequestMap.get(String.valueOf(callBack.hashCode())));
-                    httpRequestBean = mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                    mErrorRequestMap.put(callBack.getKey(), mLoadingRequestMap.get(callBack.getKey()));
+                    httpRequestBean = mLoadingRequestMap.remove(callBack.getKey());
                     httpRequestBean.setResponse(response);
                 }
                 if (mResponseInterceptorList != null) {
@@ -329,10 +332,10 @@ public class HttpRequestManagerProxy {
             @Override
             public void onFinish(int what) {
                 LogUtils.d(TAG, "Response onFinish in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 // 用于清除被cancel的网络请求
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
-                    mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                    mLoadingRequestMap.remove(callBack.getKey());
                 }
             }
         };
@@ -344,16 +347,16 @@ public class HttpRequestManagerProxy {
             @Override
             public void onDownloadError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onDownloadError in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
                     }
-                    if (mErrorRequestMap.containsKey(callBack.getUrlTag())) {
-                        mErrorRequestMap.remove(callBack.getUrlTag());
+                    if (mErrorRequestMap.containsKey(callBack.getKey())) {
+                        mErrorRequestMap.remove(callBack.getKey());
                     }
-                    mErrorRequestMap.put(String.valueOf(callBack.hashCode()), mLoadingRequestMap.get(String.valueOf(callBack.hashCode())));
-                    mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                    mErrorRequestMap.put(callBack.getKey(), mLoadingRequestMap.get(callBack.getKey()));
+                    mLoadingRequestMap.remove(callBack.getKey());
                 }
                 if (!callBack.onError(what, exception)) {
                     defaultDeduceErrorResponse(exception);
@@ -363,7 +366,7 @@ public class HttpRequestManagerProxy {
             @Override
             public void onStart(int what, boolean isResume, long rangeSize, long allCount) {
                 LogUtils.d(TAG, "Response onStart in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 callBack.onStart(what, isResume, rangeSize, allCount);
             }
 
@@ -375,9 +378,9 @@ public class HttpRequestManagerProxy {
             @Override
             public void onFinish(int what, String filePath) {
                 LogUtils.d(TAG, "Response onFinish in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
-                    mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                    mLoadingRequestMap.remove(callBack.getKey());
                 }
                 callBack.onFinish(what, filePath);
             }
@@ -385,9 +388,9 @@ public class HttpRequestManagerProxy {
             @Override
             public void onCancel(int what) {
                 LogUtils.d(TAG, "Response onCancel in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(String.valueOf(callBack.hashCode()))) {
-                    mLoadingRequestMap.remove(String.valueOf(callBack.hashCode()));
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                    mLoadingRequestMap.remove(callBack.getKey());
                 }
                 callBack.onCancel(what);
             }
@@ -414,14 +417,14 @@ public class HttpRequestManagerProxy {
             @Override
             public void onFinish(int what) {
                 LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 callBack.onFinish(what);
             }
 
             @Override
             public void onError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onError in upload queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrlTag());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 if (!callBack.onError(what, exception)) {
                     defaultDeduceErrorResponse(exception);
                 }
@@ -441,11 +444,11 @@ public class HttpRequestManagerProxy {
     }
 
     //重新发起一次已失败的网络请求
-    public static void reloadErrorRequest(String urlTag) {
+    public static void reloadErrorRequest(String key) {
         if (mErrorRequestMap == null) {
             return;
         }
-        HttpRequestBean bean = mErrorRequestMap.get(urlTag);
+        HttpRequestBean bean = mErrorRequestMap.get(key);
         if (bean == null) {
             return;
         }

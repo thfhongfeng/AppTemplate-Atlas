@@ -103,14 +103,14 @@ public class MvpHomeModel {
                 ArrayList<MvpHomePartCEntity> retList = new ArrayList<MvpHomePartCEntity>();
                 // Test code begin
                 String res = "{success:true,code:200,message:'',data:" +
-                        "[{title:'Part B Item 0'},{title:'Part B Item 1'}," +
-                        "{title:'Part B Item 2'},{title:'Part B Item 3'}," +
-                        "{title:'Part B Item 4'},{title:'Part B Item 5'}," +
-                        "{title:'Part B Item 6'},{title:'Part B Item 7'}," +
-                        "{title:'Part B Item 8'},{title:'Part B Item 9'}," +
-                        "{title:'Part B Item 10'},{title:'Part B Item 11'}," +
-                        "{title:'Part B Item 12'},{title:'Part B Item 13'}," +
-                        "{title:'Part B Item 14'},{title:'Part B Item 15'}]}";
+                        "[{title:'Part C Item 0'},{title:'Part C Item 1'}," +
+                        "{title:'Part C Item 2'},{title:'Part C Item 3'}," +
+                        "{title:'Part C Item 4'},{title:'Part C Item 5'}," +
+                        "{title:'Part C Item 6'},{title:'Part C Item 7'}," +
+                        "{title:'Part C Item 8'},{title:'Part C Item 9'}," +
+                        "{title:'Part C Item 10'},{title:'Part C Item 11'}," +
+                        "{title:'Part C Item 12'},{title:'Part C Item 13'}," +
+                        "{title:'Part C Item 14'},{title:'Part C Item 15'}]}";
                 try {
                     jsonObject = new JSONObject(res);
                 } catch (JSONException e) {

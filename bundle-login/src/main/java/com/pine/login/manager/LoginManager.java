@@ -82,12 +82,12 @@ public class LoginManager {
         return mNoAuthRequestMap;
     }
 
-    // 重新发起之前因401终止的指定的urlTag的请求
-    public static void reloadNoAuthRequest(String urlTag) {
+    // 重新发起之前因401终止的指定的key的请求
+    public static void reloadNoAuthRequest(String key) {
         if (mNoAuthRequestMap == null) {
             return;
         }
-        HttpRequestBean bean = mNoAuthRequestMap.get(urlTag);
+        HttpRequestBean bean = mNoAuthRequestMap.get(key);
         if (bean == null) {
             return;
         }
@@ -105,11 +105,11 @@ public class LoginManager {
         }
     }
 
-    public static void flushNoAuthRequest(String urlTag) {
+    public static void flushNoAuthRequest(String key) {
         if (mNoAuthRequestMap == null) {
             return;
         }
-        HttpRequestBean bean = mNoAuthRequestMap.get(urlTag);
+        HttpRequestBean bean = mNoAuthRequestMap.get(key);
         if (bean == null) {
             return;
         }
