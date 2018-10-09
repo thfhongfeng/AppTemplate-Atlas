@@ -166,19 +166,35 @@ public class HttpRequestManagerProxy {
     public static void setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
                                           int what, HttpDownloadCallback callBack) {
         setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
-                moduleTag, true, null, what, false, callBack);
+                moduleTag, false, true, null, what, false, callBack);
     }
 
     // 下载文件
     public static void setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
                                           int what, boolean needLogin, HttpDownloadCallback callBack) {
         setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
-                moduleTag, true, null, what, needLogin, callBack);
+                moduleTag, false, true, null, what, needLogin, callBack);
+    }
+
+    // 下载文件
+    public static void setDownloadRequest(String url, String fileFolder, String fileName,
+                                          String moduleTag, boolean isContinue, boolean isDeleteOld,
+                                          int what, boolean needLogin, HttpDownloadCallback callBack) {
+        setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
+                moduleTag, isContinue, isDeleteOld, null, what, needLogin, callBack);
     }
 
     // 下载文件
     public static void setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
-                                          HashMap<String, String> params, String moduleTag, boolean isDeleteOld,
+                                          HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
+                                          int what, boolean needLogin, HttpDownloadCallback callBack) {
+        setDownloadRequest(url, fileFolder, fileName, method, params, moduleTag, isContinue,
+                isDeleteOld, null, what, needLogin, callBack);
+    }
+
+    // 下载文件
+    public static void setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
+                                          HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
                                           Object sign, int what, boolean needLogin, HttpDownloadCallback callBack) {
         //设置模块名
         callBack.setModuleTag(moduleTag);
@@ -191,6 +207,7 @@ public class HttpRequestManagerProxy {
         requestBean.setRequestMethod(method);
         requestBean.setParams(params);
         requestBean.setModuleTag(moduleTag);
+        requestBean.setContinue(isContinue);
         requestBean.setDeleteOld(isDeleteOld);
         requestBean.setWhat(what);
         requestBean.setSign(sign);

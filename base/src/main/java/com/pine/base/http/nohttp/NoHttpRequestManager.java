@@ -208,7 +208,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         IBasicRequest request = NoHttp.createDownloadRequest(requestBean.getUrl(),
                 transferToNoHttpHttpMethod(requestBean.getRequestMethod()),
                 requestBean.getFileFolder(), requestBean.getFileName(),
-                false, requestBean.isDeleteOld());
+                requestBean.isContinue(), requestBean.isDeleteOld());
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }

@@ -26,6 +26,7 @@ public class HttpRequestBean {
     // for download
     private String fileFolder;
     private String fileName;
+    private boolean isContinue;
     private boolean isDeleteOld;
 
     // for upload
@@ -143,6 +144,14 @@ public class HttpRequestBean {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public boolean isContinue() {
+        return isContinue;
+    }
+
+    public void setContinue(boolean aContinue) {
+        isContinue = aContinue;
     }
 
     public boolean isDeleteOld() {

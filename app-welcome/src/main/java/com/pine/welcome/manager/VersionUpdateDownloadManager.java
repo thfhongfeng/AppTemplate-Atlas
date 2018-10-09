@@ -1,10 +1,13 @@
 package com.pine.welcome.manager;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpDownloadCallback;
 import com.pine.tool.util.LogUtils;
+import com.pine.tool.util.SharePreferenceUtils;
+import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.bean.VersionEntity;
 
 import java.io.File;
@@ -45,6 +48,7 @@ public class VersionUpdateDownloadManager {
     }
 
     private void startDownloadTask() {
+        deleteOldApk();
         HttpRequestManagerProxy.setDownloadRequest(mVersionEntity.getPath(), mDownloadDir,
                 mVersionEntity.getFileName(), TAG, HTTP_REQUEST_DOWNLOAD, new HttpDownloadCallback() {
                     @Override
@@ -63,6 +67,7 @@ public class VersionUpdateDownloadManager {
 
                     @Override
                     public void onFinish(int what, String filePath) {
+                        SharePreferenceUtils.saveStringToConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH, filePath);
                         if (mListener != null) {
                             mListener.onDownloadComplete(filePath);
                         }
@@ -85,8 +90,28 @@ public class VersionUpdateDownloadManager {
                 });
     }
 
+    private void deleteOldApk() {
+        String apkFilePath = getDownLoadFilePath();
+        if (TextUtils.isEmpty(apkFilePath)) {
+            return;
+        }
+        File folder = new File(mDownloadDir);
+        if (!folder.exists()) {
+            return;
+        }
+        File downloadedFile = new File(apkFilePath);
+        if (downloadedFile != null && downloadedFile.exists() && downloadedFile.isFile()) {
+            downloadedFile.delete();
+        }
+    }
+
+    public String getDownLoadFilePath() {
+        return SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH);
+    }
+
     public File getDownLoadFile() {
-        return new File(mDownloadDir, mVersionEntity.getFileName());
+        String apkFilePath = SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH);
+        return new File(apkFilePath);
     }
 
     public interface UpdateListener {

@@ -7,8 +7,12 @@ import com.pine.tool.Constants;
  */
 
 public interface BaseConstants extends Constants {
+    // http response key
     String SUCCESS = "success";
     String CODE = "code";
     String MESSAGE = "message";
     String DATA = "data";
+
+    // preference key
+    String APK_DOWNLOAD_FILE_PATH = "apk_download_file_path";
 }
