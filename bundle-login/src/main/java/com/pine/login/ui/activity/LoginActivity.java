@@ -23,27 +23,8 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     private EditText password_et;
 
     @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.login_activity_login;
-    }
-
-    @Override
-    protected boolean initData() {
-        return true;
-    }
-
-    @Override
-    protected void initView() {
-        mobile_et = (EditText) findViewById(R.id.mobile_et);
-        password_et = (EditText) findViewById(R.id.password_et);
-        login_btn_tv = (TextView) findViewById(R.id.login_btn_tv);
-
-        login_btn_tv.setOnClickListener(this);
-    }
-
-    @Override
-    protected void afterInit() {
-
+    protected LoginPresenter createPresenter() {
+        return new LoginPresenter();
     }
 
     @Override
@@ -59,20 +40,44 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
-    protected LoginPresenter createPresenter() {
-        return new LoginPresenter();
+    protected int getActivityLayoutResId() {
+        return R.layout.login_activity_login;
+    }
+
+    @Override
+    protected boolean initData() {
+        return false;
+    }
+
+    @Override
+    protected void initView() {
+        mobile_et = (EditText) findViewById(R.id.mobile_et);
+        password_et = (EditText) findViewById(R.id.password_et);
+        login_btn_tv = (TextView) findViewById(R.id.login_btn_tv);
+
+        login_btn_tv.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.login_btn_tv) {
-            mPresenter.login(mobile_et.getText().toString(), password_et.getText().toString());
+            mPresenter.login();
         }
     }
 
     @Override
     public void showLoginResultToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public String getUserMobile() {
+        return mobile_et.getText().toString();
+    }
+
+    @Override
+    public String getUserPassword() {
+        return password_et.getText().toString();
     }
 }

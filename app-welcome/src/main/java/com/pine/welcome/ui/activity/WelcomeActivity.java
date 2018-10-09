@@ -9,13 +9,18 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
         implements IWelcomeContract.Ui {
 
     @Override
+    protected WelcomePresenter createPresenter() {
+        return new WelcomePresenter();
+    }
+
+    @Override
     protected int getActivityLayoutResId() {
         return R.layout.activity_welcome;
     }
 
     @Override
     protected boolean initData() {
-        return true;
+        return false;
     }
 
     @Override
@@ -25,11 +30,7 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
 
     @Override
     protected void afterInit() {
+        super.afterInit();
         mPresenter.goMainHomeActivity();
-    }
-
-    @Override
-    protected WelcomePresenter createPresenter() {
-        return new WelcomePresenter();
     }
 }

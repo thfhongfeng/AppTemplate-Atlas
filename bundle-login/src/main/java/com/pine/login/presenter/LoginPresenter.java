@@ -14,17 +14,16 @@ import com.pine.tool.util.RegexUtils;
 
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
-    public void login(String mobile, String pwd) {
+    @Override
+    public void login() {
+        String mobile = getUi().getUserMobile();
+        String pwd = getUi().getUserPassword();
         if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(pwd)) {
-            if (isUiAlive()) {
-                getUi().showLoginResultToast(getContext().getString(R.string.login_input_empty_msg));
-            }
+            getUi().showLoginResultToast(getContext().getString(R.string.login_input_empty_msg));
             return;
         }
         if (!RegexUtils.isMobilePhoneNumber(mobile)) {
-            if (isUiAlive()) {
-                getUi().showLoginResultToast(getContext().getString(R.string.login_mobile_incorrect_format));
-            }
+            getUi().showLoginResultToast(getContext().getString(R.string.login_mobile_incorrect_format));
             return;
         }
         LoginManager.login(mobile, pwd, new LoginManager.Callback() {

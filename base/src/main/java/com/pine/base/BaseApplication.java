@@ -8,6 +8,7 @@ import com.pine.base.access.UiAccessManager;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.access.executor.UiAccessLoginExecutor;
 import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.manager.ShareManager;
 import com.pine.tool.util.LogUtils;
 
 /**
@@ -32,6 +33,9 @@ public class BaseApplication {
         mApplication = application;
 
         registerActivity();
+
+        ShareManager.getInstance().init(BuildConfig.QQ_FOR_APP_KEY, BuildConfig.WX_FOR_APP_KEY, BuildConfig.WX_SECRET_KEY,
+                R.mipmap.base_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
 
         HttpRequestManagerProxy.init(application);
 

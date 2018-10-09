@@ -16,22 +16,22 @@ import java.io.File;
  * Created by tanghongfeng on 2018/9/25
  */
 
-public class VersionUpdateDownloadManager {
-    private final static String TAG = LogUtils.makeLogTag(VersionUpdateDownloadManager.class);
+public class ApkVersionManager {
+    private final static String TAG = LogUtils.makeLogTag(ApkVersionManager.class);
     private final static int HTTP_REQUEST_DOWNLOAD = 1;
-    private static volatile VersionUpdateDownloadManager mInstance;
+    private static volatile ApkVersionManager mInstance;
     private String mDownloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
     private VersionEntity mVersionEntity;
     private UpdateListener mListener;
 
-    private VersionUpdateDownloadManager() {
+    private ApkVersionManager() {
     }
 
-    public static VersionUpdateDownloadManager getInstance() {
+    public static ApkVersionManager getInstance() {
         if (mInstance == null) {
-            synchronized (VersionUpdateDownloadManager.class) {
+            synchronized (ApkVersionManager.class) {
                 if (mInstance == null) {
-                    mInstance = new VersionUpdateDownloadManager();
+                    mInstance = new ApkVersionManager();
                 }
             }
         }

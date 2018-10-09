@@ -20,6 +20,11 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     private ProgressDialog mUpdateProgressDialog;
 
     @Override
+    protected LoadingPresenter createPresenter() {
+        return new LoadingPresenter();
+    }
+
+    @Override
     protected int getActivityLayoutResId() {
         return R.layout.activity_loading;
     }
@@ -27,7 +32,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     @Override
     protected boolean initData() {
         mPresenter.setStartTime();
-        return true;
+        return false;
     }
 
     @Override
@@ -37,6 +42,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
 
     @Override
     protected void afterInit() {
+        super.afterInit();
         mPresenter.loadBundleSwitcherData();
     }
 
@@ -51,11 +57,6 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
             mUpdateProgressDialog = null;
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected LoadingPresenter createPresenter() {
-        return new LoadingPresenter();
     }
 
     @Override

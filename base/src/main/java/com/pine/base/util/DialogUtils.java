@@ -6,10 +6,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.pine.base.R;
+import com.pine.base.manager.ShareManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/9/7.
@@ -91,6 +100,59 @@ public class DialogUtils {
             }
         });
         return dialog;
+    }
+
+    /**
+     * 分享弹出框
+     *
+     * @param context
+     * @return
+     */
+    public static AlertDialog createShareDialog(final Context context, final List<String> titleList,
+                                                final List<String> descList, final List<String> shareUrlList) {
+        final View shareContent = LayoutInflater.from(context).inflate(R.layout.base_dialog_share, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(shareContent);
+        final AlertDialog shareDialog = builder.create();
+        shareDialog.setCanceledOnTouchOutside(true);
+        List<Map<String, Object>> items = new ArrayList<>();
+        final int[] shareIcon = {
+                R.drawable.base_ic_share_weixin,
+                R.drawable.base_ic_share_weixin_friend_circle,
+                R.drawable.base_ic_share_qq,
+        };
+        final String[] shareDesc = context.getResources().getStringArray(R.array.base_share_icon_desc_arr);
+        for (int i = 0; i < shareIcon.length; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("img", shareIcon[i]);
+            map.put("desc", shareDesc[i]);
+            items.add(map);
+        }
+        SimpleAdapter adapter = new SimpleAdapter(context, items, R.layout.base_item_share,
+                new String[]{"img", "desc"}, new int[]{R.id.share_img, R.id.share_desc});
+        GridView gridView = (GridView) shareContent.findViewById(R.id.share_grid);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        ShareManager.getInstance().sendWXRequest(context, false, shareUrlList.get(position),
+                                titleList.get(position), descList.get(position));
+                        break;
+                    case 1:
+                        ShareManager.getInstance().sendWXRequest(context, true, shareUrlList.get(position),
+                                titleList.get(position), descList.get(position));
+                        break;
+                    case 2:
+                        ShareManager.getInstance().shareToQQ(context, titleList.get(position),
+                                descList.get(position), shareUrlList.get(position));
+                        break;
+                }
+                shareDialog.dismiss();
+            }
+        });
+        return shareDialog;
     }
 
     public interface IActionListener {

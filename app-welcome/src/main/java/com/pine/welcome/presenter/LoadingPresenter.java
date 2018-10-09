@@ -20,7 +20,7 @@ import com.pine.welcome.R;
 import com.pine.welcome.bean.BundleSwitcherEntity;
 import com.pine.welcome.bean.VersionEntity;
 import com.pine.welcome.contract.ILoadingContract;
-import com.pine.welcome.manager.VersionUpdateDownloadManager;
+import com.pine.welcome.manager.ApkVersionManager;
 import com.pine.welcome.model.BundleSwitcherModel;
 import com.pine.welcome.model.VersionModel;
 import com.pine.welcome.ui.activity.WelcomeActivity;
@@ -76,7 +76,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
 
     @Override
     public void updateVersion() {
-        VersionUpdateDownloadManager.getInstance().startUpdate(new VersionUpdateDownloadManager.UpdateListener() {
+        ApkVersionManager.getInstance().startUpdate(new ApkVersionManager.UpdateListener() {
 
             @Override
             public void onDownloadStart(boolean isResume, long rangeSize, long allCount) {
@@ -177,7 +177,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             @Override
             public void onResponse(VersionEntity versionEntity) {
                 if (isUiAlive() && versionEntity != null) {
-                    VersionUpdateDownloadManager.getInstance().setVersionEntity(versionEntity);
+                    ApkVersionManager.getInstance().setVersionEntity(versionEntity);
                     try {
                         PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
                         if (packageInfo.versionCode < versionEntity.getVersionCode()) {
@@ -212,7 +212,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        File file = VersionUpdateDownloadManager.getInstance().getDownLoadFile();
+        File file = ApkVersionManager.getInstance().getDownLoadFile();
         if (file != null && file.exists()) {
             intent.setDataAndType(Uri.fromFile(file),
                     "application/vnd.android.package-archive");

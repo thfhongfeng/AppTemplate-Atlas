@@ -1,6 +1,7 @@
 package com.pine.base.mvc.activity;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
@@ -20,17 +21,24 @@ public abstract class BaseMvcActionBarActivity extends BaseActivity {
         setContentView(R.layout.base_mvp_activity_actionbar);
     }
 
-    protected final boolean beforeInit() {
+    @CallSuper
+    @Override
+    protected boolean beforeInit() {
         ViewStub content_layout = (ViewStub) findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
 
         initImmersionBar();
 
+        return false;
+    }
+
+    @CallSuper
+    @Override
+    protected void afterInit() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title));
-        return true;
     }
 
     @Override

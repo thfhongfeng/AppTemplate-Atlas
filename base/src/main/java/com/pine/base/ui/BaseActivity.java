@@ -23,11 +23,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        if (!beforeInit()) {
+        if (beforeInit()) {
             return;
         }
 
-        if (!initData()) {
+        if (initData()) {
             return;
         }
         initView();
@@ -37,12 +37,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 前置初始化
-     * <p>
-     * false:初始化失败
-     * true:初始化成功
+     *
+     * @return false:没有消耗掉
+     * true:消耗掉了
      */
     protected boolean beforeInit() {
-        return true;
+        return false;
     }
 
     protected void setContentView() {
@@ -54,8 +54,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 初始化数据
      *
-     * @return false:初始化失败
-     * true:初始化成功
+     * @return false:没有消耗掉
+     * true:消耗掉了
      */
     protected abstract boolean initData();
 

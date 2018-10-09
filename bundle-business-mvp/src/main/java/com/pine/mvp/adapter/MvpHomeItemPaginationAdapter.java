@@ -1,6 +1,7 @@
 package com.pine.mvp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.pine.base.adapter.BasePaginationListAdapter;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpHomePartAEntity;
 import com.pine.mvp.bean.MvpHomePartBEntity;
+import com.pine.mvp.ui.activity.MvpItemDetailActivity;
 
 import java.util.List;
 
@@ -48,30 +50,48 @@ public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
     }
 
     public class HomePartAViewHolder extends BaseListViewHolder<MvpHomePartAEntity> {
+        private Context mContext;
         private TextView title_tv;
 
         public HomePartAViewHolder(Context context, View itemView) {
             super(itemView);
+            mContext = context;
             title_tv = itemView.findViewById(R.id.title_tv);
         }
 
         @Override
         public void updateData(MvpHomePartAEntity content, int position) {
             title_tv.setText(content.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MvpItemDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 
     public class HomePartBViewHolder extends BaseListViewHolder<MvpHomePartBEntity> {
+        private Context mContext;
         private TextView title_tv;
 
         public HomePartBViewHolder(Context context, View itemView) {
             super(itemView);
+            mContext = context;
             title_tv = itemView.findViewById(R.id.title_tv);
         }
 
         @Override
         public void updateData(MvpHomePartBEntity content, int position) {
             title_tv.setText(content.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MvpItemDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

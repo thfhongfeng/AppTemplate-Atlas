@@ -10,7 +10,13 @@ android {
         versionCode build_versions.versionCode
         versionName build_versions.versionName
 
+        buildConfigField "String", "APP_NAME", "\"${build_versions.app_name}\""
+
         buildConfigField "String", "BASE_URL", "\"${build_url.base_url}\""
+
+        buildConfigField "String", "QQ_FOR_APP_KEY", "\"${build_app_key.qq_for_app_key}\""
+        buildConfigField "String", "WX_FOR_APP_KEY", "\"${build_app_key.wx_for_app_key}\""
+        buildConfigField "String", "WX_SECRET_KEY", "\"${build_app_key.wx_secret_key}\""
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

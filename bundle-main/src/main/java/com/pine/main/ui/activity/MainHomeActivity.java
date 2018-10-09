@@ -16,13 +16,18 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     private GridView business_gv;
 
     @Override
+    protected MainHomePresenter createPresenter() {
+        return new MainHomePresenter();
+    }
+
+    @Override
     protected int getActivityLayoutResId() {
         return R.layout.main_activity_home;
     }
 
     @Override
     protected boolean initData() {
-        return true;
+        return false;
     }
 
     @Override
@@ -32,17 +37,13 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
 
     @Override
     protected void afterInit() {
+        super.afterInit();
         mPresenter.loadBusinessBundleData();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    @Override
-    protected MainHomePresenter createPresenter() {
-        return new MainHomePresenter();
     }
 
     @Override

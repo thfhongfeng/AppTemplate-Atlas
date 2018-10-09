@@ -47,8 +47,7 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginRight="@dimen/dp_5"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/base_ic_menu"
-            android:visibility="gone" />
+            android:src="@mipmap/base_ic_menu" />
     </LinearLayout>
 
     <ViewStub

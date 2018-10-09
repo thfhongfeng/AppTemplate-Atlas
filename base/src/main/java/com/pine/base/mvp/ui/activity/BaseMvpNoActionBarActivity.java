@@ -1,6 +1,7 @@
 package com.pine.base.mvp.ui.activity;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 
@@ -21,8 +22,9 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
         setContentView(R.layout.base_mvp_activity_no_actionbar);
     }
 
+    @CallSuper
     @Override
-    protected final boolean beforeInit() {
+    protected boolean beforeInit() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -34,7 +36,13 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
         content_layout.inflate();
 
         initImmersionBar();
-        return true;
+        return false;
+    }
+
+    @CallSuper
+    @Override
+    protected void afterInit() {
+
     }
 
     @Override

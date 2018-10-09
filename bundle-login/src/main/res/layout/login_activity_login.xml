@@ -50,6 +50,7 @@
                 android:background="@drawable/login_bord_edit_text"
                 android:hint="@string/login_pwd_hint"
                 android:padding="@dimen/dp_10"
+                android:inputType="textPassword"
                 android:textSize="@dimen/sp_15" />
 
             <TextView

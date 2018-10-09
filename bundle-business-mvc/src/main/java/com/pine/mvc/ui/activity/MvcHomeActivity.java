@@ -24,13 +24,25 @@ public class MvcHomeActivity extends BaseMvcActionBarActivity {
     private TabFragmentPagerAdapter mFragmentPagerAdapter;
 
     @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+        titleTv.setText(R.string.mvc_home_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
+    }
+
+    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvc_activity_home;
     }
 
     @Override
     protected boolean initData() {
-        return true;
+        return false;
     }
 
     @Override
@@ -42,22 +54,5 @@ public class MvcHomeActivity extends BaseMvcActionBarActivity {
                 new Fragment[]{new MvcHomePartAFragment(), new MvcHomePartBFragment()},
                 new String[]{"PartA", "PartB"}));
         view_pager_tab_layout.setupWithViewPager(view_pager);
-    }
-
-    @Override
-    protected void afterInit() {
-
-    }
-
-    @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
-        titleTv.setText(R.string.mvc_home_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
     }
 }

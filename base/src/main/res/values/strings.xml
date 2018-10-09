@@ -11,6 +11,8 @@
     <string name="base_no_item"> 暂无数据哦</string>
     <string name="base_item_footer">正在加载...</string>
 
+    <string name="base_share_to">分享至</string>
+
     <string name="base_cancel">取消</string>
     <string name="base_done">完成</string>
     <string name="base_confirm">确定</string>

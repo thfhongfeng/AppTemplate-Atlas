@@ -1,6 +1,7 @@
 package com.pine.base.mvp.ui.activity;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
@@ -24,7 +25,9 @@ public abstract class BaseMvpActionBarActivity<V extends IBaseContract.Ui, P ext
         setContentView(R.layout.base_mvp_activity_actionbar);
     }
 
-    protected final boolean beforeInit() {
+    @CallSuper
+    @Override
+    protected boolean beforeInit() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -37,10 +40,15 @@ public abstract class BaseMvpActionBarActivity<V extends IBaseContract.Ui, P ext
 
         initImmersionBar();
 
+        return false;
+    }
+
+    @CallSuper
+    @Override
+    protected void afterInit() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title));
-        return true;
     }
 
     @Override
@@ -87,7 +95,7 @@ public abstract class BaseMvpActionBarActivity<V extends IBaseContract.Ui, P ext
         return R.mipmap.base_iv_status_bar_bg;
     }
 
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv);
-
     protected abstract P createPresenter();
+
+    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv);
 }

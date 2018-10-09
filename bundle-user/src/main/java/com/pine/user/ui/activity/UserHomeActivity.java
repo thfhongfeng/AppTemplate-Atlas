@@ -14,6 +14,12 @@ import com.pine.user.presenter.UserHomePresenter;
 @UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, LevelValues = {-1})
 public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContract.Ui, UserHomePresenter>
         implements IUserHomeContract.Ui {
+
+    @Override
+    protected UserHomePresenter createPresenter() {
+        return new UserHomePresenter();
+    }
+
     @Override
     protected int getActivityLayoutResId() {
         return R.layout.user_activity_home;
@@ -21,21 +27,11 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
 
     @Override
     protected boolean initData() {
-        return true;
+        return false;
     }
 
     @Override
     protected void initView() {
 
-    }
-
-    @Override
-    protected void afterInit() {
-
-    }
-
-    @Override
-    protected UserHomePresenter createPresenter() {
-        return new UserHomePresenter();
     }
 }

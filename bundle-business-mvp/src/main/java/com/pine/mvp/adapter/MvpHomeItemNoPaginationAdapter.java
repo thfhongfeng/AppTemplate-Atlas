@@ -1,6 +1,7 @@
 package com.pine.mvp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.pine.base.adapter.BaseListViewHolder;
 import com.pine.base.adapter.BaseNoPaginationListAdapter;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpHomePartCEntity;
+import com.pine.mvp.ui.activity.MvpItemDetailActivity;
 
 import java.util.List;
 
@@ -42,16 +44,25 @@ public class MvpHomeItemNoPaginationAdapter extends BaseNoPaginationListAdapter 
     }
 
     public class HomePartCViewHolder extends BaseListViewHolder<MvpHomePartCEntity> {
+        private Context mContext;
         private TextView title_tv;
 
         public HomePartCViewHolder(Context context, View itemView) {
             super(itemView);
+            mContext = context;
             title_tv = itemView.findViewById(R.id.title_tv);
         }
 
         @Override
         public void updateData(MvpHomePartCEntity content, int position) {
             title_tv.setText(content.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MvpItemDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

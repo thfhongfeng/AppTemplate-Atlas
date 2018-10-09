@@ -1,3 +1,5 @@
 <resources>
     <string name="mvp_home_title">Business Mvp</string>
+
+    <string name="mvp_item_detail_title">Business Mvp Item Detail</string>
 </resources>

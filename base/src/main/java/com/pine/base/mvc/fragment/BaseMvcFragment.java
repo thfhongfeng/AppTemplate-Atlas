@@ -1,12 +1,15 @@
 package com.pine.base.mvc.fragment;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 
 import com.pine.base.ui.BaseFragment;
 
 public abstract class BaseMvcFragment extends BaseFragment {
 
-    protected final void beforeInit() {
+    @CallSuper
+    @Override
+    protected void beforeInit() {
 
     }
 

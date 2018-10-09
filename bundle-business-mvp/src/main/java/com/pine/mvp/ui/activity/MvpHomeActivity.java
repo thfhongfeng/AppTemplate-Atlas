@@ -27,31 +27,8 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
     private ViewPager view_pager;
 
     @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.mvp_activity_home;
-    }
-
-    @Override
-    protected boolean initData() {
-        return true;
-    }
-
-    @Override
-    protected void initView() {
-        view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
-        view_pager = (ViewPager) findViewById(R.id.view_pager);
-
-        view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
-                new Fragment[]{
-                        new MvpHomePartAFragment(), new MvpHomePartBFragment(),
-                        new MvpHomePartCFragment(), new MvpHomePartDFragment()},
-                new String[]{"PartA", "PartB", "PartC", "PartD"}));
-        view_pager_tab_layout.setupWithViewPager(view_pager);
-    }
-
-    @Override
-    protected void afterInit() {
-
+    protected MvpHomePresenter createPresenter() {
+        return new MvpHomePresenter();
     }
 
     @Override
@@ -67,7 +44,25 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
     }
 
     @Override
-    protected MvpHomePresenter createPresenter() {
-        return new MvpHomePresenter();
+    protected int getActivityLayoutResId() {
+        return R.layout.mvp_activity_home;
+    }
+
+    @Override
+    protected boolean initData() {
+        return false;
+    }
+
+    @Override
+    protected void initView() {
+        view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
+        view_pager = (ViewPager) findViewById(R.id.view_pager);
+
+        view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
+                new Fragment[]{
+                        new MvpHomePartAFragment(), new MvpHomePartBFragment(),
+                        new MvpHomePartCFragment(), new MvpHomePartDFragment()},
+                new String[]{"PartA", "PartB", "PartC", "PartD"}));
+        view_pager_tab_layout.setupWithViewPager(view_pager);
     }
 }

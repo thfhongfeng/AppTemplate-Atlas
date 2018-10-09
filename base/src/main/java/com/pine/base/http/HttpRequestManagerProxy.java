@@ -1,6 +1,6 @@
 package com.pine.base.http;
 
-import android.app.Application;
+import android.content.Context;
 import android.widget.Toast;
 
 import com.pine.base.R;
@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class HttpRequestManagerProxy {
     private final static String TAG = LogUtils.makeLogTag(HttpRequestManagerProxy.class);
-    private static Application mApplicationContext;
+    private static Context mApplicationContext;
     private static IHttpRequestManager mRequestManager;
 
     // 正在进行的请求
@@ -40,7 +40,7 @@ public class HttpRequestManagerProxy {
 
     private static List<IHttpResponseInterceptor> mResponseInterceptorList = new ArrayList<IHttpResponseInterceptor>();
 
-    public static void init(Application context) {
+    public static void init(Context context) {
         init(context, new HashMap<String, String>());
     }
 
@@ -50,7 +50,7 @@ public class HttpRequestManagerProxy {
      * @param context
      * @param head
      */
-    public static void init(Application context, HashMap<String, String> head) {
+    public static void init(Context context, HashMap<String, String> head) {
         if (context != null) {
             mApplicationContext = context;
         } else {
