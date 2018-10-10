@@ -34,7 +34,7 @@ public class BaseApplication {
 
         registerActivity();
 
-        TencentShareManager.getInstance().init(BuildConfig.QQ_FOR_APP_KEY, BuildConfig.WX_FOR_APP_KEY, BuildConfig.WX_SECRET_KEY,
+        TencentShareManager.getInstance().init(BuildConfig.QQ_FOR_APP_ID, BuildConfig.WX_FOR_APP_KEY, BuildConfig.WX_SECRET_KEY,
                 R.mipmap.base_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
 
         HttpRequestManagerProxy.init(application);

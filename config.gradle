@@ -39,7 +39,7 @@ ext.build_url = build_url
  * 第三方KEY
  */
 def build_app_key = [:]
-build_app_key.qq_for_app_key = "1106052137"
+build_app_key.qq_for_app_id = "1107820499"
 build_app_key.wx_for_app_key = "wx57ee655d45be8d8a"
 build_app_key.wx_secret_key = "faf7a17b7ef08adf96d6d19372b0895c"
 

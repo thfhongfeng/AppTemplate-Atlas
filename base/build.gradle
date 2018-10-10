@@ -16,7 +16,7 @@ android {
 
         buildConfigField "String", "BASE_URL", "\"${build_url.base_url}\""
 
-        buildConfigField "String", "QQ_FOR_APP_KEY", "\"${build_app_key.qq_for_app_key}\""
+        buildConfigField "String", "QQ_FOR_APP_ID", "\"${build_app_key.qq_for_app_id}\""
         buildConfigField "String", "WX_FOR_APP_KEY", "\"${build_app_key.wx_for_app_key}\""
         buildConfigField "String", "WX_SECRET_KEY", "\"${build_app_key.wx_secret_key}\""
 
