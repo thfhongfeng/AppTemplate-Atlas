@@ -45,12 +45,12 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
-    protected boolean initData() {
+    protected boolean onCreateInitData() {
         return false;
     }
 
     @Override
-    protected void initView() {
+    protected void onCreateInitView() {
         mobile_et = (EditText) findViewById(R.id.mobile_et);
         password_et = (EditText) findViewById(R.id.password_et);
         login_btn_tv = (TextView) findViewById(R.id.login_btn_tv);

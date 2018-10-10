@@ -7,11 +7,18 @@
     tools:context="com.pine.mvp.ui.activity.MvpItemDetailActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/refresh_btn_tv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="@dimen/dp_30"
-        android:text="Business Mvp Item Detail" />
+        android:text="Business Mvp Item Detail(Click To Refresh)" />
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></WebView>
 
 </LinearLayout>

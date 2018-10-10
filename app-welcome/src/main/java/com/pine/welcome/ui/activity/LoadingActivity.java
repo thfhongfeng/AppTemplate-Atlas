@@ -30,19 +30,19 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     }
 
     @Override
-    protected boolean initData() {
+    protected boolean onCreateInitData() {
         mPresenter.setStartTime();
         return false;
     }
 
     @Override
-    protected void initView() {
+    protected void onCreateInitView() {
 
     }
 
     @Override
-    protected void afterInit() {
-        super.afterInit();
+    protected void onCreateAfterInit() {
+        super.onCreateAfterInit();
         mPresenter.loadBundleSwitcherData();
     }
 
@@ -84,7 +84,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
             });
         }
         mUpdateConfirmDialog.show();
-        CountDownTimer countDownTimer = new CountDownTimer(30000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(900000, 1000) {
 
             @Override
             public void onFinish() {

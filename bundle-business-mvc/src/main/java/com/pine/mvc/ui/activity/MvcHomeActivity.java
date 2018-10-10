@@ -41,12 +41,12 @@ public class MvcHomeActivity extends BaseMvcActionBarActivity {
     }
 
     @Override
-    protected boolean initData() {
+    protected boolean onCreateInitData() {
         return false;
     }
 
     @Override
-    protected void initView() {
+    protected void onCreateInitView() {
         view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
         view_pager = (ViewPager) findViewById(R.id.view_pager);
 

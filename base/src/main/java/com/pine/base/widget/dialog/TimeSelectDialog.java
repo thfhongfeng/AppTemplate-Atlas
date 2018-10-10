@@ -73,7 +73,7 @@ public class TimeSelectDialog extends Dialog {
             wheelHour = (WheelPicker) layout.findViewById(R.id.wheel_one);
             wheelMinute = (WheelPicker) layout.findViewById(R.id.wheel_two);
             wheelSecond = (WheelPicker) layout.findViewById(R.id.wheel_three);
-            initView(dialog, dialogSelect, showHour, showMinute, showSecond);
+            onCreateInitView(dialog, dialogSelect, showHour, showMinute, showSecond);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
             window.setGravity(Gravity.BOTTOM);
@@ -86,7 +86,7 @@ public class TimeSelectDialog extends Dialog {
             return dialog;
         }
 
-        private void initView(final TimeSelectDialog dialog, final IDialogTimeSelected dialogSelect,
+        private void onCreateInitView(final TimeSelectDialog dialog, final IDialogTimeSelected dialogSelect,
                               boolean showHour, boolean showMinute, boolean showSecond) {
             selectedTime = Calendar.getInstance();
             selectedTime.setTime(new Date());

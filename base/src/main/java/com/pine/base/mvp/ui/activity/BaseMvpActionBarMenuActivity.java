@@ -27,7 +27,7 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
 
     @CallSuper
     @Override
-    protected boolean beforeInit() {
+    protected boolean onCreateBeforeInit() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -45,11 +45,19 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
 
     @CallSuper
     @Override
-    protected void afterInit() {
+    protected void onCreateAfterInit() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),
                 (ImageView) action_bar_ll.findViewById(R.id.menu_iv));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_SHOW);
+        }
     }
 
     @Override
@@ -60,6 +68,17 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         }
         super.onPause();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_PAUSE);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_HIDE);
+        }
+        super.onStop();
     }
 
     @Override

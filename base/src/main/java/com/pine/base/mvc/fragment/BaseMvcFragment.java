@@ -9,7 +9,7 @@ public abstract class BaseMvcFragment extends BaseFragment {
 
     @CallSuper
     @Override
-    protected void beforeInit() {
+    protected void onCreateViewBeforeInit() {
 
     }
 

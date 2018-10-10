@@ -9,4 +9,8 @@ import com.pine.mvp.contract.IMvpHomeContract;
 
 public class MvpHomePresenter extends BasePresenter<IMvpHomeContract.Ui>
         implements IMvpHomeContract.Presenter {
+    @Override
+    public void onUiState(int state) {
+
+    }
 }

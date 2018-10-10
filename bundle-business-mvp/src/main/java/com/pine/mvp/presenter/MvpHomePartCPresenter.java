@@ -2,6 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.mvp.adapter.MvpHomeItemNoPaginationAdapter;
 import com.pine.mvp.bean.MvpHomePartCEntity;
 import com.pine.mvp.contract.IMvpHomePartCContract;
 import com.pine.mvp.model.MvpHomeModel;
@@ -16,10 +17,19 @@ import java.util.HashMap;
 public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.Ui>
         implements IMvpHomePartCContract.Presenter {
     private MvpHomeModel mModel = new MvpHomeModel();
+    private MvpHomeItemNoPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpHomePartCPresenter() {
         mModel = new MvpHomeModel();
+    }
+
+    @Override
+    public MvpHomeItemNoPaginationAdapter getRecycleViewAdapter() {
+        if (mMvpHomeItemAdapter == null) {
+            mMvpHomeItemAdapter = new MvpHomeItemNoPaginationAdapter(MvpHomeItemNoPaginationAdapter.HOME_PART_C_VIEW_HOLDER);
+        }
+        return mMvpHomeItemAdapter;
     }
 
     @Override
@@ -33,7 +43,8 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
             @Override
             public void onResponse(ArrayList<MvpHomePartCEntity> mvpHomePartCEntities) {
                 if (isUiAlive()) {
-                    getUi().setHomePartCListAdapter(mvpHomePartCEntities);
+                    mMvpHomeItemAdapter.setData(mvpHomePartCEntities);
+                    mMvpHomeItemAdapter.notifyDataSetChanged();
                 }
                 finishDataLoad();
             }
@@ -51,5 +62,10 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);
         }
+    }
+
+    @Override
+    public void onUiState(int state) {
+
     }
 }

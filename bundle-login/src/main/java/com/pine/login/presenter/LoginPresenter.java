@@ -39,4 +39,9 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
             }
         });
     }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
 }

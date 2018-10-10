@@ -13,7 +13,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.pine.base.R;
-import com.pine.base.manager.ShareManager;
+import com.pine.base.manager.TencentShareManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,9 +117,9 @@ public class DialogUtils {
         shareDialog.setCanceledOnTouchOutside(true);
         List<Map<String, Object>> items = new ArrayList<>();
         final int[] shareIcon = {
-                R.drawable.base_ic_share_weixin,
-                R.drawable.base_ic_share_weixin_friend_circle,
-                R.drawable.base_ic_share_qq,
+                R.mipmap.base_ic_share_weixin,
+                R.mipmap.base_ic_share_weixin_friend_circle,
+                R.mipmap.base_ic_share_qq,
         };
         final String[] shareDesc = context.getResources().getStringArray(R.array.base_share_icon_desc_arr);
         for (int i = 0; i < shareIcon.length; i++) {
@@ -137,15 +137,15 @@ public class DialogUtils {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        ShareManager.getInstance().sendWXRequest(context, false, shareUrlList.get(position),
+                        TencentShareManager.getInstance().sendWXRequest(context, false, shareUrlList.get(position),
                                 titleList.get(position), descList.get(position));
                         break;
                     case 1:
-                        ShareManager.getInstance().sendWXRequest(context, true, shareUrlList.get(position),
+                        TencentShareManager.getInstance().sendWXRequest(context, true, shareUrlList.get(position),
                                 titleList.get(position), descList.get(position));
                         break;
                     case 2:
-                        ShareManager.getInstance().shareToQQ(context, titleList.get(position),
+                        TencentShareManager.getInstance().shareToQQ(context, titleList.get(position),
                                 descList.get(position), shareUrlList.get(position));
                         break;
                 }

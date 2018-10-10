@@ -232,4 +232,12 @@ public class DecimalUtils {
         }
         return new BigDecimal(s1).divide(new BigDecimal(s2), scale, mode).toString();
     }
+
+    public static boolean isEqual(float f1, float f2) {
+        return Math.abs(f1 - f2) <= 0;
+    }
+
+    public static boolean isEqual(double d1, double d2) {
+        return Math.abs(d1 - d2) <= 0;
+    }
 }

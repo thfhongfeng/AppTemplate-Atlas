@@ -224,4 +224,9 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
         }
         finishUi();
     }
+
+    @Override
+    public void onUiState(int state) {
+        
+    }
 }

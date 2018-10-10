@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.pine.base.BaseApplication;
+import com.pine.tool.util.AppUtils;
 import com.pine.tool.util.LogUtils;
 import com.tencent.connect.share.QQShare;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -24,10 +26,9 @@ import java.io.ByteArrayOutputStream;
  * Created by tanghongfeng on 2018/10/9
  */
 
-public class ShareManager {
-    private final static String TAG = LogUtils.makeLogTag(ShareManager.class);
-    private static volatile ShareManager mInstance;
-    public Context mContext;
+public class TencentShareManager {
+    private final static String TAG = LogUtils.makeLogTag(TencentShareManager.class);
+    private static volatile TencentShareManager mInstance;
     private IWXAPI mIwxApi;
     private Tencent mTencent;
     private String QQ_FOR_APP_KEY = "";
@@ -37,26 +38,18 @@ public class ShareManager {
     private String APP_NAME = "";
     private String HOST = "";
 
-    private ShareManager() {
+    private TencentShareManager() {
     }
 
-    public static ShareManager getInstance() {
+    public static TencentShareManager getInstance() {
         if (mInstance == null) {
-            synchronized (ShareManager.class) {
+            synchronized (TencentShareManager.class) {
                 if (mInstance == null) {
-                    mInstance = new ShareManager();
+                    mInstance = new TencentShareManager();
                 }
             }
         }
         return mInstance;
-    }
-
-    public IWXAPI registerTencentApi() {
-        if (mIwxApi == null) {
-            mIwxApi = WXAPIFactory.createWXAPI(mContext, WX_FOR_APP_KEY, true);
-            mIwxApi.registerApp(WX_FOR_APP_KEY);
-        }
-        return mIwxApi;
     }
 
     public void init(String qq_for_app_key, String wx_for_app_key, String wx_secret_key,
@@ -85,18 +78,19 @@ public class ShareManager {
             LogUtils.d(TAG, "ShareManager was not init");
             return;
         }
-        mContext = context;
-        mIwxApi = WXAPIFactory.createWXAPI(context, WX_FOR_APP_KEY, true);
-        mIwxApi.registerApp(WX_FOR_APP_KEY);
+        if (mIwxApi == null) {
+            mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplicationByReflect(), WX_FOR_APP_KEY, true);
+            mIwxApi.registerApp(WX_FOR_APP_KEY);
+        }
         if (!mIwxApi.isWXAppInstalled()) {
             Toast.makeText(context, "抱歉，您的手机上未安装微信，无法分享！", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = url;
+        WXWebpageObject webPage = new WXWebpageObject();
+        webPage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage();
-        msg.mediaObject = webpage;
+        msg.mediaObject = webPage;
         msg.title = title;
         msg.description = description;
         Bitmap thumb = BitmapFactory.decodeResource(context.getResources(), ICON_ID);
@@ -116,7 +110,6 @@ public class ShareManager {
             LogUtils.d(TAG, "ShareManager was not init");
             return;
         }
-        mContext = context;
         if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_FOR_APP_KEY, context);
         }
@@ -143,12 +136,12 @@ public class ShareManager {
 
         @Override
         public void onError(UiError e) {
-            Toast.makeText(mContext, "分享QQ失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BaseApplication.mApplication, "分享QQ失败", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel() {
-            Toast.makeText(mContext, "取消分享", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BaseApplication.mApplication, "取消分享", Toast.LENGTH_SHORT).show();
         }
     }
 }

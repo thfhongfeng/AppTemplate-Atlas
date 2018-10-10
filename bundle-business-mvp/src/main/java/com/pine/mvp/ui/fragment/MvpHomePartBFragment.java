@@ -8,11 +8,8 @@ import android.view.View;
 import com.pine.base.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
-import com.pine.mvp.bean.MvpHomePartBEntity;
 import com.pine.mvp.contract.IMvpHomePartBContract;
 import com.pine.mvp.presenter.MvpHomePartBPresenter;
-
-import java.util.List;
 
 /**
  * Created by tanghongfeng on 2018/9/28
@@ -22,7 +19,6 @@ public class MvpHomePartBFragment extends BaseMvpFragment<IMvpHomePartBContract.
         implements IMvpHomePartBContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
-    private MvpHomeItemPaginationAdapter mMvpHomeItemAdapter;
 
     @Override
     protected MvpHomePartBPresenter createPresenter() {
@@ -35,12 +31,12 @@ public class MvpHomePartBFragment extends BaseMvpFragment<IMvpHomePartBContract.
     }
 
     @Override
-    protected void initData() {
+    protected void onCreateViewInitData() {
 
     }
 
     @Override
-    protected void initView(View layout) {
+    protected void onCreateViewInitView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
         swipe_refresh_layout.setOnRefreshListener(this);
@@ -74,28 +70,16 @@ public class MvpHomePartBFragment extends BaseMvpFragment<IMvpHomePartBContract.
                 }
             }
         });
-        mMvpHomeItemAdapter = new MvpHomeItemPaginationAdapter(MvpHomeItemPaginationAdapter.HOME_PART_B_VIEW_HOLDER);
-        recycle_view.setAdapter(mMvpHomeItemAdapter);
+        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.loadHomePartBListData(true, 1, mMvpHomeItemAdapter.getPageSize());
+        mPresenter.loadHomePartBListData(true);
     }
 
     public void onLoadingMore() {
-        mPresenter.loadHomePartBListData(false, mMvpHomeItemAdapter.getPageNo() + 1,
-                mMvpHomeItemAdapter.getPageSize());
-    }
-
-    @Override
-    public void setHomePartBListAdapter(List<MvpHomePartBEntity> data, boolean refresh) {
-        if (refresh) {
-            mMvpHomeItemAdapter.setData(data);
-        } else {
-            mMvpHomeItemAdapter.addData(data);
-        }
-        mMvpHomeItemAdapter.notifyDataSetChanged();
+        mPresenter.loadHomePartBListData(false);
     }
 
     @Override

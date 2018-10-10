@@ -7,12 +7,8 @@ import android.view.View;
 
 import com.pine.base.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpHomeItemNoPaginationAdapter;
-import com.pine.mvp.bean.MvpHomePartCEntity;
 import com.pine.mvp.contract.IMvpHomePartCContract;
 import com.pine.mvp.presenter.MvpHomePartCPresenter;
-
-import java.util.List;
 
 /**
  * Created by tanghongfeng on 2018/9/28
@@ -22,7 +18,6 @@ public class MvpHomePartCFragment extends BaseMvpFragment<IMvpHomePartCContract.
         implements IMvpHomePartCContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
-    private MvpHomeItemNoPaginationAdapter mMvpHomeItemAdapter;
 
     @Override
     protected MvpHomePartCPresenter createPresenter() {
@@ -35,12 +30,12 @@ public class MvpHomePartCFragment extends BaseMvpFragment<IMvpHomePartCContract.
     }
 
     @Override
-    protected void initData() {
+    protected void onCreateViewInitData() {
 
     }
 
     @Override
-    protected void initView(View layout) {
+    protected void onCreateViewInitView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
         swipe_refresh_layout.setOnRefreshListener(this);
@@ -66,19 +61,12 @@ public class MvpHomePartCFragment extends BaseMvpFragment<IMvpHomePartCContract.
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycle_view.setLayoutManager(linearLayoutManager);
         recycle_view.setHasFixedSize(true);
-        mMvpHomeItemAdapter = new MvpHomeItemNoPaginationAdapter(MvpHomeItemNoPaginationAdapter.HOME_PART_C_VIEW_HOLDER);
-        recycle_view.setAdapter(mMvpHomeItemAdapter);
+        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
     }
 
     @Override
     public void onRefresh() {
         mPresenter.loadHomePartCListData();
-    }
-
-    @Override
-    public void setHomePartCListAdapter(List<MvpHomePartCEntity> data) {
-        mMvpHomeItemAdapter.setData(data);
-        mMvpHomeItemAdapter.notifyDataSetChanged();
     }
 
     @Override

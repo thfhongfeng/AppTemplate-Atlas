@@ -49,4 +49,9 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
             }
         }, 2000);
     }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
 }

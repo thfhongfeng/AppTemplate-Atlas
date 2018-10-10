@@ -2,6 +2,7 @@ package com.pine.base.mvp.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.CallSuper;
 
 import com.pine.base.mvp.contract.IBaseContract;
 import com.pine.tool.util.LogUtils;
@@ -13,8 +14,12 @@ import java.lang.ref.WeakReference;
  */
 
 public abstract class BasePresenter<V extends IBaseContract.Ui> {
+    public final static int UI_STATE_ON_ATTACH = 1;
+    public final static int UI_STATE_ON_SHOW = 2;
+    public final static int UI_STATE_ON_PAUSE = 3;
+    public final static int UI_STATE_ON_HIDE = 4;
+    public final static int UI_STATE_ON_DETACH = 5;
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
-
     /**
      * UI的弱引用
      */
@@ -25,15 +30,19 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
      *
      * @param ui
      */
+    @CallSuper
     public void attachUi(V ui) {
         mUiRef = new WeakReference<V>(ui);
+        onUiState(BasePresenter.UI_STATE_ON_ATTACH);
     }
 
     /**
      * 解除关联
      */
+    @CallSuper
     public void detachUi() {
         if (mUiRef != null) {
+            onUiState(BasePresenter.UI_STATE_ON_DETACH);
             mUiRef.clear();
         }
     }
@@ -71,4 +80,6 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
             ((Activity) mUiRef.get()).finish();
         }
     }
+
+    public abstract void onUiState(int state);
 }

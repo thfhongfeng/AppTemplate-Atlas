@@ -1,9 +1,7 @@
 package com.pine.mvp.contract;
 
 import com.pine.base.mvp.contract.IBaseContract;
-import com.pine.mvp.bean.MvpHomePartBEntity;
-
-import java.util.List;
+import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -11,12 +9,12 @@ import java.util.List;
 
 public interface IMvpHomePartBContract {
     interface Ui extends IBaseContract.Ui {
-        void setHomePartBListAdapter(List<MvpHomePartBEntity> data, boolean refresh);
-
         void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {
-        void loadHomePartBListData(boolean refresh, int pageNo, int pageSize);
+        void loadHomePartBListData(boolean refresh);
+
+        MvpHomeItemPaginationAdapter getRecycleViewAdapter();
     }
 }

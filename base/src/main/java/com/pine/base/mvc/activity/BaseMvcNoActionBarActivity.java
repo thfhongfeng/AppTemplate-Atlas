@@ -20,7 +20,7 @@ public abstract class BaseMvcNoActionBarActivity extends BaseActivity {
 
     @CallSuper
     @Override
-    protected boolean beforeInit() {
+    protected boolean onCreateBeforeInit() {
         ViewStub content_layout = (ViewStub) findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
@@ -32,7 +32,7 @@ public abstract class BaseMvcNoActionBarActivity extends BaseActivity {
 
     @CallSuper
     @Override
-    protected void afterInit() {
+    protected void onCreateAfterInit() {
 
     }
 

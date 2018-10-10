@@ -26,18 +26,18 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     }
 
     @Override
-    protected boolean initData() {
+    protected boolean onCreateInitData() {
         return false;
     }
 
     @Override
-    protected void initView() {
+    protected void onCreateInitView() {
         business_gv = (GridView) findViewById(R.id.business_gv);
     }
 
     @Override
-    protected void afterInit() {
-        super.afterInit();
+    protected void onCreateAfterInit() {
+        super.onCreateAfterInit();
         mPresenter.loadBusinessBundleData();
     }
 

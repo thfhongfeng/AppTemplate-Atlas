@@ -47,10 +47,6 @@ dependencies {
     compile build_dependency["appcompat_v7"]
     // android官方 dependency end
 
-    // 第三方 dependency begin
-    compile build_dependency['safewebviewbridge']
-    // 第三方 dependency end
-
     // 主体基础模块 begin
     providedCompile project(':base')
     // 主体基础模块 end

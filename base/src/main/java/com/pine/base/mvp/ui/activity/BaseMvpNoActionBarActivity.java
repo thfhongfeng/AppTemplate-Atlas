@@ -24,7 +24,7 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @CallSuper
     @Override
-    protected boolean beforeInit() {
+    protected boolean onCreateBeforeInit() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -41,8 +41,16 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @CallSuper
     @Override
-    protected void afterInit() {
+    protected void onCreateAfterInit() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_SHOW);
+        }
     }
 
     @Override
@@ -53,6 +61,17 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         }
         super.onPause();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_PAUSE);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_HIDE);
+        }
+        super.onStop();
     }
 
     @Override

@@ -75,4 +75,9 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
                     });
         }
     }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
 }

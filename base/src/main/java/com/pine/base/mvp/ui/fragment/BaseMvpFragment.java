@@ -13,12 +13,36 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
 
     @CallSuper
     @Override
-    protected void beforeInit() {
+    protected void onCreateViewBeforeInit() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
             mPresenter.attachUi((V) this);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_SHOW);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_PAUSE);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_HIDE);
+        }
+        super.onStop();
     }
 
     @Override

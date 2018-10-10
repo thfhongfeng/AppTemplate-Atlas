@@ -10,6 +10,8 @@ android {
         versionCode build_versions.versionCode
         versionName build_versions.versionName
 
+        manifestPlaceholders = [baidu_for_app_key: build_app_key.baidu_for_app_key]
+
         buildConfigField "String", "APP_NAME", "\"${build_versions.app_name}\""
 
         buildConfigField "String", "BASE_URL", "\"${build_url.base_url}\""
@@ -37,6 +39,8 @@ android {
                     'src/main/res/layout',
                     'src/main/res'
             ]
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []    //disable automatic ndk-build
         }
     }
 }
@@ -64,6 +68,7 @@ dependencies {
     // 第三方 dependency begin
     compile build_dependency["nohttp_okhttp"]
     compile build_dependency["aigestudio_wheelpicker"]
+    compile build_dependency['safewebviewbridge']
     compile project(':base-lib-immersionbar')
     // 第三方 dependency end
 

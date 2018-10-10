@@ -9,4 +9,8 @@ import com.pine.mvp.contract.IMvpItemDetailContract;
 
 public class MvpItemDetailPresenter extends BasePresenter<IMvpItemDetailContract.Ui>
         implements IMvpItemDetailContract.Presenter {
+    @Override
+    public void onUiState(int state) {
+
+    }
 }

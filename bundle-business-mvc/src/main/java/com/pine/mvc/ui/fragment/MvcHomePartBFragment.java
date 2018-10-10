@@ -17,12 +17,12 @@ public class MvcHomePartBFragment extends BaseMvcFragment {
     }
 
     @Override
-    protected void initData() {
+    protected void onCreateViewInitData() {
 
     }
 
     @Override
-    protected void initView(View layout) {
+    protected void onCreateViewInitView(View layout) {
 
     }
 }

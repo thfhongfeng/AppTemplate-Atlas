@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.Build;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -19,6 +17,7 @@ import com.pine.base.mvp.presenter.BasePresenter;
 import com.pine.base.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
+import com.pine.tool.util.WebViewUtils;
 
 import cn.pedant.SafeWebViewBridge.InjectedChromeClient;
 
@@ -41,14 +40,13 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
     }
 
     @Override
-    protected void initData() {
+    protected void onCreateViewInitData() {
 
     }
 
     @Override
-    protected void initView(View layout) {
+    protected void onCreateViewInitView(View layout) {
         refresh_btn_tv = (TextView) layout.findViewById(R.id.refresh_btn_tv);
-
         initWebView(layout);
         initEvent();
     }
@@ -59,36 +57,20 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
 
     private void initWebView(View view) {
         web_view = (WebView) view.findViewById(R.id.web_view);
-        WebSettings webSettings = web_view.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setAppCacheEnabled(false);
-        webSettings.setAllowContentAccess(true);
-        web_view.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        web_view.setDownloadListener(new DownloadListener() {
+        WebViewUtils.setupCommonWebView(web_view, new DownloadListener() {
             @Override
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
-        });
-        webSettings.setAllowFileAccess(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            webSettings.setAllowFileAccessFromFileURLs(true);
-        }
-        webSettings.setDomStorageEnabled(true); // 必须设置为true，否则杀死APP后，再次加载时，onGeolocationPermissionsShowPrompt不会调用(除非清除APP缓存)。从而授权无法完成，导致页面加载出问题。
-        web_view.setWebChromeClient(new InjectedChromeClient("appInterface", JsInterface.class) {
+        }, new InjectedChromeClient("appInterface", JsInterface.class) {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
             }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-        web_view.setWebViewClient(new WebViewClient() {
+        }, new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -122,7 +104,6 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
                 handler.proceed();
             }
         });
-        web_view.removeJavascriptInterface("searchBoxJavaBredge_");
         loadUrl();
     }
 

@@ -26,12 +26,12 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
     }
 
     @Override
-    protected boolean initData() {
+    protected boolean onCreateInitData() {
         return false;
     }
 
     @Override
-    protected void initView() {
+    protected void onCreateInitView() {
 
     }
 }

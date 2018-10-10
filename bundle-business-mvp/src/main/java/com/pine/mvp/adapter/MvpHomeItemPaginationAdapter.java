@@ -2,9 +2,11 @@ package com.pine.mvp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pine.base.adapter.BaseListViewHolder;
@@ -13,6 +15,7 @@ import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpHomePartAEntity;
 import com.pine.mvp.bean.MvpHomePartBEntity;
 import com.pine.mvp.ui.activity.MvpItemDetailActivity;
+import com.pine.tool.util.DecimalUtils;
 
 import java.util.List;
 
@@ -51,17 +54,33 @@ public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
 
     public class HomePartAViewHolder extends BaseListViewHolder<MvpHomePartAEntity> {
         private Context mContext;
-        private TextView title_tv;
+        private LinearLayout location_ll;
+        private TextView title_tv, location_tv;
 
         public HomePartAViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             title_tv = itemView.findViewById(R.id.title_tv);
+            location_ll = itemView.findViewById(R.id.location_ll);
+            location_tv = itemView.findViewById(R.id.location_tv);
         }
 
         @Override
         public void updateData(MvpHomePartAEntity content, int position) {
             title_tv.setText(content.getTitle());
+            String distanceStr = content.getDistance();
+            if (TextUtils.isEmpty(distanceStr)) {
+                location_tv.setText("");
+                location_ll.setVisibility(View.GONE);
+            } else {
+                float distance = Float.parseFloat(distanceStr);
+                if (distance >= 1000.0f) {
+                    location_tv.setText(DecimalUtils.divide(distance, 1000.0f, 2) + mContext.getString(R.string.base_unit_kilometre));
+                } else {
+                    location_tv.setText(distance + mContext.getString(R.string.base_unit_metre));
+                }
+                location_ll.setVisibility(View.VISIBLE);
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

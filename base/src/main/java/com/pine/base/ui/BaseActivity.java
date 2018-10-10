@@ -23,43 +23,54 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        if (beforeInit()) {
+        if (onCreateBeforeInit()) {
             return;
         }
 
-        if (initData()) {
+        if (onCreateInitData()) {
             return;
         }
-        initView();
+        onCreateInitView();
 
-        afterInit();
-    }
-
-    /**
-     * 前置初始化
-     *
-     * @return false:没有消耗掉
-     * true:消耗掉了
-     */
-    protected boolean beforeInit() {
-        return false;
+        onCreateAfterInit();
     }
 
     protected void setContentView() {
         setContentView(getActivityLayoutResId());
     }
 
+    /**
+     * onCreate中获取当前Activity的内容布局资源id
+     *
+     * @return Activity的内容布局资源id
+     */
     protected abstract int getActivityLayoutResId();
 
     /**
-     * 初始化数据
+     * onCreate中前置初始化
      *
-     * @return false:没有消耗掉
-     * true:消耗掉了
+     * @return false:没有消耗掉(不中断onCreate后续流程并finish)
+     * true:消耗掉了(中断onCreate后续流程并finish)
      */
-    protected abstract boolean initData();
+    protected boolean onCreateBeforeInit() {
+        return false;
+    }
 
-    protected abstract void initView();
+    /**
+     * onCreate中初始化数据
+     *
+     * @return false:没有消耗掉(不中断onCreate后续流程)
+     * true:消耗掉了(中断onCreate后续流程)
+     */
+    protected abstract boolean onCreateInitData();
 
-    protected abstract void afterInit();
+    /**
+     * onCreate中初始化View
+     */
+    protected abstract void onCreateInitView();
+
+    /**
+     * onCreate中结束初始化
+     */
+    protected abstract void onCreateAfterInit();
 }

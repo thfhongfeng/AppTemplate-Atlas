@@ -9,10 +9,12 @@ import com.pine.base.adapter.BaseListAdapterItemEntity;
 public class MvpHomePartAEntity extends BaseListAdapterItemEntity {
 
     /**
-     * title : title
+     * title :
+     * distance :
      */
 
     private String title;
+    private String distance;
 
     public String getTitle() {
         return title;
@@ -20,5 +22,13 @@ public class MvpHomePartAEntity extends BaseListAdapterItemEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 }
