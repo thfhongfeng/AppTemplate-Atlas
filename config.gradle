@@ -65,8 +65,8 @@ def build_dependency = [
 
         // android官方 dependency
         "appcompat_v7"          : 'com.android.support:appcompat-v7:27.+',
+        "support_design"        : 'com.android.support:design:27.+',
         "constraint_layout"     : 'com.android.support.constraint:constraint-layout:1.0.2',
-        "support_design"        : 'com.android.support:design:26.+',
 
         // 阿里atlas dependency
         "atlas_core"            : 'com.taobao.android:atlas_core:5.0.8.0-rc7@aar',
