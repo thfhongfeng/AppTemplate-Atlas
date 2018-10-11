@@ -4,6 +4,5 @@
     <!--圆角度数-->
     <corners android:radius="@dimen/dp_8" />
     <!--边宽宽度及边宽颜色-->
-    <solid
-        android:color="@color/white"/>
+    <solid android:color="@color/white" />
 </shape>

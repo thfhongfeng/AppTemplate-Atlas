@@ -14,9 +14,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pine.base.mvp.ui.activity.BaseMvpActionBarMenuActivity;
-import com.pine.base.util.DialogUtils;
+import com.pine.base.share.bean.ShareBean;
+import com.pine.base.share.manager.ShareManager;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpItemDetailContract;
@@ -24,7 +26,6 @@ import com.pine.mvp.presenter.MvpItemDetailPresenter;
 import com.pine.tool.util.WebViewUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SafeWebViewBridge.InjectedChromeClient;
 
@@ -50,19 +51,24 @@ public class MvpItemDetailActivity extends BaseMvpActionBarMenuActivity<IMvpItem
             }
         });
         menuBtnIv.setImageResource(R.mipmap.base_ic_share);
-        List<String> titleList = new ArrayList<String>();
-        titleList.add("Item Detail Title");
-        titleList.add("Item Detail Title");
-        titleList.add("Item Detail Title");
-        List<String> descList = new ArrayList<String>();
-        descList.add("Item Detail Desc");
-        descList.add("Item Detail Desc");
-        descList.add("Item Detail Desc");
-        List<String> shareUrlList = new ArrayList<String>();
-        shareUrlList.add("http://www.baidu.com");
-        shareUrlList.add("http://www.baidu.com");
-        shareUrlList.add("http://www.baidu.com");
-        mShareDialog = DialogUtils.createShareDialog(this, titleList, descList, shareUrlList);
+        ArrayList<ShareBean> shareBeanList = new ArrayList<>();
+        ShareBean shareBean = new ShareBean(ShareBean.SHARE_TARGET_QQ, ShareBean.SHARE_CONTENT_TYPE_TEXT_URL,
+                "Item Detail Title", "Item Detail Text",
+                "Item Detail Desc", "http://www.baidu.com");
+        shareBeanList.add(shareBean);
+        shareBean = new ShareBean(ShareBean.SHARE_TARGET_WX, ShareBean.SHARE_CONTENT_TYPE_TEXT_URL,
+                "Item Detail Title", "Item Detail Text",
+                "Item Detail Desc", "http://www.baidu.com");
+        shareBeanList.add(shareBean);
+        shareBean = new ShareBean(ShareBean.SHARE_TARGET_WX_FRIEND_CIRCLE, ShareBean.SHARE_CONTENT_TYPE_TEXT_URL,
+                "Item Detail Title", "Item Detail Text",
+                "Item Detail Desc", "http://www.baidu.com");
+        shareBeanList.add(shareBean);
+        shareBean = new ShareBean(ShareBean.SHARE_TARGET_WEI_BO, ShareBean.SHARE_CONTENT_TYPE_TEXT_URL,
+                "Item Detail Title", "Item Detail Text",
+                "Item Detail Desc", "http://www.baidu.com");
+        shareBeanList.add(shareBean);
+        mShareDialog = ShareManager.getInstance().createShareDialog(this, shareBeanList);
         menuBtnIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +157,30 @@ public class MvpItemDetailActivity extends BaseMvpActionBarMenuActivity<IMvpItem
 
     private void loadUrl() {
         web_view.loadUrl(MvpUrlConstants.H5_HomeItemDetail);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ShareManager.getInstance().onActivityResult(requestCode, resultCode, data, new ShareManager.ShareCallback() {
+            @Override
+            public void onShareSuccess(ShareBean shareBean) {
+                Toast.makeText(MvpItemDetailActivity.this,
+                        R.string.mvp_share_wei_bo_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onShareCancel(ShareBean shareBean) {
+                Toast.makeText(MvpItemDetailActivity.this,
+                        R.string.mvp_share_wei_bo_cancel, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onShareFail(ShareBean shareBean) {
+                Toast.makeText(MvpItemDetailActivity.this,
+                        R.string.mvp_share_wei_bo_fail, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

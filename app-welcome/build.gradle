@@ -21,6 +21,12 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs', '../base/libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 

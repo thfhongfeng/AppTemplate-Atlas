@@ -1,9 +1,11 @@
 package com.pine.base.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +15,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.pine.base.R;
-import com.pine.base.manager.TencentShareManager;
+import com.pine.base.share.bean.ShareBean;
+import com.pine.base.share.manager.ShareManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,50 +108,32 @@ public class DialogUtils {
     /**
      * 分享弹出框
      *
-     * @param context
+     * @param activity
      * @return
      */
-    public static AlertDialog createShareDialog(final Context context, final List<String> titleList,
-                                                final List<String> descList, final List<String> shareUrlList) {
-        final View shareContent = LayoutInflater.from(context).inflate(R.layout.base_dialog_share, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static AlertDialog createShareDialog(final Activity activity, @NonNull final ArrayList<ShareBean> shareBeanList) {
+        final View shareContent = LayoutInflater.from(activity).inflate(R.layout.base_dialog_share, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(shareContent);
         final AlertDialog shareDialog = builder.create();
         shareDialog.setCanceledOnTouchOutside(true);
         List<Map<String, Object>> items = new ArrayList<>();
-        final int[] shareIcon = {
-                R.mipmap.base_ic_share_weixin,
-                R.mipmap.base_ic_share_weixin_friend_circle,
-                R.mipmap.base_ic_share_qq,
-        };
-        final String[] shareDesc = context.getResources().getStringArray(R.array.base_share_icon_desc_arr);
-        for (int i = 0; i < shareIcon.length; i++) {
+        for (int i = 0; i < shareBeanList.size(); i++) {
+            ShareBean shareBean = shareBeanList.get(i);
             Map<String, Object> map = new HashMap<>();
-            map.put("img", shareIcon[i]);
-            map.put("desc", shareDesc[i]);
+            map.put("img", shareBean.getIconId());
+            map.put("desc", shareBean.getIconName());
             items.add(map);
         }
-        SimpleAdapter adapter = new SimpleAdapter(context, items, R.layout.base_item_share,
+        SimpleAdapter adapter = new SimpleAdapter(activity, items, R.layout.base_item_share,
                 new String[]{"img", "desc"}, new int[]{R.id.share_img, R.id.share_desc});
         GridView gridView = (GridView) shareContent.findViewById(R.id.share_grid);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        TencentShareManager.getInstance().sendWXRequest(context, false, shareUrlList.get(position),
-                                titleList.get(position), descList.get(position));
-                        break;
-                    case 1:
-                        TencentShareManager.getInstance().sendWXRequest(context, true, shareUrlList.get(position),
-                                titleList.get(position), descList.get(position));
-                        break;
-                    case 2:
-                        TencentShareManager.getInstance().shareToQQ(context, titleList.get(position),
-                                descList.get(position), shareUrlList.get(position));
-                        break;
-                }
+                ShareBean shareBean = shareBeanList.get(position);
+                ShareManager.getInstance().share(activity, shareBean);
                 shareDialog.dismiss();
             }
         });

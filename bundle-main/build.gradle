@@ -30,6 +30,18 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs', '../base/libs'
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs', '../base/libs'
+    }
+}
+
 /**
  * 主dex中已经打入了必要的公用代码，在runtime时，atlas框架会自动找到主dex中的class使用，可以使用providedCompile，表示不需要再重复打入
  */

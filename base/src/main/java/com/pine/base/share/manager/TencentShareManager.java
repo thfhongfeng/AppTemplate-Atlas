@@ -1,4 +1,4 @@
-package com.pine.base.manager;
+package com.pine.base.share.manager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -41,7 +41,7 @@ public class TencentShareManager {
     private TencentShareManager() {
     }
 
-    public static TencentShareManager getInstance() {
+    protected static TencentShareManager getInstance() {
         if (mInstance == null) {
             synchronized (TencentShareManager.class) {
                 if (mInstance == null) {
@@ -68,15 +68,15 @@ public class TencentShareManager {
     }
 
     /**
-     * 分享微信朋友 or 朋友圈 true为朋友  false为朋友圈
+     * 分享微信朋友 or 朋友圈
      *
-     * @param isTimeline
+     * @param isTimeline true为朋友  false为朋友圈
      * @param url
      */
-    public void sendWXRequest(Context context, boolean isTimeline, String url, String title, String description) {
+    public boolean shareWebPageToWX(Context context, boolean isTimeline, String url, String title, String description) {
         if (!isInit()) {
-            LogUtils.d(TAG, "ShareManager was not init");
-            return;
+            LogUtils.d(TAG, "TencentShareManager was not init");
+            return false;
         }
         if (mIwxApi == null) {
             mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplicationByReflect(), WX_FOR_APP_KEY, true);
@@ -84,7 +84,7 @@ public class TencentShareManager {
         }
         if (!mIwxApi.isWXAppInstalled()) {
             Toast.makeText(context, "抱歉，您的手机上未安装微信，无法分享！", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         WXWebpageObject webPage = new WXWebpageObject();
@@ -103,12 +103,13 @@ public class TencentShareManager {
         req.message = msg;
         req.scene = isTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
         mIwxApi.sendReq(req);
+        return true;
     }
 
-    public void shareToQQ(Context context, String title, String description, String url) {
+    public boolean shareWebPageToQQ(Context context, String title, String description, String url) {
         if (!isInit()) {
-            LogUtils.d(TAG, "ShareManager was not init");
-            return;
+            LogUtils.d(TAG, "TencentShareManager was not init");
+            return false;
         }
         if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_FOR_APP_ID, context);
@@ -123,15 +124,13 @@ public class TencentShareManager {
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, HOST + "/images/logo2.png");
         /*params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");*/
         mTencent.shareToQQ((Activity) context, params, new BaseUiListener());
+        return true;
     }
 
     private class BaseUiListener implements IUiListener {
         @Override
         public void onComplete(Object response) {
-            doComplete(response);
-        }
-
-        protected void doComplete(Object values) {
+            Toast.makeText(BaseApplication.mApplication, "分享QQ成功", Toast.LENGTH_SHORT).show();
         }
 
         @Override

@@ -13,6 +13,9 @@ public interface BaseConstants extends Constants {
     String MESSAGE = "message";
     String DATA = "data";
 
+    // file path
+    String IMAGE_LOADER_CACHE_DIR = "";
+
     // preference key
     String APK_DOWNLOAD_FILE_PATH = "apk_download_file_path";
 }

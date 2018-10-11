@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="base_share_icon_desc_arr">
+    <string-array name="base_share_icon_name_arr">
+        <item>QQ</item>
         <item>微信</item>
         <item>朋友圈</item>
-        <item>QQ</item>
+        <item>微博</item>
     </string-array>
 </resources>

@@ -108,6 +108,12 @@ String getEnvValue(key, defValue) {
     return defValue;
 }
 
+repositories {
+    flatDir {
+        dirs 'libs', '../base/libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 

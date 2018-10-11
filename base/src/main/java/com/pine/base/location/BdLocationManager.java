@@ -1,4 +1,4 @@
-package com.pine.base.manager;
+package com.pine.base.location;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;

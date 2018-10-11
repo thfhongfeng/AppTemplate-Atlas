@@ -15,10 +15,13 @@ android {
         buildConfigField "String", "APP_NAME", "\"${build_versions.app_name}\""
 
         buildConfigField "String", "BASE_URL", "\"${build_url.base_url}\""
+        buildConfigField "String", "WEI_BO_REDIRECT_URL", "\"${build_url.wei_bo_secret_key}\""
 
         buildConfigField "String", "QQ_FOR_APP_ID", "\"${build_app_key.qq_for_app_id}\""
         buildConfigField "String", "WX_FOR_APP_KEY", "\"${build_app_key.wx_for_app_key}\""
         buildConfigField "String", "WX_SECRET_KEY", "\"${build_app_key.wx_secret_key}\""
+        buildConfigField "String", "WEI_BO_FOR_APP_KEY", "\"${build_app_key.wei_bo_for_app_key}\""
+        buildConfigField "String", "WEI_BO_SECRET_KEY", "\"${build_app_key.wei_bo_secret_key}\""
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -42,6 +45,12 @@ android {
             jniLibs.srcDir 'libs'
             jni.srcDirs = []    //disable automatic ndk-build
         }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -69,6 +78,8 @@ dependencies {
     compile build_dependency["nohttp_okhttp"]
     compile build_dependency["aigestudio_wheelpicker"]
     compile build_dependency['safewebviewbridge']
+    compile build_dependency['bumptech_glide']
+    compile(name: build_dependency["sina_weibo_sdk"], ext: 'aar')
     compile project(':base-lib-immersionbar')
     // 第三方 dependency end
 

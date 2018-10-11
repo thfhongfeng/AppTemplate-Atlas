@@ -29,6 +29,8 @@ ext.build_versions = build_versions
  */
 def build_url = [:]
 build_url.base_url = "https://suggest.taobao.com/sug?code=utf-8&q=android"
+
+build_url.wei_bo_redirect_url = "https://api.weibo.com/oauth2/default.html"
 ext.build_url = build_url
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +46,9 @@ build_app_key.wx_for_app_key = "wx57ee655d45be8d8a"
 build_app_key.wx_secret_key = "faf7a17b7ef08adf96d6d19372b0895c"
 
 build_app_key.baidu_for_app_key = "eaR8Y8d2cAxelTNIVTAWkIGEgF22XHL3"
+
+build_app_key.wei_bo_for_app_key = "1125184506"
+build_app_key.wei_bo_secret_key = "15256daac5dc83e0b0aec9dabafc3620"
 ext.build_app_key = build_app_key
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +64,7 @@ def build_dependency = [
         "test_junit"            : 'junit:junit:4.12',
 
         // android官方 dependency
-        "appcompat_v7"          : 'com.android.support:appcompat-v7:26.+',
+        "appcompat_v7"          : 'com.android.support:appcompat-v7:27.+',
         "constraint_layout"     : 'com.android.support.constraint:constraint-layout:1.0.2',
         "support_design"        : 'com.android.support:design:26.+',
 
@@ -68,10 +73,12 @@ def build_dependency = [
 
         // google官方 dependency
         "google_gson"           : 'com.google.code.gson:gson:2.6.2',
+        "bumptech_glide"        : 'com.github.bumptech.glide:glide:4.8.0',
 
         // 第三方 dependency
         "nohttp_okhttp"         : 'com.yanzhenjie.nohttp:okhttp:1.1.1',
         "aigestudio_wheelpicker": 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2',
-        "safewebviewbridge"     : 'cn.pedant.safewebviewbridge:library:1.4'
+        "safewebviewbridge"     : 'cn.pedant.safewebviewbridge:library:1.4',
+        "sina_weibo_sdk"        : 'core-4.3.1-openDefaultRelease'
 ]
 ext.build_dependency = build_dependency

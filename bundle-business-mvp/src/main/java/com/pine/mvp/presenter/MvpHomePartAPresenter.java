@@ -4,7 +4,7 @@ import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.pine.base.manager.BdLocationManager;
+import com.pine.base.location.BdLocationManager;
 import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.base.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;

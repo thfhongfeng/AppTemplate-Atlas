@@ -87,7 +87,7 @@ public class TimeSelectDialog extends Dialog {
         }
 
         private void onCreateInitView(final TimeSelectDialog dialog, final IDialogTimeSelected dialogSelect,
-                              boolean showHour, boolean showMinute, boolean showSecond) {
+                                      boolean showHour, boolean showMinute, boolean showSecond) {
             selectedTime = Calendar.getInstance();
             selectedTime.setTime(new Date());
             if (showHour) {

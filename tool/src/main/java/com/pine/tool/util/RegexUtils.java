@@ -14,7 +14,7 @@ public class RegexUtils {
      * 匹配手机号码的正则表达式
      * <br>支持130——139、150——153、155——159、180、183、185、186、188、189号段
      */
-    public static final String PHONE_NUMBER_REGEX = "^1{1}(3{1}\\d{1}|5{1}[012356789]{1}|8{1}[035689]{1})\\d{8}$";
+    public static final String PHONE_NUMBER_REGEX = "^1{1}\\d{10}$";
 
     /**
      * 匹配邮箱的正则表达式

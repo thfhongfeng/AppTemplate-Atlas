@@ -8,7 +8,7 @@ import com.pine.base.access.UiAccessManager;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.access.executor.UiAccessLoginExecutor;
 import com.pine.base.http.HttpRequestManagerProxy;
-import com.pine.base.manager.TencentShareManager;
+import com.pine.base.share.manager.ShareManager;
 import com.pine.tool.util.LogUtils;
 
 /**
@@ -18,8 +18,8 @@ import com.pine.tool.util.LogUtils;
 public class BaseApplication {
     private final static String TAG = LogUtils.makeLogTag(BaseApplication.class);
     public static volatile Activity mCurResumedActivity;
-    private static volatile boolean mIsLogin;
     public static Application mApplication;
+    private static volatile boolean mIsLogin;
 
     public static boolean isLogin() {
         return mIsLogin;
@@ -34,8 +34,7 @@ public class BaseApplication {
 
         registerActivity();
 
-        TencentShareManager.getInstance().init(BuildConfig.QQ_FOR_APP_ID, BuildConfig.WX_FOR_APP_KEY, BuildConfig.WX_SECRET_KEY,
-                R.mipmap.base_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
+        ShareManager.getInstance().init(application);
 
         HttpRequestManagerProxy.init(application);
 
