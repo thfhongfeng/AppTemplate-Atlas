@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.mvc.activity.BaseMvcActionBarActivity;
+import com.pine.base.architecture.mvc.activity.BaseMvcActionBarActivity;
 import com.pine.mvc.R;
 import com.pine.mvc.ui.fragment.MvcHomePartAFragment;
 import com.pine.mvc.ui.fragment.MvcHomePartBFragment;

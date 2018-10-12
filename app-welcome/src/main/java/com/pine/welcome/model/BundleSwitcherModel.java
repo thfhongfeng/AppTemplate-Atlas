@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpJsonCallback;
-import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.WelcomeUrlConstants;

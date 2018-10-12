@@ -8,7 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.mvp.ui.activity.BaseMvpNoActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.base.util.DialogUtils;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.ILoadingContract;
@@ -132,6 +132,6 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
 
     @Override
     public void showVersionUpdateToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

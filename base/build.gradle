@@ -79,6 +79,7 @@ dependencies {
     compile build_dependency["aigestudio_wheelpicker"]
     compile build_dependency['safewebviewbridge']
     compile build_dependency['bumptech_glide']
+    annotationProcessor build_dependency['bumptech_glide_compiler']
     compile(name: build_dependency["sina_weibo_sdk"], ext: 'aar')
     compile project(':base-lib-immersionbar')
     // 第三方 dependency end

@@ -10,6 +10,10 @@ public class DecimalUtils {
     // 默认除法运算精度
     private static final int DEFAULT_DIVIDE_SCALE = 10;
 
+    private DecimalUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 提供精确的加法运算
      *

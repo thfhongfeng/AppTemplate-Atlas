@@ -8,8 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.mvp.model.IModelAsyncResponse;
-import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.exception.MessageException;
 import com.pine.router.IRouterCallback;
 import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterBundleSwitcher;
@@ -116,7 +117,14 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             public void onDownloadError(Exception exception) {
                 LogUtils.d(TAG, "onDownloadError onDownloadError:" + exception);
                 if (isUiAlive()) {
-                    getUi().showVersionUpdateToast(getContext().getString(R.string.version_update_fail));
+                    String msg = "";
+                    if (exception instanceof MessageException) {
+                        msg = getContext().getString(R.string.version_update_fail) +
+                                "(" + exception.getMessage() + ")";
+                    } else {
+                        msg = getContext().getString(R.string.version_update_fail);
+                    }
+                    getUi().showVersionUpdateToast(msg);
                     getUi().dismissVersionUpdateProgressDialog();
                     autoLogin();
                 }
@@ -227,6 +235,6 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
 
     @Override
     public void onUiState(int state) {
-        
+
     }
 }

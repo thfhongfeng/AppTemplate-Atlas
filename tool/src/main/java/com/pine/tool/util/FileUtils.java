@@ -33,6 +33,10 @@ import java.util.zip.ZipInputStream;
 public class FileUtils {
     public final static String FILE_EXTENSION_SEPARATOR = ".";
 
+    private FileUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * read file to string list, a element of list is a line
      *

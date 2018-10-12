@@ -2,7 +2,7 @@ package com.pine.login.presenter;
 
 import android.text.TextUtils;
 
-import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.manager.LoginManager;

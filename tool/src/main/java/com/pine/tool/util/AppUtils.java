@@ -21,6 +21,10 @@ import java.util.List;
 
 public class AppUtils {
 
+    private AppUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 在AndroidManifest.xml中最好不设置android:debuggable属性置，而是由打包方式来决定其值.
      *

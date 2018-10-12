@@ -16,6 +16,9 @@ public class SharePreferenceUtils {
 
     private static Application mApplication = AppUtils.getApplicationByReflect();
 
+    private SharePreferenceUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
 
     /**
      * 删除cache数据库

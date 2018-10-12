@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.pine.mvp.ui.activity.MvpItemDetailActivity">
+    tools:context="com.pine.mvp.ui.activity.MvpShopDetailActivity">
 
     <TextView
         android:id="@+id/refresh_btn_tv"

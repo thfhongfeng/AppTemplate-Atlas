@@ -1,6 +1,6 @@
 package com.pine.welcome.ui.activity;
 
-import com.pine.base.mvp.ui.activity.BaseMvpNoActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.IWelcomeContract;
 import com.pine.welcome.presenter.WelcomePresenter;

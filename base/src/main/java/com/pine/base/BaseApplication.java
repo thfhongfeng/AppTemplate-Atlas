@@ -34,11 +34,7 @@ public class BaseApplication {
 
         registerActivity();
 
-        ShareManager.getInstance().init(application);
-
-        HttpRequestManagerProxy.init(application);
-
-        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.LOGIN, new UiAccessLoginExecutor());
+        initManager();
     }
 
     private static void registerActivity() {
@@ -81,4 +77,12 @@ public class BaseApplication {
         });
     }
 
+    private static void initManager() {
+
+        ShareManager.getInstance().init(mApplication);
+
+        HttpRequestManagerProxy.init(mApplication);
+
+        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.LOGIN, new UiAccessLoginExecutor());
+    }
 }

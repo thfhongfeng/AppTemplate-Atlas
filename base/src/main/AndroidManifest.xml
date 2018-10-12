@@ -23,12 +23,6 @@
         android:allowBackup="true"
         android:supportsRtl="true">
 
-        <!-- 图片加载Glide begin -->
-        <meta-data
-            android:name="com.pine.base.image.config.GlideImageLoaderConfig"
-            android:value="GlideModule" />
-        <!-- 图片加载Glide end -->
-
         <!-- 腾讯SDK begin-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

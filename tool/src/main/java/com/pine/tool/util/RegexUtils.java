@@ -47,6 +47,10 @@ public class RegexUtils {
      */
     public static final String URL = "^(([hH][tT]{2}[pP][sS]?)|([fF][tT][pP]))\\:\\/\\/[wW]{3}\\.[\\w-]+\\.\\w{2,4}(\\/.*)?$";
 
+    private RegexUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 匹配给定的字符串是否是一个邮箱账号，"www."可省略不写
      *

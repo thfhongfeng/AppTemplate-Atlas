@@ -13,8 +13,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.pine.base.mvp.presenter.BasePresenter;
-import com.pine.base.mvp.ui.fragment.BaseMvpFragment;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.tool.util.WebViewUtils;

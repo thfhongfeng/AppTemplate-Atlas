@@ -1,9 +1,9 @@
 package com.pine.mvp.presenter;
 
-import com.pine.base.mvp.model.IModelAsyncResponse;
-import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpHomeItemNoPaginationAdapter;
-import com.pine.mvp.bean.MvpHomePartCEntity;
+import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.mvp.contract.IMvpHomePartCContract;
 import com.pine.mvp.model.MvpHomeModel;
 
@@ -27,7 +27,8 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
     @Override
     public MvpHomeItemNoPaginationAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemNoPaginationAdapter(MvpHomeItemNoPaginationAdapter.HOME_PART_C_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpHomeItemNoPaginationAdapter(
+                    MvpHomeItemNoPaginationAdapter.HOME_SHOP_VIEW_HOLDER, false);
         }
         return mMvpHomeItemAdapter;
     }
@@ -39,11 +40,11 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
         }
         HashMap<String, String> params = new HashMap<>();
         mIsLoadProcessing = true;
-        mModel.requestHomePartCListData(params, new IModelAsyncResponse<ArrayList<MvpHomePartCEntity>>() {
+        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopEntity>>() {
             @Override
-            public void onResponse(ArrayList<MvpHomePartCEntity> mvpHomePartCEntities) {
+            public void onResponse(ArrayList<MvpShopEntity> homeShopItemEntity) {
                 if (isUiAlive()) {
-                    mMvpHomeItemAdapter.setData(mvpHomePartCEntities);
+                    mMvpHomeItemAdapter.setData(homeShopItemEntity);
                     mMvpHomeItemAdapter.notifyDataSetChanged();
                 }
                 finishDataLoad();

@@ -1,9 +1,9 @@
 package com.pine.mvp.presenter;
 
-import com.pine.base.mvp.model.IModelAsyncResponse;
-import com.pine.base.mvp.presenter.BasePresenter;
-import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
-import com.pine.mvp.bean.MvpHomePartBEntity;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.mvp.adapter.MvpHomeItemPaginationComplexAdapter;
+import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpHomePartBContract;
 import com.pine.mvp.model.MvpHomeModel;
 
@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.Ui>
         implements IMvpHomePartBContract.Presenter {
-    private MvpHomeModel mModel = new MvpHomeModel();
-    private MvpHomeItemPaginationAdapter mMvpHomeItemAdapter;
+    private MvpHomeModel mModel;
+    private MvpHomeItemPaginationComplexAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpHomePartBPresenter() {
@@ -25,9 +25,10 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
     }
 
     @Override
-    public MvpHomeItemPaginationAdapter getRecycleViewAdapter() {
+    public MvpHomeItemPaginationComplexAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemPaginationAdapter(MvpHomeItemPaginationAdapter.HOME_PART_B_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpHomeItemPaginationComplexAdapter(
+                    MvpHomeItemPaginationComplexAdapter.HOME_SHOP_AND_PRODUCT_COMPLEX_VIEW_HOLDER, true);
         }
         return mMvpHomeItemAdapter;
     }
@@ -45,14 +46,14 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
         mIsLoadProcessing = true;
-        mModel.requestHomePartBListData(params, new IModelAsyncResponse<ArrayList<MvpHomePartBEntity>>() {
+        mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
-            public void onResponse(ArrayList<MvpHomePartBEntity> mvpHomePartBEntities) {
+            public void onResponse(ArrayList<MvpShopAndProductEntity> shopAndProductEntities) {
                 if (isUiAlive()) {
                     if (refresh) {
-                        mMvpHomeItemAdapter.setData(mvpHomePartBEntities);
+                        mMvpHomeItemAdapter.setData(shopAndProductEntities);
                     } else {
-                        mMvpHomeItemAdapter.addData(mvpHomePartBEntities);
+                        mMvpHomeItemAdapter.addData(shopAndProductEntities);
                     }
                     mMvpHomeItemAdapter.notifyDataSetChanged();
                 }

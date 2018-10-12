@@ -3,9 +3,9 @@ package com.pine.welcome.model;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpJsonCallback;
-import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.WelcomeUrlConstants;
@@ -22,19 +22,19 @@ import java.util.HashMap;
 
 public class VersionModel {
     private static final String TAG = LogUtils.makeLogTag(VersionModel.class);
-    private static final int HTTP_REQUEST_QUERY_VERSION_INFO = 1;
+    private static final int HTTP_QUERY_VERSION_INFO = 1;
 
     public void requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
         String url = WelcomeUrlConstants.Query_Version_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_VERSION_INFO, httpStringCallback);
+        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
     }
 
     private HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<VersionEntity> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                if (HTTP_REQUEST_QUERY_VERSION_INFO == what) {
+                if (HTTP_QUERY_VERSION_INFO == what) {
                     // Test code begin
                     String res = "{success:true,code:200,message:'',data:" +
                             "{package:'com.pine.template', 'versionCode':2," +

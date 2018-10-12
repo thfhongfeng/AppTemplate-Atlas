@@ -3,10 +3,14 @@ package com.pine.welcome.manager;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.pine.base.exception.MessageException;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpDownloadCallback;
+import com.pine.tool.util.AppUtils;
 import com.pine.tool.util.LogUtils;
+import com.pine.tool.util.PathUtils;
 import com.pine.tool.util.SharePreferenceUtils;
+import com.pine.welcome.R;
 import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.bean.VersionEntity;
 
@@ -20,7 +24,7 @@ public class ApkVersionManager {
     private final static String TAG = LogUtils.makeLogTag(ApkVersionManager.class);
     private final static int HTTP_REQUEST_DOWNLOAD = 1;
     private static volatile ApkVersionManager mInstance;
-    private String mDownloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+    private String mDownloadDir = PathUtils.getExternalPublicPath(Environment.DIRECTORY_DOWNLOADS);
     private VersionEntity mVersionEntity;
     private UpdateListener mListener;
 
@@ -48,6 +52,13 @@ public class ApkVersionManager {
     }
 
     private void startDownloadTask() {
+        if (TextUtils.isEmpty(mDownloadDir)) {
+            if (mListener != null) {
+                mListener.onDownloadError(new MessageException(AppUtils.getApplicationByReflect()
+                        .getString(R.string.version_get_download_path_fail, mDownloadDir)));
+            }
+            return;
+        }
         deleteOldApk();
         HttpRequestManagerProxy.setDownloadRequest(mVersionEntity.getPath(), mDownloadDir,
                 mVersionEntity.getFileName(), TAG, HTTP_REQUEST_DOWNLOAD, new HttpDownloadCallback() {

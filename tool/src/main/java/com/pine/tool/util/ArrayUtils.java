@@ -8,6 +8,10 @@ import android.text.TextUtils;
 
 public class ArrayUtils {
 
+    private ArrayUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 在数组中查询第一个element元素
      *

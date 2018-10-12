@@ -4,11 +4,11 @@ import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.location.BdLocationManager;
-import com.pine.base.mvp.model.IModelAsyncResponse;
-import com.pine.base.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
-import com.pine.mvp.bean.MvpHomePartAEntity;
+import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.mvp.contract.IMvpHomePartAContract;
 import com.pine.mvp.model.MvpHomeModel;
 import com.pine.tool.util.GPSUtils;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.Ui>
         implements IMvpHomePartAContract.Presenter {
-    private MvpHomeModel mModel = new MvpHomeModel();
+    private MvpHomeModel mModel;
     private MvpHomeItemPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
     private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
@@ -48,7 +48,8 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
     @Override
     public MvpHomeItemPaginationAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemPaginationAdapter(MvpHomeItemPaginationAdapter.HOME_PART_A_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpHomeItemPaginationAdapter(
+                    MvpHomeItemPaginationAdapter.HOME_SHOP_VIEW_HOLDER, false);
         }
         return mMvpHomeItemAdapter;
     }
@@ -72,14 +73,14 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
             params.put("longitude", String.valueOf(locations[1]));
         }
         mIsLoadProcessing = true;
-        mModel.requestHomePartAListData(params, new IModelAsyncResponse<ArrayList<MvpHomePartAEntity>>() {
+        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopEntity>>() {
             @Override
-            public void onResponse(ArrayList<MvpHomePartAEntity> mvpHomePartAEntities) {
+            public void onResponse(ArrayList<MvpShopEntity> homeShopItemEntity) {
                 if (isUiAlive()) {
                     if (refresh) {
-                        mMvpHomeItemAdapter.setData(mvpHomePartAEntities);
+                        mMvpHomeItemAdapter.setData(homeShopItemEntity);
                     } else {
-                        mMvpHomeItemAdapter.addData(mvpHomePartAEntities);
+                        mMvpHomeItemAdapter.addData(homeShopItemEntity);
                     }
                     mMvpHomeItemAdapter.notifyDataSetChanged();
                 }

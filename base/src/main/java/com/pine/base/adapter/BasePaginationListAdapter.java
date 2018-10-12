@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.pine.base.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,17 +28,14 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
-    protected List<BaseListAdapterItemEntity> mData = null;
+    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
+    private boolean mIsComplexList;
 
-    public BasePaginationListAdapter(int defaultItemViewType) {
+    public BasePaginationListAdapter(int defaultItemViewType, boolean isComplexList) {
         mDefaultItemViewType = defaultItemViewType;
-    }
-
-    public BasePaginationListAdapter(int defaultItemViewType, int pageSize) {
-        mDefaultItemViewType = defaultItemViewType;
-        mPageSize.set(pageSize);
+        mIsComplexList = isComplexList;
     }
 
     public static boolean isLastVisibleViewFooter(RecyclerView recyclerView) {
@@ -74,14 +72,14 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
     @Override
     public void onBindViewHolder(BaseListViewHolder holder, int position) {
         if (mData == null || mData.size() == 0) {
-            holder.updateData("", position);
+            holder.updateData("", new BaseListAdapterPropertyEntity(), position);
             return;
         }
         if (isFooterView(mHasMore, position, mData.size())) {
-            holder.updateData(mHasMore, position);
+            holder.updateData(mHasMore, new BaseListAdapterPropertyEntity(), position);
             return;
         }
-        holder.updateData(mData.get(position), position);
+        holder.updateData(mData.get(position).getData(), mData.get(position).getPropertyEntity(), position);
     }
 
     @Override
@@ -108,7 +106,8 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
             return FOOTER_VIEW_HOLDER;
         }
         BaseListAdapterItemEntity itemEntity = mData.get(position);
-        return itemEntity != null && itemEntity.getItemViewType() != -10000 ? itemEntity.getItemViewType() : mDefaultItemViewType;
+        return itemEntity != null && itemEntity.getPropertyEntity().getItemViewType() != -10000 ?
+                itemEntity.getPropertyEntity().getItemViewType() : mDefaultItemViewType;
     }
 
     private boolean hasFooterView(boolean hasMore, int dataSize) {
@@ -119,12 +118,17 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         return hasMore && dataSize >= getPageSize() && position == dataSize;
     }
 
-    public final void addData(List<? extends BaseListAdapterItemEntity> newData) {
+    public final void addData(List<? extends Object> newData) {
         if (newData == null || newData.size() == 0) {
             mHasMore = false;
             return;
         }
-        List<BaseListAdapterItemEntity> parseData = parseData(newData);
+        List<BaseListAdapterItemEntity<? extends Object>> parseData;
+        if (!mIsComplexList) {
+            parseData = parseData(newData);
+        } else {
+            parseData = parseComplexData(newData);
+        }
         for (int i = 0; i < parseData.size(); i++) {
             mData.add(parseData.get(i));
         }
@@ -133,12 +137,30 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         notifyDataSetChanged();
     }
 
-    public final void setData(List<? extends BaseListAdapterItemEntity> data) {
+    public final void setData(List<? extends Object> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        if (!mIsComplexList) {
+            mData = parseData(data);
+        } else {
+            mData = parseComplexData(data);
+        }
         resetAndGetPageNo();
         mHasMore = data != null && data.size() >= getPageSize();
         notifyDataSetChanged();
+    }
+
+    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
+        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+        if (data != null) {
+            BaseListAdapterItemEntity adapterEntity;
+            for (int i = 0; i < data.size(); i++) {
+                adapterEntity = new BaseListAdapterItemEntity();
+                adapterEntity.setData(data.get(i));
+                adapterEntity.getPropertyEntity().setItemViewType(mDefaultItemViewType);
+                adapterData.add(adapterEntity);
+            }
+        }
+        return adapterData;
     }
 
     public void resetAndGetPageNo() {
@@ -153,9 +175,13 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         return mPageSize.get();
     }
 
-    public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
+    public int getDefaultItemViewType() {
+        return mDefaultItemViewType;
+    }
 
-    public abstract List<BaseListAdapterItemEntity> parseData(List<? extends BaseListAdapterItemEntity> data);
+    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseComplexData(List<? extends Object> data);
+
+    public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 底部holder
@@ -172,7 +198,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         }
 
         @Override
-        public void updateData(Boolean show, int position) {
+        public void updateData(Boolean show, BaseListAdapterPropertyEntity propertyEntity, int position) {
             if (show) {
                 footer_tv.setVisibility(View.VISIBLE);
             } else {
@@ -196,7 +222,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         }
 
         @Override
-        public void updateData(String tipsValue, int position) {
+        public void updateData(String tipsValue, BaseListAdapterPropertyEntity propertyEntity, int position) {
             if (!TextUtils.isEmpty(tipsValue)) {
                 tips.setText(tipsValue);
             }

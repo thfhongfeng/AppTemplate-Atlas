@@ -3,8 +3,8 @@ package com.pine.main.presenter;
 import android.os.Bundle;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.mvp.model.IModelAsyncResponse;
-import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.main.bean.MainHomeGridViewEntity;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.model.MainHomeModel;

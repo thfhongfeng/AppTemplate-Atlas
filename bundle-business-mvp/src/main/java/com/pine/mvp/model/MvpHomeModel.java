@@ -1,17 +1,17 @@
 package com.pine.mvp.model;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpJsonCallback;
-import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.mvp.MvpConstants;
 import com.pine.mvp.MvpUrlConstants;
-import com.pine.mvp.bean.MvpHomePartAEntity;
-import com.pine.mvp.bean.MvpHomePartBEntity;
-import com.pine.mvp.bean.MvpHomePartCEntity;
+import com.pine.mvp.bean.MvpShopAndProductEntity;
+import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.tool.util.DecimalUtils;
 import com.pine.tool.util.GPSUtils;
 import com.pine.tool.util.LogUtils;
@@ -30,19 +30,25 @@ import java.util.List;
 
 public class MvpHomeModel {
     private static final String TAG = LogUtils.makeLogTag(MvpHomeModel.class);
-    private static final int HTTP_REQUEST_PART_QUERY_A_LIST = 1;
-    private static final int HTTP_REQUEST_PART_QUERY_B_LIST = 2;
-    private static final int HTTP_REQUEST_PART_QUERY_C_LIST = 3;
+    private static final int HTTP_QUERY_SHOP_LIST = 1;
+    private static final int HTTP_QUERY_SHOP_AND_PRODUCT_LIST = 2;
 
-    public void requestHomePartAListData(final HashMap<String, String> params, @NonNull final IModelAsyncResponse<ArrayList<MvpHomePartAEntity>> callback) {
-        String url = MvpUrlConstants.Query_HomePartAList_Data;
+    public void requestShopListData(final HashMap<String, String> params,
+                                    @NonNull final IModelAsyncResponse<ArrayList<MvpShopEntity>> callback) {
+        String url = MvpUrlConstants.Query_HomeShopList;
         HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                ArrayList<MvpHomePartAEntity> retList = new ArrayList<MvpHomePartAEntity>();
+                ArrayList<MvpShopEntity> retList = new ArrayList<MvpShopEntity>();
                 // Test code begin
-                int pageNo = Integer.parseInt(params.get("pageNo"));
-                int pageSize = Integer.parseInt(params.get("pageSize"));
+                int pageNo = 1;
+                int pageSize = 15;
+                if (!TextUtils.isEmpty(params.get("pageNo"))) {
+                    pageNo = Integer.parseInt(params.get("pageNo"));
+                }
+                if (!TextUtils.isEmpty(params.get("pageSize"))) {
+                    pageSize = Integer.parseInt(params.get("pageSize"));
+                }
                 String distanceStr = "";
                 double distance = -1d;
                 if (params.get("latitude") != null && params.get("longitude") != null) {
@@ -57,16 +63,16 @@ public class MvpHomeModel {
                     distanceStr = String.valueOf(distance);
                 }
                 String res = "{success:true,code:200,message:'',data:" +
-                        "[{title:'Part A Item " + ((pageNo - 1) * pageSize) +
-                        "', distance:'" + distanceStr + "'}";
+                        "[{name:'Shop Item " + ((pageNo - 1) * pageSize) +
+                        "', distance:'" + distanceStr + "',imgUrl:''}";
                 if (pageNo < 5) {
                     for (int i = 1; i < pageSize; i++) {
                         if (!DecimalUtils.isEqual(distance, -1f)) {
                             distance += (pageNo - 1) * 1000 + 50;
                             distanceStr = String.valueOf(distance);
                         }
-                        res += ",{title:'Part A Item " + ((pageNo - 1) * pageSize + i) +
-                                "', distance:'" + distanceStr + "'}";
+                        res += ",{name:'Shop Item " + ((pageNo - 1) * pageSize + i) +
+                                "', distance:'" + distanceStr + "',imgUrl:''}";
                     }
                 }
                 res += "]}";
@@ -77,7 +83,7 @@ public class MvpHomeModel {
                 }
                 // Text code end
 
-                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpHomePartAEntity>>() {
+                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpShopEntity>>() {
                 }.getType());
                 callback.onResponse(retList);
             }
@@ -87,59 +93,63 @@ public class MvpHomeModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_REQUEST_PART_QUERY_A_LIST, httpStringCallback);
+        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST, httpStringCallback);
     }
 
-    public void requestHomePartBListData(HashMap<String, String> params, @NonNull final IModelAsyncResponse<ArrayList<MvpHomePartBEntity>> callback) {
-        String url = MvpUrlConstants.Query_HomePartBList_Data;
+    public void requestShopAndProductListData(final HashMap<String, String> params,
+                                              @NonNull final IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>> callback) {
+        String url = MvpUrlConstants.Query_HomeShopAndProductList;
         HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                ArrayList<MvpHomePartBEntity> retList = new ArrayList<MvpHomePartBEntity>();
+                ArrayList<MvpShopAndProductEntity> retList = new ArrayList<>();
                 // Test code begin
-                String res = "{success:true,code:200,message:'',data:[]}";
-                try {
-                    jsonObject = new JSONObject(res);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                int pageNo = 1;
+                int pageSize = 15;
+                if (!TextUtils.isEmpty(params.get("pageNo"))) {
+                    pageNo = Integer.parseInt(params.get("pageNo"));
                 }
-                // Text code end
-                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpHomePartBEntity>>() {
-                }.getType());
-                callback.onResponse(retList);
-            }
-
-            @Override
-            public boolean onError(int what, Exception e) {
-                return callback.onFail(e);
-            }
-        };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_REQUEST_PART_QUERY_B_LIST, httpStringCallback);
-    }
-
-    public void requestHomePartCListData(HashMap<String, String> params, @NonNull final IModelAsyncResponse<ArrayList<MvpHomePartCEntity>> callback) {
-        String url = MvpUrlConstants.Query_HomePartCList_Data;
-        HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
-            @Override
-            public void onResponse(int what, JSONObject jsonObject) {
-                ArrayList<MvpHomePartCEntity> retList = new ArrayList<MvpHomePartCEntity>();
-                // Test code begin
+                if (!TextUtils.isEmpty(params.get("pageSize"))) {
+                    pageSize = Integer.parseInt(params.get("pageSize"));
+                }
+                String distanceStr = "";
+                double distance = -1d;
+                if (params.get("latitude") != null && params.get("longitude") != null) {
+                    BigDecimal startLatBd = new BigDecimal(params.get("latitude"));
+                    BigDecimal startLonBd = new BigDecimal(params.get("longitude"));
+                    double endLatBd = 31.221367;
+                    double endLonBd = 121.635707;
+                    double[] locations = GPSUtils.bd09_To_gps84(endLatBd, endLonBd);
+                    distance = GPSUtils.getDistance(locations[0], locations[1],
+                            startLatBd.doubleValue(), startLonBd.doubleValue());
+                    distance += ((pageNo - 1) * 1000 + 50) * pageSize * (pageNo - 1);
+                    distanceStr = String.valueOf(distance);
+                }
                 String res = "{success:true,code:200,message:'',data:" +
-                        "[{title:'Part C Item 0'},{title:'Part C Item 1'}," +
-                        "{title:'Part C Item 2'},{title:'Part C Item 3'}," +
-                        "{title:'Part C Item 4'},{title:'Part C Item 5'}," +
-                        "{title:'Part C Item 6'},{title:'Part C Item 7'}," +
-                        "{title:'Part C Item 8'},{title:'Part C Item 9'}," +
-                        "{title:'Part C Item 10'},{title:'Part C Item 11'}," +
-                        "{title:'Part C Item 12'},{title:'Part C Item 13'}," +
-                        "{title:'Part C Item 14'},{title:'Part C Item 15'}]}";
+                        "[{name:'Shop Item " + ((pageNo - 1) * pageSize) +
+                        "', distance:'" + distanceStr + "',imgUrl:''," +
+                        "products:[{name:'Product Item 1'}, " +
+                        "{name:'Product Item 2'},{name:'Product Item 3'}]}";
+                if (pageNo < 5) {
+                    for (int i = 1; i < pageSize; i++) {
+                        if (!DecimalUtils.isEqual(distance, -1f)) {
+                            distance += (pageNo - 1) * 1000 + 50;
+                            distanceStr = String.valueOf(distance);
+                        }
+                        res += ",{name:'Shop Item " + ((pageNo - 1) * pageSize + i) +
+                                "', distance:'" + distanceStr + "',imgUrl:'', " +
+                                "products:[{name:'Product Item 1'}, {name:'Product Item 2'}]}";
+                    }
+                }
+                res += "]}";
                 try {
                     jsonObject = new JSONObject(res);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 // Text code end
-                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpHomePartCEntity>>() {
+
+                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpShopAndProductEntity>>() {
                 }.getType());
                 callback.onResponse(retList);
             }
@@ -149,6 +159,6 @@ public class MvpHomeModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_REQUEST_PART_QUERY_C_LIST, httpStringCallback);
+        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_AND_PRODUCT_LIST, httpStringCallback);
     }
 }

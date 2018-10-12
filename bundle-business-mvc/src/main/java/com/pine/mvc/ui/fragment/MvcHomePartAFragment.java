@@ -2,7 +2,7 @@ package com.pine.mvc.ui.fragment;
 
 import android.view.View;
 
-import com.pine.base.mvc.fragment.BaseMvcFragment;
+import com.pine.base.architecture.mvc.fragment.BaseMvcFragment;
 import com.pine.mvc.R;
 
 /**

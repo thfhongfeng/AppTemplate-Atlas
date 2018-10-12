@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.mvp.ui.activity.BaseMvpActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpHomeContract;
 import com.pine.mvp.presenter.MvpHomePresenter;

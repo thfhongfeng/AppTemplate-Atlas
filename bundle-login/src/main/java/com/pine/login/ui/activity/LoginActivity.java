@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pine.base.mvp.ui.activity.BaseMvpActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.presenter.LoginPresenter;

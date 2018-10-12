@@ -13,6 +13,10 @@ import android.webkit.WebViewClient;
  */
 
 public class WebViewUtils {
+    private WebViewUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     public static void setupCommonWebView(WebView webView, DownloadListener downloadListener,
                                           WebChromeClient webChromeClient, WebViewClient webViewClient) {
         WebSettings webSettings = webView.getSettings();

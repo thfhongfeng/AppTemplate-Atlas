@@ -1,6 +1,6 @@
 package com.pine.login.contract;
 
-import com.pine.base.mvp.contract.IBaseContract;
+import com.pine.base.architecture.mvp.contract.IBaseContract;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -9,7 +9,9 @@ import com.pine.base.mvp.contract.IBaseContract;
 public interface ILoginContract {
     interface Ui extends IBaseContract.Ui {
         void showLoginResultToast(String msg);
+
         String getUserMobile();
+
         String getUserPassword();
     }
 

@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.pine.base.mvp.ui.fragment.BaseMvpFragment;
+import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
 import com.pine.mvp.contract.IMvpHomePartAContract;

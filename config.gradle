@@ -59,26 +59,29 @@ ext.build_app_key = build_app_key
  * 依赖
  */
 def build_dependency = [
-        // 测试 dependency
-        "test_espresso_core"    : 'com.android.support.test.espresso:espresso-core:2.2.2',
-        "test_junit"            : 'junit:junit:4.12',
-
         // android官方 dependency
-        "appcompat_v7"          : 'com.android.support:appcompat-v7:27.+',
-        "support_design"        : 'com.android.support:design:27.+',
-        "constraint_layout"     : 'com.android.support.constraint:constraint-layout:1.0.2',
+        "appcompat_v7"           : 'com.android.support:appcompat-v7:27.+',
+        "support_design"         : 'com.android.support:design:27.+',
+        "constraint_layout"      : 'com.android.support.constraint:constraint-layout:1.0.2',
 
         // 阿里atlas dependency
-        "atlas_core"            : 'com.taobao.android:atlas_core:5.0.8.0-rc7@aar',
+        "atlas_core"             : 'com.taobao.android:atlas_core:5.0.8.0-rc7@aar',
 
         // google官方 dependency
-        "google_gson"           : 'com.google.code.gson:gson:2.6.2',
-        "bumptech_glide"        : 'com.github.bumptech.glide:glide:4.8.0',
+        "google_gson"            : 'com.google.code.gson:gson:2.6.2',
 
         // 第三方 dependency
-        "nohttp_okhttp"         : 'com.yanzhenjie.nohttp:okhttp:1.1.1',
-        "aigestudio_wheelpicker": 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2',
-        "safewebviewbridge"     : 'cn.pedant.safewebviewbridge:library:1.4',
-        "sina_weibo_sdk"        : 'core-4.3.1-openDefaultRelease'
+        "nohttp_okhttp"          : 'com.yanzhenjie.nohttp:okhttp:1.1.1',
+        "aigestudio_wheelpicker" : 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2',
+        "safewebviewbridge"      : 'cn.pedant.safewebviewbridge:library:1.4',
+        "bumptech_glide"         : 'com.github.bumptech.glide:glide:4.8.0',
+        "bumptech_glide_compiler": 'com.github.bumptech.glide:compiler:4.8.0',
+
+        // 第三方 sdk
+        "sina_weibo_sdk"         : 'core-4.3.1-openDefaultRelease',
+
+        // 测试 dependency
+        "test_espresso_core"     : 'com.android.support.test.espresso:espresso-core:2.2.2',
+        "test_junit"             : 'junit:junit:4.12'
 ]
 ext.build_dependency = build_dependency

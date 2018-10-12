@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.pine.base.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,12 +21,14 @@ import java.util.List;
 
 public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -1000;
-    protected List<BaseListAdapterItemEntity> mData = null;
+    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
+    private boolean mIsComplexList;
 
-    public BaseNoPaginationListAdapter(int defaultItemViewType) {
+    public BaseNoPaginationListAdapter(int defaultItemViewType, boolean isComplexList) {
         mDefaultItemViewType = defaultItemViewType;
+        mIsComplexList = isComplexList;
     }
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
@@ -50,10 +53,10 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
     @Override
     public void onBindViewHolder(BaseListViewHolder holder, int position) {
         if (mData == null || mData.size() == 0) {
-            holder.updateData("", position);
+            holder.updateData("", new BaseListAdapterPropertyEntity(), position);
             return;
         }
-        holder.updateData(mData.get(position), position);
+        holder.updateData(mData.get(position).getData(), mData.get(position).getPropertyEntity(), position);
     }
 
     @Override
@@ -73,18 +76,40 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
         BaseListAdapterItemEntity itemEntity = mData.get(position);
-        return itemEntity != null && itemEntity.getItemViewType() != -10000 ? itemEntity.getItemViewType() : mDefaultItemViewType;
+        return itemEntity.getPropertyEntity().getItemViewType();
     }
 
-    public final void setData(List<? extends BaseListAdapterItemEntity> data) {
+    public final void setData(List<? extends Object> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        if (!mIsComplexList) {
+            mData = parseData(data);
+        } else {
+            mData = parseComplexData(data);
+        }
         notifyDataSetChanged();
     }
 
-    public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
+    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
+        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+        if (data != null) {
+            BaseListAdapterItemEntity adapterEntity;
+            for (int i = 0; i < data.size(); i++) {
+                adapterEntity = new BaseListAdapterItemEntity();
+                adapterEntity.setData(data.get(i));
+                adapterEntity.getPropertyEntity().setItemViewType(mDefaultItemViewType);
+                adapterData.add(adapterEntity);
+            }
+        }
+        return adapterData;
+    }
 
-    public abstract List<BaseListAdapterItemEntity> parseData(List<? extends BaseListAdapterItemEntity> data);
+    public int getDefaultItemViewType() {
+        return mDefaultItemViewType;
+    }
+
+    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseComplexData(List<? extends Object> data);
+
+    public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 空背景
@@ -101,7 +126,7 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
         }
 
         @Override
-        public void updateData(String tipsValue, int position) {
+        public void updateData(String tipsValue, BaseListAdapterPropertyEntity propertyEntity, int position) {
             if (!TextUtils.isEmpty(tipsValue)) {
                 tips.setText(tipsValue);
             }

@@ -14,6 +14,10 @@ public class GPSUtils {
     private static final double ee = 0.00669342162296594323;
     private static double EARTH_RADIUS = 6371.393;
 
+    private GPSUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     public static double transformLat(double x, double y) {
         double ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y
                 + 0.2 * Math.sqrt(Math.abs(x));

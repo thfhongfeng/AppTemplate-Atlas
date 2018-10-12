@@ -16,6 +16,10 @@ import android.widget.EditText;
 
 public class KeyboardUtils {
 
+    private KeyboardUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 为给定的编辑器开启软键盘
      *

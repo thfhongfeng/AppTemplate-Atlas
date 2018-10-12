@@ -5,7 +5,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
-import com.pine.base.mvp.ui.activity.BaseMvpNoActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.main.R;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.presenter.MainHomePresenter;

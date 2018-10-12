@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.mvp.presenter.BasePresenter;
+import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.router.IRouterCallback;
 import com.pine.router.RouterCommand;
 import com.pine.router.RouterFactory;

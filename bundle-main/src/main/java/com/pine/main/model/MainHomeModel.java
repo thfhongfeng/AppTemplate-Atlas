@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.http.callback.HttpJsonCallback;
-import com.pine.base.mvp.model.IModelAsyncResponse;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
 import com.pine.main.bean.MainHomeGridViewEntity;
@@ -24,19 +24,19 @@ import java.util.HashMap;
 
 public class MainHomeModel {
     private static final String TAG = LogUtils.makeLogTag(MainHomeModel.class);
-    private static final int HTTP_REQUEST_QUERY_BUSINESS_LIST = 1;
+    private static final int HTTP_QUERY_BUSINESS_LIST = 1;
 
     public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUSINESS_LIST, httpStringCallback);
+        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
     private HttpJsonCallback handleHttpResponse(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                if (HTTP_REQUEST_QUERY_BUSINESS_LIST == what) {
+                if (HTTP_QUERY_BUSINESS_LIST == what) {
                     ArrayList<MainHomeGridViewEntity> retList = new ArrayList<MainHomeGridViewEntity>();
                     // Test code begin
                     String res = "{success:true,code:200,message:'',data:" +

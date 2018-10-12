@@ -24,6 +24,10 @@ public class LogUtils {
     private static final int MAX_LOG_TAG_LENGTH = 23 - LOG_PREFIX.length();
     private static boolean DEBUG = BuildConfig.DEBUG;
 
+    private LogUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     public static void setDebuggable(boolean isDebuggable) {
         Log.d("LogUtils", "setDebuggable isDebuggable:" + isDebuggable);
         DEBUG = isDebuggable;

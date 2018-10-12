@@ -7,6 +7,10 @@ import java.util.Stack;
  */
 
 public class SortUtils {
+    private SortUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 使用选择排序法，对数组intArray进行排序
      *
