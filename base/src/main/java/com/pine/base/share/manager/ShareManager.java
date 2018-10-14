@@ -42,14 +42,14 @@ public class ShareManager {
     }
 
     public void init(Context context) {
-        initTencent(BuildConfig.QQ_FOR_APP_ID, BuildConfig.WX_FOR_APP_KEY, BuildConfig.WX_SECRET_KEY,
+        initTencent(BuildConfig.QQ_FOR_APP_ID, BuildConfig.WX_FOR_APP_ID, BuildConfig.WX_SECRET_KEY,
                 R.mipmap.base_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
         initSina(context, BuildConfig.WEI_BO_FOR_APP_KEY, BuildConfig.WEI_BO_REDIRECT_URL);
     }
 
-    public void initTencent(String qq_for_app_id, String wx_for_app_key, String wx_secret_key,
+    public void initTencent(String qq_for_app_id, String wx_for_app_id, String wx_secret_key,
                             int icon, String appName, String baseUrl) {
-        TencentShareManager.getInstance().init(qq_for_app_id, wx_for_app_key, wx_secret_key,
+        TencentShareManager.getInstance().init(qq_for_app_id, wx_for_app_id, wx_secret_key,
                 icon, appName, baseUrl);
     }
 

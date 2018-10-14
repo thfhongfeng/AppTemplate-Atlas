@@ -18,7 +18,7 @@ android {
         buildConfigField "String", "WEI_BO_REDIRECT_URL", "\"${build_url.wei_bo_secret_key}\""
 
         buildConfigField "String", "QQ_FOR_APP_ID", "\"${build_app_key.qq_for_app_id}\""
-        buildConfigField "String", "WX_FOR_APP_KEY", "\"${build_app_key.wx_for_app_key}\""
+        buildConfigField "String", "WX_FOR_APP_ID", "\"${build_app_key.wx_for_app_id}\""
         buildConfigField "String", "WX_SECRET_KEY", "\"${build_app_key.wx_secret_key}\""
         buildConfigField "String", "WEI_BO_FOR_APP_KEY", "\"${build_app_key.wei_bo_for_app_key}\""
         buildConfigField "String", "WEI_BO_SECRET_KEY", "\"${build_app_key.wei_bo_secret_key}\""

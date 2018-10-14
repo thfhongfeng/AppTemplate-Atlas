@@ -32,7 +32,7 @@ public class TencentShareManager {
     private IWXAPI mIwxApi;
     private Tencent mTencent;
     private String QQ_FOR_APP_ID = "";
-    private String WX_FOR_APP_KEY = "";
+    private String WX_FOR_APP_ID = "";
     private String WX_SECRET_KEY = "";
     private int ICON_ID;
     private String APP_NAME = "";
@@ -52,10 +52,10 @@ public class TencentShareManager {
         return mInstance;
     }
 
-    public void init(String qq_for_app_id, String wx_for_app_key, String wx_secret_key,
+    public void init(String qq_for_app_id, String wx_for_app_id, String wx_secret_key,
                      int icon, String appName, String baseUrl) {
         QQ_FOR_APP_ID = qq_for_app_id;
-        WX_FOR_APP_KEY = wx_for_app_key;
+        WX_FOR_APP_ID = wx_for_app_id;
         WX_SECRET_KEY = wx_secret_key;
         ICON_ID = icon;
         APP_NAME = appName;
@@ -63,7 +63,7 @@ public class TencentShareManager {
     }
 
     private boolean isInit() {
-        return QQ_FOR_APP_ID.length() != 0 && WX_FOR_APP_KEY.length() != 0 &&
+        return QQ_FOR_APP_ID.length() != 0 && WX_FOR_APP_ID.length() != 0 &&
                 WX_SECRET_KEY.length() != 0 && APP_NAME.length() != 0 && HOST.length() != 0;
     }
 
@@ -79,8 +79,8 @@ public class TencentShareManager {
             return false;
         }
         if (mIwxApi == null) {
-            mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplicationByReflect(), WX_FOR_APP_KEY, true);
-            mIwxApi.registerApp(WX_FOR_APP_KEY);
+            mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplicationByReflect(), WX_FOR_APP_ID, true);
+            mIwxApi.registerApp(WX_FOR_APP_ID);
         }
         if (!mIwxApi.isWXAppInstalled()) {
             Toast.makeText(context, "抱歉，您的手机上未安装微信，无法分享！", Toast.LENGTH_SHORT).show();
