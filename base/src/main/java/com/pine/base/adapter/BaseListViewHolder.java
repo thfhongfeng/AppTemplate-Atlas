@@ -12,5 +12,5 @@ public abstract class BaseListViewHolder<T> extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public abstract void updateData(T content, BaseListAdapterPropertyEntity propertyEntity, int position);
+    public abstract void updateData(T content, BaseListAdapterItemPropertyEntity propertyEntity, int position);
 }

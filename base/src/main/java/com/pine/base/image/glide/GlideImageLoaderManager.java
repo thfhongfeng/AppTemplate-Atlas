@@ -37,6 +37,14 @@ public class GlideImageLoaderManager implements IImageLoaderManager {
     }
 
     @Override
+    public IImageLoaderManager initConfig(@NonNull int emptyImageResId) {
+        mDefaultOption.error(emptyImageResId)    //错误加载
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE);
+        return mInstance;
+    }
+
+    @Override
     public IImageLoaderManager initConfig(@NonNull int emptyImageResId, @NonNull int loadingImageResId) {
         mDefaultOption.error(emptyImageResId)    //错误加载
                 .placeholder(loadingImageResId)   //加载图

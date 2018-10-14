@@ -81,7 +81,7 @@ public class MvpHomeModel {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                // Text code end
+                // Test code end
 
                 retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpShopEntity>>() {
                 }.getType());
@@ -126,11 +126,11 @@ public class MvpHomeModel {
                     distanceStr = String.valueOf(distance);
                 }
                 String res = "{success:true,code:200,message:'',data:" +
-                        "[{name:'Shop Item " + ((pageNo - 1) * pageSize) +
-                        "', distance:'" + distanceStr + "',imgUrl:''," +
+                        "[{name:'Shop Item " + ((pageNo - 1) * pageSize) + "', distance:'" + distanceStr +
+                        "',imgUrl:'https://img.zcool.cn/community/019af55798a4090000018c1be7a078.jpg@1280w_1l_2o_100sh.webp'," +
                         "products:[{name:'Product Item 1'}, " +
                         "{name:'Product Item 2'},{name:'Product Item 3'}]}";
-                if (pageNo < 5) {
+                if (pageNo < 500) {
                     for (int i = 1; i < pageSize; i++) {
                         if (!DecimalUtils.isEqual(distance, -1f)) {
                             distance += (pageNo - 1) * 1000 + 50;
@@ -147,7 +147,7 @@ public class MvpHomeModel {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                // Text code end
+                // Test code end
 
                 retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpShopAndProductEntity>>() {
                 }.getType());

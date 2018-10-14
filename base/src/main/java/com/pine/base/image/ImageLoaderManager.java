@@ -13,7 +13,7 @@ public class ImageLoaderManager {
     private static volatile IImageLoaderManager mInstance;
 
     static {
-        getInstance().initConfig(R.mipmap.base_iv_empty, R.mipmap.base_iv_loading);
+        getInstance().initConfig(R.mipmap.base_iv_empty);
     }
 
     private ImageLoaderManager() {

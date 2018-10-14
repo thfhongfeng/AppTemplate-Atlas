@@ -10,8 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pine.base.adapter.BaseListAdapterItemEntity;
-import com.pine.base.adapter.BaseListAdapterPropertyEntity;
+import com.pine.base.adapter.BaseListAdapterItemPropertyEntity;
 import com.pine.base.adapter.BaseListViewHolder;
 import com.pine.base.adapter.BasePaginationListAdapter;
 import com.pine.base.image.ImageLoaderManager;
@@ -20,8 +19,6 @@ import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
 import com.pine.tool.util.DecimalUtils;
 
-import java.util.List;
-
 /**
  * Created by tanghongfeng on 2018/9/28
  */
@@ -29,13 +26,8 @@ import java.util.List;
 public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
     public static final int HOME_SHOP_VIEW_HOLDER = 1;
 
-    public MvpHomeItemPaginationAdapter(int defaultItemViewType, boolean complexList) {
-        super(defaultItemViewType, complexList);
-    }
-
-    @Override
-    public List<BaseListAdapterItemEntity<? extends Object>> parseComplexData(List<? extends Object> data) {
-        return null;
+    public MvpHomeItemPaginationAdapter(int defaultItemViewType) {
+        super(defaultItemViewType);
     }
 
     @Override
@@ -66,7 +58,7 @@ public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
         }
 
         @Override
-        public void updateData(MvpShopEntity content, BaseListAdapterPropertyEntity propertyEntity, int position) {
+        public void updateData(MvpShopEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, R.mipmap.base_ic_launcher, photo_iv);
             title_tv.setText(content.getName());
             String distanceStr = content.getDistance();

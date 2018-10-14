@@ -16,6 +16,11 @@ public interface IImageLoaderManager {
     /**
      * 初始化基本配置项
      */
+    IImageLoaderManager initConfig(@NonNull int emptyImageResId);
+
+    /**
+     * 初始化基本配置项
+     */
     IImageLoaderManager initConfig(@NonNull int emptyImageResId, @NonNull int loadingImageResId);
 
     /**

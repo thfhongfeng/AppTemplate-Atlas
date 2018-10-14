@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.pine.base.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int FOOTER_VIEW_HOLDER = -100;
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -1000;
     // 1: 表示第一页（计数从1开始）
@@ -30,10 +29,10 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
     protected Boolean mHasMore = true;
     protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
-    private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
+    private int mTreeListType = -1;
 
-    public BasePaginationListAdapter(int defaultItemViewType) {
-        mDefaultItemViewType = defaultItemViewType;
+    public BasePaginationTreeListAdapter(int treeListType) {
+        mTreeListType = treeListType;
     }
 
     public static boolean isLastVisibleViewFooter(RecyclerView recyclerView) {
@@ -104,8 +103,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
             return FOOTER_VIEW_HOLDER;
         }
         BaseListAdapterItemEntity itemEntity = mData.get(position);
-        return itemEntity != null && itemEntity.getPropertyEntity().getItemViewType() != -10000 ?
-                itemEntity.getPropertyEntity().getItemViewType() : mDefaultItemViewType;
+        return itemEntity.getPropertyEntity().getItemViewType();
     }
 
     private boolean hasFooterView(boolean hasMore, int dataSize) {
@@ -122,7 +120,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
             return;
         }
         List<BaseListAdapterItemEntity<? extends Object>> parseData;
-        parseData = parseData(newData);
+        parseData = parseTreeData(newData);
         for (int i = 0; i < parseData.size(); i++) {
             mData.add(parseData.get(i));
         }
@@ -133,24 +131,10 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
 
     public final void setData(List<? extends Object> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        mData = parseTreeData(data);
         resetAndGetPageNo();
         mHasMore = data != null && data.size() >= getPageSize();
         notifyDataSetChanged();
-    }
-
-    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
-        if (data != null) {
-            BaseListAdapterItemEntity adapterEntity;
-            for (int i = 0; i < data.size(); i++) {
-                adapterEntity = new BaseListAdapterItemEntity();
-                adapterEntity.setData(data.get(i));
-                adapterEntity.getPropertyEntity().setItemViewType(mDefaultItemViewType);
-                adapterData.add(adapterEntity);
-            }
-        }
-        return adapterData;
     }
 
     public void resetAndGetPageNo() {
@@ -165,9 +149,11 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         return mPageSize.get();
     }
 
-    public int getDefaultItemViewType() {
-        return mDefaultItemViewType;
+    public int getTreeListType() {
+        return mTreeListType;
     }
+
+    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 

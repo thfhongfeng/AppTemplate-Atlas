@@ -12,22 +12,20 @@ import android.widget.TextView;
 
 import com.pine.base.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -1000;
     protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
-    private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
-    private boolean mIsTreeList;
+    private int mTreeListType = -1;
 
-    public BaseNoPaginationListAdapter(int defaultItemViewType) {
-        mDefaultItemViewType = defaultItemViewType;
+    public BaseNoPaginationTreeListAdapter(int treeListType) {
+        mTreeListType = treeListType;
     }
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
@@ -80,27 +78,15 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
 
     public final void setData(List<? extends Object> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        mData = parseTreeData(data);
         notifyDataSetChanged();
     }
 
-    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
-        if (data != null) {
-            BaseListAdapterItemEntity adapterEntity;
-            for (int i = 0; i < data.size(); i++) {
-                adapterEntity = new BaseListAdapterItemEntity();
-                adapterEntity.setData(data.get(i));
-                adapterEntity.getPropertyEntity().setItemViewType(mDefaultItemViewType);
-                adapterData.add(adapterEntity);
-            }
-        }
-        return adapterData;
+    public int getTreeListType() {
+        return mTreeListType;
     }
 
-    public int getDefaultItemViewType() {
-        return mDefaultItemViewType;
-    }
+    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 

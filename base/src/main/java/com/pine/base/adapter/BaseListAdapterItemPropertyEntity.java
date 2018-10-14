@@ -4,7 +4,7 @@ package com.pine.base.adapter;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class BaseListAdapterPropertyEntity {
+public class BaseListAdapterItemPropertyEntity {
     // item类别
     private int itemViewType = -10000;
     // item是否需要显示

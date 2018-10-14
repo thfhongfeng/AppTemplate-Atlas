@@ -2,7 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.mvp.adapter.MvpHomeItemPaginationComplexAdapter;
+import com.pine.mvp.adapter.MvpHomeItemPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpHomePartBContract;
 import com.pine.mvp.model.MvpHomeModel;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.Ui>
         implements IMvpHomePartBContract.Presenter {
     private MvpHomeModel mModel;
-    private MvpHomeItemPaginationComplexAdapter mMvpHomeItemAdapter;
+    private MvpHomeItemPaginationTreeAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpHomePartBPresenter() {
@@ -25,10 +25,10 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
     }
 
     @Override
-    public MvpHomeItemPaginationComplexAdapter getRecycleViewAdapter() {
+    public MvpHomeItemPaginationTreeAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemPaginationComplexAdapter(
-                    MvpHomeItemPaginationComplexAdapter.HOME_SHOP_AND_PRODUCT_COMPLEX_VIEW_HOLDER, true);
+            mMvpHomeItemAdapter = new MvpHomeItemPaginationTreeAdapter(
+                    MvpHomeItemPaginationTreeAdapter.HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM);
         }
         return mMvpHomeItemAdapter;
     }
@@ -41,7 +41,7 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
         HashMap<String, String> params = new HashMap<>();
         int pageNo = 1;
         if (!refresh) {
-            pageNo = mMvpHomeItemAdapter.getPageNo();
+            pageNo = mMvpHomeItemAdapter.getPageNo() + 1;
         }
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));

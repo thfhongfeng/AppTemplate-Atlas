@@ -49,7 +49,7 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
     public MvpHomeItemPaginationAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
             mMvpHomeItemAdapter = new MvpHomeItemPaginationAdapter(
-                    MvpHomeItemPaginationAdapter.HOME_SHOP_VIEW_HOLDER, false);
+                    MvpHomeItemPaginationAdapter.HOME_SHOP_VIEW_HOLDER);
         }
         return mMvpHomeItemAdapter;
     }

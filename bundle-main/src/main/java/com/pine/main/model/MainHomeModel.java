@@ -47,7 +47,7 @@ public class MainHomeModel {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    // Text code end
+                    // Test code end
                     retList = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
                     }.getType());
                     callback.onResponse(retList);

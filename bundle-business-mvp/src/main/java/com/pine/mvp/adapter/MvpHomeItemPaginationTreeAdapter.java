@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pine.base.adapter.BaseListAdapterItemEntity;
-import com.pine.base.adapter.BaseListAdapterPropertyEntity;
+import com.pine.base.adapter.BaseListAdapterItemPropertyEntity;
 import com.pine.base.adapter.BaseListViewHolder;
-import com.pine.base.adapter.BasePaginationListAdapter;
+import com.pine.base.adapter.BasePaginationTreeListAdapter;
 import com.pine.base.image.ImageLoaderManager;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
@@ -26,22 +26,22 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomeItemPaginationComplexAdapter extends BasePaginationListAdapter {
+public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdapter {
     public static final int HOME_SHOP_VIEW_HOLDER = 1;
     public static final int HOME_SHOP_PRODUCT_VIEW_HOLDER = 2;
-    public static final int HOME_SHOP_AND_PRODUCT_COMPLEX_VIEW_HOLDER = 101;
+    public static final int HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM = 101;
 
-    public MvpHomeItemPaginationComplexAdapter(int defaultItemViewType, boolean complexList) {
-        super(defaultItemViewType, complexList);
+    public MvpHomeItemPaginationTreeAdapter(int defaultItemViewType) {
+        super(defaultItemViewType);
     }
 
     @Override
-    public List<BaseListAdapterItemEntity<? extends Object>> parseComplexData(List<? extends Object> data) {
+    public List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data) {
         List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
-            switch (getDefaultItemViewType()) {
-                case HOME_SHOP_AND_PRODUCT_COMPLEX_VIEW_HOLDER:
+            switch (getTreeListType()) {
+                case HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM:
                     for (int i = 0; i < data.size(); i++) {
                         MvpShopAndProductEntity entity = (MvpShopAndProductEntity) data.get(i);
                         adapterEntity = new BaseListAdapterItemEntity();
@@ -97,8 +97,9 @@ public class MvpHomeItemPaginationComplexAdapter extends BasePaginationListAdapt
         }
 
         @Override
-        public void updateData(MvpShopEntity content, final BaseListAdapterPropertyEntity propertyEntity, final int position) {
-            ImageLoaderManager.getInstance().loadImage(mContext, R.mipmap.base_ic_launcher, photo_iv);
+        public void updateData(MvpShopEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
+            ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
+            ImageLoaderManager.getInstance().loadImage(mContext, "https://img.zcool.cn/community/019af55798a4090000018c1be7a078.jpg@1280w_1l_2o_100sh.webp", photo_iv);
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;
@@ -114,7 +115,7 @@ public class MvpHomeItemPaginationComplexAdapter extends BasePaginationListAdapt
                     for (int i = position + 1; i < propertyEntity.getSubItemViewCount() + position + 1; i++) {
                         mData.get(i).getPropertyEntity().setItemViewNeedShow(subWillShow);
                     }
-                    notifyDataSetChanged();
+                    notifyItemRangeChanged(position, propertyEntity.getSubItemViewCount() + 1);
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +142,7 @@ public class MvpHomeItemPaginationComplexAdapter extends BasePaginationListAdapt
 
         @Override
         public void updateData(MvpShopAndProductEntity.ProductsBean content,
-                               BaseListAdapterPropertyEntity propertyEntity, int position) {
+                               BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;
