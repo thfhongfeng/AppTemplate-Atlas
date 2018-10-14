@@ -71,7 +71,7 @@ public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         switch (viewType) {
             case HOME_SHOP_VIEW_HOLDER:
                 viewHolder = new HomeShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_shop_complex, parent, false));
+                        .inflate(R.layout.mvp_item_home_shop_tree, parent, false));
                 break;
             case HOME_SHOP_PRODUCT_VIEW_HOLDER:
                 viewHolder = new HomeShopProductViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
