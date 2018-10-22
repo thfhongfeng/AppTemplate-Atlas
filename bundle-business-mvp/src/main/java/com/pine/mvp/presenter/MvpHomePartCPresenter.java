@@ -2,7 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.mvp.adapter.MvpHomeItemNoPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopItemNoPaginationAdapter;
 import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.mvp.contract.IMvpHomePartCContract;
 import com.pine.mvp.model.MvpHomeModel;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.Ui>
         implements IMvpHomePartCContract.Presenter {
     private MvpHomeModel mModel = new MvpHomeModel();
-    private MvpHomeItemNoPaginationAdapter mMvpHomeItemAdapter;
+    private MvpShopItemNoPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpHomePartCPresenter() {
@@ -25,10 +25,10 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
     }
 
     @Override
-    public MvpHomeItemNoPaginationAdapter getRecycleViewAdapter() {
+    public MvpShopItemNoPaginationAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemNoPaginationAdapter(
-                    MvpHomeItemNoPaginationAdapter.HOME_SHOP_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpShopItemNoPaginationAdapter(
+                    MvpShopItemNoPaginationAdapter.HOME_SHOP_VIEW_HOLDER);
         }
         return mMvpHomeItemAdapter;
     }
@@ -39,26 +39,32 @@ public class MvpHomePartCPresenter extends BasePresenter<IMvpHomePartCContract.U
             return;
         }
         HashMap<String, String> params = new HashMap<>();
-        mIsLoadProcessing = true;
+        startDataLoadUi();
         mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopEntity> homeShopItemEntity) {
+                finishDataLoadUi();
                 if (isUiAlive()) {
                     mMvpHomeItemAdapter.setData(homeShopItemEntity);
-                    mMvpHomeItemAdapter.notifyDataSetChanged();
                 }
-                finishDataLoad();
             }
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoad();
+                finishDataLoadUi();
                 return false;
             }
         });
     }
 
-    private void finishDataLoad() {
+    private void startDataLoadUi() {
+        mIsLoadProcessing = true;
+        if (isUiAlive()) {
+            getUi().setSwipeRefreshLayoutRefresh(true);
+        }
+    }
+
+    private void finishDataLoadUi() {
         mIsLoadProcessing = false;
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);

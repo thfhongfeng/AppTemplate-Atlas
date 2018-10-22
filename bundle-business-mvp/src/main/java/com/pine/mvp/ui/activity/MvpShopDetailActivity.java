@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -38,7 +39,10 @@ public class MvpShopDetailActivity extends BaseMvpActionBarMenuActivity<IMvpShop
     // 分享dialog
     private AlertDialog mShareDialog;
     private WebView web_view;
+    private TextView go_travel_note_btn_tv;
     private TextView refresh_btn_tv;
+
+    private String mId;
 
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
@@ -84,16 +88,22 @@ public class MvpShopDetailActivity extends BaseMvpActionBarMenuActivity<IMvpShop
 
     @Override
     protected int getActivityLayoutResId() {
-        return R.layout.mvp_activity_item_detail;
+        return R.layout.mvp_activity_shop_detail;
     }
 
     @Override
-    protected boolean onCreateInitData() {
+    protected boolean initDataOnCreate() {
+        mId = getIntent().getStringExtra("id");
+        if (TextUtils.isEmpty(mId)) {
+            finish();
+            return true;
+        }
         return false;
     }
 
     @Override
-    protected void onCreateInitView() {
+    protected void initViewOnCreate() {
+        go_travel_note_btn_tv = (TextView) findViewById(R.id.go_travel_note_btn_tv);
         refresh_btn_tv = (TextView) findViewById(R.id.refresh_btn_tv);
         initWebView();
         initEvent();
@@ -101,6 +111,7 @@ public class MvpShopDetailActivity extends BaseMvpActionBarMenuActivity<IMvpShop
 
     private void initEvent() {
         refresh_btn_tv.setOnClickListener(this);
+        go_travel_note_btn_tv.setOnClickListener(this);
     }
 
     private void initWebView() {
@@ -187,6 +198,10 @@ public class MvpShopDetailActivity extends BaseMvpActionBarMenuActivity<IMvpShop
     public void onClick(View v) {
         if (v.getId() == R.id.refresh_btn_tv) {
             loadUrl();
+        } else if (v.getId() == R.id.go_travel_note_btn_tv) {
+            Intent intent = new Intent(this, MvpTravelNoteDetailActivity.class);
+            intent.putExtra("id", mId);
+            startActivity(intent);
         }
     }
 

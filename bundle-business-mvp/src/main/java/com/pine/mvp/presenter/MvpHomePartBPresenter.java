@@ -2,7 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.mvp.adapter.MvpHomeItemPaginationTreeAdapter;
+import com.pine.mvp.adapter.MvpShopItemPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpHomePartBContract;
 import com.pine.mvp.model.MvpHomeModel;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.Ui>
         implements IMvpHomePartBContract.Presenter {
     private MvpHomeModel mModel;
-    private MvpHomeItemPaginationTreeAdapter mMvpHomeItemAdapter;
+    private MvpShopItemPaginationTreeAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpHomePartBPresenter() {
@@ -25,10 +25,9 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
     }
 
     @Override
-    public MvpHomeItemPaginationTreeAdapter getRecycleViewAdapter() {
+    public MvpShopItemPaginationTreeAdapter getRecycleViewAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpHomeItemPaginationTreeAdapter(
-                    MvpHomeItemPaginationTreeAdapter.HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM);
+            mMvpHomeItemAdapter = new MvpShopItemPaginationTreeAdapter();
         }
         return mMvpHomeItemAdapter;
     }
@@ -45,30 +44,36 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
         }
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
-        mIsLoadProcessing = true;
+        startDataLoadUi();
         mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopAndProductEntity> shopAndProductEntities) {
+                finishDataLoadUi();
                 if (isUiAlive()) {
                     if (refresh) {
                         mMvpHomeItemAdapter.setData(shopAndProductEntities);
                     } else {
                         mMvpHomeItemAdapter.addData(shopAndProductEntities);
                     }
-                    mMvpHomeItemAdapter.notifyDataSetChanged();
                 }
-                finishDataLoad();
             }
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoad();
+                finishDataLoadUi();
                 return false;
             }
         });
     }
 
-    private void finishDataLoad() {
+    private void startDataLoadUi() {
+        mIsLoadProcessing = true;
+        if (isUiAlive()) {
+            getUi().setSwipeRefreshLayoutRefresh(true);
+        }
+    }
+
+    private void finishDataLoadUi() {
         mIsLoadProcessing = false;
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);

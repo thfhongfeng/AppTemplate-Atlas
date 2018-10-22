@@ -19,18 +19,18 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
     }
 
     @Override
-    protected boolean onCreateInitData() {
+    protected boolean initDataOnCreate() {
         return false;
     }
 
     @Override
-    protected void onCreateInitView() {
+    protected void initViewOnCreate() {
 
     }
 
     @Override
-    protected void onCreateAfterInit() {
-        super.onCreateAfterInit();
+    protected void afterInitOnCreate() {
+        super.afterInitOnCreate();
         mPresenter.goMainHomeActivity();
     }
 }

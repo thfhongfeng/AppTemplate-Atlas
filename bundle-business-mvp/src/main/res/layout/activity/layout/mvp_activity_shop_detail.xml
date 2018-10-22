@@ -7,12 +7,26 @@
     tools:context="com.pine.mvp.ui.activity.MvpShopDetailActivity">
 
     <TextView
+        android:id="@+id/go_travel_note_btn_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/dp_20"
+        android:text="Go to Travel Note" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="#999999"></View>
+
+    <TextView
         android:id="@+id/refresh_btn_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:padding="@dimen/dp_30"
+        android:padding="@dimen/dp_20"
         android:text="Business Mvp Item Detail(Click To Refresh)" />
 
     <WebView

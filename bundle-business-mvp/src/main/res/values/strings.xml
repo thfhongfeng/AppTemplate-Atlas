@@ -2,6 +2,7 @@
     <string name="mvp_home_title">Business Mvp</string>
 
     <string name="mvp_item_detail_title">Business Mvp Item Detail</string>
+    <string name="mvp_travel_note_detail_title">Business Mvp Travel Note Detail</string>
 
     <string name="mvp_share_wei_bo_success">分享成功</string>
     <string name="mvp_share_wei_bo_cancel">分享取消</string>

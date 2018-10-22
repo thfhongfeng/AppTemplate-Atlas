@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pine.base.adapter.BaseListAdapterItemPropertyEntity;
-import com.pine.base.adapter.BaseListViewHolder;
-import com.pine.base.adapter.BasePaginationListAdapter;
 import com.pine.base.image.ImageLoaderManager;
+import com.pine.base.list.BaseListViewHolder;
+import com.pine.base.list.adapter.BasePaginationListAdapter;
+import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
@@ -23,10 +23,10 @@ import com.pine.tool.util.DecimalUtils;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
+public class MvpShopItemPaginationAdapter extends BasePaginationListAdapter {
     public static final int HOME_SHOP_VIEW_HOLDER = 1;
 
-    public MvpHomeItemPaginationAdapter(int defaultItemViewType) {
+    public MvpShopItemPaginationAdapter(int defaultItemViewType) {
         super(defaultItemViewType);
     }
 
@@ -58,8 +58,11 @@ public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
         }
 
         @Override
-        public void updateData(MvpShopEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(final MvpShopEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+            ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
+            // Test code begin
             ImageLoaderManager.getInstance().loadImage(mContext, R.mipmap.base_ic_launcher, photo_iv);
+            // Test code end
             title_tv.setText(content.getName());
             String distanceStr = content.getDistance();
             if (TextUtils.isEmpty(distanceStr)) {
@@ -78,6 +81,7 @@ public class MvpHomeItemPaginationAdapter extends BasePaginationListAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, MvpShopDetailActivity.class);
+                    intent.putExtra("id", content.getId());
                     mContext.startActivity(intent);
                 }
             });

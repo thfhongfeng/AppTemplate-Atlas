@@ -27,7 +27,7 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
 
     @CallSuper
     @Override
-    protected boolean onCreateBeforeInit() {
+    protected boolean beforeInitOnCreate() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -45,7 +45,7 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
 
     @CallSuper
     @Override
-    protected void onCreateAfterInit() {
+    protected void afterInitOnCreate() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),

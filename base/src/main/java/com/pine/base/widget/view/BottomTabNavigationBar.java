@@ -30,19 +30,19 @@ public class BottomTabNavigationBar extends FrameLayout implements View.OnClickL
     public BottomTabNavigationBar(Context context) {
         super(context);
         mContext = context;
-        onCreateInitView();
+        initViewOnCreate();
         initEvent();
     }
 
     public BottomTabNavigationBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        onCreateInitView();
+        initViewOnCreate();
         initEvent();
         init(attrs);
     }
 
-    private void onCreateInitView() {
+    private void initViewOnCreate() {
         layout_view = LayoutInflater.from(mContext).inflate(R.layout.base_bottom_tab_navigation_bar, this, true);
         setBackgroundColor(Color.TRANSPARENT);
         bottom_main_home_iv = (ImageView) layout_view.findViewById(R.id.bottom_main_home_iv);

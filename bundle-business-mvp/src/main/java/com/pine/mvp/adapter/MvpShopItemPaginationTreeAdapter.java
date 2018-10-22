@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pine.base.adapter.BaseListAdapterItemEntity;
-import com.pine.base.adapter.BaseListAdapterItemPropertyEntity;
-import com.pine.base.adapter.BaseListViewHolder;
-import com.pine.base.adapter.BasePaginationTreeListAdapter;
 import com.pine.base.image.ImageLoaderManager;
+import com.pine.base.list.BaseListViewHolder;
+import com.pine.base.list.adapter.BasePaginationTreeListAdapter;
+import com.pine.base.list.bean.BaseListAdapterItemEntity;
+import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.bean.MvpShopEntity;
@@ -26,40 +26,31 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdapter {
+public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdapter {
     public static final int HOME_SHOP_VIEW_HOLDER = 1;
     public static final int HOME_SHOP_PRODUCT_VIEW_HOLDER = 2;
-    public static final int HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM = 101;
-
-    public MvpHomeItemPaginationTreeAdapter(int defaultItemViewType) {
-        super(defaultItemViewType);
-    }
 
     @Override
     public List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data) {
         List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
-            switch (getTreeListType()) {
-                case HOME_SHOP_AND_PRODUCT_TREE_LIST_ITEM:
-                    for (int i = 0; i < data.size(); i++) {
-                        MvpShopAndProductEntity entity = (MvpShopAndProductEntity) data.get(i);
+            for (int i = 0; i < data.size(); i++) {
+                MvpShopAndProductEntity entity = (MvpShopAndProductEntity) data.get(i);
+                adapterEntity = new BaseListAdapterItemEntity();
+                adapterEntity.setData(entity);
+                adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_VIEW_HOLDER);
+                List<MvpShopAndProductEntity.ProductsBean> productList = entity.getProducts();
+                adapterEntity.getPropertyEntity().setSubItemViewCount(productList == null ? 0 : productList.size());
+                adapterData.add(adapterEntity);
+                if (productList != null) {
+                    for (int j = 0; j < productList.size(); j++) {
                         adapterEntity = new BaseListAdapterItemEntity();
-                        adapterEntity.setData(entity);
-                        adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_VIEW_HOLDER);
-                        List<MvpShopAndProductEntity.ProductsBean> productList = entity.getProducts();
-                        adapterEntity.getPropertyEntity().setSubItemViewCount(productList == null ? 0 : productList.size());
+                        adapterEntity.setData(productList.get(j));
+                        adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_PRODUCT_VIEW_HOLDER);
                         adapterData.add(adapterEntity);
-                        if (productList != null) {
-                            for (int j = 0; j < productList.size(); j++) {
-                                adapterEntity = new BaseListAdapterItemEntity();
-                                adapterEntity.setData(productList.get(j));
-                                adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_PRODUCT_VIEW_HOLDER);
-                                adapterData.add(adapterEntity);
-                            }
-                        }
                     }
-                    break;
+                }
             }
         }
         return adapterData;
@@ -97,9 +88,11 @@ public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         }
 
         @Override
-        public void updateData(MvpShopEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
+        public void updateData(final MvpShopEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
+            // Test code begin
             ImageLoaderManager.getInstance().loadImage(mContext, "https://img.zcool.cn/community/019af55798a4090000018c1be7a078.jpg@1280w_1l_2o_100sh.webp", photo_iv);
+            // Test code end
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;
@@ -122,6 +115,7 @@ public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdap
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, MvpShopDetailActivity.class);
+                    intent.putExtra("id", content.getId());
                     mContext.startActivity(intent);
                 }
             });
@@ -141,7 +135,7 @@ public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         }
 
         @Override
-        public void updateData(MvpShopAndProductEntity.ProductsBean content,
+        public void updateData(final MvpShopAndProductEntity.ProductsBean content,
                                BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
@@ -149,13 +143,6 @@ public class MvpHomeItemPaginationTreeAdapter extends BasePaginationTreeListAdap
             }
             container.setVisibility(View.VISIBLE);
             title_tv.setText(content.getName());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MvpShopDetailActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
         }
     }
 }

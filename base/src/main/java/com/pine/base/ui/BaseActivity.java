@@ -23,16 +23,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        if (onCreateBeforeInit()) {
+        if (beforeInitOnCreate()) {
             return;
         }
 
-        if (onCreateInitData()) {
+        if (initDataOnCreate()) {
             return;
         }
-        onCreateInitView();
+        initViewOnCreate();
 
-        onCreateAfterInit();
+        afterInitOnCreate();
     }
 
     protected void setContentView() {
@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return false:没有消耗掉(不中断onCreate后续流程并finish)
      * true:消耗掉了(中断onCreate后续流程并finish)
      */
-    protected boolean onCreateBeforeInit() {
+    protected boolean beforeInitOnCreate() {
         return false;
     }
 
@@ -62,15 +62,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return false:没有消耗掉(不中断onCreate后续流程)
      * true:消耗掉了(中断onCreate后续流程)
      */
-    protected abstract boolean onCreateInitData();
+    protected abstract boolean initDataOnCreate();
 
     /**
      * onCreate中初始化View
      */
-    protected abstract void onCreateInitView();
+    protected abstract void initViewOnCreate();
 
     /**
      * onCreate中结束初始化
      */
-    protected abstract void onCreateAfterInit();
+    protected abstract void afterInitOnCreate();
 }

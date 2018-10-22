@@ -68,7 +68,7 @@ public class DateSelectDialog extends Dialog {
             wheelYear = (WheelPicker) layout.findViewById(R.id.wheel_one);
             wheelMonth = (WheelPicker) layout.findViewById(R.id.wheel_two);
             wheelDay = (WheelPicker) layout.findViewById(R.id.wheel_three);
-            onCreateInitView(dialog, dialogSelect);
+            initViewOnCreate(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
             window.setGravity(Gravity.BOTTOM);
@@ -81,7 +81,7 @@ public class DateSelectDialog extends Dialog {
             return dialog;
         }
 
-        private void onCreateInitView(final DateSelectDialog dialog, final IDialogDateSelected dialogSelect) {
+        private void initViewOnCreate(final DateSelectDialog dialog, final IDialogDateSelected dialogSelect) {
             List<String> yearList = new ArrayList<>();
             for (int i = 0; i <= endYear - startYear; i++) {
                 yearList.add(context.getString(R.string.base_date_year, String.valueOf(startYear + i)));

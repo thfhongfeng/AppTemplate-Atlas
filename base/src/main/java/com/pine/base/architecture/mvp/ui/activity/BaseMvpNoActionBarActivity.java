@@ -24,7 +24,7 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @CallSuper
     @Override
-    protected boolean onCreateBeforeInit() {
+    protected boolean beforeInitOnCreate() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -41,7 +41,7 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @CallSuper
     @Override
-    protected void onCreateAfterInit() {
+    protected void afterInitOnCreate() {
 
     }
 

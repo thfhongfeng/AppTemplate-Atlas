@@ -1,6 +1,7 @@
-package com.pine.base.adapter;
+package com.pine.base.list.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.pine.base.R;
+import com.pine.base.list.BaseListViewHolder;
+import com.pine.base.list.bean.BaseListAdapterItemEntity;
+import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 
 import java.util.List;
 
@@ -19,7 +23,7 @@ import java.util.List;
  */
 
 public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
-    protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -1000;
+    protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
     protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
     private int mTreeListType = -1;
@@ -33,6 +37,7 @@ public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapt
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_empty_background, parent, false));
     }
 
+    @NonNull
     @Override
     public BaseListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;

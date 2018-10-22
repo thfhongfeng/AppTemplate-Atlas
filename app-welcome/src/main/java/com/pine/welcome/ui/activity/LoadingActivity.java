@@ -30,19 +30,19 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     }
 
     @Override
-    protected boolean onCreateInitData() {
+    protected boolean initDataOnCreate() {
         mPresenter.setStartTime();
         return false;
     }
 
     @Override
-    protected void onCreateInitView() {
+    protected void initViewOnCreate() {
 
     }
 
     @Override
-    protected void onCreateAfterInit() {
-        super.onCreateAfterInit();
+    protected void afterInitOnCreate() {
+        super.afterInitOnCreate();
         mPresenter.loadBundleSwitcherData();
     }
 

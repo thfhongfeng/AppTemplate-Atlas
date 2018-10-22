@@ -1,6 +1,7 @@
-package com.pine.base.adapter;
+package com.pine.base.list.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,6 +13,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.pine.base.R;
+import com.pine.base.list.BaseListViewHolder;
+import com.pine.base.list.bean.BaseListAdapterItemEntity;
+import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,18 +25,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
-    protected final static int FOOTER_VIEW_HOLDER = -100;
-    protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -1000;
+    protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
+    protected final static int FOOTER_VIEW_HOLDER = -10001;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
     protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
     private boolean mIsInitState = true;
-    private int mTreeListType = -1;
 
-    public BasePaginationTreeListAdapter(int treeListType) {
-        mTreeListType = treeListType;
+    public BasePaginationTreeListAdapter() {
+
     }
 
     public static boolean isLastVisibleViewFooter(RecyclerView recyclerView) {
@@ -49,6 +52,7 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_empty_background, parent, false));
     }
 
+    @NonNull
     @Override
     public BaseListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
@@ -115,17 +119,22 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
     }
 
     public final void addData(List<? extends Object> newData) {
-        if (newData == null || newData.size() == 0) {
+        List<BaseListAdapterItemEntity<? extends Object>> parseData = parseTreeData(newData);
+        if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
             return;
         }
-        List<BaseListAdapterItemEntity<? extends Object>> parseData;
-        parseData = parseTreeData(newData);
-        for (int i = 0; i < parseData.size(); i++) {
-            mData.add(parseData.get(i));
+        if (mData == null) {
+            mIsInitState = false;
+            mData = parseData;
+            resetAndGetPageNo();
+        } else {
+            for (int i = 0; i < parseData.size(); i++) {
+                mData.add(parseData.get(i));
+            }
+            mPageNo.incrementAndGet();
         }
-        mHasMore = newData.size() >= getPageSize();
-        mPageNo.incrementAndGet();
+        mHasMore = parseData.size() >= getPageSize();
         notifyDataSetChanged();
     }
 
@@ -133,7 +142,7 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
         mIsInitState = false;
         mData = parseTreeData(data);
         resetAndGetPageNo();
-        mHasMore = data != null && data.size() >= getPageSize();
+        mHasMore = mData != null && mData.size() >= getPageSize();
         notifyDataSetChanged();
     }
 
@@ -147,10 +156,6 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
 
     public int getPageSize() {
         return mPageSize.get();
-    }
-
-    public int getTreeListType() {
-        return mTreeListType;
     }
 
     public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data);

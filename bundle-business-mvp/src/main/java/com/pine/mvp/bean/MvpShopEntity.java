@@ -7,14 +7,24 @@ package com.pine.mvp.bean;
 public class MvpShopEntity {
 
     /**
+     * id :
      * name :
      * distance :
      * imgUrl :
      */
 
+    private String id;
     private String name;
     private String distance;
     private String imgUrl;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

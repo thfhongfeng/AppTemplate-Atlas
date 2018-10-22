@@ -49,12 +49,12 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
     }
 
     @Override
-    protected boolean onCreateInitData() {
+    protected boolean initDataOnCreate() {
         return false;
     }
 
     @Override
-    protected void onCreateInitView() {
+    protected void initViewOnCreate() {
         view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
         view_pager = (ViewPager) findViewById(R.id.view_pager);
 

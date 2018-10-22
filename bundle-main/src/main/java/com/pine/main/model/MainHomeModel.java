@@ -37,7 +37,7 @@ public class MainHomeModel {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_QUERY_BUSINESS_LIST == what) {
-                    ArrayList<MainHomeGridViewEntity> retList = new ArrayList<MainHomeGridViewEntity>();
+                    ArrayList<MainHomeGridViewEntity> retList = new ArrayList<>();
                     // Test code begin
                     String res = "{success:true,code:200,message:'',data:" +
                             "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +

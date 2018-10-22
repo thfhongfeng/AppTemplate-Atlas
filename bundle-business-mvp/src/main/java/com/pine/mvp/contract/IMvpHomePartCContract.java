@@ -1,7 +1,7 @@
 package com.pine.mvp.contract;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.mvp.adapter.MvpHomeItemNoPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopItemNoPaginationAdapter;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -15,6 +15,6 @@ public interface IMvpHomePartCContract {
     interface Presenter extends IBaseContract.Presenter {
         void loadHomePartCListData();
 
-        MvpHomeItemNoPaginationAdapter getRecycleViewAdapter();
+        MvpShopItemNoPaginationAdapter getRecycleViewAdapter();
     }
 }

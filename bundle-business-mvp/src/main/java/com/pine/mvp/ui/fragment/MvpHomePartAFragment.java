@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpHomeItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.contract.IMvpHomePartAContract;
 import com.pine.mvp.presenter.MvpHomePartAPresenter;
 
@@ -65,7 +65,7 @@ public class MvpHomePartAFragment extends BaseMvpFragment<IMvpHomePartAContract.
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpHomeItemPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpShopItemPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
                     onLoadingMore();
                 }
             }

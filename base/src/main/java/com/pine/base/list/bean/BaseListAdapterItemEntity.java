@@ -1,4 +1,4 @@
-package com.pine.base.adapter;
+package com.pine.base.list.bean;
 
 /**
  * Created by tanghongfeng on 2018/9/28

@@ -1,7 +1,9 @@
-package com.pine.base.adapter;
+package com.pine.base.list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 
 /**
  * Created by tanghongfeng on 2018/9/28
