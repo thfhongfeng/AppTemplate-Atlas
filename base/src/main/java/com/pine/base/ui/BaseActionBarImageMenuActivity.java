@@ -1,6 +1,5 @@
-package com.pine.base.architecture.mvp.ui.activity;
+package com.pine.base.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.view.View;
@@ -12,30 +11,26 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OnKeyboardListener;
 import com.pine.base.R;
-import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.ui.BaseActivity;
 
-public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P extends BasePresenter<V>>
-        extends BaseActivity implements IBaseContract.Ui {
-    protected P mPresenter;
+public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
+    public static final int ACTION_BAR_TYPE_DEFAULT = 0x0;
+    public static final int ACTION_BAR_CENTER_TITLE_TAG = 0x0001;
+    public static final int ACTION_BAR_NO_GO_BACK_TAG = 0x0002;
     private ImmersionBar mImmersionBar;
 
     @Override
     protected final void setContentView() {
-        setContentView(R.layout.base_mvp_activity_actionbar_menu);
+        if ((getActionBarType() & ACTION_BAR_CENTER_TITLE_TAG) == ACTION_BAR_CENTER_TITLE_TAG) {
+            setContentView(R.layout.base_activity_actionbar_image_menu_center_title);
+        } else {
+            setContentView(R.layout.base_activity_actionbar_image_menu);
+        }
     }
 
     @CallSuper
     @Override
     protected boolean beforeInitOnCreate() {
-        // 创建并绑定presenter
-        mPresenter = createPresenter();
-        if (mPresenter != null) {
-            mPresenter.attachUi((V) this);
-        }
-
-        ViewStub content_layout = (ViewStub) findViewById(R.id.content_layout);
+        ViewStub content_layout = findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
 
@@ -48,28 +43,12 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
     @Override
     protected void afterInitOnCreate() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
+        if ((getActionBarType() & ACTION_BAR_NO_GO_BACK_TAG) == ACTION_BAR_NO_GO_BACK_TAG) {
+            action_bar_ll.findViewById(R.id.go_back_iv).setVisibility(View.GONE);
+        }
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),
                 (ImageView) action_bar_ll.findViewById(R.id.menu_iv));
-        if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_START);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_RESUME);
-        }
     }
 
     @Override
@@ -80,17 +59,6 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         }
         super.onPause();
-        if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_PAUSE);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_STOP);
-        }
-        super.onStop();
     }
 
     @Override
@@ -99,15 +67,6 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
             mImmersionBar.destroy();
         }
         super.onDestroy();
-        //解除绑定
-        if (mPresenter != null) {
-            mPresenter.detachUi();
-        }
-    }
-
-    @Override
-    public Activity getContextActivity() {
-        return this;
     }
 
     private void initImmersionBar() {
@@ -127,15 +86,12 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
         return R.mipmap.base_iv_status_bar_bg;
     }
 
-    @Override
-    protected final boolean initDataOnCreate() {
-        if (mPresenter != null) {
-            return mPresenter.initDataOnUiCreate();
-        }
-        return false;
+    /**
+     * 获取actionbar类别
+     */
+    protected int getActionBarType() {
+        return ACTION_BAR_TYPE_DEFAULT;
     }
-
-    protected abstract P createPresenter();
 
     protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv);
 }

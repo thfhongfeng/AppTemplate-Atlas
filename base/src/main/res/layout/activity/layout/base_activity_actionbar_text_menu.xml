@@ -40,14 +40,15 @@
             android:textColor="@color/dark_green"
             android:textSize="@dimen/sp_16" />
 
-        <ImageView
-            android:id="@+id/menu_iv"
+        <TextView
+            android:id="@+id/menu_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginRight="@dimen/dp_5"
-            android:padding="@dimen/dp_10"
-            android:src="@mipmap/base_ic_menu" />
+            android:padding="@dimen/dp_5"
+            android:textColor="@color/dark_green"
+            android:textSize="@dimen/sp_14" />
     </LinearLayout>
 
     <ViewStub

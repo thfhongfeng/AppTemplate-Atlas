@@ -5,10 +5,10 @@ import android.support.annotation.CallSuper;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.ui.BaseNoActionBarActivity;
+import com.pine.base.ui.BaseActionBarImageMenuActivity;
 
-public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P extends BasePresenter<V>>
-        extends BaseNoActionBarActivity implements IBaseContract.Ui {
+public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.Ui, P extends BasePresenter<V>>
+        extends BaseActionBarImageMenuActivity implements IBaseContract.Ui {
     protected P mPresenter;
 
     @CallSuper

@@ -1,4 +1,4 @@
-package com.pine.base.architecture.mvc.activity;
+package com.pine.base.ui;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
@@ -11,20 +11,19 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OnKeyboardListener;
 import com.pine.base.R;
-import com.pine.base.ui.BaseActivity;
 
-public abstract class BaseMvcActionBarMenuActivity extends BaseActivity {
+public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     private ImmersionBar mImmersionBar;
 
     @Override
     protected final void setContentView() {
-        setContentView(R.layout.base_mvc_activity_actionbar_menu);
+        setContentView(R.layout.base_activity_actionbar_custom_menu);
     }
 
     @CallSuper
     @Override
     protected boolean beforeInitOnCreate() {
-        ViewStub content_layout = (ViewStub) findViewById(R.id.content_layout);
+        ViewStub content_layout = findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
 
@@ -37,9 +36,10 @@ public abstract class BaseMvcActionBarMenuActivity extends BaseActivity {
     @Override
     protected void afterInitOnCreate() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
+        ViewStub content_layout = findViewById(R.id.custom_menu_container_vs);
+        content_layout.setLayoutResource(getMenuBarLayoutResId());
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
-                (TextView) action_bar_ll.findViewById(R.id.title),
-                (ImageView) action_bar_ll.findViewById(R.id.menu_iv));
+                (TextView) action_bar_ll.findViewById(R.id.title), content_layout.inflate());
     }
 
     @Override
@@ -77,5 +77,12 @@ public abstract class BaseMvcActionBarMenuActivity extends BaseActivity {
         return R.mipmap.base_iv_status_bar_bg;
     }
 
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv);
+    /**
+     * onCreate中获取当前MenuBar的内容布局资源id
+     *
+     * @return MenuBar的内容布局资源id
+     */
+    protected abstract int getMenuBarLayoutResId();
+
+    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
 }

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarCustomMenuActivity;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
@@ -17,10 +17,15 @@ import com.pine.mvp.presenter.MvpTravelNoteListPresenter;
  * Created by tanghongfeng on 2018/10/22
  */
 
-public class MvpTravelNoteListActivity extends BaseMvpActionBarActivity<IMvpTravelNoteListContract.Ui, MvpTravelNoteListPresenter>
+public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivity<IMvpTravelNoteListContract.Ui, MvpTravelNoteListPresenter>
         implements IMvpTravelNoteListContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
+
+    @Override
+    protected int getMenuBarLayoutResId() {
+        return R.layout.mvp_travel_note_list_menu;
+    }
 
     @Override
     protected MvpTravelNoteListPresenter createPresenter() {
@@ -28,8 +33,8 @@ public class MvpTravelNoteListActivity extends BaseMvpActionBarActivity<IMvpTrav
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
-        titleTv.setText(R.string.mvp_shop_detail_title);
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer) {
+        titleTv.setText(R.string.mvp_travel_note_list_title);
         goBackIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

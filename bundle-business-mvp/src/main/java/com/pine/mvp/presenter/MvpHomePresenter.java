@@ -1,7 +1,10 @@
 package com.pine.mvp.presenter;
 
+import android.content.Intent;
+
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.contract.IMvpHomeContract;
+import com.pine.mvp.ui.activity.MvpShopAddActivity;
 
 /**
  * Created by tanghongfeng on 2018/9/13
@@ -18,5 +21,11 @@ public class MvpHomePresenter extends BasePresenter<IMvpHomeContract.Ui>
     @Override
     public void onUiState(int state) {
 
+    }
+
+    @Override
+    public void goToAddShopActivity() {
+        Intent intent = new Intent(getContext(), MvpShopAddActivity.class);
+        getContext().startActivity(intent);
     }
 }

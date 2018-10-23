@@ -22,6 +22,23 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     private TextView go_shop_h5_btn_tv;
     private TextView go_travel_note_list_btn_tv;
 
+    /**
+     * 获取actionbar类别
+     */
+    protected int getActionBarType() {
+        return ACTION_BAR_CENTER_TITLE_TAG;
+    }
+
+    @Override
+    protected int getActivityLayoutResId() {
+        return R.layout.mvp_activity_shop_detail;
+    }
+
+    @Override
+    protected MvpShopDetailPresenter createPresenter() {
+        return new MvpShopDetailPresenter();
+    }
+
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.mvp_shop_detail_title);
@@ -32,16 +49,6 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
                 return;
             }
         });
-    }
-
-    @Override
-    protected MvpShopDetailPresenter createPresenter() {
-        return new MvpShopDetailPresenter();
-    }
-
-    @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.mvp_activity_shop_detail;
     }
 
     @Override

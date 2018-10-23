@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarMenuActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarImageMenuActivity;
 import com.pine.base.share.bean.ShareBean;
 import com.pine.base.share.manager.ShareManager;
 import com.pine.mvp.R;
@@ -30,7 +30,7 @@ import cn.pedant.SafeWebViewBridge.InjectedChromeClient;
  * Created by tanghongfeng on 2018/10/9
  */
 
-public class MvpWebViewActivity extends BaseMvpActionBarMenuActivity<IMvpWebViewContract.Ui, MvpWebViewPresenter>
+public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWebViewContract.Ui, MvpWebViewPresenter>
         implements IMvpWebViewContract.Ui, View.OnClickListener {
     // 分享dialog
     private AlertDialog mShareDialog;

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
+import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarImageMenuActivity;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpHomeContract;
 import com.pine.mvp.presenter.MvpHomePresenter;
@@ -21,10 +21,17 @@ import com.pine.tool.widget.ViewPagerTabLayout;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.Ui, MvpHomePresenter>
+public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeContract.Ui, MvpHomePresenter>
         implements IMvpHomeContract.Ui {
     private ViewPagerTabLayout view_pager_tab_layout;
     private ViewPager view_pager;
+
+    /**
+     * 获取actionbar类别
+     */
+    protected int getActionBarType() {
+        return ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG;
+    }
 
     @Override
     protected MvpHomePresenter createPresenter() {
@@ -32,13 +39,20 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
         titleTv.setText(R.string.mvp_home_title);
         goBackIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
                 return;
+            }
+        });
+        menuBtnIv.setImageResource(R.mipmap.base_ic_add);
+        menuBtnIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.goToAddShopActivity();
             }
         });
     }
