@@ -8,9 +8,9 @@ import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.location.BdLocationManager;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
-import com.pine.mvp.bean.MvpShopEntity;
-import com.pine.mvp.contract.IMvpHomePartAContract;
-import com.pine.mvp.model.MvpHomeModel;
+import com.pine.mvp.bean.MvpShopItemEntity;
+import com.pine.mvp.contract.IMvpShopPaginationContract;
+import com.pine.mvp.model.MvpHomeShopModel;
 import com.pine.tool.util.GPSUtils;
 
 import org.json.JSONException;
@@ -22,9 +22,10 @@ import java.util.HashMap;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.Ui>
-        implements IMvpHomePartAContract.Presenter {
-    private MvpHomeModel mModel;
+public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPaginationContract.Ui>
+        implements IMvpShopPaginationContract.Presenter {
+    private String mId;
+    private MvpHomeShopModel mModel;
     private MvpShopItemPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
     private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
@@ -36,13 +37,42 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
                 BdLocationManager.getInstance().unregisterListener(mLocationListener);
                 BdLocationManager.getInstance().stop();
                 BdLocationManager.getInstance().setLocation(bdLocation);
-                loadHomePartAListData(true);
+                loadShopPaginationListData(true);
             }
         }
     };
 
-    public MvpHomePartAPresenter() {
-        mModel = new MvpHomeModel();
+    public MvpShopPaginationListPresenter() {
+        mModel = new MvpHomeShopModel();
+    }
+
+
+    @Override
+    public boolean initDataOnUiCreate() {
+        mId = getStringExtra("id", "");
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+        switch (state) {
+            case UI_STATE_ON_CREATE:
+                break;
+            case UI_STATE_ON_RESUME:
+                if (BdLocationManager.getInstance().getLocation() == null) {
+                    BdLocationManager.getInstance().registerListener(mLocationListener);
+                    BdLocationManager.getInstance().start();
+                }
+                break;
+            case UI_STATE_ON_PAUSE:
+                break;
+            case UI_STATE_ON_STOP:
+                BdLocationManager.getInstance().unregisterListener(mLocationListener);
+                BdLocationManager.getInstance().stop();
+                break;
+            case UI_STATE_ON_DETACH:
+                break;
+        }
     }
 
     @Override
@@ -55,7 +85,7 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
     }
 
     @Override
-    public void loadHomePartAListData(final boolean refresh) {
+    public void loadShopPaginationListData(final boolean refresh) {
         if (mIsLoadProcessing) {
             return;
         }
@@ -66,6 +96,7 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
         }
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
+        params.put("id", mId);
         BDLocation location = BdLocationManager.getInstance().getLocation();
         if (location != null) {
             double[] locations = GPSUtils.bd09_To_gps84(location.getLatitude(), location.getLongitude());
@@ -73,15 +104,15 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
             params.put("longitude", String.valueOf(locations[1]));
         }
         startDataLoadUi();
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopEntity>>() {
+        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
-            public void onResponse(ArrayList<MvpShopEntity> homeShopItemEntity) {
+            public void onResponse(ArrayList<MvpShopItemEntity> list) {
                 finishDataLoadUi();
                 if (isUiAlive()) {
                     if (refresh) {
-                        mMvpHomeItemAdapter.setData(homeShopItemEntity);
+                        mMvpHomeItemAdapter.setData(list);
                     } else {
-                        mMvpHomeItemAdapter.addData(homeShopItemEntity);
+                        mMvpHomeItemAdapter.addData(list);
                     }
                 }
             }
@@ -110,28 +141,6 @@ public class MvpHomePartAPresenter extends BasePresenter<IMvpHomePartAContract.U
         mIsLoadProcessing = false;
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);
-        }
-    }
-
-    @Override
-    public void onUiState(int state) {
-        switch (state) {
-            case UI_STATE_ON_ATTACH:
-                break;
-            case UI_STATE_ON_SHOW:
-                if (BdLocationManager.getInstance().getLocation() == null) {
-                    BdLocationManager.getInstance().registerListener(mLocationListener);
-                    BdLocationManager.getInstance().start();
-                }
-                break;
-            case UI_STATE_ON_PAUSE:
-                break;
-            case UI_STATE_ON_HIDE:
-                BdLocationManager.getInstance().unregisterListener(mLocationListener);
-                BdLocationManager.getInstance().stop();
-                break;
-            case UI_STATE_ON_DETACH:
-                break;
         }
     }
 }

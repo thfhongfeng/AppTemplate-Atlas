@@ -1,5 +1,7 @@
 package com.pine.mvp.presenter;
 
+import android.text.TextUtils;
+
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpTravelNoteDetailComplexAdapter;
@@ -18,12 +20,28 @@ import java.util.List;
 
 public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDetailContract.Ui>
         implements IMvpTravelNoteDetailContract.Presenter {
+    private String mId;
     private MvpTravelNoteModel mModel;
     private MvpTravelNoteDetailComplexAdapter mTravelNoteDetailAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpTravelNoteDetailPresenter() {
         mModel = new MvpTravelNoteModel();
+    }
+
+    @Override
+    public boolean initDataOnUiCreate() {
+        mId = getStringExtra("id", "");
+        if (TextUtils.isEmpty(mId)) {
+            finishUi();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
     }
 
     @Override
@@ -40,6 +58,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
             return;
         }
         HashMap<String, String> params = new HashMap<>();
+        params.put("id", mId);
         startDataLoadUi();
         mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
@@ -75,6 +94,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         }
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mTravelNoteDetailAdapter.getPageSize()));
+        params.put("id", mId);
         startDataLoadUi();
         mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
             @Override
@@ -109,10 +129,5 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);
         }
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

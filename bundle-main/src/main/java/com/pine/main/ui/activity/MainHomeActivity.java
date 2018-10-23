@@ -26,13 +26,8 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     }
 
     @Override
-    protected boolean initDataOnCreate() {
-        return false;
-    }
-
-    @Override
     protected void initViewOnCreate() {
-        business_gv = (GridView) findViewById(R.id.business_gv);
+        business_gv = findViewById(R.id.business_gv);
     }
 
     @Override
@@ -48,7 +43,7 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
 
     @Override
     public void setBusinessBundleAdapter(String[] names) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 R.layout.main_item_home_gridview, R.id.title_tv, names);
         business_gv.setAdapter(arrayAdapter);
         business_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -10,10 +10,10 @@ import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpHomeContract;
 import com.pine.mvp.presenter.MvpHomePresenter;
-import com.pine.mvp.ui.fragment.MvpHomePartAFragment;
-import com.pine.mvp.ui.fragment.MvpHomePartBFragment;
-import com.pine.mvp.ui.fragment.MvpHomePartCFragment;
-import com.pine.mvp.ui.fragment.MvpHomePartDFragment;
+import com.pine.mvp.ui.fragment.MvpShopNoPaginationListFragment;
+import com.pine.mvp.ui.fragment.MvpShopPaginationListFragment;
+import com.pine.mvp.ui.fragment.MvpShopTreeListFragment;
+import com.pine.mvp.ui.fragment.MvpWebViewFragment;
 import com.pine.tool.adapter.TabFragmentPagerAdapter;
 import com.pine.tool.widget.ViewPagerTabLayout;
 
@@ -49,19 +49,14 @@ public class MvpHomeActivity extends BaseMvpActionBarActivity<IMvpHomeContract.U
     }
 
     @Override
-    protected boolean initDataOnCreate() {
-        return false;
-    }
-
-    @Override
     protected void initViewOnCreate() {
-        view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
-        view_pager = (ViewPager) findViewById(R.id.view_pager);
+        view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
+        view_pager = findViewById(R.id.view_pager);
 
         view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{
-                        new MvpHomePartAFragment(), new MvpHomePartBFragment(),
-                        new MvpHomePartCFragment(), new MvpHomePartDFragment()},
+                        new MvpShopPaginationListFragment(), new MvpShopTreeListFragment(),
+                        new MvpShopNoPaginationListFragment(), new MvpWebViewFragment()},
                 new String[]{"PartA", "PartB", "PartC", "PartD"}));
         view_pager_tab_layout.setupWithViewPager(view_pager);
     }

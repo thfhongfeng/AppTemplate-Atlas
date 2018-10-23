@@ -47,8 +47,8 @@ public class MvcHomeActivity extends BaseMvcActionBarActivity {
 
     @Override
     protected void initViewOnCreate() {
-        view_pager_tab_layout = (ViewPagerTabLayout) findViewById(R.id.view_pager_tab_layout);
-        view_pager = (ViewPager) findViewById(R.id.view_pager);
+        view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
+        view_pager = findViewById(R.id.view_pager);
 
         view_pager.setAdapter(mFragmentPagerAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{new MvcHomePartAFragment(), new MvcHomePartBFragment()},

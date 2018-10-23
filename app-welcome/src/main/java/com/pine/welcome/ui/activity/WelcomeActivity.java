@@ -19,11 +19,6 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
     }
 
     @Override
-    protected boolean initDataOnCreate() {
-        return false;
-    }
-
-    @Override
     protected void initViewOnCreate() {
 
     }

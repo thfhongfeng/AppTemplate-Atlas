@@ -10,6 +10,11 @@ import com.pine.user.contract.IUserHomeContract;
 public class UserHomePresenter extends BasePresenter<IUserHomeContract.Ui> implements IUserHomeContract.Presenter {
 
     @Override
+    public boolean initDataOnUiCreate() {
+        return false;
+    }
+
+    @Override
     public void onUiState(int state) {
 
     }

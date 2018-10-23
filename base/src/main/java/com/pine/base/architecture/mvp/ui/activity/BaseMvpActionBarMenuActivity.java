@@ -1,5 +1,6 @@
 package com.pine.base.architecture.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.view.View;
@@ -50,13 +51,24 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),
                 (ImageView) action_bar_ll.findViewById(R.id.menu_iv));
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_START);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_SHOW);
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_RESUME);
         }
     }
 
@@ -76,7 +88,7 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
     @Override
     protected void onStop() {
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_HIDE);
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_STOP);
         }
         super.onStop();
     }
@@ -94,7 +106,7 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
     }
 
     @Override
-    public Context getContext() {
+    public Activity getContextActivity() {
         return this;
     }
 
@@ -113,6 +125,14 @@ public abstract class BaseMvpActionBarMenuActivity<V extends IBaseContract.Ui, P
 
     protected int getStatusBarBgResId() {
         return R.mipmap.base_iv_status_bar_bg;
+    }
+
+    @Override
+    protected final boolean initDataOnCreate() {
+        if (mPresenter != null) {
+            return mPresenter.initDataOnUiCreate();
+        }
+        return false;
     }
 
     protected abstract P createPresenter();

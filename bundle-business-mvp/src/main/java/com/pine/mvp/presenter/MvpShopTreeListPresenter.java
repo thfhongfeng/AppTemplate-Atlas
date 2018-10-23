@@ -4,8 +4,8 @@ import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpShopItemPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
-import com.pine.mvp.contract.IMvpHomePartBContract;
-import com.pine.mvp.model.MvpHomeModel;
+import com.pine.mvp.contract.IMvpShopTreeListContract;
+import com.pine.mvp.model.MvpHomeShopModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +14,26 @@ import java.util.HashMap;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.Ui>
-        implements IMvpHomePartBContract.Presenter {
-    private MvpHomeModel mModel;
+public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListContract.Ui>
+        implements IMvpShopTreeListContract.Presenter {
+    private String mId;
+    private MvpHomeShopModel mModel;
     private MvpShopItemPaginationTreeAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
-    public MvpHomePartBPresenter() {
-        mModel = new MvpHomeModel();
+    public MvpShopTreeListPresenter() {
+        mModel = new MvpHomeShopModel();
+    }
+
+    @Override
+    public boolean initDataOnUiCreate() {
+        mId = getStringExtra("id", "");
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
     }
 
     @Override
@@ -33,7 +45,7 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
     }
 
     @Override
-    public void loadHomePartBListData(final boolean refresh) {
+    public void loadShopTreeListData(final boolean refresh) {
         if (mIsLoadProcessing) {
             return;
         }
@@ -44,16 +56,17 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
         }
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
+        params.put("id", mId);
         startDataLoadUi();
         mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
-            public void onResponse(ArrayList<MvpShopAndProductEntity> shopAndProductEntities) {
+            public void onResponse(ArrayList<MvpShopAndProductEntity> list) {
                 finishDataLoadUi();
                 if (isUiAlive()) {
                     if (refresh) {
-                        mMvpHomeItemAdapter.setData(shopAndProductEntities);
+                        mMvpHomeItemAdapter.setData(list);
                     } else {
-                        mMvpHomeItemAdapter.addData(shopAndProductEntities);
+                        mMvpHomeItemAdapter.addData(list);
                     }
                 }
             }
@@ -78,10 +91,5 @@ public class MvpHomePartBPresenter extends BasePresenter<IMvpHomePartBContract.U
         if (isUiAlive()) {
             getUi().setSwipeRefreshLayoutRefresh(false);
         }
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

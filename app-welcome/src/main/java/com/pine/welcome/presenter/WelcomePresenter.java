@@ -22,6 +22,16 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
     }
 
     @Override
+    public boolean initDataOnUiCreate() {
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
+
+    @Override
     public void goMainHomeActivity() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -48,10 +58,5 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
 
             }
         }, 2000);
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

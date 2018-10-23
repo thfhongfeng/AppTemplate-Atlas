@@ -1,6 +1,6 @@
 package com.pine.base.architecture.mvp.contract;
 
-import android.content.Context;
+import android.app.Activity;
 
 /**
  * Created by tanghongfeng on 2018/9/21
@@ -8,7 +8,7 @@ import android.content.Context;
 
 public interface IBaseContract {
     interface Ui {
-        Context getContext();
+        Activity getContextActivity();
     }
 
     interface Presenter {

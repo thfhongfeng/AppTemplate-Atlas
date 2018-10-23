@@ -28,6 +28,16 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
     }
 
     @Override
+    public boolean initDataOnUiCreate() {
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
+
+    @Override
     public void loadBusinessBundleData() {
         mModel.requestBusinessListData(new IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>>() {
             @Override
@@ -74,10 +84,5 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
                         }
                     });
         }
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

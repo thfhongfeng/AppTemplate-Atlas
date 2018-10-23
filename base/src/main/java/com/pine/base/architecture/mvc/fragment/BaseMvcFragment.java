@@ -9,13 +9,14 @@ public abstract class BaseMvcFragment extends BaseFragment {
 
     @CallSuper
     @Override
-    protected void onCreateViewBeforeInit() {
+    protected void beforeInitOnCreateView() {
 
     }
 
+    @CallSuper
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    protected void afterInitOnCreateView() {
+
     }
 
     @Override

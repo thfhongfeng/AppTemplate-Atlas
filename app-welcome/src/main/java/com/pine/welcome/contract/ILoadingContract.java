@@ -20,7 +20,6 @@ public interface ILoadingContract {
     }
 
     interface Presenter extends IBaseContract.Presenter {
-        void setStartTime();
 
         void loadBundleSwitcherData();
 

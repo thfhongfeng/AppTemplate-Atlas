@@ -1,7 +1,10 @@
 <resources>
     <string name="mvp_home_title">Business Mvp</string>
 
-    <string name="mvp_item_detail_title">Business Mvp Item Detail</string>
+    <string name="mvp_web_view_title">Business Mvp Web View</string>
+
+    <string name="mvp_shop_detail_title">Business Mvp Shop Detail</string>
+    <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
     <string name="mvp_travel_note_detail_title">Business Mvp Travel Note Detail</string>
 
     <string name="mvp_share_wei_bo_success">分享成功</string>

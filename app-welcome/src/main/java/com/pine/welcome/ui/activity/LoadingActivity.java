@@ -30,12 +30,6 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     }
 
     @Override
-    protected boolean initDataOnCreate() {
-        mPresenter.setStartTime();
-        return false;
-    }
-
-    @Override
     protected void initViewOnCreate() {
 
     }

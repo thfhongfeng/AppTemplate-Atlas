@@ -8,35 +8,30 @@ import android.view.View;
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
-import com.pine.mvp.contract.IMvpHomePartBContract;
-import com.pine.mvp.presenter.MvpHomePartBPresenter;
+import com.pine.mvp.contract.IMvpShopPaginationContract;
+import com.pine.mvp.presenter.MvpShopPaginationListPresenter;
 
 /**
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartBFragment extends BaseMvpFragment<IMvpHomePartBContract.Ui, MvpHomePartBPresenter>
-        implements IMvpHomePartBContract.Ui, SwipeRefreshLayout.OnRefreshListener {
+public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPaginationContract.Ui, MvpShopPaginationListPresenter>
+        implements IMvpShopPaginationContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpHomePartBPresenter createPresenter() {
-        return new MvpHomePartBPresenter();
+    protected MvpShopPaginationListPresenter createPresenter() {
+        return new MvpShopPaginationListPresenter();
     }
 
     @Override
     protected int getFragmentLayoutResId() {
-        return R.layout.mvp_fragment_home_part_b;
+        return R.layout.mvp_fragment_shop_pagination_list;
     }
 
     @Override
-    protected void onCreateViewInitData() {
-
-    }
-
-    @Override
-    protected void onCreateViewInitView(View layout) {
+    protected void initViewOnCreateView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
         swipe_refresh_layout.setOnRefreshListener(this);
@@ -75,11 +70,11 @@ public class MvpHomePartBFragment extends BaseMvpFragment<IMvpHomePartBContract.
 
     @Override
     public void onRefresh() {
-        mPresenter.loadHomePartBListData(true);
+        mPresenter.loadShopPaginationListData(true);
     }
 
     public void onLoadingMore() {
-        mPresenter.loadHomePartBListData(false);
+        mPresenter.loadShopPaginationListData(false);
     }
 
     @Override

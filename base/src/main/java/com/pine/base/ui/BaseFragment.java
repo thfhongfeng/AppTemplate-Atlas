@@ -18,13 +18,14 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        onCreateViewBeforeInit();
+        beforeInitOnCreateView();
 
-        onCreateViewInitData();
+        initDataOnCreateView();
 
         View layout = inflater.inflate(getFragmentLayoutResId(), container, false);
-        onCreateViewInitView(layout);
+        initViewOnCreateView(layout);
 
+        afterInitOnCreateView();
         return layout;
     }
 
@@ -33,17 +34,22 @@ public abstract class BaseFragment extends Fragment {
     /**
      * onCreateView中前置初始化
      */
-    protected void onCreateViewBeforeInit() {
+    protected void beforeInitOnCreateView() {
 
     }
 
     /**
      * onCreateView中初始化数据
      */
-    protected abstract void onCreateViewInitData();
+    protected abstract void initDataOnCreateView();
 
     /**
      * onCreateView中初始化View
      */
-    protected abstract void onCreateViewInitView(View layout);
+    protected abstract void initViewOnCreateView(View layout);
+
+    /**
+     * onCreate中结束初始化
+     */
+    protected abstract void afterInitOnCreateView();
 }

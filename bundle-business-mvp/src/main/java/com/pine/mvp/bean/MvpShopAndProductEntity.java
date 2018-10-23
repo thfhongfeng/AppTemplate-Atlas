@@ -6,7 +6,7 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopAndProductEntity extends MvpShopEntity {
+public class MvpShopAndProductEntity extends MvpShopItemEntity {
 
     /**
      * id :

@@ -7,35 +7,30 @@ import android.view.View;
 
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
-import com.pine.mvp.contract.IMvpHomePartCContract;
-import com.pine.mvp.presenter.MvpHomePartCPresenter;
+import com.pine.mvp.contract.IMvpShopNoPaginationListContract;
+import com.pine.mvp.presenter.MvpShopNoPaginationListPresenter;
 
 /**
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartCFragment extends BaseMvpFragment<IMvpHomePartCContract.Ui, MvpHomePartCPresenter>
-        implements IMvpHomePartCContract.Ui, SwipeRefreshLayout.OnRefreshListener {
+public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoPaginationListContract.Ui, MvpShopNoPaginationListPresenter>
+        implements IMvpShopNoPaginationListContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpHomePartCPresenter createPresenter() {
-        return new MvpHomePartCPresenter();
+    protected MvpShopNoPaginationListPresenter createPresenter() {
+        return new MvpShopNoPaginationListPresenter();
     }
 
     @Override
     protected int getFragmentLayoutResId() {
-        return R.layout.mvp_fragment_home_part_c;
+        return R.layout.mvp_fragment_shop_no_pagination_list;
     }
 
     @Override
-    protected void onCreateViewInitData() {
-
-    }
-
-    @Override
-    protected void onCreateViewInitView(View layout) {
+    protected void initViewOnCreateView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
         swipe_refresh_layout.setOnRefreshListener(this);
@@ -66,7 +61,7 @@ public class MvpHomePartCFragment extends BaseMvpFragment<IMvpHomePartCContract.
 
     @Override
     public void onRefresh() {
-        mPresenter.loadHomePartCListData();
+        mPresenter.loadShopNoPaginationListData();
     }
 
     @Override

@@ -8,35 +8,30 @@ import android.view.View;
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
-import com.pine.mvp.contract.IMvpHomePartAContract;
-import com.pine.mvp.presenter.MvpHomePartAPresenter;
+import com.pine.mvp.contract.IMvpShopTreeListContract;
+import com.pine.mvp.presenter.MvpShopTreeListPresenter;
 
 /**
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartAFragment extends BaseMvpFragment<IMvpHomePartAContract.Ui, MvpHomePartAPresenter>
-        implements IMvpHomePartAContract.Ui, SwipeRefreshLayout.OnRefreshListener {
+public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListContract.Ui, MvpShopTreeListPresenter>
+        implements IMvpShopTreeListContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpHomePartAPresenter createPresenter() {
-        return new MvpHomePartAPresenter();
+    protected MvpShopTreeListPresenter createPresenter() {
+        return new MvpShopTreeListPresenter();
     }
 
     @Override
     protected int getFragmentLayoutResId() {
-        return R.layout.mvp_fragment_home_part_a;
+        return R.layout.mvp_fragment_shop_tree_list;
     }
 
     @Override
-    protected void onCreateViewInitData() {
-
-    }
-
-    @Override
-    protected void onCreateViewInitView(View layout) {
+    protected void initViewOnCreateView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
         swipe_refresh_layout.setOnRefreshListener(this);
@@ -75,11 +70,11 @@ public class MvpHomePartAFragment extends BaseMvpFragment<IMvpHomePartAContract.
 
     @Override
     public void onRefresh() {
-        mPresenter.loadHomePartAListData(true);
+        mPresenter.loadShopTreeListData(true);
     }
 
     public void onLoadingMore() {
-        mPresenter.loadHomePartAListData(false);
+        mPresenter.loadShopTreeListData(false);
     }
 
     @Override

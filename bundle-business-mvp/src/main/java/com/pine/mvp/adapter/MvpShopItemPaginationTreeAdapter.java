@@ -16,7 +16,7 @@ import com.pine.base.list.bean.BaseListAdapterItemEntity;
 import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
-import com.pine.mvp.bean.MvpShopEntity;
+import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
 
 import java.util.ArrayList;
@@ -62,17 +62,17 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         switch (viewType) {
             case HOME_SHOP_VIEW_HOLDER:
                 viewHolder = new HomeShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_shop_tree, parent, false));
+                        .inflate(R.layout.mvp_item_shop_tree, parent, false));
                 break;
             case HOME_SHOP_PRODUCT_VIEW_HOLDER:
                 viewHolder = new HomeShopProductViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_shop_product, parent, false));
+                        .inflate(R.layout.mvp_item_shop_product, parent, false));
                 break;
         }
         return viewHolder;
     }
 
-    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopEntity> {
+    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
         private Context mContext;
         private LinearLayout container;
         private ImageView photo_iv;
@@ -88,11 +88,8 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         }
 
         @Override
-        public void updateData(final MvpShopEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
+        public void updateData(final MvpShopItemEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
-            // Test code begin
-            ImageLoaderManager.getInstance().loadImage(mContext, "https://img.zcool.cn/community/019af55798a4090000018c1be7a078.jpg@1280w_1l_2o_100sh.webp", photo_iv);
-            // Test code end
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;

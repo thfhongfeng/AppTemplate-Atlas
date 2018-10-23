@@ -25,10 +25,10 @@ import java.util.List;
  */
 
 public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
-    public static final int HOME_TRAVEL_NOTE_HEAD_VIEW_HOLDER = 1;
-    public static final int HOME_TRAVEL_NOTE_DAY_VIEW_HOLDER = 2;
-    public static final int HOME_TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER = 3;
-    public static final int HOME_TRAVEL_NOTE_COMMENT_VIEW_HOLDER = 4;
+    public static final int TRAVEL_NOTE_HEAD_VIEW_HOLDER = 1;
+    public static final int TRAVEL_NOTE_DAY_VIEW_HOLDER = 2;
+    public static final int TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER = 3;
+    public static final int TRAVEL_NOTE_COMMENT_VIEW_HOLDER = 4;
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
         return new EmptyBackgroundViewHolder(parent.getContext(),
@@ -44,21 +44,21 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
                 MvpTravelNoteDetailEntity entity = (MvpTravelNoteDetailEntity) data.get(i);
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(entity);
-                adapterEntity.getPropertyEntity().setItemViewType(HOME_TRAVEL_NOTE_HEAD_VIEW_HOLDER);
+                adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_HEAD_VIEW_HOLDER);
                 List<MvpTravelNoteDetailEntity.DaysBean> dayList = entity.getDays();
                 adapterData.add(adapterEntity);
                 if (dayList != null) {
                     for (int j = 0; j < dayList.size(); j++) {
                         adapterEntity = new BaseListAdapterItemEntity();
                         adapterEntity.setData(dayList.get(j));
-                        adapterEntity.getPropertyEntity().setItemViewType(HOME_TRAVEL_NOTE_DAY_VIEW_HOLDER);
+                        adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_DAY_VIEW_HOLDER);
                         adapterData.add(adapterEntity);
                     }
                 }
             }
             adapterEntity = new BaseListAdapterItemEntity();
             adapterEntity.setData("");
-            adapterEntity.getPropertyEntity().setItemViewType(HOME_TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER);
+            adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER);
             adapterData.add(adapterEntity);
         }
         return adapterData;
@@ -72,7 +72,7 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
             for (int i = 0; i < data.size(); i++) {
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(data.get(i));
-                adapterEntity.getPropertyEntity().setItemViewType(HOME_TRAVEL_NOTE_COMMENT_VIEW_HOLDER);
+                adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_COMMENT_VIEW_HOLDER);
                 adapterData.add(adapterEntity);
             }
         }
@@ -83,33 +83,33 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
     public BaseListViewHolder getViewHolder(ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
         switch (viewType) {
-            case HOME_TRAVEL_NOTE_HEAD_VIEW_HOLDER:
-                viewHolder = new HomeTravelNoteHeadViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_travel_note_head, parent, false));
+            case TRAVEL_NOTE_HEAD_VIEW_HOLDER:
+                viewHolder = new TravelNoteHeadViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.mvp_item_travel_note_head, parent, false));
                 break;
-            case HOME_TRAVEL_NOTE_DAY_VIEW_HOLDER:
-                viewHolder = new HomeTravelNoteDayViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_travel_note_day, parent, false));
+            case TRAVEL_NOTE_DAY_VIEW_HOLDER:
+                viewHolder = new TravelNoteDayViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.mvp_item_travel_note_day, parent, false));
                 break;
-            case HOME_TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER:
-                viewHolder = new HomeTravelNoteCommentHeadViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_travel_note_comment_head, parent, false));
+            case TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER:
+                viewHolder = new TravelNoteCommentHeadViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.mvp_item_travel_note_comment_head, parent, false));
                 break;
-            case HOME_TRAVEL_NOTE_COMMENT_VIEW_HOLDER:
-                viewHolder = new HomeTravelNoteCommentViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_travel_note_comment, parent, false));
+            case TRAVEL_NOTE_COMMENT_VIEW_HOLDER:
+                viewHolder = new TravelNoteCommentViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.mvp_item_travel_note_comment, parent, false));
                 break;
         }
         return viewHolder;
     }
 
-    public class HomeTravelNoteHeadViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity> {
+    public class TravelNoteHeadViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity> {
         private Context mContext;
         private CircleImageView person_civ;
         private ImageView is_like_iv;
         private TextView title_tv, sub_title_tv, name_tv, create_time_tv, like_count_tv, read_count_tv, preface_tv;
 
-        public HomeTravelNoteHeadViewHolder(Context context, View itemView) {
+        public TravelNoteHeadViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             person_civ = itemView.findViewById(R.id.person_civ);
@@ -140,11 +140,11 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
         }
     }
 
-    public class HomeTravelNoteDayViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity.DaysBean> {
+    public class TravelNoteDayViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity.DaysBean> {
         private Context mContext;
         private TextView day_tv, content_tv;
 
-        public HomeTravelNoteDayViewHolder(Context context, View itemView) {
+        public TravelNoteDayViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             day_tv = itemView.findViewById(R.id.day_tv);
@@ -158,10 +158,10 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
         }
     }
 
-    public class HomeTravelNoteCommentHeadViewHolder extends BaseListViewHolder<String> {
+    public class TravelNoteCommentHeadViewHolder extends BaseListViewHolder<String> {
         private Context mContext;
 
-        public HomeTravelNoteCommentHeadViewHolder(Context context, View itemView) {
+        public TravelNoteCommentHeadViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
         }
@@ -171,12 +171,12 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
         }
     }
 
-    public class HomeTravelNoteCommentViewHolder extends BaseListViewHolder<MvpTravelNoteCommentEntity> {
+    public class TravelNoteCommentViewHolder extends BaseListViewHolder<MvpTravelNoteCommentEntity> {
         private Context mContext;
         private CircleImageView person_civ;
         private TextView name_tv, create_time_tv, content_tv;
 
-        public HomeTravelNoteCommentViewHolder(Context context, View itemView) {
+        public TravelNoteCommentViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             person_civ = itemView.findViewById(R.id.person_civ);

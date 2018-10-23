@@ -45,8 +45,14 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
     }
 
     @Override
-    public void setStartTime() {
+    public boolean initDataOnUiCreate() {
         mStartTimeMillis = System.currentTimeMillis();
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
     }
 
     @Override
@@ -231,10 +237,5 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             autoLogin();
         }
         finishUi();
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

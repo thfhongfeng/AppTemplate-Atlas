@@ -7,13 +7,13 @@ import com.pine.mvp.adapter.MvpShopItemNoPaginationAdapter;
  * Created by tanghongfeng on 2018/9/14
  */
 
-public interface IMvpHomePartCContract {
+public interface IMvpShopNoPaginationListContract {
     interface Ui extends IBaseContract.Ui {
         void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {
-        void loadHomePartCListData();
+        void loadShopNoPaginationListData();
 
         MvpShopItemNoPaginationAdapter getRecycleViewAdapter();
     }

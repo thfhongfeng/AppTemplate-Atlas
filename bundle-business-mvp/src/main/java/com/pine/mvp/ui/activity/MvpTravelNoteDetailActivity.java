@@ -3,7 +3,6 @@ package com.pine.mvp.ui.activity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
 
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
-    private String mId;
 
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
@@ -45,16 +43,6 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_travel_note_detail;
-    }
-
-    @Override
-    protected boolean initDataOnCreate() {
-        mId = getIntent().getStringExtra("id");
-        if (TextUtils.isEmpty(mId)) {
-            finish();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -96,6 +84,11 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     }
 
     @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
     public void onRefresh() {
         mPresenter.loadTravelNoteDetailData(true);
     }
@@ -116,10 +109,5 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
         } else {
             swipe_refresh_layout.setRefreshing(processing);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

@@ -12,6 +12,7 @@ import com.pine.mvp.MvpConstants;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.bean.MvpTravelNoteCommentEntity;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
+import com.pine.mvp.bean.MvpTravelNoteItemEntity;
 import com.pine.tool.util.LogUtils;
 
 import org.json.JSONException;
@@ -27,12 +28,60 @@ import java.util.List;
 
 public class MvpTravelNoteModel {
     private static final String TAG = LogUtils.makeLogTag(MvpTravelNoteModel.class);
-    private static final int HTTP_QUERY_TRAVEL_NOTE_DETAIL = 1;
-    private static final int HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST = 2;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_LIST = 1;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_DETAIL = 2;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST = 3;
+
+    public void requestTravelNoteListData(final HashMap<String, String> params,
+                                          @NonNull final IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>> callback) {
+        String url = MvpUrlConstants.Query_TravelNoteList;
+        HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
+            @Override
+            public void onResponse(int what, JSONObject jsonObject) {
+                ArrayList<MvpTravelNoteItemEntity> retList = new ArrayList<>();
+                // Test code begin
+                int pageNo = 1;
+                int pageSize = 15;
+                if (!TextUtils.isEmpty(params.get("pageNo"))) {
+                    pageNo = Integer.parseInt(params.get("pageNo"));
+                }
+                if (!TextUtils.isEmpty(params.get("pageSize"))) {
+                    pageSize = Integer.parseInt(params.get("pageSize"));
+                }
+                String res = "{success:true,code:200,message:'',data:" +
+                        "[{id:'" + ((pageNo - 1) * pageSize) + "',title:'Travel Note Item " + ((pageNo - 1) * pageSize) + "'," +
+                        "createTime:'2018-10-10 10:10'}";
+                if (pageNo < 500) {
+                    for (int i = 1; i < pageSize; i++) {
+                        res += ",{id:'" + ((pageNo - 1) * pageSize + i) + "'," +
+                                "title:'Travel Note Item " + ((pageNo - 1) * pageSize + i) + "'," +
+                                "createTime:'2018-10-10 10:10'}";
+                    }
+                }
+                res += "]}";
+                try {
+                    jsonObject = new JSONObject(res);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Test code end
+
+                retList = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<List<MvpTravelNoteItemEntity>>() {
+                }.getType());
+                callback.onResponse(retList);
+            }
+
+            @Override
+            public boolean onError(int what, Exception e) {
+                return callback.onFail(e);
+            }
+        };
+        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_LIST, httpStringCallback);
+    }
 
     public void requestTravelNoteDetailData(final HashMap<String, String> params,
                                             @NonNull final IModelAsyncResponse<MvpTravelNoteDetailEntity> callback) {
-        String url = MvpUrlConstants.Query_HomeShopList;
+        String url = MvpUrlConstants.Query_TravelNoteDetail;
         HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
@@ -76,7 +125,7 @@ public class MvpTravelNoteModel {
 
     public void requestTravelNoteCommentData(final HashMap<String, String> params,
                                              @NonNull final IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>> callback) {
-        String url = MvpUrlConstants.Query_HomeShopAndProductList;
+        String url = MvpUrlConstants.Query_TravelNoteCommentList;
         HttpJsonCallback httpStringCallback = new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {

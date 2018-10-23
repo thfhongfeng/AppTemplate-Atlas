@@ -1,24 +1,20 @@
 package com.pine.mvp.contract;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.mvp.bean.MvpShopDetailEntity;
+import com.pine.mvp.adapter.MvpShopItemPaginationTreeAdapter;
 
 /**
  * Created by tanghongfeng on 2018/9/14
  */
 
-public interface IMvpShopDetailContract {
+public interface IMvpShopTreeListContract {
     interface Ui extends IBaseContract.Ui {
         void setSwipeRefreshLayoutRefresh(boolean processing);
-
-        void setupShopDetail(MvpShopDetailEntity entity);
     }
 
     interface Presenter extends IBaseContract.Presenter {
-        void loadShopDetailData();
+        void loadShopTreeListData(boolean refresh);
 
-        void goToShopH5Activity();
-
-        void goToTravelNoteListActivity();
+        MvpShopItemPaginationTreeAdapter getRecycleViewAdapter();
     }
 }

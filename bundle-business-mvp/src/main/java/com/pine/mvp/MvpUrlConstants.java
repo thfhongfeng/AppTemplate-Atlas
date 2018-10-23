@@ -8,8 +8,11 @@ import com.pine.base.BaseUrlConstants;
 
 public interface MvpUrlConstants extends BaseUrlConstants {
     String Query_HomeShopList = BASE_URL + "";
+    String Query_HomeShopDetail = BASE_URL + "";
     String Query_HomeShopAndProductList = BASE_URL + "";
+    String Query_TravelNoteList = BASE_URL + "";
+    String Query_TravelNoteDetail = BASE_URL + "";
+    String Query_TravelNoteCommentList = BASE_URL + "";
 
-    String H5_HomePartD = "https://www.baidu.com";
-    String H5_HomeItemDetail = "https://www.baidu.com";
+    String H5_DefaultUrl = "https://www.baidu.com";
 }

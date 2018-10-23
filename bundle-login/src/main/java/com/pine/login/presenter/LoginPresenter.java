@@ -15,6 +15,16 @@ import com.pine.tool.util.RegexUtils;
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
     @Override
+    public boolean initDataOnUiCreate() {
+        return false;
+    }
+
+    @Override
+    public void onUiState(int state) {
+
+    }
+
+    @Override
     public void login() {
         String mobile = getUi().getUserMobile();
         String pwd = getUi().getUserPassword();
@@ -38,10 +48,5 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
                 }
             }
         });
-    }
-
-    @Override
-    public void onUiState(int state) {
-
     }
 }

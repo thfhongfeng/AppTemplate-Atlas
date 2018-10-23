@@ -1,6 +1,6 @@
 package com.pine.base.architecture.mvp.ui.fragment;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.annotation.CallSuper;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
@@ -13,7 +13,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
 
     @CallSuper
     @Override
-    protected void onCreateViewBeforeInit() {
+    protected void beforeInitOnCreateView() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -21,11 +21,27 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
         }
     }
 
+    @CallSuper
+    @Override
+    protected void afterInitOnCreateView() {
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mPresenter != null) {
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_START);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_SHOW);
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_RESUME);
         }
     }
 
@@ -40,7 +56,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     @Override
     public void onStop() {
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_HIDE);
+            mPresenter.onUiState(BasePresenter.UI_STATE_ON_STOP);
         }
         super.onStop();
     }
@@ -55,8 +71,15 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public Context getContext() {
+    public Activity getContextActivity() {
         return getActivity();
+    }
+
+    @Override
+    protected final void initDataOnCreateView() {
+        if (mPresenter != null) {
+            mPresenter.initDataOnUiCreate();
+        }
     }
 
     protected abstract P createPresenter();

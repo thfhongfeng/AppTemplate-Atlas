@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:text="Part Item" />
+
+    <TextView
+        android:id="@+id/create_time_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="@dimen/dp_5"
+        android:text="2018-10-10 10:10"
+        android:textColor="@color/dark_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/light_gray"></View>
+</LinearLayout>
+

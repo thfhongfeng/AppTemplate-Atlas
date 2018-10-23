@@ -15,7 +15,7 @@ import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.mvp.R;
-import com.pine.mvp.bean.MvpShopEntity;
+import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
 import com.pine.tool.util.DecimalUtils;
 
@@ -36,13 +36,13 @@ public class MvpShopItemNoPaginationAdapter extends BaseNoPaginationListAdapter 
         switch (viewType) {
             case HOME_SHOP_VIEW_HOLDER:
                 viewHolder = new HomeShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.mvp_item_home_shop, parent, false));
+                        .inflate(R.layout.mvp_item_shop, parent, false));
                 break;
         }
         return viewHolder;
     }
 
-    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopEntity> {
+    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
         private Context mContext;
         private LinearLayout location_ll;
         private ImageView photo_iv;
@@ -58,7 +58,7 @@ public class MvpShopItemNoPaginationAdapter extends BaseNoPaginationListAdapter 
         }
 
         @Override
-        public void updateData(final MvpShopEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(final MvpShopItemEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
             title_tv.setText(content.getName());
             String distanceStr = content.getDistance();

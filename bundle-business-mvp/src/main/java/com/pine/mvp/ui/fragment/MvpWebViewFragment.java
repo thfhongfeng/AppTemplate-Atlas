@@ -25,7 +25,7 @@ import cn.pedant.SafeWebViewBridge.InjectedChromeClient;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClickListener {
+public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickListener {
     private WebView web_view;
     private TextView refresh_btn_tv;
 
@@ -36,17 +36,12 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
 
     @Override
     protected int getFragmentLayoutResId() {
-        return R.layout.mvp_fragment_home_part_d;
+        return R.layout.mvp_fragment_web_view;
     }
 
     @Override
-    protected void onCreateViewInitData() {
-
-    }
-
-    @Override
-    protected void onCreateViewInitView(View layout) {
-        refresh_btn_tv = (TextView) layout.findViewById(R.id.refresh_btn_tv);
+    protected void initViewOnCreateView(View layout) {
+        refresh_btn_tv = layout.findViewById(R.id.refresh_btn_tv);
         initWebView(layout);
         initEvent();
     }
@@ -56,7 +51,7 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
     }
 
     private void initWebView(View view) {
-        web_view = (WebView) view.findViewById(R.id.web_view);
+        web_view = view.findViewById(R.id.web_view);
         WebViewUtils.setupCommonWebView(web_view, new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
@@ -108,7 +103,7 @@ public class MvpHomePartDFragment extends BaseMvpFragment implements View.OnClic
     }
 
     private void loadUrl() {
-        web_view.loadUrl(MvpUrlConstants.H5_HomePartD);
+        web_view.loadUrl(MvpUrlConstants.H5_DefaultUrl);
     }
 
     @Override
