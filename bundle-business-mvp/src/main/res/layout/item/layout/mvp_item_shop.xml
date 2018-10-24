@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_3"
-                    android:src="@mipmap/mvp_ic_location" />
+                    android:src="@mipmap/base_ic_location" />
 
                 <TextView
                     android:id="@+id/location_tv"

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -17,6 +18,10 @@ import android.widget.TextView;
 import com.pine.base.R;
 import com.pine.base.share.bean.ShareBean;
 import com.pine.base.share.manager.ShareManager;
+import com.pine.base.widget.dialog.DateSelectDialog;
+import com.pine.base.widget.dialog.InputTextDialog;
+import com.pine.base.widget.dialog.SelectItemDialog;
+import com.pine.base.widget.dialog.TimeSelectDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +43,8 @@ public class DialogUtils {
     public static Dialog createLoadingDialog(Context context, String msg) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.base_dialog_loading, null);
-        LinearLayout layout = (LinearLayout) v
-                .findViewById(R.id.dialog_loading_view);
-        TextView tip_tv = (TextView) v.findViewById(R.id.tip_tv);
+        LinearLayout layout = v.findViewById(R.id.dialog_loading_view);
+        TextView tip_tv = v.findViewById(R.id.tip_tv);
         tip_tv.setText(msg);
         Dialog loadingDialog = new Dialog(context, R.style.BaseDialogStyle);
         loadingDialog.setCanceledOnTouchOutside(false);
@@ -80,10 +84,10 @@ public class DialogUtils {
         final Dialog dialog = new AlertDialog.Builder(context).create();
         dialog.show();
         dialog.getWindow().setContentView(layout);
-        TextView msg_tv = (TextView) layout.findViewById(R.id.msg_tv);
+        TextView msg_tv = layout.findViewById(R.id.msg_tv);
         msg_tv.setText(msg);
-        TextView cancel_btn_tv = (TextView) layout.findViewById(R.id.cancel_btn_tv);
-        TextView confirm_btn_tv = (TextView) layout.findViewById(R.id.confirm_btn_tv);
+        TextView cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);
+        TextView confirm_btn_tv = layout.findViewById(R.id.confirm_btn_tv);
         cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +113,7 @@ public class DialogUtils {
      * 分享弹出框
      *
      * @param activity
+     * @param shareBeanList
      * @return
      */
     public static AlertDialog createShareDialog(final Activity activity, @NonNull final ArrayList<ShareBean> shareBeanList) {
@@ -127,7 +132,7 @@ public class DialogUtils {
         }
         SimpleAdapter adapter = new SimpleAdapter(activity, items, R.layout.base_item_share,
                 new String[]{"img", "desc"}, new int[]{R.id.share_img, R.id.share_desc});
-        GridView gridView = (GridView) shareContent.findViewById(R.id.share_grid);
+        GridView gridView = shareContent.findViewById(R.id.share_grid);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -138,6 +143,141 @@ public class DialogUtils {
             }
         });
         return shareDialog;
+    }
+
+    /**
+     * 普通文本输入框
+     *
+     * @param context
+     * @param title
+     * @param originalText
+     * @param inputMaxLength
+     * @param actionClickListener
+     * @return
+     */
+    public static InputTextDialog createTextInputDialog(final Context context, String title,
+                                                        String originalText, final int inputMaxLength,
+                                                        final InputTextDialog.IActionClickListener actionClickListener) {
+        return createTextInputDialog(context, title, originalText, inputMaxLength,
+                -1, actionClickListener);
+    }
+
+    /**
+     * 普通文本输入框
+     *
+     * @param context
+     * @param title
+     * @param originalText
+     * @param inputMaxLength
+     * @param inputType           {@link EditorInfo#inputType}
+     * @param actionClickListener
+     * @return
+     */
+    public static InputTextDialog createTextInputDialog(final Context context, String title, String originalText,
+                                                        final int inputMaxLength, int inputType,
+                                                        final InputTextDialog.IActionClickListener actionClickListener) {
+        final InputTextDialog.Builder builder = new InputTextDialog.Builder(context);
+        builder.setActionClickListener(actionClickListener);
+        final InputTextDialog dialog = builder.create(title, originalText, inputMaxLength, inputType);
+        return dialog;
+    }
+
+    /**
+     * 有千分位分隔符数字文本输入框
+     *
+     * @param context
+     * @param title
+     * @param originalText
+     * @param inputMaxLength
+     * @param actionClickListener
+     * @return
+     */
+    public static InputTextDialog createThousandthNumberInputDialog(final Context context,
+                                                                    String title, String originalText,
+                                                                    final int inputMaxLength,
+                                                                    final InputTextDialog.IActionClickListener actionClickListener) {
+        return createThousandthNumberInputDialog(context, title, originalText,
+                inputMaxLength, false, 0, actionClickListener);
+    }
+
+    /**
+     * 有千分位分隔符数字文本输入框
+     *
+     * @param context
+     * @param title
+     * @param originalText
+     * @param inputMaxLength
+     * @param allowDecimal
+     * @param decimalNum
+     * @param actionClickListener
+     * @return
+     */
+    public static InputTextDialog createThousandthNumberInputDialog(final Context context,
+                                                                    String title, String originalText,
+                                                                    final int inputMaxLength,
+                                                                    boolean allowDecimal, int decimalNum,
+                                                                    final InputTextDialog.IActionClickListener actionClickListener) {
+        final InputTextDialog.Builder builder = new InputTextDialog.Builder(context);
+        builder.setActionClickListener(actionClickListener);
+        final InputTextDialog dialog = builder.thousandthNumberInputCreate(title, originalText, inputMaxLength, allowDecimal, decimalNum);
+        return dialog;
+    }
+
+    /**
+     * 元素选择弹出框
+     *
+     * @param context
+     * @param itemTextList
+     * @param currentPosition
+     * @param listener
+     * @return
+     */
+    public static SelectItemDialog createItemSelectDialog(final Context context, String[] itemTextList,
+                                                          int currentPosition, SelectItemDialog.IDialogSelectListener listener) {
+        return new SelectItemDialog.Builder(context).create(itemTextList, currentPosition, listener);
+    }
+
+    /**
+     * 日期(年月日)选择弹出框
+     *
+     * @param context
+     * @param startYear
+     * @param endYear
+     * @param dialogSelect
+     * @return
+     */
+    public static DateSelectDialog createDateSelectDialog(final Context context,
+                                                          int startYear, int endYear,
+                                                          DateSelectDialog.IDialogDateSelected dialogSelect) {
+        return new DateSelectDialog.Builder(context).create(dialogSelect, startYear, endYear);
+    }
+
+    /**
+     * 时间(时分秒)选择弹出框
+     *
+     * @param context
+     * @param dialogSelect
+     * @return
+     */
+    public static TimeSelectDialog createTimeSelectDialog(final Context context,
+                                                          TimeSelectDialog.IDialogTimeSelected dialogSelect) {
+        return createTimeSelectDialog(context, true, true, true, dialogSelect);
+    }
+
+    /**
+     * 时间(时分秒)选择弹出框
+     *
+     * @param context
+     * @param showHour
+     * @param showMinute
+     * @param showSecond
+     * @param dialogSelect
+     * @return
+     */
+    public static TimeSelectDialog createTimeSelectDialog(final Context context, boolean showHour,
+                                                          boolean showMinute, boolean showSecond,
+                                                          TimeSelectDialog.IDialogTimeSelected dialogSelect) {
+        return new TimeSelectDialog.Builder(context).create(dialogSelect, showHour, showMinute, showSecond);
     }
 
     public interface IActionListener {

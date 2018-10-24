@@ -33,6 +33,7 @@ atlas的demo的github地址：https://github.com/alibaba/atlas/tree/master/atlas
 1.遇到错误
 java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.List android.taobao.atlas.bundleInfo.BundleListing$BundleInfo.getTotalDependency()' on a null object reference
 排查代码无误的情况下，删除app下的build文件夹，重新编译。
+2.权限申明不能写在bundle模块的manifest文件中（bundle模块为需要是即时加载，因此与应用相关的各种初始化动作不能在bundle中进行或者申明注册，否则是无效的）
 
 
 

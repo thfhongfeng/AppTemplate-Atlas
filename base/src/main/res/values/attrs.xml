@@ -3,4 +3,12 @@
     <declare-styleable name="BottomTabNavigationBar">
         <attr name="selectedItem" format="integer"></attr>
     </declare-styleable>
+
+
+    <style name="SelectItemDialog" parent="android:style/Theme.Dialog">
+        <item name="android:background">#00000000</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
 </resources>

@@ -30,6 +30,10 @@
     <string name="base_time_minute">%1$s分</string>
     <string name="base_time_second">%1$s秒</string>
 
+    <string name="base_rationale_ask">This app may not work correctly without the requested permissions.</string>
+    <string name="base_rationale_ask_again"> This app may not work correctly without the requested permissions. Open the app settings screen to modify app permissions.</string>
+    <string name="base_title_settings_dialog">Permissions Required</string>
+
     <string name="base_main_tab_home">首页</string>
     <string name="base_main_tab_mine">我的</string>
 </resources>

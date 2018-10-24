@@ -6,7 +6,16 @@
     <string name="mvp_shop_detail_title">Business Mvp Shop Detail</string>
 
     <string name="mvp_shop_add_title">Business Mvp Shop Add</string>
+    <string name="mvp_shop_camera_permission_need">需要相机权限</string>
     <string name="mvp_shop_add_confirm_menu">确认添加</string>
+    <string name="mvp_shop_add_name_label">名称：</string>
+    <string name="mvp_shop_add_type_label">类别：</string>
+    <string name="mvp_shop_add_online_time_label">上线时间：</string>
+    <string name="mvp_shop_add_contact_label">联系方式：</string>
+    <string name="mvp_shop_add_contact_hint">请输入手机号码</string>
+    <string name="mvp_shop_add_address_label">地址：</string>
+    <string name="mvp_shop_add_description_label">介绍：</string>
+    <string name="mvp_shop_add_remark_label">备注：</string>
 
     <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
 

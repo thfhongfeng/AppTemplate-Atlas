@@ -1,7 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_10">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:shrinkColumns="1">
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_name_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <EditText
+                    android:id="@+id/name_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:ellipsize="end"
+                    android:maxLength="20"
+                    android:maxLines="2"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_type_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <LinearLayout
+                    android:id="@+id/type_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/type_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/dp_10"
+                        android:textColor="#929292"
+                        android:textSize="@dimen/sp_15" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        android:src="@mipmap/base_ic_solid_down" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_online_time_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <LinearLayout
+                    android:id="@+id/online_time_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/online_time_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/dp_10"
+                        android:textColor="#929292"
+                        android:textSize="@dimen/sp_15" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        android:src="@mipmap/base_ic_date_select" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_contact_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:id="@+id/contact_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_address_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:id="@+id/address_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_description_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <EditText
+                    android:id="@+id/description_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:gravity="top"
+                    android:lines="3"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_remark_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <EditText
+                    android:id="@+id/remark_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:gravity="top"
+                    android:lines="3"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+        </TableLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

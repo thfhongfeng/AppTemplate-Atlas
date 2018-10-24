@@ -65,7 +65,7 @@
             android:layout_height="@dimen/dp_12"
             android:layout_marginLeft="@dimen/dp_10"
             android:scaleType="center"
-            android:src="@mipmap/mvp_ic_like_selected" />
+            android:src="@mipmap/base_ic_like_selected" />
 
         <TextView
             android:id="@+id/like_count_tv"
@@ -80,7 +80,7 @@
             android:layout_height="@dimen/dp_12"
             android:layout_marginLeft="@dimen/dp_10"
             android:scaleType="center"
-            android:src="@mipmap/mvp_iv_has_read" />
+            android:src="@mipmap/base_iv_has_read" />
 
         <TextView
             android:id="@+id/read_count_tv"

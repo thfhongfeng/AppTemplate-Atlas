@@ -40,6 +40,10 @@ public class DateSelectDialog extends Dialog {
         return mBuilder;
     }
 
+    public interface IDialogDateSelected {
+        void onSelected(Calendar calendar);
+    }
+
     public static class Builder {
         private TextView cancelBtn, confirmBtn;
         private WheelPicker wheelYear, wheelMonth, wheelDay;
@@ -63,11 +67,11 @@ public class DateSelectDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final DateSelectDialog dialog = new DateSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_date_or_time_select, null);
-            cancelBtn = (TextView) layout.findViewById(R.id.cancel_tv);
-            confirmBtn = (TextView) layout.findViewById(R.id.confirm_tv);
-            wheelYear = (WheelPicker) layout.findViewById(R.id.wheel_one);
-            wheelMonth = (WheelPicker) layout.findViewById(R.id.wheel_two);
-            wheelDay = (WheelPicker) layout.findViewById(R.id.wheel_three);
+            cancelBtn = layout.findViewById(R.id.cancel_tv);
+            confirmBtn = layout.findViewById(R.id.confirm_tv);
+            wheelYear = layout.findViewById(R.id.wheel_one);
+            wheelMonth = layout.findViewById(R.id.wheel_two);
+            wheelDay = layout.findViewById(R.id.wheel_three);
             initViewOnCreate(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -162,10 +166,6 @@ public class DateSelectDialog extends Dialog {
             c.set(Calendar.DATE, 1);
             c.roll(Calendar.DATE, -1);
             return c.get(Calendar.DATE);
-        }
-
-        public interface IDialogDateSelected {
-            void onSelected(Calendar calendar);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,20 +21,21 @@ import com.pine.tool.widget.ThousandthNumberEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by tanghongfeng on 2018/2/12.
  */
 
 public class InputTextDialog extends Dialog {
-    public static int ACTION_CANCEL = 1;
-    public static int ACTION_SUBMIT = 0;
+    private Builder mBuilder;
 
-    public InputTextDialog(Context context) {
+    protected InputTextDialog(Context context) {
         super(context);
     }
 
-    public InputTextDialog(Context context, int theme) {
+    protected InputTextDialog(Context context, int theme) {
         super(context, theme);
     }
 
@@ -41,35 +43,46 @@ public class InputTextDialog extends Dialog {
         super(context, cancelable, cancelListener);
     }
 
-    public interface SubmitClickListener {
-        void onSubmitClick(Dialog dialog, int which, List<String> list);
+    public void setInputTex(String text) {
+        mBuilder.getInputEditText().setText(text);
+        mBuilder.getInputEditText().setSelection(text.length());
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (isShowing()) {
+                    mBuilder.showKeyboard(mBuilder.getInputEditText());
+                }
+            }
+        }, 100);
+    }
+
+    public interface IActionClickListener {
+        void onSubmitClick(Dialog dialog, List<String> textList);
+
+        void onCancelClick(Dialog dialog);
     }
 
     public static class Builder {
         private Context context;
-        private OnClickListener cancelClickListener;
-        private SubmitClickListener submitClickListener;
-        private List<String> list = new ArrayList<>();
+        private IActionClickListener actionClickListener;
+        private EditText input_et;
 
         public Builder(Context context) {
             this.context = context;
         }
 
-        public OnClickListener getCancelClickListener() {
-            return cancelClickListener;
+        public IActionClickListener getActionClickListener() {
+            return actionClickListener;
         }
 
-
-        public void setCancelClickListener(OnClickListener cancelClickListener) {
-            this.cancelClickListener = cancelClickListener;
-        }
-
-        public SubmitClickListener getSubmitClickListener() {
-            return submitClickListener;
-        }
-
-        public void setSubmitClickListener(SubmitClickListener submitClickListener) {
-            this.submitClickListener = submitClickListener;
+        public void setActionClickListener(IActionClickListener actionClickListener) {
+            this.actionClickListener = actionClickListener;
         }
 
         public Dialog create(String title) {
@@ -77,121 +90,53 @@ public class InputTextDialog extends Dialog {
         }
 
         public Dialog create(String title, String originalText, final int inputMaxLength) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final Dialog dialog = new Dialog(context, R.style.BaseInputTextDialogStyle);
-            View layout = inflater.inflate(R.layout.base_dialog_text_input, null);
-            TextView title_tv = layout.findViewById(R.id.title_tv);
-            final EditText input_et = layout.findViewById(R.id.input_et);
-            TextView cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);
-            TextView submit_btn_tv = layout.findViewById(R.id.submit_btn_tv);
-            dialog.addContentView(layout, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            if (cancelClickListener != null)
-                cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelClickListener.onClick(dialog, ACTION_CANCEL);
-                    }
-                });
-            if (submitClickListener != null)
-                submit_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        list = new ArrayList<>();
-                        list.add(input_et.getText().toString());
-                        list.add(input_et.getText().toString());
-                        submitClickListener.onSubmitClick(dialog, ACTION_SUBMIT, list);
-                    }
-                });
-            dialog.setOnDismissListener(new OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    hideKeyboard(input_et);
-                }
-            });
-            dialog.setContentView(layout);
-            title_tv.setText(title);
-            if (inputMaxLength > 0) {
-                input_et.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        Editable editable = input_et.getText();
-                        int len = editable.length();
-                        if (len > inputMaxLength) {
-                            int selEndIndex = Selection.getSelectionEnd(editable);
-                            String str = editable.toString();
-                            //截取新字符串
-                            String newStr = str.substring(0, inputMaxLength);
-                            input_et.setText(newStr);
-                            editable = input_et.getText();
-                            //新字符串的长度
-                            int newLen = editable.length();
-                            //旧光标位置超过字符串长度
-                            if (selEndIndex > newLen) {
-                                selEndIndex = editable.length();
-                            }
-                            //设置新光标所在的位置
-                            Selection.setSelection(editable, selEndIndex);
-                            Toast.makeText(context, context.getString(R.string.base_text_max_length, inputMaxLength), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-            }
-            if (!TextUtils.isEmpty(originalText)) {
-                input_et.setText(originalText);
-                input_et.setSelection(originalText.length());
-            }
-            return dialog;
+            return this.create(title, originalText, inputMaxLength, -1);
         }
 
         /**
-         * 创建对输入的类dialog
+         * 创建对应输入的类别的dialog
          *
          * @param title
          * @param originalText
          * @param inputMaxLength
-         * @param inputType
+         * @param inputType      {@link EditorInfo#inputType}
          * @return
          */
-        public Dialog create(String title, String originalText, final int inputMaxLength, int inputType) {
+        public InputTextDialog create(String title, String originalText, final int inputMaxLength, int inputType) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final Dialog dialog = new Dialog(context, R.style.BaseInputTextDialogStyle);
+            final InputTextDialog dialog = new InputTextDialog(context, R.style.BaseInputTextDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_text_input, null);
             TextView title_tv = layout.findViewById(R.id.title_tv);
-            final EditText input_et = layout.findViewById(R.id.input_et);
+            input_et = layout.findViewById(R.id.input_et);
             TextView cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);
             TextView submit_btn_tv = layout.findViewById(R.id.submit_btn_tv);
             dialog.addContentView(layout, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            if (cancelClickListener != null)
-                cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelClickListener.onClick(dialog, ACTION_CANCEL);
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(input_et);
+                    dialog.dismiss();
+                    if (actionClickListener != null) {
+                        actionClickListener.onCancelClick(dialog);
                     }
-                });
-            if (submitClickListener != null)
-                submit_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        list = new ArrayList<>();
+                }
+            });
+            submit_btn_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(input_et);
+                    dialog.dismiss();
+                    if (actionClickListener != null) {
+                        ArrayList<String> list = new ArrayList<>();
                         list.add(input_et.getText().toString());
                         list.add(input_et.getText().toString());
-                        submitClickListener.onSubmitClick(dialog, ACTION_SUBMIT, list);
+                        actionClickListener.onSubmitClick(dialog, list);
                     }
-                });
+                }
+            });
             dialog.setOnDismissListener(new OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
@@ -199,7 +144,9 @@ public class InputTextDialog extends Dialog {
                 }
             });
             dialog.setContentView(layout);
-            input_et.setInputType(inputType);
+            if (inputType != -1) {
+                input_et.setInputType(inputType);
+            }
             title_tv.setText(title);
             if (inputMaxLength > 0) {
                 input_et.addTextChangedListener(new TextWatcher() {
@@ -241,40 +188,49 @@ public class InputTextDialog extends Dialog {
                 input_et.setText(originalText);
                 input_et.setSelection(originalText.length());
             }
+            dialog.mBuilder = this;
             return dialog;
         }
 
         /**
          * 创建数字输入dialog
          */
-        public Dialog thousandthNumberInputCreate(String title, String originalText, final int inputMaxLength, boolean allowDecimal, int decimalNum) {
+        public InputTextDialog thousandthNumberInputCreate(String title, String originalText,
+                                                           final int inputMaxLength, boolean allowDecimal,
+                                                           int decimalNum) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final Dialog dialog = new Dialog(context, R.style.BaseInputTextDialogStyle);
+            final InputTextDialog dialog = new InputTextDialog(context, R.style.BaseInputTextDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_thounsandth_number_text_input, null);
             TextView title_tv = layout.findViewById(R.id.title_tv);
-            final EditText input_et = layout.findViewById(R.id.input_et);
+            input_et = layout.findViewById(R.id.input_et);
             TextView cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);
             TextView submit_btn_tv = layout.findViewById(R.id.submit_btn_tv);
             dialog.addContentView(layout, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            if (cancelClickListener != null)
-                cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelClickListener.onClick(dialog, ACTION_CANCEL);
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(input_et);
+                    dialog.dismiss();
+                    if (actionClickListener != null) {
+                        actionClickListener.onCancelClick(dialog);
                     }
-                });
-            if (submitClickListener != null)
-                submit_btn_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        list = new ArrayList<>();
+                }
+            });
+            submit_btn_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(input_et);
+                    dialog.dismiss();
+                    if (actionClickListener != null) {
+                        ArrayList<String> list = new ArrayList<>();
                         list.add(input_et.getText().toString());
                         list.add(((ThousandthNumberEditText) input_et).getOriginalText());
-                        submitClickListener.onSubmitClick(dialog, ACTION_SUBMIT, list);
+                        actionClickListener.onSubmitClick(dialog, list);
                     }
-                });
+                }
+            });
             dialog.setOnDismissListener(new OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
@@ -297,6 +253,7 @@ public class InputTextDialog extends Dialog {
                 input_et.setText(originalText);
                 input_et.setSelection(originalText.length());
             }
+            dialog.mBuilder = this;
             return dialog;
         }
 
@@ -322,6 +279,10 @@ public class InputTextDialog extends Dialog {
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘
             }
+        }
+
+        public EditText getInputEditText() {
+            return input_et;
         }
     }
 }

@@ -40,6 +40,10 @@ public class TimeSelectDialog extends Dialog {
         return mBuilder;
     }
 
+    public interface IDialogTimeSelected {
+        void onSelected(Calendar calendar);
+    }
+
     public static class Builder {
         private static final int MAX_YEARS = 10;
         private TextView cancelBtn, confirmBtn;
@@ -68,11 +72,11 @@ public class TimeSelectDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final TimeSelectDialog dialog = new TimeSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_date_or_time_select, null);
-            cancelBtn = (TextView) layout.findViewById(R.id.cancel_tv);
-            confirmBtn = (TextView) layout.findViewById(R.id.confirm_tv);
-            wheelHour = (WheelPicker) layout.findViewById(R.id.wheel_one);
-            wheelMinute = (WheelPicker) layout.findViewById(R.id.wheel_two);
-            wheelSecond = (WheelPicker) layout.findViewById(R.id.wheel_three);
+            cancelBtn = layout.findViewById(R.id.cancel_tv);
+            confirmBtn = layout.findViewById(R.id.confirm_tv);
+            wheelHour = layout.findViewById(R.id.wheel_one);
+            wheelMinute = layout.findViewById(R.id.wheel_two);
+            wheelSecond = layout.findViewById(R.id.wheel_three);
             initViewOnCreate(dialog, dialogSelect, showHour, showMinute, showSecond);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -169,10 +173,6 @@ public class TimeSelectDialog extends Dialog {
                     }
                 }
             });
-        }
-
-        public interface IDialogTimeSelected {
-            void onSelected(Calendar calendar);
         }
     }
 }

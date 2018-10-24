@@ -35,12 +35,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp_5"
-                android:background="@drawable/mvp_shape_bord_orange_red"
+                android:background="@drawable/base_shape_bord_orange_red"
                 android:paddingBottom="@dimen/dp_5"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingRight="@dimen/dp_10"
                 android:paddingTop="@dimen/dp_5"
-                android:src="@mipmap/mvp_ic_location"
+                android:src="@mipmap/base_ic_location"
                 android:text="@string/mvp_spread" />
 
         </LinearLayout>

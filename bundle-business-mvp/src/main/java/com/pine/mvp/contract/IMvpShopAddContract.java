@@ -1,5 +1,7 @@
 package com.pine.mvp.contract;
 
+import android.support.annotation.NonNull;
+
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 
 /**
@@ -12,6 +14,9 @@ public interface IMvpShopAddContract {
     }
 
     interface Presenter extends IBaseContract.Presenter {
+        @NonNull
+        String[] getShopTypeArr();
+
         void addShop();
     }
 }
