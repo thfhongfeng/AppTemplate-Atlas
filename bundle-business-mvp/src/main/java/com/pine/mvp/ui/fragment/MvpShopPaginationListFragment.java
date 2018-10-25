@@ -44,13 +44,6 @@ public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPagin
         if (swipe_refresh_layout != null) {
             swipe_refresh_layout.setRefreshing(true);
         }
-        swipe_refresh_layout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe_refresh_layout.setRefreshing(true);
-                onRefresh();
-            }
-        });
         swipe_refresh_layout.setEnabled(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -66,6 +59,17 @@ public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPagin
             }
         });
         recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
+        swipe_refresh_layout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipe_refresh_layout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override

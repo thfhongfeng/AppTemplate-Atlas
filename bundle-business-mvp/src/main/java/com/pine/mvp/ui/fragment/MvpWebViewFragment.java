@@ -43,7 +43,12 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
     protected void initViewOnCreateView(View layout) {
         refresh_btn_tv = layout.findViewById(R.id.refresh_btn_tv);
         initWebView(layout);
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         initEvent();
+        loadUrl();
     }
 
     private void initEvent() {
@@ -99,7 +104,6 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
                 handler.proceed();
             }
         });
-        loadUrl();
     }
 
     private void loadUrl() {

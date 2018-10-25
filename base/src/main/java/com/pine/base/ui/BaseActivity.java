@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.pine.base.R;
 import com.pine.base.access.UiAccessManager;
+import com.pine.base.permission.AfterPermissionGranted;
 import com.pine.base.permission.AppSettingsDialog;
 import com.pine.base.permission.AppSettingsDialogHolderActivity;
 import com.pine.base.permission.EasyPermissions;
+import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.tool.util.LogUtils;
 
 import java.util.List;
@@ -19,20 +22,37 @@ import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
+    public final int REQUEST_PERMISSION = 33333;
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
+    private boolean mUiAccessReady, mPermissionReady;
+    private boolean onAllAccessRestrictionReleasedMethodCalled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        beforeInitOnCreate();
         setContentView();
 
+        mUiAccessReady = true;
         if (!UiAccessManager.getInstance().checkCanAccess(this)) {
+            mUiAccessReady = false;
             finish();
             return;
         }
 
-        if (beforeInitOnCreate()) {
-            return;
+        mPermissionReady = true;
+        PermissionsAnnotation annotation = getClass().getAnnotation(PermissionsAnnotation.class);
+        if (annotation != null) {
+            String[] permissions = annotation.Permissions();
+            if (permissions != null) {
+                if (!EasyPermissions.hasPermissions(this, permissions)) {
+                    mPermissionReady = false;
+                    EasyPermissions.requestPermissions(
+                            this,
+                            getString(R.string.base_rationale_need),
+                            REQUEST_PERMISSION, permissions);
+                }
+            }
         }
 
         if (initDataOnCreate()) {
@@ -41,6 +61,8 @@ public abstract class BaseActivity extends AppCompatActivity
         initViewOnCreate();
 
         afterInitOnCreate();
+
+        tryOnAllRestrictionReleased();
     }
 
     protected void setContentView() {
@@ -56,12 +78,9 @@ public abstract class BaseActivity extends AppCompatActivity
 
     /**
      * onCreate中前置初始化
-     *
-     * @return false:没有消耗掉(不中断onCreate后续流程并finish)
-     * true:消耗掉了(中断onCreate后续流程并finish)
      */
-    protected boolean beforeInitOnCreate() {
-        return false;
+    protected void beforeInitOnCreate() {
+
     }
 
     /**
@@ -90,6 +109,9 @@ public abstract class BaseActivity extends AppCompatActivity
             String[] permissions = data.getStringArrayExtra(AppSettingsDialogHolderActivity.REQUEST_PERMISSIONS_KEY);
             if (!EasyPermissions.hasPermissions(this, permissions)) {
                 finish();
+            } else {
+                mPermissionReady = true;
+                tryOnAllRestrictionReleased();
             }
         }
     }
@@ -135,4 +157,23 @@ public abstract class BaseActivity extends AppCompatActivity
         LogUtils.d(TAG, "onRationaleDenied:" + requestCode);
         finish();
     }
+
+    @AfterPermissionGranted(REQUEST_PERMISSION)
+    public final void afterAllPermissionGranted() {
+        mPermissionReady = true;
+        tryOnAllRestrictionReleased();
+    }
+
+    private void tryOnAllRestrictionReleased() {
+        if (!onAllAccessRestrictionReleasedMethodCalled &&
+                mUiAccessReady && mPermissionReady) {
+            onAllAccessRestrictionReleasedMethodCalled = true;
+            onAllAccessRestrictionReleased();
+        }
+    }
+
+    /**
+     * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
+     */
+    protected abstract void onAllAccessRestrictionReleased();
 }

@@ -24,8 +24,7 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
     }
 
     @Override
-    protected void afterInitOnCreate() {
-        super.afterInitOnCreate();
+    protected void onAllAccessRestrictionReleased() {
         mPresenter.goMainHomeActivity();
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.pine.base.access.UiAccessManager;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.access.executor.UiAccessLoginExecutor;
+import com.pine.base.access.executor.UiAccessVipLevelExecutor;
 import com.pine.base.http.HttpRequestManagerProxy;
 import com.pine.base.share.manager.ShareManager;
 import com.pine.tool.util.LogUtils;
@@ -83,6 +84,9 @@ public class BaseApplication {
 
         HttpRequestManagerProxy.init(mApplication);
 
-        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.LOGIN, new UiAccessLoginExecutor());
+        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.LOGIN,
+                new UiAccessLoginExecutor(R.string.base_ui_access_login_forbidden));
+        UiAccessManager.getInstance().addAccessExecutor(UiAccessType.VIP_LEVEL,
+                new UiAccessVipLevelExecutor(R.string.base_ui_access_vip_level_forbidden));
     }
 }

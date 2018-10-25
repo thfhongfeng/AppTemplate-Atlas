@@ -10,8 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
-import com.pine.base.permission.AfterPermissionGranted;
-import com.pine.base.permission.EasyPermissions;
+import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
@@ -28,9 +27,9 @@ import java.util.List;
  * Created by tanghongfeng on 2018/10/23
  */
 
+@PermissionsAnnotation(Permissions = {Manifest.permission.CAMERA})
 public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpShopAddContract.Ui, MvpShopAddPresenter>
         implements IMvpShopAddContract.Ui, View.OnClickListener {
-    private final int REQUEST_CAMERA_PERM = 1;
     private LinearLayout type_ll, online_time_ll;
     private EditText name_et, description_et, remark_et;
     private TextView type_tv, online_time_tv, contact_tv, address_tv;
@@ -69,7 +68,6 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
 
     @Override
     protected void initViewOnCreate() {
-        cameraPermissionTask();
         type_ll = findViewById(R.id.type_ll);
         online_time_ll = findViewById(R.id.online_time_ll);
         name_et = findViewById(R.id.name_et);
@@ -79,27 +77,14 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         online_time_tv = findViewById(R.id.online_time_tv);
         contact_tv = findViewById(R.id.contact_tv);
         address_tv = findViewById(R.id.address_tv);
+    }
 
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         type_ll.setOnClickListener(this);
         online_time_ll.setOnClickListener(this);
         contact_tv.setOnClickListener(this);
         address_tv.setOnClickListener(this);
-    }
-
-    @Override
-    protected void afterInitOnCreate() {
-        super.afterInitOnCreate();
-    }
-
-    @AfterPermissionGranted(REQUEST_CAMERA_PERM)
-    public void cameraPermissionTask() {
-        if (!EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-            EasyPermissions.requestPermissions(
-                    this,
-                    getString(R.string.mvp_shop_camera_permission_need),
-                    REQUEST_CAMERA_PERM,
-                    Manifest.permission.CAMERA);
-        }
     }
 
     @Override

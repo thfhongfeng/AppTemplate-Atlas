@@ -16,7 +16,13 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
     public static final int ACTION_BAR_TYPE_DEFAULT = 0x0;
     public static final int ACTION_BAR_CENTER_TITLE_TAG = 0x0001;
     public static final int ACTION_BAR_NO_GO_BACK_TAG = 0x0002;
+    private int mActionBarTag = ACTION_BAR_TYPE_DEFAULT;
     private ImmersionBar mImmersionBar;
+
+    @Override
+    protected void beforeInitOnCreate() {
+
+    }
 
     @Override
     protected final void setContentView() {
@@ -25,18 +31,12 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
         } else {
             setContentView(R.layout.base_activity_actionbar_image_menu);
         }
-    }
 
-    @CallSuper
-    @Override
-    protected boolean beforeInitOnCreate() {
         ViewStub content_layout = findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
 
         initImmersionBar();
-
-        return false;
     }
 
     @CallSuper
@@ -90,7 +90,16 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
      * 获取actionbar类别
      */
     protected int getActionBarType() {
-        return ACTION_BAR_TYPE_DEFAULT;
+        return mActionBarTag;
+    }
+
+    /**
+     * 设置actionbar类别，需在{@link #beforeInitOnCreate}中设置才有效
+     *
+     * @param tag
+     */
+    protected void setActionBarType(int tag) {
+        mActionBarTag = tag;
     }
 
     protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv);

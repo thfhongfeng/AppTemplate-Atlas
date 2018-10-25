@@ -20,6 +20,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 相机-->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 读取联系人-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"

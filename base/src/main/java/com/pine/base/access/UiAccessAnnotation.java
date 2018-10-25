@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 public @interface UiAccessAnnotation {
     String[] AccessTypes();
 
-    int[] LevelValues();
+    String[] Args();
 }

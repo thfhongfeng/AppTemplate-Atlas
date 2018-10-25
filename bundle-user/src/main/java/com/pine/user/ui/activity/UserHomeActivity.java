@@ -11,7 +11,7 @@ import com.pine.user.presenter.UserHomePresenter;
  * Created by tanghongfeng on 2018/9/13
  */
 
-@UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, LevelValues = {-1})
+@UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN, UiAccessType.VIP_LEVEL}, Args = {"", "1"})
 public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContract.Ui, UserHomePresenter>
         implements IUserHomeContract.Ui {
 
@@ -27,6 +27,11 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
 
     @Override
     protected void initViewOnCreate() {
+
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
 
     }
 }

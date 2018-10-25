@@ -49,7 +49,10 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
         mobile_et = findViewById(R.id.mobile_et);
         password_et = findViewById(R.id.password_et);
         login_btn_tv = findViewById(R.id.login_btn_tv);
+    }
 
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         login_btn_tv.setOnClickListener(this);
     }
 

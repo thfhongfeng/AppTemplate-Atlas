@@ -1,6 +1,7 @@
 package com.pine.base.access;
 
-import android.content.Context;
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 
 import java.util.LinkedHashMap;
 
@@ -38,20 +39,41 @@ public class UiAccessManager {
         mAccessExecutorMap.clear();
     }
 
-    public boolean checkCanAccess(Context context) {
-        if (context == null) {
+    public boolean checkCanAccess(Activity activity) {
+        if (activity == null) {
             return false;
         }
-        UiAccessAnnotation annotation = context.getClass().getAnnotation(UiAccessAnnotation.class);
+        UiAccessAnnotation annotation = activity.getClass().getAnnotation(UiAccessAnnotation.class);
         if (annotation != null) {
             String[] types = annotation.AccessTypes();
-            int[] levels = annotation.LevelValues();
-            if (types == null || levels == null || types.length != levels.length) {
+            String[] args = annotation.Args();
+            if (types == null || args == null || types.length != args.length) {
                 return false;
             }
             for (int i = 0; i < types.length; i++) {
                 if (mAccessExecutorMap.get(types[i]) != null &&
-                        !mAccessExecutorMap.get(types[i]).onExecute(context, levels[i])) {
+                        !mAccessExecutorMap.get(types[i]).onExecute(activity, args[i])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean checkCanAccess(Fragment fragment) {
+        if (fragment == null) {
+            return false;
+        }
+        UiAccessAnnotation annotation = fragment.getClass().getAnnotation(UiAccessAnnotation.class);
+        if (annotation != null) {
+            String[] types = annotation.AccessTypes();
+            String[] args = annotation.Args();
+            if (types == null || args == null || types.length != args.length) {
+                return false;
+            }
+            for (int i = 0; i < types.length; i++) {
+                if (mAccessExecutorMap.get(types[i]) != null &&
+                        !mAccessExecutorMap.get(types[i]).onExecute(fragment, args[i])) {
                     return false;
                 }
             }

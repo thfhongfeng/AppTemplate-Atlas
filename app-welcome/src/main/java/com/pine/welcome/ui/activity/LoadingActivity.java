@@ -35,8 +35,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     }
 
     @Override
-    protected void afterInitOnCreate() {
-        super.afterInitOnCreate();
+    protected void onAllAccessRestrictionReleased() {
         mPresenter.loadBundleSwitcherData();
     }
 

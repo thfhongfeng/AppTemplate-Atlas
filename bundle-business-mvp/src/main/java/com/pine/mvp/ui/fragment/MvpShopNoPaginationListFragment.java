@@ -43,13 +43,6 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
         if (swipe_refresh_layout != null) {
             swipe_refresh_layout.setRefreshing(true);
         }
-        swipe_refresh_layout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe_refresh_layout.setRefreshing(true);
-                onRefresh();
-            }
-        });
         swipe_refresh_layout.setEnabled(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -57,6 +50,17 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
         recycle_view.setLayoutManager(linearLayoutManager);
         recycle_view.setHasFixedSize(true);
         recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
+        swipe_refresh_layout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipe_refresh_layout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override

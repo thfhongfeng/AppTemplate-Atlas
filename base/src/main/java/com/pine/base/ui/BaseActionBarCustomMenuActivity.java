@@ -16,20 +16,19 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     private ImmersionBar mImmersionBar;
 
     @Override
-    protected final void setContentView() {
-        setContentView(R.layout.base_activity_actionbar_custom_menu);
+    protected void beforeInitOnCreate() {
+
     }
 
-    @CallSuper
     @Override
-    protected boolean beforeInitOnCreate() {
+    protected final void setContentView() {
+        setContentView(R.layout.base_activity_actionbar_custom_menu);
+
         ViewStub content_layout = findViewById(R.id.content_layout);
         content_layout.setLayoutResource(getActivityLayoutResId());
         content_layout.inflate();
 
         initImmersionBar();
-
-        return false;
     }
 
     @CallSuper

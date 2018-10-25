@@ -36,6 +36,7 @@
                 android:layout_marginTop="@dimen/dp_5"
                 android:background="@drawable/login_bord_edit_text"
                 android:hint="@string/login_mobile_hint"
+                android:maxLength="11"
                 android:padding="@dimen/dp_10"
                 android:textSize="@dimen/sp_15" />
 
@@ -49,8 +50,8 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@drawable/login_bord_edit_text"
                 android:hint="@string/login_pwd_hint"
-                android:padding="@dimen/dp_10"
                 android:inputType="textPassword"
+                android:padding="@dimen/dp_10"
                 android:textSize="@dimen/sp_15" />
 
             <TextView

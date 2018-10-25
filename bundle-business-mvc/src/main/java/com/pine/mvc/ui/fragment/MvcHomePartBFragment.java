@@ -25,4 +25,9 @@ public class MvcHomePartBFragment extends BaseMvcFragment {
     protected void initViewOnCreateView(View layout) {
 
     }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
+
+    }
 }

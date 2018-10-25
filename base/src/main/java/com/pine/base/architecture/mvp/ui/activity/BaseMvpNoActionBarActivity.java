@@ -13,14 +13,20 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @CallSuper
     @Override
-    protected boolean beforeInitOnCreate() {
+    protected void beforeInitOnCreate() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
             mPresenter.attachUi((V) this);
         }
+    }
 
-        return super.beforeInitOnCreate();
+    @Override
+    protected final boolean initDataOnCreate() {
+        if (mPresenter != null) {
+            return mPresenter.initDataOnUiCreate();
+        }
+        return false;
     }
 
     @CallSuper
@@ -76,14 +82,6 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
     @Override
     public Activity getContextActivity() {
         return this;
-    }
-
-    @Override
-    protected final boolean initDataOnCreate() {
-        if (mPresenter != null) {
-            return mPresenter.initDataOnUiCreate();
-        }
-        return false;
     }
 
     protected abstract P createPresenter();

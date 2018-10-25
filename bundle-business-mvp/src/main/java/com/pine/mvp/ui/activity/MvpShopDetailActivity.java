@@ -22,12 +22,6 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     private TextView go_shop_h5_btn_tv;
     private TextView go_travel_note_list_btn_tv;
 
-    /**
-     * 获取actionbar类别
-     */
-    protected int getActionBarType() {
-        return ACTION_BAR_CENTER_TITLE_TAG;
-    }
 
     @Override
     protected int getActivityLayoutResId() {
@@ -68,6 +62,11 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
         if (swipe_refresh_layout != null) {
             swipe_refresh_layout.setRefreshing(true);
         }
+        swipe_refresh_layout.setEnabled(true);
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         swipe_refresh_layout.post(new Runnable() {
             @Override
             public void run() {
@@ -75,8 +74,6 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
                 onRefresh();
             }
         });
-        swipe_refresh_layout.setEnabled(true);
-
         initEvent();
     }
 

@@ -72,6 +72,10 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     protected void initViewOnCreate() {
         refresh_btn_tv = findViewById(R.id.refresh_btn_tv);
         initWebView();
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         initEvent();
     }
 

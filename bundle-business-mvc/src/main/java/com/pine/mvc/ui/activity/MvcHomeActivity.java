@@ -49,7 +49,10 @@ public class MvcHomeActivity extends BaseMvcActionBarActivity {
     protected void initViewOnCreate() {
         view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
         view_pager = findViewById(R.id.view_pager);
+    }
 
+    @Override
+    protected void onAllAccessRestrictionReleased() {
         view_pager.setAdapter(mFragmentPagerAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{new MvcHomePartAFragment(), new MvcHomePartBFragment()},
                 new String[]{"PartA", "PartB"}));

@@ -1,5 +1,6 @@
 package com.pine.mvp.ui.activity;
 
+import android.Manifest;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarImageMenuActivity;
+import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpHomeContract;
 import com.pine.mvp.presenter.MvpHomePresenter;
@@ -21,16 +23,17 @@ import com.pine.tool.widget.ViewPagerTabLayout;
  * Created by tanghongfeng on 2018/9/13
  */
 
+@PermissionsAnnotation(Permissions = {Manifest.permission.READ_CONTACTS,
+        Manifest.permission.ACCESS_FINE_LOCATION})
 public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeContract.Ui, MvpHomePresenter>
         implements IMvpHomeContract.Ui {
     private ViewPagerTabLayout view_pager_tab_layout;
     private ViewPager view_pager;
 
-    /**
-     * 获取actionbar类别
-     */
-    protected int getActionBarType() {
-        return ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG;
+    @Override
+    protected void beforeInitOnCreate() {
+        super.beforeInitOnCreate();
+        setActionBarType(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
 
     @Override
@@ -66,12 +69,19 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     protected void initViewOnCreate() {
         view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
         view_pager = findViewById(R.id.view_pager);
+    }
 
+    private void setupViewPage() {
         view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{
                         new MvpShopPaginationListFragment(), new MvpShopTreeListFragment(),
                         new MvpShopNoPaginationListFragment(), new MvpWebViewFragment()},
                 new String[]{"PartA", "PartB", "PartC", "PartD"}));
         view_pager_tab_layout.setupWithViewPager(view_pager);
+    }
+
+    @Override
+    protected void onAllAccessRestrictionReleased() {
+        setupViewPage();
     }
 }
