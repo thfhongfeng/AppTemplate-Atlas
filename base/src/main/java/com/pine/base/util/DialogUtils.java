@@ -20,6 +20,7 @@ import com.pine.base.share.bean.ShareBean;
 import com.pine.base.share.manager.ShareManager;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
+import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
 import com.pine.base.widget.dialog.TimeSelectDialog;
 
@@ -279,6 +280,19 @@ public class DialogUtils {
                                                           TimeSelectDialog.IDialogTimeSelected dialogSelect) {
         return new TimeSelectDialog.Builder(context).create(dialogSelect, showHour, showMinute, showSecond);
     }
+
+    /**
+     * 省市区选择弹出框
+     *
+     * @param context
+     * @param dialogSelect
+     * @return
+     */
+    public static ProvinceSelectDialog createProvinceSelectDialog(final Context context,
+                                                                  ProvinceSelectDialog.IDialogDateSelected dialogSelect) {
+        return new ProvinceSelectDialog.Builder(context).create(dialogSelect);
+    }
+
 
     public interface IActionListener {
         void onConfirm();

@@ -30,6 +30,8 @@
     <string name="base_time_minute">%1$s分</string>
     <string name="base_time_second">%1$s秒</string>
 
+    <string name="base_province_select_title">请选择省市区</string>
+
     <string name="base_ui_access_login_forbidden">您需要登陆</string>
     <string name="base_ui_access_vip_level_forbidden">您需要成为%s级会员</string>
 

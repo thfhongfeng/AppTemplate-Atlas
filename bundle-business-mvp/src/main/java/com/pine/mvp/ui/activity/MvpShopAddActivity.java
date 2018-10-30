@@ -14,6 +14,7 @@ import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
+import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpShopAddContract;
@@ -36,6 +37,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
     private InputTextDialog mContactInputDialog;
     private DateSelectDialog mOnLineDateSelectDialog;
     private SelectItemDialog mTypeSelectDialog;
+    private ProvinceSelectDialog mProvinceSelectDialog;
 
     @Override
     protected MvpShopAddPresenter createPresenter() {
@@ -98,6 +100,9 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         if (mOnLineDateSelectDialog != null && mOnLineDateSelectDialog.isShowing()) {
             mOnLineDateSelectDialog.dismiss();
         }
+        if (mProvinceSelectDialog != null && mProvinceSelectDialog.isShowing()) {
+            mProvinceSelectDialog.dismiss();
+        }
         super.onDestroy();
     }
 
@@ -147,7 +152,17 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
             }
             mContactInputDialog.show();
         } else if (v.getId() == R.id.address_tv) {
-
+            if (mProvinceSelectDialog == null) {
+                mProvinceSelectDialog = DialogUtils.createProvinceSelectDialog(this,
+                        new ProvinceSelectDialog.IDialogDateSelected() {
+                            @Override
+                            public void onSelected(String provinceName, String cityName,
+                                                   String districtName, String zipCode) {
+                                address_tv.setText(provinceName + cityName + districtName);
+                            }
+                        });
+            }
+            mProvinceSelectDialog.show();
         }
     }
 }
