@@ -244,4 +244,28 @@ public class DecimalUtils {
     public static boolean isEqual(double d1, double d2) {
         return Math.abs(d1 - d2) <= 0;
     }
+
+    public static float format(float f, int scale) {
+        return new BigDecimal(f).setScale(scale, BigDecimal.ROUND_HALF_UP).floatValue();
+    }
+
+    public static float format(float f, int scale, int mode) {
+        return new BigDecimal(f).setScale(scale, mode).floatValue();
+    }
+
+    public static double format(double d, int scale) {
+        return new BigDecimal(d).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    public static double format(double d, int scale, int mode) {
+        return new BigDecimal(d).setScale(scale, mode).doubleValue();
+    }
+
+    public static double format(String s, int scale) {
+        return new BigDecimal(s).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    public static double format(String s, int scale, int mode) {
+        return new BigDecimal(s).setScale(scale, mode).doubleValue();
+    }
 }

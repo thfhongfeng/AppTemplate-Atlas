@@ -101,7 +101,11 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {
+                // [高危]WebView未校验HTTPS证书
+                // 风险详情：APP 的 WebView 证书认证错误时，未取消加载页面，存在中间人攻击风险。
+                // 修复建议使用： handler.cancel() 停止加载问题页面。
                 handler.proceed();
+//                handler.cancel();
             }
         });
     }

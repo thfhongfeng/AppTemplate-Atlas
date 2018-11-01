@@ -93,7 +93,9 @@ public class ProvinceSelectDialog extends Dialog {
                         districtList = new ArrayList<>();
                     } else if (qName.equals("district")) {
                         districtList.add(attributes.getValue(0));
-                        mZipCodeMap.put(attributes.getValue(0), attributes.getValue(1));
+                        mZipCodeMap.put(mProvinceList.get(mProvinceList.size() - 1) +
+                                cityList.get(cityList.size() - 1) +
+                                attributes.getValue(0), attributes.getValue(1));
                     }
                 }
 

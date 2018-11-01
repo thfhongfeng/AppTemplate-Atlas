@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.mvp.MvpConstants;
 import com.pine.mvp.MvpUrlConstants;
@@ -95,7 +95,7 @@ public class MvpHomeShopModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST, httpStringCallback);
     }
 
     public void requestShopDetailData(final HashMap<String, String> params,
@@ -139,7 +139,7 @@ public class MvpHomeShopModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST, httpStringCallback);
     }
 
     public void requestShopAndProductListData(final HashMap<String, String> params,
@@ -205,6 +205,6 @@ public class MvpHomeShopModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_AND_PRODUCT_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_AND_PRODUCT_LIST, httpStringCallback);
     }
 }

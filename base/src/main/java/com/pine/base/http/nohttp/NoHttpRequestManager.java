@@ -60,6 +60,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (mInstance == null) {
             synchronized (NoHttpRequestManager.class) {
                 if (mInstance == null) {
+                    LogUtils.releaseLog(TAG, "use http request: nohttp");
                     mInstance = new NoHttpRequestManager();
                 }
             }

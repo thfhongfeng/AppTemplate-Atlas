@@ -26,8 +26,8 @@ import java.util.Map;
  * Created by tanghongfeng on 2018/9/7.
  */
 
-public class HttpRequestManagerProxy {
-    private final static String TAG = LogUtils.makeLogTag(HttpRequestManagerProxy.class);
+public class HttpRequestManager {
+    private final static String TAG = LogUtils.makeLogTag(HttpRequestManager.class);
     private static Context mApplicationContext;
     private static IHttpRequestManager mRequestManager;
 

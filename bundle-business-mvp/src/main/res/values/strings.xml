@@ -9,12 +9,19 @@
     <string name="mvp_shop_add_confirm_menu">确认添加</string>
     <string name="mvp_shop_add_name_label">名称：</string>
     <string name="mvp_shop_add_type_label">类别：</string>
-    <string name="mvp_shop_add_online_time_label">上线时间：</string>
+    <string name="mvp_shop_add_online_date_label">上线时间：</string>
     <string name="mvp_shop_add_contact_label">联系方式：</string>
     <string name="mvp_shop_add_contact_hint">请输入手机号码</string>
     <string name="mvp_shop_add_address_label">地址：</string>
+    <string name="mvp_shop_add_address_marker_label">地图选点：</string>
+    <string name="mvp_shop_add_address_detail_label">详细地址：</string>
     <string name="mvp_shop_add_description_label">介绍：</string>
     <string name="mvp_shop_add_remark_label">备注：</string>
+    <string name="mvp_shop_add_name_need_msg">名称不能为空</string>
+    <string name="mvp_shop_add_type_need_msg">类别不能为空</string>
+    <string name="mvp_shop_add_online_date_need_msg">上线时间不能为空</string>
+    <string name="mvp_shop_add_contact_need_msg">联系方式不能为空</string>
+    <string name="mvp_shop_add_address_need_msg">地址不能为空</string>
 
     <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
 

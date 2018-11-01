@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.WelcomeConstants;
@@ -29,7 +29,7 @@ public class BundleSwitcherModel {
     public void requestBundleSwitcherData(@NonNull IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {
         String url = WelcomeUrlConstants.Query_BundleSwitcher_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
     }
 
     private HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {

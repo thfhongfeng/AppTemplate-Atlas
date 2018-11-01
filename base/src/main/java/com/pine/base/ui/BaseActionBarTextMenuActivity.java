@@ -37,7 +37,6 @@ public abstract class BaseActionBarTextMenuActivity extends BaseActivity {
         content_layout.inflate();
 
         initImmersionBar();
-
     }
 
     @CallSuper

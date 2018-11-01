@@ -23,6 +23,10 @@ android {
         buildConfigField "String", "WEI_BO_FOR_APP_KEY", "\"${build_app_key.wei_bo_for_app_key}\""
         buildConfigField "String", "WEI_BO_SECRET_KEY", "\"${build_app_key.wei_bo_secret_key}\""
 
+        buildConfigField "String", "APP_THIRD_MAP_PROVIDER", "\"${app_third_sdk_provider.map_provider}\""
+        buildConfigField "String", "APP_THIRD_IMAGE_LOADER_PROVIDER", "\"${app_third_sdk_provider.image_loader_provider}\""
+        buildConfigField "String", "APP_THIRD_HTTP_REQUEST_PROVIDER", "\"${app_third_sdk_provider.http_request_provider}\""
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

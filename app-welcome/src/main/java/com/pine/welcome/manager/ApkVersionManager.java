@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.pine.base.exception.MessageException;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpDownloadCallback;
 import com.pine.tool.util.AppUtils;
 import com.pine.tool.util.LogUtils;
@@ -60,7 +60,7 @@ public class ApkVersionManager {
             return;
         }
         deleteOldApk();
-        HttpRequestManagerProxy.setDownloadRequest(mVersionEntity.getPath(), mDownloadDir,
+        HttpRequestManager.setDownloadRequest(mVersionEntity.getPath(), mDownloadDir,
                 mVersionEntity.getFileName(), TAG, HTTP_REQUEST_DOWNLOAD, new HttpDownloadCallback() {
                     @Override
                     public void onStart(int what, boolean isResume, long rangeSize, long allCount) {

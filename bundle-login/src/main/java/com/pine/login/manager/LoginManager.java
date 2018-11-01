@@ -2,7 +2,7 @@ package com.pine.login.manager;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.http.HttpRequestBean;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.IHttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.login.LoginConstants;
@@ -35,8 +35,8 @@ public class LoginManager {
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
 
-        HttpRequestManagerProxy.clearCookie();
-        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
+        HttpRequestManager.clearCookie();
+        HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.LOGIN_CODE, new LoginCallback(mobile, password, callback));
     }
 
@@ -53,8 +53,8 @@ public class LoginManager {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
-        HttpRequestManagerProxy.clearCookie();
-        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
+        HttpRequestManager.clearCookie();
+        HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.AUTO_LOGIN_CODE, new LoginCallback(mobile, password, callback));
     }
 
@@ -71,10 +71,10 @@ public class LoginManager {
         }
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
-        HttpRequestManagerProxy.clearCookie();
+        HttpRequestManager.clearCookie();
         mReLoginCount++;
         mIsReLoginProcessing = true;
-        HttpRequestManagerProxy.setJsonRequest(mLoginUrl, params, TAG,
+        HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.RE_LOGIN_CODE, new LoginCallback(mobile, password, null));
     }
 
@@ -91,7 +91,7 @@ public class LoginManager {
         if (bean == null) {
             return;
         }
-        HttpRequestManagerProxy.setJsonRequest(bean, IHttpRequestManager.ActionType.RETRY_AFTER_RE_LOGIN);
+        HttpRequestManager.setJsonRequest(bean, IHttpRequestManager.ActionType.RETRY_AFTER_RE_LOGIN);
     }
 
     // 重新发起之前所有因401终止的请求

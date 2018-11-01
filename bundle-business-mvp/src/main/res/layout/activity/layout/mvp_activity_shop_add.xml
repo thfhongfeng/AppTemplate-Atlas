@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/dp_10"
@@ -88,12 +89,12 @@
                     android:layout_gravity="center_vertical"
                     android:paddingBottom="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
-                    android:text="@string/mvp_shop_add_online_time_label"
+                    android:text="@string/mvp_shop_add_online_date_label"
                     android:textColor="#989898"
                     android:textSize="@dimen/sp_15" />
 
                 <LinearLayout
-                    android:id="@+id/online_time_ll"
+                    android:id="@+id/online_date_ll"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -102,7 +103,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/online_time_tv"
+                        android:id="@+id/online_date_tv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -169,6 +170,53 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_address_marker_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:id="@+id/address_marker_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:text="@string/mvp_shop_add_address_detail_label"
+                    android:textColor="#989898"
+                    android:textSize="@dimen/sp_15" />
+
+                <EditText
+                    android:id="@+id/address_detail_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/base_shape_round_f3f3f3"
+                    android:gravity="top"
+                    android:lines="2"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="#929292"
+                    android:textSize="@dimen/sp_15" />
+            </TableRow>
+
+            <TableRow android:layout_margin="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="top"
                     android:paddingBottom="@dimen/dp_10"
@@ -217,7 +265,7 @@
         </TableLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/photo_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_10"></android.support.v7.widget.RecyclerView>

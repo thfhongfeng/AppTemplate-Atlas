@@ -32,7 +32,7 @@ public class ShareBean {
 
     private static final String[] DEFAULT_ICON_NAMES = AppUtils
             .getApplicationByReflect()
-            .getResources().getStringArray(R.array.base_share_icon_name_arr);
+            .getResources().getStringArray(R.array.base_share_icon_name);
 
     private int shareTarget;
     private int shareContentType;

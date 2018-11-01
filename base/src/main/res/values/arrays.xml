@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="base_share_icon_name_arr">
+    <string-array name="base_share_icon_name">
         <item>QQ</item>
         <item>微信</item>
         <item>朋友圈</item>

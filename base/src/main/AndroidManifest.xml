@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <!-- 读取设备硬件信息，统计数据 -->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <!-- 访问网络，网络定位需要上网-->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 相机-->
@@ -23,9 +25,18 @@
     <!-- 读取联系人-->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- [高危]未关闭备份模式
+         风险详情：APP 开启了数据备份和恢复的功能时，可通过 ADB 备份数据，存在信息泄露的风险。
+         修复建议在：AndroidManifest.xml 配置文件中显式配置 android:allowBackup=false。 -->
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
+
+        <activity
+            android:name=".map.baidu.ui.BaiduMapActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
         <activity
             android:name=".permission.AppSettingsDialogHolderActivity"

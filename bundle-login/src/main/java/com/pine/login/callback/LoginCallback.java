@@ -3,7 +3,7 @@ package com.pine.login.callback;
 import android.content.Intent;
 
 import com.pine.base.BaseApplication;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.HttpResponse;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.login.LoginConstants;
@@ -43,7 +43,7 @@ public class LoginCallback extends HttpJsonCallback {
         List<HttpCookie> list = response.getCookies();
         for (int i = 0; i < list.size(); i++) {
             if (SESSION_ID.equals(list.get(i).getName())) {
-                HttpRequestManagerProxy.setSessionId(list.get(i).getValue());
+                HttpRequestManager.setSessionId(list.get(i).getValue());
                 break;
             }
         }

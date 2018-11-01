@@ -2,6 +2,7 @@ package com.pine.base.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
@@ -33,6 +34,11 @@ public abstract class BaseActivity extends AppCompatActivity
         beforeInitOnCreate();
         setContentView();
 
+        if (initDataOnCreate()) {
+            return;
+        }
+        initViewOnCreate();
+
         mUiAccessReady = true;
         if (!UiAccessManager.getInstance().checkCanAccess(this)) {
             mUiAccessReady = false;
@@ -54,11 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity
                 }
             }
         }
-
-        if (initDataOnCreate()) {
-            return;
-        }
-        initViewOnCreate();
 
         afterInitOnCreate();
 
@@ -101,6 +102,7 @@ public abstract class BaseActivity extends AppCompatActivity
      */
     protected abstract void afterInitOnCreate();
 
+    @CallSuper
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

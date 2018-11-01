@@ -28,8 +28,14 @@ public class WebViewUtils {
         if (downloadListener != null) {
             webView.setDownloadListener(downloadListener);
         }
+        // [中危]WebView同源策略绕过
+        // 风险详情：APP 的 WebView 加载本地资源文件并启用 JavaScript 时，存在信息泄漏风险。
+        // 修复建议：避免同时使用 File 协议与 JavaScript。
         webSettings.setAllowFileAccess(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            // [高危]WebView应用克隆风险
+            // 风险详情：APP使用WebView访问网络，当开启了允许JS脚本访问本地文件，一旦访问恶意网址，存在被窃取APP数据并复制APP的运行环境，造成“应用克隆”的后果，可能造成严重的经济损失。
+            // 修复建议：建议禁用setAllowFileAccessFromFileURLs和setAllowUniversalAccessFromFileURLs；若需要允许JS访问本地文件，则应使用白名单等策略进行严格的访问控制。
             webSettings.setAllowFileAccessFromFileURLs(true);
         }
         if (webChromeClient != null) {

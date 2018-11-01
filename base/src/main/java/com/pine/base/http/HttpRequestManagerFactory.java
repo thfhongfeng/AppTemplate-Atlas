@@ -1,5 +1,6 @@
 package com.pine.base.http;
 
+import com.pine.base.BuildConfig;
 import com.pine.base.http.nohttp.NoHttpRequestManager;
 
 /**
@@ -7,8 +8,16 @@ import com.pine.base.http.nohttp.NoHttpRequestManager;
  */
 
 public class HttpRequestManagerFactory {
+    private HttpRequestManagerFactory() {
 
-    public static IHttpRequestManager getRequestManager() {
-        return NoHttpRequestManager.getInstance();
+    }
+
+    protected static IHttpRequestManager getRequestManager() {
+        switch (BuildConfig.APP_THIRD_HTTP_REQUEST_PROVIDER) {
+            case "nohttp":
+                return NoHttpRequestManager.getInstance();
+            default:
+                return NoHttpRequestManager.getInstance();
+        }
     }
 }

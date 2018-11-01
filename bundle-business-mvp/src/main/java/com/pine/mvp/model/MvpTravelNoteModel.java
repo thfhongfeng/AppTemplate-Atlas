@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.mvp.MvpConstants;
 import com.pine.mvp.MvpUrlConstants;
@@ -76,7 +76,7 @@ public class MvpTravelNoteModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_LIST, httpStringCallback);
     }
 
     public void requestTravelNoteDetailData(final HashMap<String, String> params,
@@ -120,7 +120,7 @@ public class MvpTravelNoteModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_DETAIL, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_DETAIL, httpStringCallback);
     }
 
     public void requestTravelNoteCommentData(final HashMap<String, String> params,
@@ -170,6 +170,6 @@ public class MvpTravelNoteModel {
                 return callback.onFail(e);
             }
         };
-        HttpRequestManagerProxy.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST, httpStringCallback);
     }
 }

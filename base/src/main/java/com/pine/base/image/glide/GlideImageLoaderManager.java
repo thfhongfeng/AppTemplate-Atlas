@@ -29,6 +29,7 @@ public class GlideImageLoaderManager implements IImageLoaderManager {
         if (mInstance == null) {
             synchronized (GlideImageLoaderManager.class) {
                 if (mInstance == null) {
+                    LogUtils.releaseLog(TAG, "use image loader: glide");
                     mInstance = new GlideImageLoaderManager();
                 }
             }

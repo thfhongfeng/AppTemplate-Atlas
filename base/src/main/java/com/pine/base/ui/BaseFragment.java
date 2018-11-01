@@ -23,14 +23,14 @@ public abstract class BaseFragment extends Fragment {
         beforeInitOnCreateView();
         View layout = inflater.inflate(getFragmentLayoutResId(), container, false);
 
+        initDataOnCreateView();
+
+        initViewOnCreateView(layout);
+
         mUiAccessReady = true;
         if (!UiAccessManager.getInstance().checkCanAccess(this)) {
             mUiAccessReady = false;
         }
-
-        initDataOnCreateView();
-
-        initViewOnCreateView(layout);
 
         afterInitOnCreateView();
 

@@ -2,11 +2,11 @@ package com.pine.mvp.presenter;
 
 import android.widget.Toast;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.location.BdLocationManager;
+import com.pine.base.map.ILocationListener;
+import com.pine.base.map.LocationInfo;
+import com.pine.base.map.MapSdkManager;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
@@ -28,17 +28,16 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
     private MvpHomeShopModel mModel;
     private MvpShopItemPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
-    private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
+
+    private ILocationListener mLocationListener = new ILocationListener() {
         @Override
-        public void onReceiveLocation(BDLocation bdLocation) {
-            if (bdLocation != null && (bdLocation.getLocType() == BDLocation.TypeGpsLocation
-                    || bdLocation.getLocType() == BDLocation.TypeNetWorkLocation
-                    || bdLocation.getLocType() == BDLocation.TypeOffLineLocation)) {
-                BdLocationManager.getInstance().unregisterListener(mLocationListener);
-                BdLocationManager.getInstance().stop();
-                BdLocationManager.getInstance().setLocation(bdLocation);
-                loadShopPaginationListData(true);
-            }
+        public void onReceiveLocation(LocationInfo locationInfo) {
+            loadShopPaginationListData(true);
+        }
+
+        @Override
+        public void onReceiveFail() {
+
         }
     };
 
@@ -59,16 +58,16 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
             case UI_STATE_ON_CREATE:
                 break;
             case UI_STATE_ON_RESUME:
-                if (BdLocationManager.getInstance().getLocation() == null) {
-                    BdLocationManager.getInstance().registerListener(mLocationListener);
-                    BdLocationManager.getInstance().start();
+                if (MapSdkManager.getInstance().getLocation() == null) {
+                    MapSdkManager.getInstance().registerLocationListener(mLocationListener);
+                    MapSdkManager.getInstance().startLocation();
                 }
                 break;
             case UI_STATE_ON_PAUSE:
                 break;
             case UI_STATE_ON_STOP:
-                BdLocationManager.getInstance().unregisterListener(mLocationListener);
-                BdLocationManager.getInstance().stop();
+                MapSdkManager.getInstance().unregisterLocationListener(mLocationListener);
+                MapSdkManager.getInstance().stopLocation();
                 break;
             case UI_STATE_ON_DETACH:
                 break;
@@ -97,7 +96,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
         params.put("pageNo", String.valueOf(pageNo));
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
         params.put("id", mId);
-        BDLocation location = BdLocationManager.getInstance().getLocation();
+        LocationInfo location = MapSdkManager.getInstance().getLocation();
         if (location != null) {
             double[] locations = GPSUtils.bd09_To_gps84(location.getLatitude(), location.getLongitude());
             params.put("latitude", String.valueOf(locations[0]));

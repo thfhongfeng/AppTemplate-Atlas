@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
@@ -29,7 +29,7 @@ public class MainHomeModel {
     public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManagerProxy.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
+        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
     private HttpJsonCallback handleHttpResponse(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {

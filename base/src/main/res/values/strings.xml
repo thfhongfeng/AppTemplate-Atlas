@@ -40,6 +40,9 @@
     <string name="base_title_settings_dialog">权限需求</string>
     <string name="base_rationale_need">需要授予相应权限(点击确定进行权限授予)</string>
 
+    <string name="base_baidu_map_title">百度地图</string>
+    <string name="base_baidu_map_marker_need">请在地图上选择一个地点</string>
+
     <string name="base_main_tab_home">首页</string>
     <string name="base_main_tab_mine">我的</string>
 </resources>

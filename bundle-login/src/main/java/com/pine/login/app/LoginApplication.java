@@ -3,7 +3,7 @@ package com.pine.login.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.pine.base.http.HttpRequestManagerProxy;
+import com.pine.base.http.HttpRequestManager;
 import com.pine.login.interceptor.LoginResponseInterceptor;
 
 /**
@@ -15,7 +15,7 @@ public class LoginApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        HttpRequestManagerProxy.setGlobalResponseInterceptor(new LoginResponseInterceptor());
+        HttpRequestManager.setGlobalResponseInterceptor(new LoginResponseInterceptor());
     }
 
     @Override

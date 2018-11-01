@@ -1,4 +1,4 @@
-package com.pine.base.location;
+package com.pine.base.map.baidu.location;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
