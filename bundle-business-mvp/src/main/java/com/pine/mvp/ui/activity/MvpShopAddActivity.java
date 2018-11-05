@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,14 +13,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pine.base.BaseConstants;
+import com.pine.base.access.UiAccessAnnotation;
+import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
-import com.pine.base.map.MapSdkManager;
+import com.pine.base.component.map.MapSdkManager;
 import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
 import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
+import com.pine.base.widget.view.ImageUploadView;
+import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopAddContract;
@@ -29,8 +33,11 @@ import com.pine.mvp.presenter.MvpShopAddPresenter;
 import com.pine.tool.util.DecimalUtils;
 import com.pine.tool.util.ViewActionUtils;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,6 +45,7 @@ import java.util.List;
  */
 
 @PermissionsAnnotation(Permissions = {Manifest.permission.CAMERA})
+@UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, Args = {""})
 public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpShopAddContract.Ui, MvpShopAddPresenter>
         implements IMvpShopAddContract.Ui, View.OnClickListener {
     private final int REQUEST_CODE_BAIDU_MAP = 1;
@@ -45,7 +53,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
     private LinearLayout type_ll, online_date_ll;
     private EditText name_et, address_detail_et, description_et, remark_et;
     private TextView type_tv, online_date_tv, contact_tv, address_tv, address_marker_tv;
-    private RecyclerView photo_rv;
+    private ImageUploadView photo_iuv;
     private InputTextDialog mContactInputDialog;
     private DateSelectDialog mOnLineDateSelectDialog;
     private SelectItemDialog mTypeSelectDialog;
@@ -94,7 +102,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         contact_tv = findViewById(R.id.contact_tv);
         address_tv = findViewById(R.id.address_tv);
         address_marker_tv = findViewById(R.id.address_marker_tv);
-        photo_rv = findViewById(R.id.photo_rv);
+        photo_iuv = findViewById(R.id.photo_iuv);
     }
 
     @Override
@@ -104,6 +112,38 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         contact_tv.setOnClickListener(this);
         address_tv.setOnClickListener(this);
         address_marker_tv.setOnClickListener(this);
+
+        photo_iuv.init(MvpUrlConstants.Add_HomeShopPhoto, makeUploadParams(), true,
+                new ImageUploadView.UploadResponseAdapter() {
+                    @Override
+                    public String getRemoteUrl(JSONObject response) {
+                        // Test code begin
+                        if (response == null) {
+                            return null;
+                        }
+                        if (!response.optBoolean(BaseConstants.SUCCESS)) {
+                            return null;
+                        }
+                        JSONObject data = response.optJSONObject(BaseConstants.DATA);
+                        if (data == null) {
+                            return null;
+                        }
+                        return data.optString("fileUrl");
+                        // Test code end
+                    }
+                });
+    }
+
+    private HashMap<String, String> makeUploadParams() {
+        HashMap<String, String> params = new HashMap<>();
+        // Test code begin
+        params.put("bizType", "10");
+        params.put("orderNum", "100");
+        params.put("orderNum", "100");
+        params.put("descr", "desc");
+        params.put("fileType", "1");
+        // Test code end
+        return params;
     }
 
     @Override
@@ -209,6 +249,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
                         DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6));
             }
         }
+        photo_iuv.onActivityResult(requestCode, resultCode, data);
     }
 
     private void onAddShopBtnClicked() {

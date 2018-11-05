@@ -1,7 +1,5 @@
 package com.pine.tool.util;
 
-import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -36,6 +34,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 
 import java.io.BufferedOutputStream;
@@ -47,13 +46,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 
 /**
  * Created by tanghongfeng on 2018/9/7.
  */
 
 public class ImageUtils {
+    public static final String TAG = LogUtils.makeLogTag(ImageUtils.class);
+
     private ImageUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
@@ -123,7 +124,7 @@ public class ImageUtils {
      * @return drawable
      */
     public static Drawable bitmap2Drawable(final Bitmap bitmap) {
-        return bitmap == null ? null : new BitmapDrawable(getApplicationByReflect().getResources(), bitmap);
+        return bitmap == null ? null : new BitmapDrawable(AppUtils.getApplicationByReflect().getResources(), bitmap);
     }
 
     /**
@@ -293,7 +294,7 @@ public class ImageUtils {
      * @return bitmap
      */
     public static Bitmap getBitmap(@DrawableRes final int resId) {
-        Drawable drawable = ContextCompat.getDrawable(getApplicationByReflect(), resId);
+        Drawable drawable = ContextCompat.getDrawable(AppUtils.getApplicationByReflect(), resId);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                 drawable.getIntrinsicHeight(),
@@ -316,7 +317,7 @@ public class ImageUtils {
                                    final int maxWidth,
                                    final int maxHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        final Resources resources = getApplicationByReflect().getResources();
+        final Resources resources = AppUtils.getApplicationByReflect().getResources();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(resources, resId, options);
         options.inSampleSize = calculateInSampleSize(options, maxWidth, maxHeight);
@@ -1188,7 +1189,7 @@ public class ImageUtils {
         RenderScript rs = null;
         Bitmap ret = recycle ? src : src.copy(src.getConfig(), true);
         try {
-            rs = RenderScript.create(getApplicationByReflect());
+            rs = RenderScript.create(AppUtils.getApplicationByReflect());
             rs.setMessageHandler(new RenderScript.RSMessageHandler());
             Allocation input = Allocation.createFromBitmap(rs,
                     ret,
@@ -1614,13 +1615,13 @@ public class ImageUtils {
                 && (b[0] == 0x42) && (b[1] == 0x4d);
     }
 
-    private static boolean isEmptyBitmap(final Bitmap src) {
-        return src == null || src.getWidth() == 0 || src.getHeight() == 0;
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // about compress
     ///////////////////////////////////////////////////////////////////////////
+
+    private static boolean isEmptyBitmap(final Bitmap src) {
+        return src == null || src.getWidth() == 0 || src.getHeight() == 0;
+    }
 
     /**
      * Return the compressed bitmap using scale.
@@ -1868,6 +1869,132 @@ public class ImageUtils {
         return inSampleSize;
     }
 
+    public static boolean compressBySize(String pathName, long maxSize, int targetWidth,
+                                         int targetHeight, ByteArrayOutputStream outputStream) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;// 不去真的解析图片，只是获取图片的头部信息，包含宽高等；
+        Bitmap bitmap;
+        // 得到图片的宽度、高度；
+        int imgWidth = opts.outWidth;
+        int imgHeight = opts.outHeight;
+        if (imgWidth == -1 || imgHeight == -1)
+            return false;
+        // 分别计算图片宽度、高度与目标宽度、高度的比例；取大于等于该比例的最小整数；
+        int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
+        int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
+        if (widthRatio > 1 || heightRatio > 1) {
+            if (widthRatio > heightRatio) {
+                opts.inSampleSize = widthRatio;
+            } else {
+                opts.inSampleSize = heightRatio;
+            }
+        }
+        String type = opts.outMimeType;
+        // 设置好缩放比例后，加载图片进内容；
+        opts.inJustDecodeBounds = false;
+        if ("image/jpeg".equals(type)) {
+            bitmap = rotateBitmapByExif(pathName, BitmapFactory.decodeFile(pathName, opts));
+        } else {
+            bitmap = BitmapFactory.decodeFile(pathName, opts);
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(CompressFormat.JPEG, quality, baos);
+        LogUtils.d(TAG, "需要压缩到" + maxSize + "byte," +
+                "图片按尺寸压缩后大小：" + baos.toByteArray().length + "byte"
+        );
+        boolean isCompressed = false;
+        while (baos.toByteArray().length > maxSize && quality >= 2) {
+            quality = quality <= 10 ? quality / 2 : quality - 10;
+            baos.reset();
+            bitmap.compress(CompressFormat.JPEG, quality, baos);
+            LogUtils.d(TAG, "质量压缩到原来的" + quality + "%时大小为："
+                    + baos.toByteArray().length + "byte");
+            isCompressed = true;
+        }
+        LogUtils.d(TAG, "图片降低质量压缩后大小：" + baos.toByteArray().length + "byte");
+        if (isCompressed) {
+            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
+            recycleBitmap(bitmap);
+            return compressedBitmap.compress(CompressFormat.JPEG, 100, outputStream);
+        } else {
+            return bitmap.compress(CompressFormat.JPEG, 100, outputStream);
+        }
+    }
+
+    /**
+     * 旋转图片摆正显示
+     *
+     * @param srcPath
+     * @param bitmap
+     * @return
+     */
+    public static Bitmap rotateBitmapByExif(String srcPath, Bitmap bitmap) {
+        ExifInterface exif;
+        Bitmap newBitmap = null;
+        try {
+            exif = new ExifInterface(srcPath);
+            if (exif != null) { // 读取图片中相机方向信息
+                int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL);
+                int degree = 0;
+                switch (ori) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        degree = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        degree = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        degree = 270;
+                        break;
+                }
+                if (degree != 0) {
+                    Matrix m = new Matrix();
+                    m.postRotate(degree);
+                    newBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight(), m, true);
+                    recycleBitmap(bitmap);
+                    return newBitmap;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public static void saveExif(String oldFilePath, String newFilePath) throws Exception {
+        ExifInterface oldExif = new ExifInterface(oldFilePath);
+        ExifInterface newExif = new ExifInterface(newFilePath);
+        Class<ExifInterface> cls = ExifInterface.class;
+        Field[] fields = cls.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            String fieldName = fields[i].getName();
+            if (!TextUtils.isEmpty(fieldName) && fieldName.startsWith("TAG")) {
+                String fieldValue = fields[i].get(cls).toString();
+                String attribute = oldExif.getAttribute(fieldValue);
+                if (attribute != null) {
+                    newExif.setAttribute(fieldValue, attribute);
+                }
+            }
+        }
+        newExif.saveAttributes();
+    }
+
+    /**
+     * 回收位图对象
+     *
+     * @param bitmap
+     */
+    public static void recycleBitmap(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            System.gc();
+            bitmap = null;
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // other utils methods
     ///////////////////////////////////////////////////////////////////////////
@@ -1922,27 +2049,5 @@ public class ImageUtils {
                 e.printStackTrace();
             }
         }
-    }
-
-    private static Application getApplicationByReflect() {
-        try {
-            @SuppressLint("PrivateApi")
-            Class<?> activityThread = Class.forName("android.app.ActivityThread");
-            Object thread = activityThread.getMethod("currentActivityThread").invoke(null);
-            Object app = activityThread.getMethod("getApplication").invoke(thread);
-            if (app == null) {
-                throw new NullPointerException("you should init first");
-            }
-            return (Application) app;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        throw new NullPointerException("u should init first");
     }
 }

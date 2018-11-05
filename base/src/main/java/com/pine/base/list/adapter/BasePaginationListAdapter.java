@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
     protected final static int FOOTER_VIEW_HOLDER = -10001;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
+    protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
 
@@ -87,7 +87,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
 
     @Override
     public int getItemCount() {
-        if (mIsInitState) {
+        if (mIsInitState()) {
             return 0;
         }
         if (mData == null || mData.size() == 0) {
@@ -101,7 +101,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
     }
 
     @Override
-    public final int getItemViewType(int position) {
+    public int getItemViewType(int position) {
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
@@ -121,8 +121,8 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         return hasMore && dataSize >= getPageSize() && position == dataSize;
     }
 
-    public final void addData(List<? extends Object> newData) {
-        List<BaseListAdapterItemEntity<? extends Object>> parseData = parseData(newData);
+    public final void addData(List<T> newData) {
+        List<BaseListAdapterItemEntity<T>> parseData = parseData(newData, false);
         if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
             return;
@@ -141,16 +141,16 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         notifyDataSetChanged();
     }
 
-    public final void setData(List<? extends Object> data) {
+    public final void setData(List<T> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        mData = parseData(data, true);
         resetAndGetPageNo();
         mHasMore = mData != null && mData.size() >= getPageSize();
         notifyDataSetChanged();
     }
 
-    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+    protected List<BaseListAdapterItemEntity<T>> parseData(List<T> data, boolean reset) {
+        List<BaseListAdapterItemEntity<T>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {
@@ -161,6 +161,10 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
             }
         }
         return adapterData;
+    }
+
+    public List<BaseListAdapterItemEntity<T>> getAdapterData() {
+        return mData;
     }
 
     public void resetAndGetPageNo() {
@@ -179,6 +183,10 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         return mDefaultItemViewType;
     }
 
+    public final boolean mIsInitState() {
+        return mIsInitState;
+    }
+
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
@@ -192,7 +200,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         public FooterViewHolder(View itemView) {
             super(itemView);
             itemView.setTag("footer");
-            footer_tv = (TextView) itemView.findViewById(R.id.footer_tv);
+            footer_tv = itemView.findViewById(R.id.footer_tv);
         }
 
         @Override
@@ -216,7 +224,7 @@ public abstract class BasePaginationListAdapter extends RecyclerView.Adapter<Bas
         public EmptyBackgroundViewHolder(Context context, View itemView) {
             super(itemView);
             this.context = context;
-            container = (RelativeLayout) itemView.findViewById(R.id.container);
+            container = itemView.findViewById(R.id.container);
         }
 
         @Override

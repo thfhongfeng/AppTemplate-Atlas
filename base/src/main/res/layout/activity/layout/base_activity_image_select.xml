@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#d000">
+
+        <GridView
+            android:id="@+id/grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_rl"
+            android:horizontalSpacing="@dimen/dp_3"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:verticalSpacing="@dimen/dp_5"></GridView>
+
+        <RelativeLayout
+            android:id="@+id/bottom_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentBottom="true"
+            android:background="#45000000">
+
+            <Button
+                android:id="@+id/folder_select_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/dp_8"
+                android:background="@drawable/base_selector_shape_round_00c614_346934"
+                android:padding="@dimen/dp_3"
+                android:text="@string/base_all_image"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/preview_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_8"
+                android:background="@null"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/base_preview"
+                android:textColor="#ff909090" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_360"
+            android:layout_above="@id/bottom_rl"
+            android:background="#fff"
+            android:visibility="gone"></ListView>
+    </RelativeLayout>
+</LinearLayout>

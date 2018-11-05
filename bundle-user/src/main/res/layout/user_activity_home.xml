@@ -18,5 +18,5 @@
     <com.pine.base.widget.view.BottomTabNavigationBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:selectedItem="1"></com.pine.base.widget.view.BottomTabNavigationBar>
+        app:baseSelectedItem="1"></com.pine.base.widget.view.BottomTabNavigationBar>
 </LinearLayout>

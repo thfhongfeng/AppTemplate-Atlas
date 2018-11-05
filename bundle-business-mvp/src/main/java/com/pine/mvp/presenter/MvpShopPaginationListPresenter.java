@@ -4,9 +4,9 @@ import android.widget.Toast;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.map.ILocationListener;
-import com.pine.base.map.LocationInfo;
-import com.pine.base.map.MapSdkManager;
+import com.pine.base.component.map.ILocationListener;
+import com.pine.base.component.map.LocationInfo;
+import com.pine.base.component.map.MapSdkManager;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;

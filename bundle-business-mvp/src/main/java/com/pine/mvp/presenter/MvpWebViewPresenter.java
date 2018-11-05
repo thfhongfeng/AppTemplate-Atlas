@@ -1,7 +1,7 @@
 package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.share.bean.ShareBean;
+import com.pine.base.component.share.bean.ShareBean;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.contract.IMvpWebViewContract;
 

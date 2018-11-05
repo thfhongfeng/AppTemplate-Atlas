@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pine.base.image.ImageLoaderManager;
+import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BasePaginationListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
@@ -71,9 +71,9 @@ public class MvpShopItemPaginationAdapter extends BasePaginationListAdapter {
             } else {
                 float distance = Float.parseFloat(distanceStr);
                 if (distance >= 1000.0f) {
-                    location_tv.setText(DecimalUtils.divide(distance, 1000.0f, 2) + mContext.getString(R.string.base_unit_kilometre));
+                    location_tv.setText(DecimalUtils.divide(distance, 1000.0f, 2) + mContext.getString(R.string.unit_kilometre));
                 } else {
-                    location_tv.setText(distance + mContext.getString(R.string.base_unit_metre));
+                    location_tv.setText(distance + mContext.getString(R.string.unit_metre));
                 }
                 location_ll.setVisibility(View.VISIBLE);
             }

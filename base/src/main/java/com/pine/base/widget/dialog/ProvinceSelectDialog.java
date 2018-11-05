@@ -154,7 +154,7 @@ public class ProvinceSelectDialog extends Dialog {
             wheelProvince = layout.findViewById(R.id.wheel_one);
             wheelCity = layout.findViewById(R.id.wheel_two);
             wheelDistrict = layout.findViewById(R.id.wheel_three);
-            initViewOnCreate(dialog, dialogSelect);
+            initView(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
             window.setGravity(Gravity.BOTTOM);
@@ -167,7 +167,7 @@ public class ProvinceSelectDialog extends Dialog {
             return dialog;
         }
 
-        private void initViewOnCreate(final ProvinceSelectDialog dialog, final IDialogDateSelected dialogSelect) {
+        private void initView(final ProvinceSelectDialog dialog, final IDialogDateSelected dialogSelect) {
             wheelProvince.setData(mProvinceList);
             wheelProvince.setSelectedItemPosition(curProvinceIndex);
             wheelCity.setData(mCityListMap.get(mProvinceList.get(curProvinceIndex)));

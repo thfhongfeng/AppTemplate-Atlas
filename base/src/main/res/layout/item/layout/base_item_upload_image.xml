@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_96"
+    android:layout_height="@dimen/dp_96"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/show_iv"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/num_max_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:padding="@dimen/dp_3"
+        android:textColor="#333333"
+        android:textSize="@dimen/sp_12" />
+
+    <RelativeLayout
+        android:id="@+id/state_rl"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
+        android:layout_centerInParent="true"
+        android:background="#66000000">
+
+        <TextView
+            android:id="@+id/fail_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/base_upload_fail"
+            android:textColor="#fb4d11" />
+
+        <ImageView
+            android:id="@+id/loading_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/base_animated_loading" />
+
+        <TextView
+            android:id="@+id/loading_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:padding="@dimen/dp_3"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/base_ic_delete" />
+</RelativeLayout>

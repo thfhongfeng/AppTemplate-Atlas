@@ -43,6 +43,7 @@ android {
             jni.srcDirs = []    //disable automatic ndk-build
         }
     }
+    resourcePrefix "mvp_"
 }
 
 repositories {

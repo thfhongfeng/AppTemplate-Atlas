@@ -24,15 +24,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by tanghongfeng on 2018/10/22
  */
 
-public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
     protected final static int FOOTER_VIEW_HOLDER = -10001;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mTopNoPaginationData = null;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mBottomPaginationData = null;
+    protected List<BaseListAdapterItemEntity<T>> mHeadNoPaginationData = null;
+    protected List<BaseListAdapterItemEntity<B>> mTailPaginationData = null;
     private boolean mIsInitState = true;
 
     public BaseComplexListAdapter() {
@@ -73,8 +73,8 @@ public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseLi
 
     @Override
     public void onBindViewHolder(@NonNull BaseListViewHolder holder, int position) {
-        int topSize = mTopNoPaginationData == null ? 0 : mTopNoPaginationData.size();
-        int bottomSize = mBottomPaginationData == null ? 0 : mBottomPaginationData.size();
+        int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
+        int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
         if (topSize == 0 && bottomSize == 0) {
             holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
@@ -83,21 +83,21 @@ public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseLi
             holder.updateData(mHasMore, new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
-        if (mTopNoPaginationData != null && position < mTopNoPaginationData.size()) {
-            holder.updateData(mTopNoPaginationData.get(position).getData(), mTopNoPaginationData.get(position).getPropertyEntity(), position);
+        if (mHeadNoPaginationData != null && position < mHeadNoPaginationData.size()) {
+            holder.updateData(mHeadNoPaginationData.get(position).getData(), mHeadNoPaginationData.get(position).getPropertyEntity(), position);
         } else {
-            int index = position - mTopNoPaginationData.size();
-            holder.updateData(mBottomPaginationData.get(index).getData(), mBottomPaginationData.get(index).getPropertyEntity(), index);
+            int index = position - mHeadNoPaginationData.size();
+            holder.updateData(mTailPaginationData.get(index).getData(), mTailPaginationData.get(index).getPropertyEntity(), index);
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mIsInitState) {
+        if (mIsInitState()) {
             return 0;
         }
-        int topSize = mTopNoPaginationData == null ? 0 : mTopNoPaginationData.size();
-        int bottomSize = mBottomPaginationData == null ? 0 : mBottomPaginationData.size();
+        int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
+        int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
         if (topSize == 0 && bottomSize == 0) {
             return 1;
         }
@@ -109,36 +109,42 @@ public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseLi
     }
 
     @Override
-    public final int getItemViewType(int position) {
-        int topSize = mTopNoPaginationData == null ? 0 : mTopNoPaginationData.size();
-        int bottomSize = mBottomPaginationData == null ? 0 : mBottomPaginationData.size();
+    public int getItemViewType(int position) {
+        int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
+        int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
         if (topSize == 0 && bottomSize == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
         if (isFooterView(true, position, topSize, bottomSize)) {
             return FOOTER_VIEW_HOLDER;
         }
-        if (mTopNoPaginationData != null && position < mTopNoPaginationData.size()) {
-            return mTopNoPaginationData.get(position).getPropertyEntity().getItemViewType();
+        if (mHeadNoPaginationData != null && position < mHeadNoPaginationData.size()) {
+            return mHeadNoPaginationData.get(position).getPropertyEntity().getItemViewType();
         } else {
-            int index = position - mTopNoPaginationData.size();
-            return mBottomPaginationData.get(index).getPropertyEntity().getItemViewType();
+            int index = position - mHeadNoPaginationData.size();
+            return mTailPaginationData.get(index).getPropertyEntity().getItemViewType();
         }
     }
 
-    public final void addBottomData(List<? extends Object> newData) {
-        List<BaseListAdapterItemEntity<? extends Object>> parseData = parseBottomData(newData);
+    public final void setHeadData(List<T> data) {
+        mIsInitState = false;
+        mHeadNoPaginationData = parseHeadData(data);
+        notifyDataSetChanged();
+    }
+
+    public final void addTailData(List<B> newData) {
+        List<BaseListAdapterItemEntity<B>> parseData = parseTailData(newData);
         if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
             return;
         }
-        if (mBottomPaginationData == null) {
+        if (mTailPaginationData == null) {
             mIsInitState = false;
-            mBottomPaginationData = parseData;
+            mTailPaginationData = parseData;
             resetAndGetPageNo();
         } else {
             for (int i = 0; i < parseData.size(); i++) {
-                mBottomPaginationData.add(parseData.get(i));
+                mTailPaginationData.add(parseData.get(i));
             }
             mPageNo.incrementAndGet();
         }
@@ -146,17 +152,11 @@ public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseLi
         notifyDataSetChanged();
     }
 
-    public final void setTopData(List<? extends Object> data) {
+    public final void setTailData(List<B> data) {
         mIsInitState = false;
-        mTopNoPaginationData = parseTopData(data);
-        notifyDataSetChanged();
-    }
-
-    public final void setBottomData(List<? extends Object> data) {
-        mIsInitState = false;
-        mBottomPaginationData = parseBottomData(data);
+        mTailPaginationData = parseTailData(data);
         resetAndGetPageNo();
-        mHasMore = mBottomPaginationData != null && mBottomPaginationData.size() >= getPageSize();
+        mHasMore = mTailPaginationData != null && mTailPaginationData.size() >= getPageSize();
         notifyDataSetChanged();
     }
 
@@ -180,9 +180,13 @@ public abstract class BaseComplexListAdapter extends RecyclerView.Adapter<BaseLi
         return mPageSize.get();
     }
 
-    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTopData(List<? extends Object> data);
+    public final boolean mIsInitState() {
+        return mIsInitState;
+    }
 
-    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseBottomData(List<? extends Object> data);
+    public abstract List<BaseListAdapterItemEntity<T>> parseHeadData(List<? extends Object> data);
+
+    public abstract List<BaseListAdapterItemEntity<B>> parseTailData(List<? extends Object> data);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 

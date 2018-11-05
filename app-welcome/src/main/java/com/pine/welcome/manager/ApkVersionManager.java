@@ -55,7 +55,7 @@ public class ApkVersionManager {
         if (TextUtils.isEmpty(mDownloadDir)) {
             if (mListener != null) {
                 mListener.onDownloadError(new MessageException(AppUtils.getApplicationByReflect()
-                        .getString(R.string.version_get_download_path_fail, mDownloadDir)));
+                        .getString(R.string.wel_version_get_download_path_fail, mDownloadDir)));
             }
             return;
         }

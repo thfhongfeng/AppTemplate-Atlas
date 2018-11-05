@@ -220,12 +220,18 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     @Override
     public void setUploadRequest(HttpRequestBean requestBean, IHttpResponseListener.OnUploadListener processListener,
                                  IHttpResponseListener.OnResponseListener responseListener) {
+        if (requestBean.getFileList() == null) {
+            return;
+        }
         Request<String> request = NoHttp.createStringRequest(requestBean.getUrl(), RequestMethod.POST);
         List<Binary> binaries = new ArrayList<>();
-        for (File file : requestBean.getFileList()) {
+        int fileNameListSize = requestBean.getFileNameList().size();
+        for (int i = 0; i < requestBean.getFileList().size(); i++) {
+            File file = requestBean.getFileList().get(i);
+            String fileName = fileNameListSize > i ? requestBean.getFileNameList().get(i) : requestBean.getFileNameList().get(fileNameListSize - 1) + i;
             BasicBinary binary = null;
             try {
-                binary = new InputStreamBinary(new FileInputStream(file), "png");
+                binary = new InputStreamBinary(new FileInputStream(file), fileName);
                 binary.setUploadListener(requestBean.getWhat(), getUploadListener(processListener));
                 binaries.add(binary);
             } catch (FileNotFoundException e) {

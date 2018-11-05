@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="BottomTabNavigationBar">
-        <attr name="selectedItem" format="integer"></attr>
+    <declare-styleable name="BaseBottomTabNavigationBar">
+        <attr name="baseSelectedItem" format="integer"></attr>
     </declare-styleable>
 
-
-    <style name="SelectItemDialog" parent="android:style/Theme.Dialog">
-        <item name="android:background">#00000000</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-    </style>
+    <declare-styleable name="BaseImageUploadView">
+        <attr name="baseMaxImageCount" format="integer"></attr>
+        <attr name="baseColumnSize" format="integer"></attr>
+        <attr name="baseMaxImageSize" format="integer"></attr>
+    </declare-styleable>
 </resources>

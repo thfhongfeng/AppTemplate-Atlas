@@ -48,7 +48,7 @@ public class SelectItemDialog extends Dialog {
                                        int currentPosition, final IDialogSelectListener listener) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final SelectItemDialog dialog = new SelectItemDialog(context, R.style.SelectItemDialog);
+            final SelectItemDialog dialog = new SelectItemDialog(context, R.style.BaseSelectItemDialog);
             View layout = inflater.inflate(R.layout.base_dialog_item_select, null);
             dialog.setContentView(layout);
             cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);

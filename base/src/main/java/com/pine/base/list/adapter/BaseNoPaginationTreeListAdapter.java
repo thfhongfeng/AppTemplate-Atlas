@@ -22,9 +22,9 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BaseNoPaginationTreeListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
+    protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
     private int mTreeListType = -1;
 
@@ -63,7 +63,7 @@ public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapt
 
     @Override
     public int getItemCount() {
-        if (mIsInitState) {
+        if (mIsInitState()) {
             return 0;
         }
         if (mData == null || mData.size() == 0) {
@@ -73,7 +73,7 @@ public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapt
     }
 
     @Override
-    public final int getItemViewType(int position) {
+    public int getItemViewType(int position) {
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
@@ -81,17 +81,41 @@ public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapt
         return itemEntity.getPropertyEntity().getItemViewType();
     }
 
-    public final void setData(List<? extends Object> data) {
+    public final void setData(List<T> data) {
         mIsInitState = false;
-        mData = parseTreeData(data);
+        mData = parseTreeData(data, true);
         notifyDataSetChanged();
+    }
+
+    public final void addData(List<T> newData) {
+        List<BaseListAdapterItemEntity<T>> parseData = parseTreeData(newData, false);
+        if (parseData == null || parseData.size() == 0) {
+            return;
+        }
+        if (mData == null) {
+            mIsInitState = false;
+            mData = parseData;
+        } else {
+            for (int i = 0; i < parseData.size(); i++) {
+                mData.add(parseData.get(i));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public List<BaseListAdapterItemEntity<T>> getAdapterData() {
+        return mData;
     }
 
     public int getTreeListType() {
         return mTreeListType;
     }
 
-    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data);
+    public final boolean mIsInitState() {
+        return mIsInitState;
+    }
+
+    public abstract List<BaseListAdapterItemEntity<T>> parseTreeData(List<T> data, boolean reset);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
@@ -106,7 +130,7 @@ public abstract class BaseNoPaginationTreeListAdapter extends RecyclerView.Adapt
         public EmptyBackgroundViewHolder(Context context, View itemView) {
             super(itemView);
             this.context = context;
-            container = (RelativeLayout) itemView.findViewById(R.id.container);
+            container = itemView.findViewById(R.id.container);
         }
 
         @Override

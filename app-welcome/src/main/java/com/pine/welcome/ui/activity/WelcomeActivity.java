@@ -15,7 +15,7 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
 
     @Override
     protected int getActivityLayoutResId() {
-        return R.layout.activity_welcome;
+        return R.layout.wel_activity_welcome;
     }
 
     @Override

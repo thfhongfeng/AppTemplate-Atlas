@@ -26,7 +26,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
 
     @Override
     protected int getActivityLayoutResId() {
-        return R.layout.activity_loading;
+        return R.layout.wel_activity_loading;
     }
 
     @Override
@@ -56,11 +56,11 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     public void showVersionUpdateConfirmDialog(String newVersionName) {
         if (mUpdateConfirmDialog == null) {
             mUpdateConfirmDialog = new Dialog(this);
-            mUpdateConfirmDialog.setContentView(R.layout.dialog_version_update_confirm);
+            mUpdateConfirmDialog.setContentView(R.layout.wel_dialog_version_update_confirm);
             mUpdateConfirmDialog.setCanceledOnTouchOutside(false);
             mUpdateConfirmDialog.setCancelable(false);
             mUpdateConfirmDialog.setOwnerActivity(this);
-            ((TextView) mUpdateConfirmDialog.findViewById(R.id.reason_tv)).setText(String.format(getString(R.string.new_version_available), newVersionName));
+            ((TextView) mUpdateConfirmDialog.findViewById(R.id.reason_tv)).setText(String.format(getString(R.string.wel_new_version_available), newVersionName));
             mUpdateConfirmDialog.findViewById(R.id.cancel_btn_tv).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

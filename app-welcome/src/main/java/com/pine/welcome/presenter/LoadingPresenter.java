@@ -113,7 +113,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             public void onDownloadCancel() {
                 LogUtils.d(TAG, "onDownloadCancel");
                 if (isUiAlive()) {
-                    getUi().showVersionUpdateToast(getContext().getString(R.string.version_update_cancel));
+                    getUi().showVersionUpdateToast(getContext().getString(R.string.wel_version_update_cancel));
                     getUi().dismissVersionUpdateProgressDialog();
                     autoLogin();
                 }
@@ -125,10 +125,10 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 if (isUiAlive()) {
                     String msg = "";
                     if (exception instanceof MessageException) {
-                        msg = getContext().getString(R.string.version_update_fail) +
+                        msg = getContext().getString(R.string.wel_version_update_fail) +
                                 "(" + exception.getMessage() + ")";
                     } else {
-                        msg = getContext().getString(R.string.version_update_fail);
+                        msg = getContext().getString(R.string.wel_version_update_fail);
                     }
                     getUi().showVersionUpdateToast(msg);
                     getUi().dismissVersionUpdateProgressDialog();
@@ -233,7 +233,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
         } else {
-            getUi().showVersionUpdateToast(getContext().getString(R.string.version_update_fail));
+            getUi().showVersionUpdateToast(getContext().getString(R.string.wel_version_update_fail));
             autoLogin();
         }
         finishUi();

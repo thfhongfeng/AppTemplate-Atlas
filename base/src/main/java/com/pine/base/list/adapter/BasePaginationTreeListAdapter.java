@@ -24,14 +24,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BasePaginationTreeListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
     protected final static int FOOTER_VIEW_HOLDER = -10001;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
+    protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
 
     public BasePaginationTreeListAdapter() {
@@ -85,7 +85,7 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
 
     @Override
     public int getItemCount() {
-        if (mIsInitState) {
+        if (mIsInitState()) {
             return 0;
         }
         if (mData == null || mData.size() == 0) {
@@ -99,7 +99,7 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public final int getItemViewType(int position) {
+    public int getItemViewType(int position) {
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
@@ -118,8 +118,8 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
         return hasMore && dataSize >= getPageSize() && position == dataSize;
     }
 
-    public final void addData(List<? extends Object> newData) {
-        List<BaseListAdapterItemEntity<? extends Object>> parseData = parseTreeData(newData);
+    public final void addData(List<T> newData) {
+        List<BaseListAdapterItemEntity<T>> parseData = parseTreeData(newData, false);
         if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
             return;
@@ -138,12 +138,16 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
-    public final void setData(List<? extends Object> data) {
+    public final void setData(List<T> data) {
         mIsInitState = false;
-        mData = parseTreeData(data);
+        mData = parseTreeData(data, true);
         resetAndGetPageNo();
         mHasMore = mData != null && mData.size() >= getPageSize();
         notifyDataSetChanged();
+    }
+
+    public List<BaseListAdapterItemEntity<T>> getAdapterData() {
+        return mData;
     }
 
     public void resetAndGetPageNo() {
@@ -158,7 +162,11 @@ public abstract class BasePaginationTreeListAdapter extends RecyclerView.Adapter
         return mPageSize.get();
     }
 
-    public abstract List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data);
+    public final boolean mIsInitState() {
+        return mIsInitState;
+    }
+
+    public abstract List<BaseListAdapterItemEntity<T>> parseTreeData(List<T> data, boolean reset);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 

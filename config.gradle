@@ -2,10 +2,10 @@
  * 编译打包参数
  */
 def build_versions = [:]
-build_versions.compileSdkVersion = 26
+build_versions.compileSdkVersion = 27
 build_versions.buildToolsVersion = "27.0.3"
 build_versions.minSdkVersion = 21
-build_versions.targetSdkVersion = 26
+build_versions.targetSdkVersion = 27
 
 build_versions.storeFile = "../template.jks"
 build_versions.storePassword = "pine123"

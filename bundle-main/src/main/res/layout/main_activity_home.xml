@@ -37,6 +37,6 @@
     <com.pine.base.widget.view.BottomTabNavigationBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:selectedItem="0"></com.pine.base.widget.view.BottomTabNavigationBar>
+        app:baseSelectedItem="0"></com.pine.base.widget.view.BottomTabNavigationBar>
 
 </LinearLayout>

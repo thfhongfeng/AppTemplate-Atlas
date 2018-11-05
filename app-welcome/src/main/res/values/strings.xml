@@ -1,7 +1,7 @@
 <resources>
-    <string name="new_version_available">发现新版本(%s)，是否要更新?</string>
-    <string name="version_update_fail">更新失败</string>
-    <string name="version_update_cancel">更新被取消</string>
+    <string name="wel_new_version_available">发现新版本(%s)，是否要更新?</string>
+    <string name="wel_version_update_fail">更新失败</string>
+    <string name="wel_version_update_cancel">更新被取消</string>
 
-    <string name="version_get_download_path_fail">获取下载目录%s失败</string>
+    <string name="wel_version_get_download_path_fail">获取下载目录%s失败</string>
 </resources>

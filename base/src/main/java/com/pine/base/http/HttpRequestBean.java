@@ -16,7 +16,8 @@ public class HttpRequestBean {
     private String url;
     private HttpRequestMethod requestMethod;
     private Map<String, String> params;
-    private String moduleTag;
+    //模块标识，默认common
+    private String moduleTag = "common";
     private int what;
     private Object sign;
     private boolean needLogin;
@@ -31,6 +32,7 @@ public class HttpRequestBean {
 
     // for upload
     private String fileKey;
+    private List<String> fileNameList;
     private List<File> fileList;
 
     private ActionType actionType = ActionType.COMMON;
@@ -176,5 +178,13 @@ public class HttpRequestBean {
 
     public void setFileList(List<File> fileList) {
         this.fileList = fileList;
+    }
+
+    public List<String> getFileNameList() {
+        return fileNameList;
+    }
+
+    public void setFileNameList(List<String> fileNameList) {
+        this.fileNameList = fileNameList;
     }
 }

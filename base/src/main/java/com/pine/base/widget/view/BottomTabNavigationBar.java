@@ -30,35 +30,31 @@ public class BottomTabNavigationBar extends FrameLayout implements View.OnClickL
     public BottomTabNavigationBar(Context context) {
         super(context);
         mContext = context;
-        initViewOnCreate();
-        initEvent();
+        initView();
     }
 
     public BottomTabNavigationBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        initViewOnCreate();
-        initEvent();
+        initView();
         init(attrs);
     }
 
-    private void initViewOnCreate() {
+    private void initView() {
         layout_view = LayoutInflater.from(mContext).inflate(R.layout.base_bottom_tab_navigation_bar, this, true);
         setBackgroundColor(Color.TRANSPARENT);
         bottom_main_home_iv = (ImageView) layout_view.findViewById(R.id.bottom_main_home_iv);
         bottom_user_center_iv = (ImageView) layout_view.findViewById(R.id.bottom_user_center_iv);
         bottom_main_home_ll = (LinearLayout) layout_view.findViewById(R.id.bottom_main_home_ll);
         bottom_user_center_ll = (LinearLayout) layout_view.findViewById(R.id.bottom_user_center_ll);
-    }
 
-    private void initEvent() {
         bottom_main_home_ll.setOnClickListener(this);
         bottom_user_center_ll.setOnClickListener(this);
     }
 
     private void init(AttributeSet attrs) {
-        TypedArray typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.BottomTabNavigationBar);
-        mCurrentItem = typedArray.getInt(R.styleable.BottomTabNavigationBar_selectedItem, 0);
+        TypedArray typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.BaseBottomTabNavigationBar);
+        mCurrentItem = typedArray.getInt(R.styleable.BaseBottomTabNavigationBar_baseSelectedItem, 0);
         switch (mCurrentItem) {
             case 0:
                 bottom_main_home_iv.setSelected(true);

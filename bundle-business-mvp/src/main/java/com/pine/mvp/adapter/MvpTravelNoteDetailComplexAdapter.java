@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.image.ImageLoaderManager;
+import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseComplexListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
@@ -24,7 +24,7 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
+public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<MvpTravelNoteDetailEntity, MvpTravelNoteCommentEntity> {
     public static final int TRAVEL_NOTE_HEAD_VIEW_HOLDER = 1;
     public static final int TRAVEL_NOTE_DAY_VIEW_HOLDER = 2;
     public static final int TRAVEL_NOTE_COMMENT_HEAD_VIEW_HOLDER = 3;
@@ -36,8 +36,8 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
     }
 
     @Override
-    public List<BaseListAdapterItemEntity<? extends Object>> parseTopData(List<?> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+    public List<BaseListAdapterItemEntity<MvpTravelNoteDetailEntity>> parseHeadData(List<?> data) {
+        List<BaseListAdapterItemEntity<MvpTravelNoteDetailEntity>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {
@@ -65,8 +65,8 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter {
     }
 
     @Override
-    public List<BaseListAdapterItemEntity<? extends Object>> parseBottomData(List<?> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+    public List<BaseListAdapterItemEntity<MvpTravelNoteCommentEntity>> parseTailData(List<?> data) {
+        List<BaseListAdapterItemEntity<MvpTravelNoteCommentEntity>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {

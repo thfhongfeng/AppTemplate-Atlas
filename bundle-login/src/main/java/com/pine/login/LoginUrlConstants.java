@@ -7,5 +7,8 @@ import com.pine.base.BaseUrlConstants;
  */
 
 public interface LoginUrlConstants extends BaseUrlConstants {
-    String Query_Login_Info = BASE_URL + "";
+    // Test code begin
+//    String Login = BASE_URL + "";
+    String Login_User = "http://10.10.128.134:8011/" + "/mobile/login.htm";
+    // Test code end
 }

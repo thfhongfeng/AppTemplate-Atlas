@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarImageMenuActivity;
-import com.pine.base.share.bean.ShareBean;
-import com.pine.base.share.manager.ShareManager;
+import com.pine.base.component.share.bean.ShareBean;
+import com.pine.base.component.share.manager.ShareManager;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpWebViewContract;
 import com.pine.mvp.presenter.MvpWebViewPresenter;

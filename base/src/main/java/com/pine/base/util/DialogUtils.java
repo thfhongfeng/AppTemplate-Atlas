@@ -16,8 +16,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.pine.base.R;
-import com.pine.base.share.bean.ShareBean;
-import com.pine.base.share.manager.ShareManager;
+import com.pine.base.component.share.bean.ShareBean;
+import com.pine.base.component.share.manager.ShareManager;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
 import com.pine.base.widget.dialog.ProvinceSelectDialog;

@@ -50,6 +50,7 @@ android {
             jni.srcDirs = []    //disable automatic ndk-build
         }
     }
+    resourcePrefix "base_"
 }
 
 repositories {
@@ -85,8 +86,11 @@ dependencies {
     compile build_dependency['bumptech_glide']
     annotationProcessor build_dependency['bumptech_glide_compiler']
     compile(name: build_dependency["sina_weibo_sdk"], ext: 'aar')
-    compile project(':base-lib-immersionbar')
     // 第三方 dependency end
+
+    // library project begin
+    compile project(':base-lib-immersionbar')
+    // library project end
 
     // 路由模块 begin
     compile project(':router')

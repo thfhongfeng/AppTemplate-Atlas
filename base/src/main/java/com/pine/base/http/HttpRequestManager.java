@@ -1,6 +1,7 @@
 package com.pine.base.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.pine.base.R;
@@ -136,7 +137,9 @@ public class HttpRequestManager {
     public static void setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
                                       int what, Object sign, boolean needLogin, RequestType requestType, HttpJsonCallback callBack) {
         //设置模块名
-        callBack.setModuleTag(moduleTag);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            callBack.setModuleTag(moduleTag);
+        }
         callBack.setUrl(url);
         callBack.setWhat(what);
 
@@ -147,6 +150,9 @@ public class HttpRequestManager {
         requestBean.setModuleTag(moduleTag);
         requestBean.setWhat(what);
         requestBean.setSign(sign);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            requestBean.setModuleTag(moduleTag);
+        }
         requestBean.setNeedLogin(needLogin);
         requestBean.setRequestType(requestType);
         requestBean.setCallBack(callBack);
@@ -158,8 +164,10 @@ public class HttpRequestManager {
             }
         }
         mLoadingRequestMap.put(callBack.getKey(), requestBean);
-        LogUtils.d(TAG, "Request in string queue - " + moduleTag +
-                "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
+
+        LogUtils.d(TAG, "Request in string queue - " + requestBean.getModuleTag() +
+                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
+                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
         mRequestManager.setJsonRequest(requestBean, getResponseListener(callBack));
     }
 
@@ -198,7 +206,9 @@ public class HttpRequestManager {
                                           HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
                                           Object sign, int what, boolean needLogin, HttpDownloadCallback callBack) {
         //设置模块名
-        callBack.setModuleTag(moduleTag);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            callBack.setModuleTag(moduleTag);
+        }
         callBack.setUrl(url);
         callBack.setWhat(what);
 
@@ -213,6 +223,9 @@ public class HttpRequestManager {
         requestBean.setDeleteOld(isDeleteOld);
         requestBean.setWhat(what);
         requestBean.setSign(sign);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            requestBean.setModuleTag(moduleTag);
+        }
         requestBean.setRequestType(RequestType.DOWNLOAD);
         requestBean.setNeedLogin(needLogin);
         requestBean.setCallBack(callBack);
@@ -225,44 +238,83 @@ public class HttpRequestManager {
             }
         }
         mLoadingRequestMap.put(callBack.getKey(), requestBean);
-        LogUtils.d(TAG, "Request in download queue - " + moduleTag +
-                "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
+
+        LogUtils.d(TAG, "Request in download queue - " + requestBean.getModuleTag() +
+                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
+                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
         mRequestManager.setDownloadRequest(requestBean, getDownloadListener(callBack));
     }
 
+    /**
+     * 上传单个文件
+     */
     public static void setPostFileRequest(String url, int what, Map<String, String> params,
-                                          List<File> fileList, String fileKey, String moduleTag,
+                                          File file, String fileName, String fileKey, Object sign,
                                           HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        setPostFileRequest(url, what, params, fileList, fileKey, false, moduleTag, processCallback, requestCallback);
+        setPostFileRequest(url, what, params, file, fileName, fileKey, sign, false, null, processCallback, requestCallback);
     }
 
     /**
-     * 上传多文件
+     * 上传单个文件
+     */
+    public static void setPostFileRequest(String url, int what, Map<String, String> params, File file,
+                                          String fileName, String fileKey, Object sign, boolean needLogin, String moduleTag,
+                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+        ArrayList<File> fileList = new ArrayList<>();
+        fileList.add(file);
+        ArrayList<String> fileNameList = new ArrayList<>();
+        fileNameList.add(fileName);
+        setPostFileRequest(url, what, params, fileList, fileNameList, fileKey, sign, needLogin, moduleTag, processCallback, requestCallback);
+    }
+
+    /**
+     * 上传多个文件
+     */
+    public static void setPostFileRequest(String url, int what, Map<String, String> params,
+                                          List<File> fileList, List<String> fileNameList, String fileKey, Object sign,
+                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+        setPostFileRequest(url, what, params, fileList, fileNameList, fileKey, sign, false, null, processCallback, requestCallback);
+    }
+
+    /**
+     * 上传多个文件
      *
      * @param url
      * @param what
      * @param params          普通参数
      * @param fileList        文件集合
+     * @param fileNameList    文件名集合
      * @param fileKey         文件的key
+     * @param sign            用于取消的sign
      * @param needLogin       是否需要登陆
      * @param moduleTag       模块标识
      * @param processCallback
      * @param requestCallback
      */
     public static void setPostFileRequest(String url, int what, Map<String, String> params, List<File> fileList,
-                                          String fileKey, boolean needLogin, String moduleTag,
+                                          List<String> fileNameList, String fileKey, Object sign, boolean needLogin, String moduleTag,
                                           HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        requestCallback.setModuleTag(moduleTag);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            requestCallback.setModuleTag(moduleTag);
+            processCallback.setModuleTag(moduleTag);
+        }
         requestCallback.setUrl(url);
+        processCallback.setUrl(url);
         requestCallback.setWhat(what);
+        processCallback.setWhat(what);
 
         HttpRequestBean requestBean = new HttpRequestBean(what, requestCallback);
         requestBean.setUrl(url);
         requestBean.setFileList(fileList);
+        requestBean.setFileNameList(fileNameList);
         requestBean.setFileKey(fileKey);
         requestBean.setRequestMethod(HttpRequestMethod.POST);
         requestBean.setParams(params);
         requestBean.setWhat(what);
+        requestBean.setSign(sign);
+        if (!TextUtils.isEmpty(moduleTag)) {
+            requestBean.setModuleTag(moduleTag);
+        }
         requestBean.setRequestType(RequestType.UPLOAD);
         requestBean.setNeedLogin(needLogin);
         requestBean.setCallBack(requestCallback);
@@ -275,8 +327,9 @@ public class HttpRequestManager {
         }
         mLoadingRequestMap.put(requestCallback.getKey(), requestBean);
 
-        LogUtils.d(TAG, "Request in upload queue - " + moduleTag +
-                "(requestCode:" + what + ")" + " \r\n- url : " + url + " \r\n - params: " + params);
+        LogUtils.d(TAG, "Request in upload queue - " + requestBean.getModuleTag() +
+                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
+                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
         mRequestManager.setUploadRequest(requestBean, getUploadListener(processCallback), getResponseListener(requestCallback));
 
     }
@@ -301,7 +354,8 @@ public class HttpRequestManager {
             @Override
             public void onSucceed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onSucceed in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     httpRequestBean = mLoadingRequestMap.remove(callBack.getKey());
@@ -320,7 +374,8 @@ public class HttpRequestManager {
             @Override
             public void onFailed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onFailed in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     if (mErrorRequestMap == null) {
@@ -348,9 +403,6 @@ public class HttpRequestManager {
 
             @Override
             public void onFinish(int what) {
-                LogUtils.d(TAG, "Response onFinish in string queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
-                // 用于清除被cancel的网络请求
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     mLoadingRequestMap.remove(callBack.getKey());
                 }
@@ -364,7 +416,8 @@ public class HttpRequestManager {
             @Override
             public void onDownloadError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onDownloadError in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- exception : " + exception.toString());
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
@@ -383,7 +436,10 @@ public class HttpRequestManager {
             @Override
             public void onStart(int what, boolean isResume, long rangeSize, long allCount) {
                 LogUtils.d(TAG, "Response onStart in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- isResume : " + isResume +
+                        " \r\n- rangeSize : " + rangeSize +
+                        " \r\n- allCount : " + allCount);
                 callBack.onStart(what, isResume, rangeSize, allCount);
             }
 
@@ -395,7 +451,8 @@ public class HttpRequestManager {
             @Override
             public void onFinish(int what, String filePath) {
                 LogUtils.d(TAG, "Response onFinish in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- filePath : " + filePath);
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
                     mLoadingRequestMap.remove(callBack.getKey());
                 }
@@ -441,7 +498,8 @@ public class HttpRequestManager {
             @Override
             public void onError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onError in upload queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
+                        " \r\n- exception : " + exception.toString());
                 if (!callBack.onError(what, exception)) {
                     defaultDeduceErrorResponse(exception);
                 }

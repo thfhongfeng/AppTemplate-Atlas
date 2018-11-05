@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@mipmap/login_bg_table"
+            android:layout_marginBottom="@dimen/dp_20"
             android:orientation="vertical"
             android:padding="@dimen/dp_15">
 
@@ -143,8 +144,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100" />
 </LinearLayout>

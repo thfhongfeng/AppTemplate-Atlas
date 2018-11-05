@@ -7,6 +7,7 @@ import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.manager.LoginManager;
 import com.pine.tool.util.RegexUtils;
+import com.pine.tool.util.SecurityUtils;
 
 /**
  * Created by tanghongfeng on 2018/9/12
@@ -36,7 +37,7 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
             getUi().showLoginResultToast(getContext().getString(R.string.login_mobile_incorrect_format));
             return;
         }
-        LoginManager.login(mobile, pwd, new LoginManager.Callback() {
+        LoginManager.login(mobile, SecurityUtils.generateMD5(pwd), new LoginManager.Callback() {
             @Override
             public void onLoginResponse(boolean isSuccess, String msg) {
                 if (isUiAlive()) {

@@ -33,7 +33,19 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".map.baidu.ui.BaiduMapActivity"
+            android:name=".component.image_selector.ui.ImageSelectActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <activity
+            android:name=".component.image_selector.ui.ImageDisplayActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <activity
+            android:name=".component.map.baidu.ui.BaiduMapActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>

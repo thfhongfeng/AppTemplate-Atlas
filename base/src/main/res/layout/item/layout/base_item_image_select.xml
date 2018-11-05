@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_120"
+    android:layout_height="@dimen/dp_120">
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_120"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/base_ic_default_image" />
+
+    <Button
+        android:id="@+id/check"
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dp_4"
+        android:background="@drawable/base_selector_check" />
+
+</RelativeLayout>

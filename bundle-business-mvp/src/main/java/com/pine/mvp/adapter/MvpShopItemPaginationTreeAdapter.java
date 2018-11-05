@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pine.base.image.ImageLoaderManager;
+import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BasePaginationTreeListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
@@ -26,17 +26,18 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdapter {
+public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdapter<MvpShopAndProductEntity> {
     public static final int HOME_SHOP_VIEW_HOLDER = 1;
     public static final int HOME_SHOP_PRODUCT_VIEW_HOLDER = 2;
 
     @Override
-    public List<BaseListAdapterItemEntity<? extends Object>> parseTreeData(List<? extends Object> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+    public List<BaseListAdapterItemEntity<MvpShopAndProductEntity>> parseTreeData(List<MvpShopAndProductEntity> data,
+                                                                                  boolean reset) {
+        List<BaseListAdapterItemEntity<MvpShopAndProductEntity>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {
-                MvpShopAndProductEntity entity = (MvpShopAndProductEntity) data.get(i);
+                MvpShopAndProductEntity entity = data.get(i);
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(entity);
                 adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_VIEW_HOLDER);

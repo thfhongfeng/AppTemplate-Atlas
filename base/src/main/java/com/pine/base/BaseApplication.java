@@ -10,8 +10,8 @@ import com.pine.base.access.UiAccessManager;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.access.executor.UiAccessLoginExecutor;
 import com.pine.base.access.executor.UiAccessVipLevelExecutor;
+import com.pine.base.component.share.manager.ShareManager;
 import com.pine.base.http.HttpRequestManager;
-import com.pine.base.share.manager.ShareManager;
 import com.pine.tool.util.LogUtils;
 
 /**

@@ -23,12 +23,11 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<BaseListViewHolder> {
+public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
-    protected List<BaseListAdapterItemEntity<? extends Object>> mData = null;
+    protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
-    private boolean mIsTreeList;
 
     public BaseNoPaginationListAdapter(int defaultItemViewType) {
         mDefaultItemViewType = defaultItemViewType;
@@ -65,7 +64,7 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
 
     @Override
     public int getItemCount() {
-        if (mIsInitState) {
+        if (mIsInitState()) {
             return 0;
         }
         if (mData == null || mData.size() == 0) {
@@ -75,7 +74,7 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
     }
 
     @Override
-    public final int getItemViewType(int position) {
+    public int getItemViewType(int position) {
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
@@ -83,14 +82,30 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
         return itemEntity.getPropertyEntity().getItemViewType();
     }
 
-    public final void setData(List<? extends Object> data) {
+    public final void setData(List<T> data) {
         mIsInitState = false;
-        mData = parseData(data);
+        mData = parseData(data, true);
         notifyDataSetChanged();
     }
 
-    protected List<BaseListAdapterItemEntity<? extends Object>> parseData(List<? extends Object> data) {
-        List<BaseListAdapterItemEntity<? extends Object>> adapterData = new ArrayList<>();
+    public final void addData(List<T> newData) {
+        List<BaseListAdapterItemEntity<T>> parseData = parseData(newData, false);
+        if (parseData == null || parseData.size() == 0) {
+            return;
+        }
+        if (mData == null) {
+            mIsInitState = false;
+            mData = parseData;
+        } else {
+            for (int i = 0; i < parseData.size(); i++) {
+                mData.add(parseData.get(i));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    protected List<BaseListAdapterItemEntity<T>> parseData(List<T> data, boolean reset) {
+        List<BaseListAdapterItemEntity<T>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {
@@ -103,8 +118,16 @@ public abstract class BaseNoPaginationListAdapter extends RecyclerView.Adapter<B
         return adapterData;
     }
 
+    public List<BaseListAdapterItemEntity<T>> getAdapterData() {
+        return mData;
+    }
+
     public int getDefaultItemViewType() {
         return mDefaultItemViewType;
+    }
+
+    public final boolean mIsInitState() {
+        return mIsInitState;
     }
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);

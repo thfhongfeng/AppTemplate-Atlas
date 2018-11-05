@@ -23,7 +23,7 @@ public class LoginManager {
     private final static String TAG = LogUtils.makeLogTag(LoginManager.class);
     public static int mReLoginCount = 0;
     public static volatile boolean mIsReLoginProcessing = false;
-    private static String mLoginUrl = LoginUrlConstants.Query_Login_Info;
+    private static String mLoginUrl = LoginUrlConstants.Login_User;
     private static Map<String, HttpRequestBean> mNoAuthRequestMap = new HashMap<String, HttpRequestBean>();
 
     // 登录

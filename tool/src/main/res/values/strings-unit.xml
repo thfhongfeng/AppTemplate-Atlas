@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unit_year">年</string>
+    <string name="unit_month">月</string>
+    <string name="unit_day1">日</string>
+    <string name="unit_day2">天</string>
+    <string name="unit_hour">小时</string>
+    <string name="unit_hour1">时</string>
+    <string name="unit_minute">分钟</string>
+    <string name="unit_minute1">分</string>
+    <string name="unit_second">秒</string>
+    <string name="unit_millisecond">毫秒</string>
+    <string name="unit_microsecond">微秒</string>
+    <string name="unit_nanosecond">毫微秒</string>
+    <string name="unit_nanosecond1">纳秒</string>
+
+    <string name="unit_half_metre">里</string>
+    <string name="unit_metre">米</string>
+    <string name="unit_kilometre">千米</string>
+    <string name="unit_kilometre1">公里</string>
+</resources>
