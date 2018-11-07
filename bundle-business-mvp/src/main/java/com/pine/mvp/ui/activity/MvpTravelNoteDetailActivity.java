@@ -24,18 +24,6 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     private RecyclerView recycle_view;
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
-        titleTv.setText(R.string.mvp_travel_note_detail_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
-    }
-
-    @Override
     protected MvpTravelNoteDetailPresenter createPresenter() {
         return new MvpTravelNoteDetailPresenter();
     }
@@ -46,9 +34,13 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
         swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout);
         recycle_view = findViewById(R.id.recycle_view);
+    }
+
+    @Override
+    protected void initOnCreate() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -74,15 +66,24 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
             }
         });
         recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
-    }
 
-    @Override
-    protected void onAllAccessRestrictionReleased() {
         swipe_refresh_layout.post(new Runnable() {
             @Override
             public void run() {
                 swipe_refresh_layout.setRefreshing(true);
                 onRefresh();
+            }
+        });
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+        titleTv.setText(R.string.mvp_travel_note_detail_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
             }
         });
     }

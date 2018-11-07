@@ -21,6 +21,16 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
         }
     }
 
+    protected abstract P createPresenter();
+
+    @Override
+    protected final boolean parseArgumentsOnCreateView() {
+        if (mPresenter != null) {
+            return mPresenter.parseIntentDataOnCreate();
+        }
+        return false;
+    }
+
     @CallSuper
     @Override
     protected void afterInitOnCreateView() {
@@ -74,13 +84,4 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     public Activity getContextActivity() {
         return getActivity();
     }
-
-    @Override
-    protected final void initDataOnCreateView() {
-        if (mPresenter != null) {
-            mPresenter.initDataOnUiCreate();
-        }
-    }
-
-    protected abstract P createPresenter();
 }

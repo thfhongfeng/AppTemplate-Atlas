@@ -26,7 +26,7 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
     }
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         mId = getStringExtra("id", "");
         return false;
     }

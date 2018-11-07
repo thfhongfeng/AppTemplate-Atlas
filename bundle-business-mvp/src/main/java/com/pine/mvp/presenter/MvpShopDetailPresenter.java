@@ -28,7 +28,7 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
     }
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         mId = getStringExtra("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();

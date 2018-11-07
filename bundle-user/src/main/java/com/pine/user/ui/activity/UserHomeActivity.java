@@ -26,12 +26,12 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
 
     }
 
     @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
 
     }
 }

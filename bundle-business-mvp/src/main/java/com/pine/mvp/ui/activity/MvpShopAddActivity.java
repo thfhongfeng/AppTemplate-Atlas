@@ -37,7 +37,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,31 +64,12 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
-        titleTv.setText(R.string.mvp_shop_add_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
-        menuBtnTv.setText(R.string.mvp_shop_add_confirm_menu);
-        menuBtnTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddShopBtnClicked();
-            }
-        });
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_shop_add;
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
         nested_scroll_view = findViewById(R.id.nested_scroll_view);
         type_ll = findViewById(R.id.type_ll);
         online_date_ll = findViewById(R.id.online_date_ll);
@@ -106,7 +86,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
     }
 
     @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
         type_ll.setOnClickListener(this);
         online_date_ll.setOnClickListener(this);
         contact_tv.setOnClickListener(this);
@@ -114,7 +94,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         address_marker_tv.setOnClickListener(this);
 
         photo_iuv.init(this, MvpUrlConstants.Add_HomeShopPhoto,
-                makeUploadParams(), true,
+                mPresenter.makeUploadParams(), true,
                 new ImageUploadView.UploadResponseAdapter() {
                     @Override
                     public String getRemoteUrl(JSONObject response) {
@@ -136,16 +116,23 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         photo_iuv.setCropEnable();
     }
 
-    private HashMap<String, String> makeUploadParams() {
-        HashMap<String, String> params = new HashMap<>();
-        // Test code begin
-        params.put("bizType", "10");
-        params.put("orderNum", "100");
-        params.put("orderNum", "100");
-        params.put("descr", "desc");
-        params.put("fileType", "1");
-        // Test code end
-        return params;
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
+        titleTv.setText(R.string.mvp_shop_add_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
+        menuBtnTv.setText(R.string.mvp_shop_add_confirm_menu);
+        menuBtnTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddShopBtnClicked();
+            }
+        });
     }
 
     @Override
@@ -163,6 +150,18 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
             mProvinceSelectDialog.dismiss();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_BAIDU_MAP) {
+            if (resultCode == RESULT_OK) {
+                address_marker_tv.setText(DecimalUtils.format(data.getDoubleExtra("latitude", 0d), 6) + "," +
+                        DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6));
+            }
+        }
+        photo_iuv.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -240,18 +239,6 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
                     MapSdkManager.MapType.MAP_TYPE_NORMAL, latLng[0], latLng[1]),
                     REQUEST_CODE_BAIDU_MAP);
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_BAIDU_MAP) {
-            if (resultCode == RESULT_OK) {
-                address_marker_tv.setText(DecimalUtils.format(data.getDoubleExtra("latitude", 0d), 6) + "," +
-                        DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6));
-            }
-        }
-        photo_iuv.onActivityResult(requestCode, resultCode, data);
     }
 
     private void onAddShopBtnClicked() {

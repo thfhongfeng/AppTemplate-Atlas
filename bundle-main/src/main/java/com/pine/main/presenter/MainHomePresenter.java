@@ -28,7 +28,7 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
     }
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         return false;
     }
 

@@ -40,13 +40,14 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
     }
 
     @Override
-    protected void initViewOnCreateView(View layout) {
+    protected void findViewOnCreateView(View layout) {
         refresh_btn_tv = layout.findViewById(R.id.refresh_btn_tv);
-        initWebView(layout);
+        web_view = layout.findViewById(R.id.web_view);
     }
 
     @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreateView() {
+        initWebView();
         initEvent();
         loadUrl();
     }
@@ -55,8 +56,7 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
         refresh_btn_tv.setOnClickListener(this);
     }
 
-    private void initWebView(View view) {
-        web_view = view.findViewById(R.id.web_view);
+    private void initWebView() {
         WebViewUtils.setupCommonWebView(web_view, new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {

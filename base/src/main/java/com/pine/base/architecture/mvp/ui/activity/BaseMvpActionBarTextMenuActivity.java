@@ -21,10 +21,12 @@ public abstract class BaseMvpActionBarTextMenuActivity<V extends IBaseContract.U
         }
     }
 
+    protected abstract P createPresenter();
+
     @Override
-    protected final boolean initDataOnCreate() {
+    protected final boolean parseIntentDataOnCreate() {
         if (mPresenter != null) {
-            return mPresenter.initDataOnUiCreate();
+            return mPresenter.parseIntentDataOnCreate();
         }
         return false;
     }
@@ -83,6 +85,4 @@ public abstract class BaseMvpActionBarTextMenuActivity<V extends IBaseContract.U
     public Activity getContextActivity() {
         return this;
     }
-
-    protected abstract P createPresenter();
 }

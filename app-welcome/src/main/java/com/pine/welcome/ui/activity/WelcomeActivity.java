@@ -19,12 +19,12 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
 
     }
 
     @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
         mPresenter.goMainHomeActivity();
     }
 }

@@ -28,6 +28,23 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
+    protected int getActivityLayoutResId() {
+        return R.layout.login_activity_login;
+    }
+
+    @Override
+    protected void findViewOnCreate() {
+        mobile_et = findViewById(R.id.mobile_et);
+        password_et = findViewById(R.id.password_et);
+        login_btn_tv = findViewById(R.id.login_btn_tv);
+    }
+
+    @Override
+    protected void initOnCreate() {
+        login_btn_tv.setOnClickListener(this);
+    }
+
+    @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.login_login_title);
         goBackIv.setOnClickListener(new View.OnClickListener() {
@@ -37,23 +54,6 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
                 return;
             }
         });
-    }
-
-    @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.login_activity_login;
-    }
-
-    @Override
-    protected void initViewOnCreate() {
-        mobile_et = findViewById(R.id.mobile_et);
-        password_et = findViewById(R.id.password_et);
-        login_btn_tv = findViewById(R.id.login_btn_tv);
-    }
-
-    @Override
-    protected void onAllAccessRestrictionReleased() {
-        login_btn_tv.setOnClickListener(this);
     }
 
     @Override

@@ -23,25 +23,13 @@ public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivit
     private RecyclerView recycle_view;
 
     @Override
-    protected int getMenuBarLayoutResId() {
-        return R.layout.mvp_travel_note_list_menu;
-    }
-
-    @Override
     protected MvpTravelNoteListPresenter createPresenter() {
         return new MvpTravelNoteListPresenter();
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer) {
-        titleTv.setText(R.string.mvp_travel_note_list_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
+    protected int getMenuBarLayoutResId() {
+        return R.layout.mvp_travel_note_list_menu;
     }
 
     @Override
@@ -50,9 +38,13 @@ public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivit
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
         swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout);
         recycle_view = findViewById(R.id.recycle_view);
+    }
+
+    @Override
+    protected void initOnCreate() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -78,15 +70,24 @@ public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivit
             }
         });
         recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
-    }
 
-    @Override
-    protected void onAllAccessRestrictionReleased() {
         swipe_refresh_layout.post(new Runnable() {
             @Override
             public void run() {
                 swipe_refresh_layout.setRefreshing(true);
                 onRefresh();
+            }
+        });
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer) {
+        titleTv.setText(R.string.mvp_travel_note_list_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
             }
         });
     }

@@ -70,7 +70,15 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected boolean initDataOnCreate() {
+    protected void findViewOnCreate() {
+        grid_view = findViewById(R.id.grid_view);
+        folder_select_btn = findViewById(R.id.folder_select_btn);
+        preview_btn = findViewById(R.id.preview_btn);
+        list_view = findViewById(R.id.list_view);
+    }
+
+    @Override
+    protected boolean parseIntentDataOnCreate() {
         if (getIntent().hasExtra(ImageSelector.INTENT_MAX_SELECTED_COUNT)) {
             mMaxImgCount = getIntent().getIntExtra(ImageSelector.INTENT_MAX_SELECTED_COUNT, DEFAULT_MAX_IMAGE_COUNT);
         }
@@ -87,35 +95,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected void initViewOnCreate() {
-        grid_view = findViewById(R.id.grid_view);
-        folder_select_btn = findViewById(R.id.folder_select_btn);
-        preview_btn = findViewById(R.id.preview_btn);
-        list_view = findViewById(R.id.list_view);
-    }
-
-    @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-        mMenuBtnTv = menuBtnTv;
-        titleTv.setText(R.string.base_image_select);
-        menuBtnTv.setText(getString(R.string.base_done) + "0/" + mMaxImgCount);
-        menuBtnTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goBack();
-            }
-        });
-    }
-
-    @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
         mContentResolver = getContentResolver();
         mAllImageFolder = new ImageFolderBean();
         mAllImageFolder.setDir("/" + getString(R.string.base_all_image));
@@ -167,6 +147,26 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
             }
         });
         getThumbnail();
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        mMenuBtnTv = menuBtnTv;
+        titleTv.setText(R.string.base_image_select);
+        menuBtnTv.setText(getString(R.string.base_done) + "0/" + mMaxImgCount);
+        menuBtnTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
     }
 
     @Override

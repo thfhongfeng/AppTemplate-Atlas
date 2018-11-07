@@ -34,10 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity
         beforeInitOnCreate();
         setContentView();
 
-        if (initDataOnCreate()) {
-            return;
-        }
-        initViewOnCreate();
+        findViewOnCreate();
 
         mUiAccessReady = true;
         if (!UiAccessManager.getInstance().checkCanAccess(this)) {
@@ -83,27 +80,28 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     /**
-     * onCreate中初始化数据
-     *
-     * @return false:没有消耗掉(不中断onCreate后续流程)
-     * true:消耗掉了(中断onCreate后续流程)
-     */
-    protected abstract boolean initDataOnCreate();
-
-    /**
      * onCreate中初始化View
      */
-    protected abstract void initViewOnCreate();
+    protected abstract void findViewOnCreate();
+
+    private void onAllAccessRestrictionReleased() {
+        if (!parseIntentDataOnCreate()) {
+            initOnCreate();
+            afterInitOnCreate();
+        }
+    }
+
+    protected abstract boolean parseIntentDataOnCreate();
+
+    /**
+     * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
+     */
+    protected abstract void initOnCreate();
 
     /**
      * onCreate中结束初始化
      */
     protected abstract void afterInitOnCreate();
-
-    private void allAccessRestrictionReleased() {
-        onAllAccessRestrictionReleased();
-        afterInitOnCreate();
-    }
 
     @CallSuper
     @Override
@@ -173,12 +171,7 @@ public abstract class BaseActivity extends AppCompatActivity
         if (!onAllAccessRestrictionReleasedMethodCalled &&
                 mUiAccessReady && mPermissionReady) {
             onAllAccessRestrictionReleasedMethodCalled = true;
-            allAccessRestrictionReleased();
+            onAllAccessRestrictionReleased();
         }
     }
-
-    /**
-     * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
-     */
-    protected abstract void onAllAccessRestrictionReleased();
 }

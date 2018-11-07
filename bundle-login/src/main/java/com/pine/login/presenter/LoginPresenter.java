@@ -16,7 +16,7 @@ import com.pine.tool.util.SecurityUtils;
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         return false;
     }
 

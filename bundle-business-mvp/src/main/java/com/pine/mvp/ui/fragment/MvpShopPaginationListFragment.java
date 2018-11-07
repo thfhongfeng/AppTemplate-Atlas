@@ -31,9 +31,13 @@ public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPagin
     }
 
     @Override
-    protected void initViewOnCreateView(View layout) {
+    protected void findViewOnCreateView(View layout) {
         swipe_refresh_layout = layout.findViewById(R.id.swipe_refresh_layout);
         recycle_view = layout.findViewById(R.id.recycle_view);
+    }
+
+    @Override
+    protected void initOnCreateView() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -59,10 +63,7 @@ public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPagin
             }
         });
         recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
-    }
 
-    @Override
-    protected void onAllAccessRestrictionReleased() {
         swipe_refresh_layout.post(new Runnable() {
             @Override
             public void run() {

@@ -28,6 +28,19 @@ public abstract class BaseNoActionBarActivity extends BaseActivity {
         initImmersionBar();
     }
 
+    private void initImmersionBar() {
+        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
+        mImmersionBar = ImmersionBar.with(this)
+                .statusBarDarkFont(true, 1f)
+                .statusBarView(R.id.base_status_bar_view)
+                .keyboardEnable(true);
+        mImmersionBar.init();
+    }
+
+    protected int getStatusBarBgResId() {
+        return R.mipmap.base_iv_status_bar_bg;
+    }
+
     @CallSuper
     @Override
     protected void afterInitOnCreate() {
@@ -52,20 +65,8 @@ public abstract class BaseNoActionBarActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    private void initImmersionBar() {
-        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
-        mImmersionBar = ImmersionBar.with(this)
-                .statusBarDarkFont(true, 1f)
-                .statusBarView(R.id.base_status_bar_view)
-                .keyboardEnable(true);
-        mImmersionBar.init();
-    }
-
     public void setKeyboardListener(OnKeyboardListener listener) {
         mImmersionBar.setOnKeyboardListener(listener);
     }
 
-    protected int getStatusBarBgResId() {
-        return R.mipmap.base_iv_status_bar_bg;
-    }
 }

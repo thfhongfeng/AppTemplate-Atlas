@@ -22,6 +22,10 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     private TextView go_shop_h5_btn_tv;
     private TextView go_travel_note_list_btn_tv;
 
+    @Override
+    protected MvpShopDetailPresenter createPresenter() {
+        return new MvpShopDetailPresenter();
+    }
 
     @Override
     protected int getActivityLayoutResId() {
@@ -29,29 +33,15 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     }
 
     @Override
-    protected MvpShopDetailPresenter createPresenter() {
-        return new MvpShopDetailPresenter();
-    }
-
-    @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
-        titleTv.setText(R.string.mvp_shop_detail_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
-    }
-
-    @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
         description_tv = findViewById(R.id.description_tv);
         go_shop_h5_btn_tv = findViewById(R.id.go_shop_h5_btn_tv);
         go_travel_note_list_btn_tv = findViewById(R.id.go_travel_note_list_btn_tv);
-
         swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout);
+    }
+
+    @Override
+    protected void initOnCreate() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -63,10 +53,7 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
             swipe_refresh_layout.setRefreshing(true);
         }
         swipe_refresh_layout.setEnabled(true);
-    }
 
-    @Override
-    protected void onAllAccessRestrictionReleased() {
         swipe_refresh_layout.post(new Runnable() {
             @Override
             public void run() {
@@ -80,6 +67,18 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     private void initEvent() {
         go_shop_h5_btn_tv.setOnClickListener(this);
         go_travel_note_list_btn_tv.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+        titleTv.setText(R.string.mvp_shop_detail_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
     }
 
     @Override

@@ -38,27 +38,6 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     private TextView refresh_btn_tv;
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
-        titleTv.setText(R.string.mvp_web_view_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
-        menuBtnIv.setImageResource(R.mipmap.base_ic_share);
-
-        mShareDialog = ShareManager.getInstance().createShareDialog(this, mPresenter.getShareBeanList());
-        menuBtnIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShareDialog.show();
-            }
-        });
-    }
-
-    @Override
     protected MvpWebViewPresenter createPresenter() {
         return new MvpWebViewPresenter();
     }
@@ -69,14 +48,14 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     }
 
     @Override
-    protected void initViewOnCreate() {
+    protected void findViewOnCreate() {
         refresh_btn_tv = findViewById(R.id.refresh_btn_tv);
-        initWebView();
     }
 
     @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
         initEvent();
+        initWebView();
     }
 
     private void initEvent() {
@@ -134,6 +113,27 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
                 // 修复建议使用： handler.cancel() 停止加载问题页面。
                 handler.proceed();
 //                handler.cancel();
+            }
+        });
+    }
+
+    @Override
+    protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
+        titleTv.setText(R.string.mvp_web_view_title);
+        goBackIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
+        menuBtnIv.setImageResource(R.mipmap.base_ic_share);
+
+        mShareDialog = ShareManager.getInstance().createShareDialog(this, mPresenter.getShareBeanList());
+        menuBtnIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShareDialog.show();
             }
         });
     }

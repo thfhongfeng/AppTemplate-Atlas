@@ -54,6 +54,47 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
     };
 
     @Override
+    protected int getActivityLayoutResId() {
+        return R.layout.base_activity_baidu_map;
+    }
+
+    @Override
+    protected void findViewOnCreate() {
+        location_iv = findViewById(R.id.location_iv);
+        map_view = findViewById(R.id.map_view);
+        mBaiduMap = map_view.getMap();
+    }
+
+    @Override
+    protected boolean parseIntentDataOnCreate() {
+        int mapTypeOrdinal = getIntent().getIntExtra("mapTypeOrdinal", 0);
+        switch (MapType.values()[mapTypeOrdinal]) {
+            case MAP_TYPE_NORMAL:
+                mMapType = BaiduMap.MAP_TYPE_NORMAL;
+                break;
+            case MAP_TYPE_SATELLITE:
+                mMapType = BaiduMap.MAP_TYPE_SATELLITE;
+                break;
+            case MAP_TYPE_NONE:
+                mMapType = BaiduMap.MAP_TYPE_NONE;
+                break;
+        }
+        double latitude = getIntent().getDoubleExtra("latitude", -1);
+        double longitude = getIntent().getDoubleExtra("longitude", -1);
+        if (latitude != -1 && latitude != -1) {
+            mInitLatLng = new LatLng(latitude, longitude);
+        }
+        return false;
+    }
+
+    @Override
+    protected void initOnCreate() {
+        location_iv.setOnClickListener(this);
+
+        setupBaiduMap();
+    }
+
+    @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         titleTv.setText(R.string.base_baidu_map_title);
         goBackIv.setOnClickListener(new View.OnClickListener() {
@@ -82,47 +123,6 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
                 }
             }
         });
-    }
-
-    @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.base_activity_baidu_map;
-    }
-
-    @Override
-    protected boolean initDataOnCreate() {
-        int mapTypeOrdinal = getIntent().getIntExtra("mapTypeOrdinal", 0);
-        switch (MapType.values()[mapTypeOrdinal]) {
-            case MAP_TYPE_NORMAL:
-                mMapType = BaiduMap.MAP_TYPE_NORMAL;
-                break;
-            case MAP_TYPE_SATELLITE:
-                mMapType = BaiduMap.MAP_TYPE_SATELLITE;
-                break;
-            case MAP_TYPE_NONE:
-                mMapType = BaiduMap.MAP_TYPE_NONE;
-                break;
-        }
-        double latitude = getIntent().getDoubleExtra("latitude", -1);
-        double longitude = getIntent().getDoubleExtra("longitude", -1);
-        if (latitude != -1 && latitude != -1) {
-            mInitLatLng = new LatLng(latitude, longitude);
-        }
-        return false;
-    }
-
-    @Override
-    protected void initViewOnCreate() {
-        location_iv = findViewById(R.id.location_iv);
-        map_view = findViewById(R.id.map_view);
-        mBaiduMap = map_view.getMap();
-    }
-
-    @Override
-    protected void onAllAccessRestrictionReleased() {
-        location_iv.setOnClickListener(this);
-
-        setupBaiduMap();
     }
 
     private void setupBaiduMap() {

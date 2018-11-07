@@ -23,16 +23,12 @@ public abstract class BaseFragment extends Fragment {
         beforeInitOnCreateView();
         View layout = inflater.inflate(getFragmentLayoutResId(), container, false);
 
-        initDataOnCreateView();
-
-        initViewOnCreateView(layout);
+        findViewOnCreateView(layout);
 
         mUiAccessReady = true;
         if (!UiAccessManager.getInstance().checkCanAccess(this)) {
             mUiAccessReady = false;
         }
-
-        afterInitOnCreateView();
 
         tryOnAllRestrictionReleased();
 
@@ -49,28 +45,30 @@ public abstract class BaseFragment extends Fragment {
     }
 
     /**
-     * onCreateView中初始化数据
-     */
-    protected abstract void initDataOnCreateView();
-
-    /**
      * onCreateView中初始化View
      */
-    protected abstract void initViewOnCreateView(View layout);
+    protected abstract void findViewOnCreateView(View layout);
+
+    private void tryOnAllRestrictionReleased() {
+        if (mUiAccessReady) {
+            if (!parseArgumentsOnCreateView()) {
+                initOnCreateView();
+                afterInitOnCreateView();
+            }
+        }
+    }
+
+    protected abstract boolean parseArgumentsOnCreateView();
+
+    /**
+     * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
+     */
+    protected abstract void initOnCreateView();
 
     /**
      * onCreate中结束初始化
      */
     protected abstract void afterInitOnCreateView();
 
-    private void tryOnAllRestrictionReleased() {
-        if (mUiAccessReady) {
-            onAllAccessRestrictionReleased();
-        }
-    }
 
-    /**
-     * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
-     */
-    protected abstract void onAllAccessRestrictionReleased();
 }

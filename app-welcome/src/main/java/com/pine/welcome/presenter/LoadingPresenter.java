@@ -45,7 +45,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
     }
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         mStartTimeMillis = System.currentTimeMillis();
         return false;
     }

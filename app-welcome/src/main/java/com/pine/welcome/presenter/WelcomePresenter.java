@@ -22,7 +22,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
     }
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         return false;
     }
 

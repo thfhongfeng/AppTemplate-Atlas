@@ -42,6 +42,31 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     }
 
     @Override
+    protected int getActivityLayoutResId() {
+        return R.layout.mvp_activity_home;
+    }
+
+    @Override
+    protected void findViewOnCreate() {
+        view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
+        view_pager = findViewById(R.id.view_pager);
+    }
+
+    @Override
+    protected void initOnCreate() {
+        setupViewPage();
+    }
+
+    private void setupViewPage() {
+        view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
+                new Fragment[]{
+                        new MvpShopPaginationListFragment(), new MvpShopTreeListFragment(),
+                        new MvpShopNoPaginationListFragment(), new MvpWebViewFragment()},
+                new String[]{"PartA", "PartB", "PartC", "PartD"}));
+        view_pager_tab_layout.setupWithViewPager(view_pager);
+    }
+
+    @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
         titleTv.setText(R.string.mvp_home_title);
         goBackIv.setOnClickListener(new View.OnClickListener() {
@@ -58,30 +83,5 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
                 mPresenter.goToAddShopActivity();
             }
         });
-    }
-
-    @Override
-    protected int getActivityLayoutResId() {
-        return R.layout.mvp_activity_home;
-    }
-
-    @Override
-    protected void initViewOnCreate() {
-        view_pager_tab_layout = findViewById(R.id.view_pager_tab_layout);
-        view_pager = findViewById(R.id.view_pager);
-    }
-
-    private void setupViewPage() {
-        view_pager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(),
-                new Fragment[]{
-                        new MvpShopPaginationListFragment(), new MvpShopTreeListFragment(),
-                        new MvpShopNoPaginationListFragment(), new MvpWebViewFragment()},
-                new String[]{"PartA", "PartB", "PartC", "PartD"}));
-        view_pager_tab_layout.setupWithViewPager(view_pager);
-    }
-
-    @Override
-    protected void onAllAccessRestrictionReleased() {
-        setupViewPage();
     }
 }

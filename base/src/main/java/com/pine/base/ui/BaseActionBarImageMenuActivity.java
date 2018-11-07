@@ -39,6 +39,19 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
         initImmersionBar();
     }
 
+    private void initImmersionBar() {
+        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
+        mImmersionBar = ImmersionBar.with(this)
+                .statusBarDarkFont(true, 1f)
+                .statusBarView(R.id.base_status_bar_view)
+                .keyboardEnable(true);
+        mImmersionBar.init();
+    }
+
+    protected int getStatusBarBgResId() {
+        return R.mipmap.base_iv_status_bar_bg;
+    }
+
     @CallSuper
     @Override
     protected void afterInitOnCreate() {
@@ -49,6 +62,24 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),
                 (ImageView) action_bar_ll.findViewById(R.id.menu_iv));
+    }
+
+    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv);
+
+    /**
+     * 获取actionbar类别
+     */
+    protected int getActionBarType() {
+        return mActionBarTag;
+    }
+
+    /**
+     * 设置actionbar类别，需在{@link #beforeInitOnCreate}中设置才有效
+     *
+     * @param tag
+     */
+    protected void setActionBarType(int tag) {
+        mActionBarTag = tag;
     }
 
     @Override
@@ -69,38 +100,7 @@ public abstract class BaseActionBarImageMenuActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    private void initImmersionBar() {
-        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
-        mImmersionBar = ImmersionBar.with(this)
-                .statusBarDarkFont(true, 1f)
-                .statusBarView(R.id.base_status_bar_view)
-                .keyboardEnable(true);
-        mImmersionBar.init();
-    }
-
     public void setKeyboardListener(OnKeyboardListener listener) {
         mImmersionBar.setOnKeyboardListener(listener);
     }
-
-    protected int getStatusBarBgResId() {
-        return R.mipmap.base_iv_status_bar_bg;
-    }
-
-    /**
-     * 获取actionbar类别
-     */
-    protected int getActionBarType() {
-        return mActionBarTag;
-    }
-
-    /**
-     * 设置actionbar类别，需在{@link #beforeInitOnCreate}中设置才有效
-     *
-     * @param tag
-     */
-    protected void setActionBarType(int tag) {
-        mActionBarTag = tag;
-    }
-
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv);
 }

@@ -39,6 +39,10 @@ public abstract class BaseActionBarTextMenuActivity extends BaseActivity {
         initImmersionBar();
     }
 
+    protected int getStatusBarBgResId() {
+        return R.mipmap.base_iv_status_bar_bg;
+    }
+
     @CallSuper
     @Override
     protected void afterInitOnCreate() {
@@ -49,6 +53,24 @@ public abstract class BaseActionBarTextMenuActivity extends BaseActivity {
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title),
                 (TextView) action_bar_ll.findViewById(R.id.menu_tv));
+    }
+
+    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv);
+
+    /**
+     * 获取actionbar类别
+     */
+    protected int getActionBarType() {
+        return mActionBarTag;
+    }
+
+    /**
+     * 设置actionbar类别，需在{@link #beforeInitOnCreate}中设置才有效
+     *
+     * @param tag
+     */
+    protected void setActionBarType(int tag) {
+        mActionBarTag = tag;
     }
 
     @Override
@@ -81,26 +103,4 @@ public abstract class BaseActionBarTextMenuActivity extends BaseActivity {
     public void setKeyboardListener(OnKeyboardListener listener) {
         mImmersionBar.setOnKeyboardListener(listener);
     }
-
-    protected int getStatusBarBgResId() {
-        return R.mipmap.base_iv_status_bar_bg;
-    }
-
-    /**
-     * 获取actionbar类别
-     */
-    protected int getActionBarType() {
-        return mActionBarTag;
-    }
-
-    /**
-     * 设置actionbar类别，需在{@link #beforeInitOnCreate}中设置才有效
-     *
-     * @param tag
-     */
-    protected void setActionBarType(int tag) {
-        mActionBarTag = tag;
-    }
-
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv);
 }

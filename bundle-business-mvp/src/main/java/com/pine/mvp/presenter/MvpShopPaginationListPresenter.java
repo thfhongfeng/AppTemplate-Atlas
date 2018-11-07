@@ -47,7 +47,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
 
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         mId = getStringExtra("id", "");
         return false;
     }

@@ -21,10 +21,12 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
         }
     }
 
+    protected abstract P createPresenter();
+
     @Override
-    protected final boolean initDataOnCreate() {
+    protected final boolean parseIntentDataOnCreate() {
         if (mPresenter != null) {
-            return mPresenter.initDataOnUiCreate();
+            return mPresenter.parseIntentDataOnCreate();
         }
         return false;
     }
@@ -83,6 +85,4 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
     public Activity getContextActivity() {
         return this;
     }
-
-    protected abstract P createPresenter();
 }

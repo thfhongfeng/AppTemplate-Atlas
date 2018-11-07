@@ -16,7 +16,7 @@ public class MvpWebViewPresenter extends BasePresenter<IMvpWebViewContract.Ui>
     private String mH5Url;
 
     @Override
-    public boolean initDataOnUiCreate() {
+    public boolean parseIntentDataOnCreate() {
         mH5Url = getStringExtra("url", MvpUrlConstants.H5_DefaultUrl);
         return false;
     }

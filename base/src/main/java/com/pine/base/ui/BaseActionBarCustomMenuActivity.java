@@ -31,6 +31,19 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
         initImmersionBar();
     }
 
+    private void initImmersionBar() {
+        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
+        mImmersionBar = ImmersionBar.with(this)
+                .statusBarDarkFont(true, 1f)
+                .statusBarView(R.id.base_status_bar_view)
+                .keyboardEnable(true);
+        mImmersionBar.init();
+    }
+
+    protected int getStatusBarBgResId() {
+        return R.mipmap.base_iv_status_bar_bg;
+    }
+
     @CallSuper
     @Override
     protected void afterInitOnCreate() {
@@ -39,6 +52,19 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
         content_layout.setLayoutResource(getMenuBarLayoutResId());
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title), content_layout.inflate());
+    }
+
+    /**
+     * onCreate中获取当前MenuBar的内容布局资源id
+     *
+     * @return MenuBar的内容布局资源id
+     */
+    protected abstract int getMenuBarLayoutResId();
+
+    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
+
+    public void setKeyboardListener(OnKeyboardListener listener) {
+        mImmersionBar.setOnKeyboardListener(listener);
     }
 
     @Override
@@ -58,30 +84,4 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
         }
         super.onDestroy();
     }
-
-    private void initImmersionBar() {
-        findViewById(R.id.base_status_bar_view).setBackgroundResource(getStatusBarBgResId());
-        mImmersionBar = ImmersionBar.with(this)
-                .statusBarDarkFont(true, 1f)
-                .statusBarView(R.id.base_status_bar_view)
-                .keyboardEnable(true);
-        mImmersionBar.init();
-    }
-
-    public void setKeyboardListener(OnKeyboardListener listener) {
-        mImmersionBar.setOnKeyboardListener(listener);
-    }
-
-    protected int getStatusBarBgResId() {
-        return R.mipmap.base_iv_status_bar_bg;
-    }
-
-    /**
-     * onCreate中获取当前MenuBar的内容布局资源id
-     *
-     * @return MenuBar的内容布局资源id
-     */
-    protected abstract int getMenuBarLayoutResId();
-
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
 }

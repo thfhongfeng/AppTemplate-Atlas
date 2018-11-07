@@ -124,7 +124,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
         }
     }
 
-    public abstract boolean initDataOnUiCreate();
+    public abstract boolean parseIntentDataOnCreate();
 
     public abstract void onUiState(int state);
 

@@ -45,7 +45,14 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected boolean initDataOnCreate() {
+    protected void findViewOnCreate() {
+        view_pager = findViewById(R.id.view_pager);
+        choose_tv = findViewById(R.id.choose_tv);
+        check_btn = findViewById(R.id.check_btn);
+    }
+
+    @Override
+    protected boolean parseIntentDataOnCreate() {
         Intent intent = getIntent();
         if (intent.hasExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST)) {
             mImageBeanList = (ArrayList<ImageItemBean>) intent.getSerializableExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST);
@@ -69,14 +76,7 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected void initViewOnCreate() {
-        view_pager = findViewById(R.id.view_pager);
-        choose_tv = findViewById(R.id.choose_tv);
-        check_btn = findViewById(R.id.check_btn);
-    }
-
-    @Override
-    protected void onAllAccessRestrictionReleased() {
+    protected void initOnCreate() {
         mContentResolver = getContentResolver();
         if (mNoImageList) {
             getThumbnail();
