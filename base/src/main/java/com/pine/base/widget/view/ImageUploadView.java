@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,7 +35,9 @@ import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
 import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.tool.util.FileUtils;
 import com.pine.tool.util.LogUtils;
+import com.pine.tool.util.PathUtils;
 
 import org.json.JSONObject;
 
@@ -48,8 +53,10 @@ import java.util.Random;
 
 public class ImageUploadView extends RecyclerView {
     private static final String TAG = LogUtils.makeLogTag(ImageUploadView.class);
-    private final int REQUEST_CODE_SELECT_IMAGE = 10000 + new Random().nextInt(10000);
-    private Context mContext;
+    private final int REQUEST_CODE_CROP = 10000 + new Random().nextInt(10000);
+    private final int REQUEST_CODE_SELECT_IMAGE = REQUEST_CODE_CROP + 1;
+    private Activity mActivity;
+    private boolean mNeedCrop;
     // 最大可上传image数量
     private int mMaxImageCount = 10;
     // RecyclerView列数（一行可容纳image数量）
@@ -71,16 +78,18 @@ public class ImageUploadView extends RecyclerView {
     private FileUploadComponent mFileUploadComponent;
     private boolean mIsInit;
     private UploadResponseAdapter mUploadResultAdapter;
+    private String mCurCropPhotoPath;
+    private List<String> mCropPathList = new ArrayList<>();
+    private int mCropWidth = 360;
+    private int mCropHeight = 360;
 
     public ImageUploadView(Context context) {
         super(context);
-        mContext = context;
         setup();
     }
 
     public ImageUploadView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         int defaultColumnSize = getResources().getDisplayMetrics().widthPixels / getResources().getDimensionPixelOffset(R.dimen.dp_106);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseImageUploadView);
         mMaxImageCount = typedArray.getInt(R.styleable.BaseImageUploadView_baseMaxImageCount, 10);
@@ -91,7 +100,6 @@ public class ImageUploadView extends RecyclerView {
 
     public ImageUploadView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
         int defaultColumnSize = getResources().getDisplayMetrics().widthPixels / getResources().getDimensionPixelOffset(R.dimen.dp_106);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseImageUploadView);
         mMaxImageCount = typedArray.getInt(R.styleable.BaseImageUploadView_baseMaxImageCount, 10);
@@ -106,26 +114,42 @@ public class ImageUploadView extends RecyclerView {
         }
     }
 
-    public void init(@NonNull String uploadUrl, HashMap<String, String> params, boolean editable,
+    public void init(Activity activity, @NonNull String uploadUrl,
+                     HashMap<String, String> params, boolean editable,
                      @NonNull UploadResponseAdapter adapter) {
-        init("", uploadUrl, params, editable, adapter);
+        init(activity, "", uploadUrl, params, editable, adapter);
     }
 
-    public void init(String attachId, @NonNull String uploadUrl, HashMap<String, String> params,
-                     boolean editable, @NonNull UploadResponseAdapter adapter) {
+    public void init(Activity activity, String attachId, @NonNull String uploadUrl,
+                     HashMap<String, String> params, boolean editable,
+                     @NonNull UploadResponseAdapter adapter) {
+        mActivity = activity;
         mAttachId = attachId;
         mUploadImageUrl = uploadUrl;
+        if (TextUtils.isEmpty(mUploadImageUrl)) {
+            throw new IllegalStateException("Upload url should not be empty");
+        }
         mUploadParams = params;
         mUploadResultAdapter = adapter;
         mUploadImageAdapter = new UploadImageAdapter(
                 UploadImageAdapter.UPLOAD_IMAGE_VIEW_HOLDER, editable, mMaxImageCount);
         addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
-        GridLayoutManager layoutManager = new GridLayoutManager(mContext, mColumnSize);
+        GridLayoutManager layoutManager = new GridLayoutManager(mActivity, mColumnSize);
         setLayoutManager(layoutManager);
         setAdapter(mUploadImageAdapter);
         mUploadImageAdapter.setData(null);
         mUploadImageAdapter.notifyDataSetChanged();
         mIsInit = true;
+    }
+
+    public void setCropEnable() {
+        mNeedCrop = true;
+    }
+
+    public void setCropEnable(int cropWidth, int cropHeight) {
+        mNeedCrop = true;
+        mCropWidth = cropWidth;
+        mCropHeight = cropHeight;
     }
 
     public void setMaxImageCount(int maxImageCount) {
@@ -137,48 +161,103 @@ public class ImageUploadView extends RecyclerView {
     }
 
     /**
+     * 打开系统裁剪功能
+     */
+    private void startCropPhoto(String filePath) {
+        String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+        String targetFilePath = PathUtils.getAppFilePath(Environment.DIRECTORY_PICTURES) +
+                File.separator + "crop_" + fileName + "_" + System.currentTimeMillis();
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(Uri.fromFile(new File(filePath)), "image/*");
+        intent.putExtra("crop", true);
+        if (mCropWidth >= mCropHeight) {
+            // 设置x,y的比例，截图方框就按照这个比例来截 若设置为0,0，或者不设置 则自由比例截图
+            intent.putExtra("aspectX", mCropWidth / mCropHeight);
+            intent.putExtra("aspectY", 1);
+        } else {
+            // 设置x,y的比例，截图方框就按照这个比例来截 若设置为0,0，或者不设置 则自由比例截图
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", mCropHeight / mCropWidth);
+        }
+        // 裁剪区的宽和高 其实就是裁剪后的显示区域 若裁剪的比例不是显示的比例，
+        // 则自动压缩图片填满显示区域。若设置为0,0 就不显示。若不设置，则按原始大小显示
+        intent.putExtra("outputX", mCropWidth);
+        intent.putExtra("outputY", mCropHeight);
+        intent.putExtra("scale", true);
+        // true的话直接返回bitmap，可能会很占内存 不建议
+        intent.putExtra("return-data", false);
+        // 上面设为false的时候将MediaStore.EXTRA_OUTPUT即"output"关联一个Uri
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(targetFilePath)));
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        mCurCropPhotoPath = targetFilePath;
+        mCropPathList.add(targetFilePath);
+        mActivity.startActivityForResult(intent, REQUEST_CODE_CROP);
+    }
+
+    /**
      * 打开相册或者照相机选择图片，最多mMaxImageCount张
      */
     private void selectImages() {
-        int existCount = getExistImageCount();
-        if (existCount >= mMaxImageCount) {
-            Toast.makeText(mContext, getResources().getString(R.string.base_upload_image_count_exceeding_msg,
+        int validCount = getValidImageList().size();
+        if (validCount >= mMaxImageCount) {
+            Toast.makeText(mActivity, getResources().getString(R.string.base_upload_image_count_exceeding_msg,
                     mMaxImageCount), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mContext instanceof Activity) {
-            ImageSelector.create()
-                    .count(mMaxImageCount - existCount)
-                    .start((Activity) mContext, REQUEST_CODE_SELECT_IMAGE);
-        }
+        ImageSelector.create()
+                .count(mNeedCrop ? 1 : mMaxImageCount - validCount)
+                .start(mActivity, REQUEST_CODE_SELECT_IMAGE);
     }
 
     private void showImages(int position) {
         ImageViewer.create()
-                .origin(getAllUploadImageList())
+                .origin(getImageShowList())
                 .position(position)
-                .start((Activity) mContext);
+                .start(mActivity);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
+        if (requestCode == REQUEST_CODE_CROP) {
             if (resultCode == Activity.RESULT_OK) {
-                List<String> selectedPicture = data.getStringArrayListExtra(
+                List<String> newSelectList = new ArrayList<>();
+                newSelectList.add(mCurCropPhotoPath);
+                uploadImageOneByOne(newSelectList, false);
+            }
+        } else if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                List<String> selectedList = data.getStringArrayListExtra(
                         ImageSelector.INTENT_SELECTED_IMAGE_LIST);
-                if (TextUtils.isEmpty(mUploadImageUrl)) {
+                List<String> existLocalList = getValidImageLocalList();
+                List<String> newSelectList = new ArrayList<>();
+                for (String url : selectedList) {
+                    if (!existLocalList.contains(url)) {
+                        newSelectList.add(url);
+                    }
+                }
+                if (newSelectList.size() < 1) {
                     return;
                 }
-                uploadImageOneByOne(selectedPicture, false);
+                if (mNeedCrop) {
+                    startCropPhoto(newSelectList.get(0));
+                } else {
+                    uploadImageOneByOne(newSelectList, false);
+                }
             }
         }
     }
 
     private void uploadImageOneByOne(final List<String> list, final boolean hasCropped) {
-        if (list == null || !mIsInit) {
+        if (!mIsInit) {
             throw new IllegalStateException("You should call init() method before use this view");
         }
+        if (list == null || list.size() < 1) {
+            return;
+        }
         if (mHandlerThread == null) {
-            mHandlerThread = new HandlerThread("MallAddPhotoFragment");
+            mHandlerThread = new HandlerThread("ImageUploadView");
             mHandlerThread.start();
             mThreadHandler = new Handler(mHandlerThread.getLooper());
         }
@@ -213,7 +292,7 @@ public class ImageUploadView extends RecyclerView {
                 if (!isAttachedToWindow()) {
                     return;
                 }
-                mFileUploadComponent = new FileUploadComponent(mContext, mMaxImageSize);
+                mFileUploadComponent = new FileUploadComponent(mActivity, mMaxImageSize);
                 mFileUploadComponent.start(uploadBeanList, new FileUploadComponent.FileUploadCallback() {
 
                     @Override
@@ -308,24 +387,57 @@ public class ImageUploadView extends RecyclerView {
         mUploadImageAdapter.notifyDataSetChanged();
     }
 
-    public int getExistImageCount() {
-        return mUploadImageAdapter.getExistImageCount();
+    public ArrayList<String> getImageShowList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
+        return mUploadImageAdapter.getImageList(states);
     }
 
-    public ArrayList<String> getAllUploadImageList() {
-        return mUploadImageAdapter.getAllUploadImageList();
+    public ArrayList<String> getValidImageList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
+        return mUploadImageAdapter.getImageList(states);
     }
 
-    public String getAllUploadImageJoinString(String joinStr) {
-        return mUploadImageAdapter.getAllUploadImageJoinString(joinStr);
+    public ArrayList<String> getValidImageLocalList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
+        return mUploadImageAdapter.getImageLocalList(states);
     }
 
-    public List<String> getNewUploadImageList() {
-        return mUploadImageAdapter.getNewUploadImageList();
+    public ArrayList<String> getUploadedImageLocalList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        return mUploadImageAdapter.getImageLocalList(states);
     }
 
-    public String getNewUploadImageJoinString(String joinStr) {
-        return mUploadImageAdapter.getNewUploadImageJoinString(joinStr);
+    public ArrayList<String> getUploadingImageLocalList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
+        return mUploadImageAdapter.getImageLocalList(states);
+    }
+
+    public ArrayList<String> getUploadedImageRemoteList() {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        return mUploadImageAdapter.getImageRemoteList(states);
+    }
+
+    public String getUploadedImageRemoteString(String joinStr) {
+        List<Integer> states = new ArrayList<>();
+        states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
+        return mUploadImageAdapter.getImageRemoteString(states, joinStr);
+    }
+
+    public List<String> getNewUploadImageRemoteList() {
+        return mUploadImageAdapter.getNewUploadImageRemoteList();
+    }
+
+    public String getNewUploadImageRemoteString(String joinStr) {
+        return mUploadImageAdapter.getNewUploadImageRemoteString(joinStr);
     }
 
     @Override
@@ -340,6 +452,11 @@ public class ImageUploadView extends RecyclerView {
         if (mMainHandler != null) {
             mMainHandler.removeCallbacksAndMessages(null);
             mMainHandler = null;
+        }
+        if (mCropPathList.size() > 0) {
+            for (String path : mCropPathList) {
+                FileUtils.deleteFile(path);
+            }
         }
         super.onDetachedFromWindow();
     }
@@ -380,55 +497,56 @@ public class ImageUploadView extends RecyclerView {
             return adapterData;
         }
 
-        public ArrayList<String> getLocalImageList() {
+        public ArrayList<String> getImageList(List<Integer> states) {
             ArrayList<String> retList = new ArrayList<>();
             for (int i = 0; i < mData.size(); i++) {
                 FileUploadBean bean = mData.get(i).getData();
-                if (bean != null && !TextUtils.isEmpty(bean.getLocalFilePath())) {
+                if (bean != null && states.contains(bean.getUploadState())) {
+                    if (!TextUtils.isEmpty(bean.getLocalFilePath())) {
+                        retList.add(bean.getLocalFilePath());
+                    } else if (!TextUtils.isEmpty(bean.getRemoteFilePath())) {
+                        retList.add(bean.getRemoteFilePath());
+                    }
+                }
+            }
+            return retList;
+        }
+
+        public ArrayList<String> getImageLocalList(List<Integer> states) {
+            ArrayList<String> retList = new ArrayList<>();
+            for (int i = 0; i < mData.size(); i++) {
+                FileUploadBean bean = mData.get(i).getData();
+                if (bean != null && !TextUtils.isEmpty(bean.getLocalFilePath()) &&
+                        states.contains(bean.getUploadState())) {
                     retList.add(bean.getLocalFilePath());
                 }
             }
             return retList;
         }
 
-        public int getExistImageCount() {
-            ArrayList<String> retList = new ArrayList<>();
-            int count = 0;
-            for (int i = 0; i < mData.size(); i++) {
-                FileUploadBean bean = mData.get(i).getData();
-                if (bean != null && (bean.getUploadState() == FileUploadBean.UPLOAD_STATE_SUCCESS ||
-                        bean.getUploadState() == FileUploadBean.UPLOAD_STATE_UPLOADING)) {
-                    count++;
-                }
-            }
-            return count;
+        public String getImageLocalString(List<Integer> states, String joinStr) {
+            List<String> list = getImageLocalList(states);
+            return listJoinToString(list, joinStr);
         }
 
-        public ArrayList<String> getAllUploadImageList() {
+        public ArrayList<String> getImageRemoteList(List<Integer> states) {
             ArrayList<String> retList = new ArrayList<>();
             for (int i = 0; i < mData.size(); i++) {
                 FileUploadBean bean = mData.get(i).getData();
-                if (bean != null && (bean.getUploadState() == FileUploadBean.UPLOAD_STATE_SUCCESS) &&
-                        !TextUtils.isEmpty(bean.getRemoteFilePath())) {
+                if (bean != null && !TextUtils.isEmpty(bean.getRemoteFilePath()) &&
+                        states.contains(bean.getUploadState())) {
                     retList.add(bean.getRemoteFilePath());
                 }
             }
             return retList;
         }
 
-        public String getAllUploadImageJoinString(String joinStr) {
-            List<String> list = getAllUploadImageList();
-            if (list.size() < 1) {
-                return "";
-            }
-            String reStr = list.get(0);
-            for (String str : list) {
-                reStr += joinStr + str;
-            }
-            return reStr;
+        public String getImageRemoteString(List<Integer> states, String joinStr) {
+            List<String> list = getImageRemoteList(states);
+            return listJoinToString(list, joinStr);
         }
 
-        public ArrayList<String> getNewUploadImageList() {
+        public ArrayList<String> getNewUploadImageRemoteList() {
             ArrayList<String> retList = new ArrayList<>();
             for (int i = 0; i < mData.size(); i++) {
                 FileUploadBean bean = mData.get(i).getData();
@@ -440,8 +558,12 @@ public class ImageUploadView extends RecyclerView {
             return retList;
         }
 
-        public String getNewUploadImageJoinString(String joinStr) {
-            List<String> list = getNewUploadImageList();
+        public String getNewUploadImageRemoteString(String joinStr) {
+            List<String> list = getNewUploadImageRemoteList();
+            return listJoinToString(list, joinStr);
+        }
+
+        private String listJoinToString(List<String> list, String joinStr) {
             if (list.size() < 1) {
                 return "";
             }
@@ -522,7 +644,7 @@ public class ImageUploadView extends RecyclerView {
                     show_iv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showImages(position);
+                            showImages(mEditable ? position - 1 : position);
                         }
                     });
                     if (mEditable) {
@@ -540,7 +662,7 @@ public class ImageUploadView extends RecyclerView {
                     }
                 } else {
                     show_iv.setImageResource(R.mipmap.base_iv_add_upload_image);// 第一个显示加号图片
-                    int successSize = getAllUploadImageList().size();
+                    int successSize = getUploadedImageRemoteList().size();
                     num_max_tv.setText(successSize + "/" + mMaxImageCount);
                     num_max_tv.setVisibility(VISIBLE);
                     show_iv.setOnClickListener(new View.OnClickListener() {

@@ -8,6 +8,7 @@ import com.pine.base.component.uploader.bean.FileUploadBean;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.base.http.callback.HttpUploadCallback;
+import com.pine.tool.util.FileUtils;
 import com.pine.tool.util.ImageUtils;
 import com.pine.tool.util.LogUtils;
 
@@ -79,6 +80,10 @@ public class FileUploadComponent {
         if (fileBean.getFileType() == TYPE_IMAGE) {
             String targetPath = context.getExternalCacheDir() + File.separator + fileBean.getFileName();
             file = compressImage(fileBean.getLocalFilePath(), targetPath);
+            if (file == null) {
+                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_compress_file_null));
+                return;
+            }
             fileBean.setLocalTempFilePath(file.getPath());
         }
         HashMap<String, String> params = fileBean.getParams();
@@ -157,6 +162,7 @@ public class FileUploadComponent {
     }
 
     private File compressImage(String srcFilePath, String targetFilePath) {
+        FileUtils.deleteFile(targetFilePath);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         ImageUtils.compressBySize(srcFilePath, mMaxFileSize, mOutFileWidth, mOutFileHeight, bao);
         File targetFile = new File(targetFilePath);

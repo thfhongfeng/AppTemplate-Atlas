@@ -75,14 +75,10 @@ public class ImageViewer {
             }
             if (mOriginBeanData != null) {
                 intent.putExtra(INTENT_IMAGE_BEAN_LIST, mOriginBeanData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mOriginBeanData.size() ? mCurPosition : 0);
             } else if (mOriginData != null) {
                 intent.putExtra(INTENT_IMAGE_LIST, mOriginData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mOriginData.size() ? mCurPosition : 0);
-            } else {
-                intent.putExtra(INTENT_IMAGE_LIST, mSelectedData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mSelectedData.size() ? mCurPosition : 0);
             }
+            intent.putExtra(INTENT_CUR_POSITION, mCurPosition);
             activity.startActivity(intent);
         }
     }
@@ -97,14 +93,10 @@ public class ImageViewer {
             }
             if (mOriginBeanData != null) {
                 intent.putExtra(INTENT_IMAGE_BEAN_LIST, mOriginBeanData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mOriginBeanData.size() ? mCurPosition : 0);
             } else if (mOriginData != null) {
                 intent.putExtra(INTENT_IMAGE_LIST, mOriginData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mOriginData.size() ? mCurPosition : 0);
-            } else {
-                intent.putExtra(INTENT_IMAGE_LIST, mSelectedData);
-                intent.putExtra(INTENT_CUR_POSITION, mCurPosition < mSelectedData.size() ? mCurPosition : 0);
             }
+            intent.putExtra(INTENT_CUR_POSITION, mCurPosition);
             activity.startActivityForResult(intent, requestCode);
         }
     }

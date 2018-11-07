@@ -83,7 +83,6 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
         if (mDirPaths == null) {
             mDirPaths = new ArrayList<>();
         }
-        mContentResolver = getContentResolver();
         return false;
     }
 
@@ -117,6 +116,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
 
     @Override
     protected void onAllAccessRestrictionReleased() {
+        mContentResolver = getContentResolver();
         mAllImageFolder = new ImageFolderBean();
         mAllImageFolder.setDir("/" + getString(R.string.base_all_image));
         mCurrentImageFolder = mAllImageFolder;
@@ -418,7 +418,6 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
                     @Override
                     public void onClick(View v) {
                         ImageViewer.create()
-                                .originBean(allImages)
                                 .count(mMaxImgCount)
                                 .canSelect(true)
                                 .selected(mSelectedImageList)

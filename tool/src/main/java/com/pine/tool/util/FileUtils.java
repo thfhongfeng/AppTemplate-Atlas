@@ -382,19 +382,6 @@ public class FileUtils {
      * @return 文件删除成功返回true，否则返回false
      */
     public static boolean deleteFile(File file) {
-        return file.delete();
-    }
-
-    /**
-     * @param path 路径
-     * @return 是否删除成功
-     */
-    public static boolean deleteFile(String path) {
-        if (TextUtils.isEmpty(path)) {
-            return true;
-        }
-
-        File file = new File(path);
         if (!file.exists()) {
             return true;
         }
@@ -412,6 +399,19 @@ public class FileUtils {
             }
         }
         return file.delete();
+    }
+
+    /**
+     * @param path 路径
+     * @return 是否删除成功
+     */
+    public static boolean deleteFile(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return true;
+        }
+
+        File file = new File(path);
+        return deleteFile(file);
     }
 
     /**

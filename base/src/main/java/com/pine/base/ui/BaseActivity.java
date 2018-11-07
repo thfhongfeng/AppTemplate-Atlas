@@ -61,8 +61,6 @@ public abstract class BaseActivity extends AppCompatActivity
             }
         }
 
-        afterInitOnCreate();
-
         tryOnAllRestrictionReleased();
     }
 
@@ -101,6 +99,11 @@ public abstract class BaseActivity extends AppCompatActivity
      * onCreate中结束初始化
      */
     protected abstract void afterInitOnCreate();
+
+    private void allAccessRestrictionReleased() {
+        onAllAccessRestrictionReleased();
+        afterInitOnCreate();
+    }
 
     @CallSuper
     @Override
@@ -170,7 +173,7 @@ public abstract class BaseActivity extends AppCompatActivity
         if (!onAllAccessRestrictionReleasedMethodCalled &&
                 mUiAccessReady && mPermissionReady) {
             onAllAccessRestrictionReleasedMethodCalled = true;
-            onAllAccessRestrictionReleased();
+            allAccessRestrictionReleased();
         }
     }
 

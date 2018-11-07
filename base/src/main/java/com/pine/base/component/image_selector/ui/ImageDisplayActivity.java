@@ -1,7 +1,10 @@
 package com.pine.base.component.image_selector.ui;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -33,6 +36,8 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     private int mCurPosition;
     private int mMaxImgCount;
     private boolean mCanSelected;
+    private boolean mNoImageList;
+    private ContentResolver mContentResolver;
 
     @Override
     protected int getActivityLayoutResId() {
@@ -50,12 +55,7 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
                 mImageBeanList.add(new ImageItemBean(each));
             }
         } else {
-            finish();
-            return true;
-        }
-        if (mImageBeanList == null || mImageBeanList.size() < 1) {
-            finish();
-            return true;
+            mNoImageList = true;
         }
         mCurPosition = intent.getIntExtra(ImageViewer.INTENT_CUR_POSITION, 0);
         mSelectedImageList = intent.getStringArrayListExtra(ImageViewer.INTENT_SELECTED_IMAGE_LIST);
@@ -77,6 +77,15 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
 
     @Override
     protected void onAllAccessRestrictionReleased() {
+        mContentResolver = getContentResolver();
+        if (mNoImageList) {
+            getThumbnail();
+        }
+        if (mImageBeanList.size() < 1) {
+            finish();
+            return;
+        }
+        mCurPosition = mCurPosition < mImageBeanList.size() ? mCurPosition : 0;
         mAdapter = new ViewPagerAdapter();
         view_pager.setAdapter(mAdapter);
         view_pager.setCurrentItem(mCurPosition);
@@ -97,6 +106,7 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+
         if (mCanSelected) {
             check_btn.setSelected(mSelectedImageList.contains(mImageBeanList.get(mCurPosition).path));
             check_btn.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +171,25 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
         data.putExtra(ImageViewer.INTENT_RETURN_TYPE, -1);
         setResult(Activity.RESULT_OK, data);
         finish();
+    }
+
+    /**
+     * 得到缩略图
+     */
+    private void getThumbnail() {
+        Cursor mCursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.ImageColumns.DATA}, "", null,
+                MediaStore.MediaColumns.DATE_ADDED + " DESC");
+        if (mCursor.moveToFirst()) {
+            mImageBeanList = new ArrayList<>();
+            int _date = mCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            do {
+                // 获取图片的路径
+                String path = mCursor.getString(_date);
+                mImageBeanList.add(new ImageItemBean(path));
+            } while (mCursor.moveToNext());
+        }
+        mCursor.close();
     }
 
     private void updateDoneButton() {

@@ -24,7 +24,7 @@ import com.pine.tool.widget.ViewPagerTabLayout;
  */
 
 @PermissionsAnnotation(Permissions = {Manifest.permission.READ_CONTACTS,
-        Manifest.permission.ACCESS_FINE_LOCATION})
+        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE})
 public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeContract.Ui, MvpHomePresenter>
         implements IMvpHomeContract.Ui {
     private ViewPagerTabLayout view_pager_tab_layout;

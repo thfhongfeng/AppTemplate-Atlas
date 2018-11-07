@@ -113,7 +113,8 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         address_tv.setOnClickListener(this);
         address_marker_tv.setOnClickListener(this);
 
-        photo_iuv.init(MvpUrlConstants.Add_HomeShopPhoto, makeUploadParams(), true,
+        photo_iuv.init(this, MvpUrlConstants.Add_HomeShopPhoto,
+                makeUploadParams(), true,
                 new ImageUploadView.UploadResponseAdapter() {
                     @Override
                     public String getRemoteUrl(JSONObject response) {
@@ -132,6 +133,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
                         // Test code end
                     }
                 });
+        photo_iuv.setCropEnable();
     }
 
     private HashMap<String, String> makeUploadParams() {
