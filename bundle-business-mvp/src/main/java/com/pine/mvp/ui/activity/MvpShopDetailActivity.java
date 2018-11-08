@@ -106,7 +106,7 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
             return;
         }
         if (processing) {
-            if (swipe_refresh_layout.isRefreshing()) {
+            if (!swipe_refresh_layout.isRefreshing()) {
                 swipe_refresh_layout.setRefreshing(processing);
             }
         } else {

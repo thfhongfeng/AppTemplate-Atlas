@@ -41,7 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@PermissionsAnnotation(Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE})
+@PermissionsAnnotation(Permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE})
 public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     public static final int DEFAULT_MAX_IMAGE_COUNT = 5;
     private static final int TAKE_PICTURE = 520;
@@ -418,6 +418,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
                     @Override
                     public void onClick(View v) {
                         ImageViewer.create()
+                                .originBean(allImages)
                                 .count(mMaxImgCount)
                                 .canSelect(true)
                                 .selected(mSelectedImageList)

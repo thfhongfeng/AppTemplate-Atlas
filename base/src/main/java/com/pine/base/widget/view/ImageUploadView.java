@@ -387,46 +387,46 @@ public class ImageUploadView extends RecyclerView {
         mUploadImageAdapter.notifyDataSetChanged();
     }
 
-    public ArrayList<String> getImageShowList() {
+    private ArrayList<String> getImageShowList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
         return mUploadImageAdapter.getImageList(states);
     }
 
-    public ArrayList<String> getValidImageList() {
+    private ArrayList<String> getValidImageList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
         return mUploadImageAdapter.getImageList(states);
     }
 
-    public ArrayList<String> getValidImageLocalList() {
+    private ArrayList<String> getValidImageLocalList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
         return mUploadImageAdapter.getImageLocalList(states);
     }
 
-    public ArrayList<String> getUploadedImageLocalList() {
+    private ArrayList<String> getUploadedImageLocalList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         return mUploadImageAdapter.getImageLocalList(states);
     }
 
-    public ArrayList<String> getUploadingImageLocalList() {
+    private ArrayList<String> getUploadingImageLocalList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_UPLOADING);
         return mUploadImageAdapter.getImageLocalList(states);
     }
 
-    public ArrayList<String> getUploadedImageRemoteList() {
+    private ArrayList<String> getUploadedImageRemoteList() {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         return mUploadImageAdapter.getImageRemoteList(states);
     }
 
-    public String getUploadedImageRemoteString(String joinStr) {
+    private String getUploadedImageRemoteString(String joinStr) {
         List<Integer> states = new ArrayList<>();
         states.add(FileUploadBean.UPLOAD_STATE_SUCCESS);
         return mUploadImageAdapter.getImageRemoteString(states, joinStr);

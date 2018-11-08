@@ -75,7 +75,7 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
             return;
         }
         if (processing) {
-            if (swipe_refresh_layout.isRefreshing()) {
+            if (!swipe_refresh_layout.isRefreshing()) {
                 swipe_refresh_layout.setRefreshing(processing);
             }
         } else {

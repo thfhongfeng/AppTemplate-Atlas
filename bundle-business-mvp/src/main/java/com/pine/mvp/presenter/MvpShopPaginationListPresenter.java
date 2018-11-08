@@ -10,7 +10,7 @@ import com.pine.base.component.map.MapSdkManager;
 import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
-import com.pine.mvp.model.MvpHomeShopModel;
+import com.pine.mvp.model.MvpShopModel;
 import com.pine.tool.util.GPSUtils;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPaginationContract.Ui>
         implements IMvpShopPaginationContract.Presenter {
     private String mId;
-    private MvpHomeShopModel mModel;
+    private MvpShopModel mModel;
     private MvpShopItemPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
@@ -42,7 +42,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
     };
 
     public MvpShopPaginationListPresenter() {
-        mModel = new MvpHomeShopModel();
+        mModel = new MvpShopModel();
     }
 
 

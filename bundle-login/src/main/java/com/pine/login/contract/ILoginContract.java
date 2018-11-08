@@ -1,5 +1,8 @@
 package com.pine.login.contract;
 
+import android.support.annotation.NonNull;
+
+import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 
 /**
@@ -8,11 +11,11 @@ import com.pine.base.architecture.mvp.contract.IBaseContract;
 
 public interface ILoginContract {
     interface Ui extends IBaseContract.Ui {
-        void showLoginResultToast(String msg);
+        @NonNull
+        InputParamBean getUserMobileParam(String key);
 
-        String getUserMobile();
-
-        String getUserPassword();
+        @NonNull
+        InputParamBean getUserPasswordParam(String key);
     }
 
     interface Presenter extends IBaseContract.Presenter {

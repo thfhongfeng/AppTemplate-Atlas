@@ -56,11 +56,9 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST)) {
             mImageBeanList = (ArrayList<ImageItemBean>) intent.getSerializableExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST);
-        } else if (intent.hasExtra(ImageViewer.INTENT_IMAGE_LIST)) {
-            mImageBeanList = new ArrayList<>();
-            for (String each : intent.getStringArrayListExtra(ImageViewer.INTENT_IMAGE_LIST)) {
-                mImageBeanList.add(new ImageItemBean(each));
-            }
+        } else if (ImageViewer.mBigOriginBeanData != null) {
+            mImageBeanList = ImageViewer.mBigOriginBeanData;
+            ImageViewer.mBigOriginBeanData = null;
         } else {
             mNoImageList = true;
         }
@@ -163,6 +161,12 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
         } else {
             menuBtnTv.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        ImageViewer.mBigOriginBeanData = null;
+        super.onDestroy();
     }
 
     private void goComplete() {

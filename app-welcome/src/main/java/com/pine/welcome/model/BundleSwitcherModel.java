@@ -32,26 +32,22 @@ public class BundleSwitcherModel {
         HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
     }
 
-    private HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {
+    private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_REQUEST_QUERY_BUNDLE_SWITCHER == what) {
                     // Test code begin
-                    String res = "{success:true,code:200,message:'',data:" +
-                            "[{bundleKey:'login_bundle', open:true},{bundleKey:'main_bundle', open:true}," +
-                            "{bundleKey:'user_bundle', open:true},{bundleKey:'business_mvc_bundle', open:true}," +
-                            "{bundleKey:'business_mvp_bundle', open:true}]}";
-                    try {
-                        jsonObject = new JSONObject(res);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    jsonObject = getBundleSwitcherData();
                     // Test code end
-                    ArrayList<BundleSwitcherEntity> list = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA),
-                            new TypeToken<ArrayList<BundleSwitcherEntity>>() {
-                            }.getType());
-                    callback.onResponse(list);
+                    if (jsonObject.optBoolean(WelcomeConstants.SUCCESS)) {
+                        T retData = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA),
+                                new TypeToken<ArrayList<BundleSwitcherEntity>>() {
+                                }.getType());
+                        callback.onResponse(retData);
+                    } else {
+                        callback.onFail(new Exception(jsonObject.optString("message")));
+                    }
                 }
             }
 
@@ -61,4 +57,19 @@ public class BundleSwitcherModel {
             }
         };
     }
+
+    // Test code begin
+    private JSONObject getBundleSwitcherData() {
+        String res = "{success:true,code:200,message:'',data:" +
+                "[{bundleKey:'login_bundle', open:true},{bundleKey:'main_bundle', open:true}," +
+                "{bundleKey:'user_bundle', open:true},{bundleKey:'business_mvc_bundle', open:true}," +
+                "{bundleKey:'business_mvp_bundle', open:true}]}";
+        try {
+            return new JSONObject(res);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONObject();
+    }
+    // Test code end
 }

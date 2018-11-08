@@ -7,7 +7,7 @@ import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopDetailContract;
-import com.pine.mvp.model.MvpHomeShopModel;
+import com.pine.mvp.model.MvpShopModel;
 import com.pine.mvp.ui.activity.MvpTravelNoteListActivity;
 import com.pine.mvp.ui.activity.MvpWebViewActivity;
 
@@ -20,11 +20,11 @@ import java.util.HashMap;
 public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract.Ui>
         implements IMvpShopDetailContract.Presenter {
     private String mId;
-    private MvpHomeShopModel mModel;
+    private MvpShopModel mModel;
     private boolean mIsLoadProcessing;
 
     public MvpShopDetailPresenter() {
-        mModel = new MvpHomeShopModel();
+        mModel = new MvpShopModel();
     }
 
     @Override

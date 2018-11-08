@@ -3,6 +3,7 @@ package com.pine.welcome.model;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
@@ -30,25 +31,21 @@ public class VersionModel {
         HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
     }
 
-    private HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<VersionEntity> callback) {
+    private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_QUERY_VERSION_INFO == what) {
                     // Test code begin
-                    String res = "{success:true,code:200,message:'',data:" +
-                            "{package:'com.pine.template', 'versionCode':2," +
-                            "versionName:'1.0.2',minSupportedVersion:1," +
-                            "force:false, fileName:'pine_app_template-V1.0.2-release.apk', " +
-                            "path:'https://yanyangtian.purang.com/download/bsd_purang.apk'}}";
-                    try {
-                        jsonObject = new JSONObject(res);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    jsonObject = getUpdateVersionData();
                     // Test code end
-                    VersionEntity versionEntity = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA), VersionEntity.class);
-                    callback.onResponse(versionEntity);
+                    if (jsonObject.optBoolean(WelcomeConstants.SUCCESS)) {
+                        T retData = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA), new TypeToken<VersionEntity>() {
+                        }.getType());
+                        callback.onResponse(retData);
+                    } else {
+                        callback.onFail(new Exception(jsonObject.optString("message")));
+                    }
                 }
             }
 
@@ -58,4 +55,20 @@ public class VersionModel {
             }
         };
     }
+
+    // Test code begin
+    private JSONObject getUpdateVersionData() {
+        String res = "{success:true,code:200,message:'',data:" +
+                "{package:'com.pine.template', 'versionCode':2," +
+                "versionName:'1.0.2',minSupportedVersion:1," +
+                "force:false, fileName:'pine_app_template-V1.0.2-release.apk', " +
+                "path:'https://yanyangtian.purang.com/download/bsd_purang.apk'}}";
+        try {
+            return new JSONObject(res);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONObject();
+    }
+    // Test code end
 }

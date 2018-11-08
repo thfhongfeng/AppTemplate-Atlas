@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
@@ -121,10 +120,5 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
         if (mUpdateProgressDialog != null) {
             mUpdateProgressDialog.dismiss();
         }
-    }
-
-    @Override
-    public void showVersionUpdateToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

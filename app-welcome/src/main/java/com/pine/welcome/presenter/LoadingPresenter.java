@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
@@ -113,7 +114,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             public void onDownloadCancel() {
                 LogUtils.d(TAG, "onDownloadCancel");
                 if (isUiAlive()) {
-                    getUi().showVersionUpdateToast(getContext().getString(R.string.wel_version_update_cancel));
+                    Toast.makeText(getContext(), R.string.wel_version_update_cancel, Toast.LENGTH_SHORT).show();
                     getUi().dismissVersionUpdateProgressDialog();
                     autoLogin();
                 }
@@ -130,7 +131,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                     } else {
                         msg = getContext().getString(R.string.wel_version_update_fail);
                     }
-                    getUi().showVersionUpdateToast(msg);
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     getUi().dismissVersionUpdateProgressDialog();
                     autoLogin();
                 }
@@ -233,7 +234,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
         } else {
-            getUi().showVersionUpdateToast(getContext().getString(R.string.wel_version_update_fail));
+            Toast.makeText(getContext(), R.string.wel_version_update_fail, Toast.LENGTH_SHORT).show();
             autoLogin();
         }
         finishUi();

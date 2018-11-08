@@ -1,12 +1,13 @@
 package com.pine.login.presenter;
 
-import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.login.LoginConstants;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.manager.LoginManager;
-import com.pine.tool.util.RegexUtils;
 import com.pine.tool.util.SecurityUtils;
 
 /**
@@ -27,22 +28,19 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
 
     @Override
     public void login() {
-        String mobile = getUi().getUserMobile();
-        String pwd = getUi().getUserPassword();
-        if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(pwd)) {
-            getUi().showLoginResultToast(getContext().getString(R.string.login_input_empty_msg));
+        InputParamBean mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
+        InputParamBean pwdBean = getUi().getUserMobileParam(LoginConstants.LOGIN_PASSWORD);
+        if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||
+                pwdBean.checkIsEmpty(R.string.login_input_empty_msg) ||
+                !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {
             return;
         }
-        if (!RegexUtils.isMobilePhoneNumber(mobile)) {
-            getUi().showLoginResultToast(getContext().getString(R.string.login_mobile_incorrect_format));
-            return;
-        }
-        LoginManager.login(mobile, SecurityUtils.generateMD5(pwd), new LoginManager.Callback() {
+        LoginManager.login(mobileBean.getValue(), SecurityUtils.generateMD5(pwdBean.getValue()), new LoginManager.Callback() {
             @Override
             public void onLoginResponse(boolean isSuccess, String msg) {
                 if (isUiAlive()) {
                     if (!isSuccess) {
-                        getUi().showLoginResultToast(getContext().getString(R.string.login_login_fail));
+                        Toast.makeText(getContext(), R.string.login_login_fail, Toast.LENGTH_SHORT).show();
                     } else {
                         finishUi();
                     }

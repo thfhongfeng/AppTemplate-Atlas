@@ -15,8 +15,6 @@ public interface ILoadingContract {
         void updateVersionUpdateProgressDialog(int progress);
 
         void dismissVersionUpdateProgressDialog();
-
-        void showVersionUpdateToast(String msg);
     }
 
     interface Presenter extends IBaseContract.Presenter {

@@ -88,7 +88,7 @@ public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListCon
             return;
         }
         if (processing) {
-            if (swipe_refresh_layout.isRefreshing()) {
+            if (!swipe_refresh_layout.isRefreshing()) {
                 swipe_refresh_layout.setRefreshing(processing);
             }
         } else {

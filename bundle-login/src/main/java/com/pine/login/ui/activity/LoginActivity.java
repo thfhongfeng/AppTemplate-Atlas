@@ -4,8 +4,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
@@ -65,17 +65,12 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
-    public void showLoginResultToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    public InputParamBean getUserMobileParam(String key) {
+        return new InputParamBean(this, null, key, mobile_et.getText().toString(), mobile_et);
     }
 
     @Override
-    public String getUserMobile() {
-        return mobile_et.getText().toString();
-    }
-
-    @Override
-    public String getUserPassword() {
-        return password_et.getText().toString();
+    public InputParamBean getUserPasswordParam(String key) {
+        return new InputParamBean(this, null, key, password_et.getText().toString(), password_et);
     }
 }

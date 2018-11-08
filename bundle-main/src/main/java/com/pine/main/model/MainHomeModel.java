@@ -32,25 +32,21 @@ public class MainHomeModel {
         HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
-    private HttpJsonCallback handleHttpResponse(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
+    private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
                 if (HTTP_QUERY_BUSINESS_LIST == what) {
-                    ArrayList<MainHomeGridViewEntity> retList = new ArrayList<>();
                     // Test code begin
-                    String res = "{success:true,code:200,message:'',data:" +
-                            "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
-                            "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]}";
-                    try {
-                        jsonObject = new JSONObject(res);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    jsonObject = getBusinessListData();
                     // Test code end
-                    retList = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
-                    }.getType());
-                    callback.onResponse(retList);
+                    if (jsonObject.optBoolean(MainConstants.SUCCESS)) {
+                        T retData = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
+                        }.getType());
+                        callback.onResponse(retData);
+                    } else {
+                        callback.onFail(new Exception(jsonObject.optString("message")));
+                    }
                 }
             }
 
@@ -60,4 +56,18 @@ public class MainHomeModel {
             }
         };
     }
+
+    // Test code begin
+    private JSONObject getBusinessListData() {
+        String res = "{success:true,code:200,message:'',data:" +
+                "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
+                "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]}";
+        try {
+            return new JSONObject(res);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONObject();
+    }
+    // Test code end
 }

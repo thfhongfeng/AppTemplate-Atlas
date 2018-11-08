@@ -189,7 +189,7 @@ public class ProvinceSelectDialog extends Dialog {
                         String cityName = mCityListMap.get(provinceName).get(curCityIndex);
                         String districtName = mDistrictListMap.get(cityName).get(curDistrictIndex);
                         dialogSelect.onSelected(provinceName, cityName, districtName,
-                                mZipCodeMap.get(districtName));
+                                mZipCodeMap.get(provinceName + cityName + districtName));
                     }
                 }
             });

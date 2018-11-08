@@ -1,9 +1,9 @@
 package com.pine.mvp.ui.activity;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,14 +11,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pine.base.BaseConstants;
 import com.pine.base.access.UiAccessAnnotation;
 import com.pine.base.access.UiAccessType;
+import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
 import com.pine.base.component.map.MapSdkManager;
-import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
@@ -27,11 +26,9 @@ import com.pine.base.widget.dialog.SelectItemDialog;
 import com.pine.base.widget.view.ImageUploadView;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
-import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopAddContract;
 import com.pine.mvp.presenter.MvpShopAddPresenter;
 import com.pine.tool.util.DecimalUtils;
-import com.pine.tool.util.ViewActionUtils;
 
 import org.json.JSONObject;
 
@@ -43,11 +40,11 @@ import java.util.List;
  * Created by tanghongfeng on 2018/10/23
  */
 
-@PermissionsAnnotation(Permissions = {Manifest.permission.CAMERA})
 @UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, Args = {""})
 public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpShopAddContract.Ui, MvpShopAddPresenter>
         implements IMvpShopAddContract.Ui, View.OnClickListener {
     private final int REQUEST_CODE_BAIDU_MAP = 1;
+    private SwipeRefreshLayout swipe_refresh_layout;
     private NestedScrollView nested_scroll_view;
     private LinearLayout type_ll, online_date_ll;
     private EditText name_et, address_detail_et, description_et, remark_et;
@@ -70,18 +67,19 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
 
     @Override
     protected void findViewOnCreate() {
+        swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout);
         nested_scroll_view = findViewById(R.id.nested_scroll_view);
         type_ll = findViewById(R.id.type_ll);
         online_date_ll = findViewById(R.id.online_date_ll);
         name_et = findViewById(R.id.name_et);
-        address_detail_et = findViewById(R.id.address_detail_et);
-        description_et = findViewById(R.id.description_et);
-        remark_et = findViewById(R.id.remark_et);
         type_tv = findViewById(R.id.type_tv);
         online_date_tv = findViewById(R.id.online_date_tv);
         contact_tv = findViewById(R.id.contact_tv);
         address_tv = findViewById(R.id.address_tv);
         address_marker_tv = findViewById(R.id.address_marker_tv);
+        address_detail_et = findViewById(R.id.address_detail_et);
+        description_et = findViewById(R.id.description_et);
+        remark_et = findViewById(R.id.remark_et);
         photo_iuv = findViewById(R.id.photo_iuv);
     }
 
@@ -93,7 +91,14 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         address_tv.setOnClickListener(this);
         address_marker_tv.setOnClickListener(this);
 
-        photo_iuv.init(this, MvpUrlConstants.Add_HomeShopPhoto,
+        swipe_refresh_layout.setColorSchemeResources(
+                R.color.red,
+                R.color.yellow,
+                R.color.green
+        );
+        swipe_refresh_layout.setEnabled(false);
+
+        photo_iuv.init(this, MvpUrlConstants.Add_ShopPhoto,
                 mPresenter.makeUploadParams(), true,
                 new ImageUploadView.UploadResponseAdapter() {
                     @Override
@@ -242,52 +247,92 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
     }
 
     private void onAddShopBtnClicked() {
-        MvpShopDetailEntity entity = new MvpShopDetailEntity();
-        String name = name_et.getText().toString();
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, R.string.mvp_shop_add_name_need_msg, Toast.LENGTH_SHORT).show();
-            ViewActionUtils.scrollToTargetView(this, nested_scroll_view, name_et);
+        mPresenter.addShop();
+    }
+
+    @Override
+    public void setSwipeRefreshLayoutRefresh(boolean processing) {
+        if (swipe_refresh_layout == null) {
             return;
         }
-        entity.setName(name);
-
-        String typeName = type_tv.getText().toString();
-        if (TextUtils.isEmpty(typeName)) {
-            Toast.makeText(this, R.string.mvp_shop_add_type_need_msg, Toast.LENGTH_SHORT).show();
-            ViewActionUtils.scrollToTargetView(this, nested_scroll_view, type_tv);
-            return;
+        if (processing) {
+            if (!swipe_refresh_layout.isRefreshing()) {
+                swipe_refresh_layout.setRefreshing(processing);
+            }
+        } else {
+            swipe_refresh_layout.setRefreshing(processing);
         }
-        entity.setTypeName(typeName);
-        entity.setType(type_tv.getTag().toString());
+    }
 
-        String onlineDate = online_date_tv.getText().toString();
-        if (TextUtils.isEmpty(onlineDate)) {
-            Toast.makeText(this, R.string.mvp_shop_add_online_date_need_msg, Toast.LENGTH_SHORT).show();
-            ViewActionUtils.scrollToTargetView(this, nested_scroll_view, online_date_tv);
-            return;
-        }
-        entity.setOnlineDate(onlineDate);
+    @Override
+    public InputParamBean getShopNameParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, name_et.getText().toString(), name_et);
+    }
 
-        String mobile = contact_tv.getText().toString();
-        if (TextUtils.isEmpty(mobile)) {
-            Toast.makeText(this, R.string.mvp_shop_add_contact_need_msg, Toast.LENGTH_SHORT).show();
-            ViewActionUtils.scrollToTargetView(this, nested_scroll_view, contact_tv);
-            return;
-        }
-        entity.setMobile(mobile);
+    @Override
+    public InputParamBean getShopTypeParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, type_tv.getTag() == null ? "" : type_tv.getTag().toString(), type_tv);
+    }
 
-        String address = address_tv.getText().toString();
-        if (TextUtils.isEmpty(address)) {
-            Toast.makeText(this, R.string.mvp_shop_add_address_need_msg, Toast.LENGTH_SHORT).show();
-            ViewActionUtils.scrollToTargetView(this, nested_scroll_view, address_tv);
-            return;
-        }
-        entity.setAddress(address);
-        entity.setAddressZipCode(address_tv.getTag().toString());
+    @Override
+    public InputParamBean getShopTypeNameParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, type_tv.getText().toString(), type_tv);
+    }
 
-        entity.setDescription(description_et.getText().toString());
-        entity.setRemark(remark_et.getText().toString());
+    @Override
+    public InputParamBean getShopOnlineDateParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, online_date_tv.getText().toString(), online_date_tv);
+    }
 
-        mPresenter.addShop(entity);
+    @Override
+    public InputParamBean getShopContactMobileParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, contact_tv.getText().toString(), contact_tv);
+    }
+
+    @Override
+    public InputParamBean getShopLocationParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, address_marker_tv.getText().toString(), address_marker_tv);
+    }
+
+    @Override
+    public InputParamBean getShopAddressParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, address_tv.getText().toString(), address_tv);
+    }
+
+    @Override
+    public InputParamBean getShopAddressZipCodeParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, address_tv.getTag() == null ? "" : address_tv.getTag().toString(), address_tv);
+    }
+
+    @Override
+    public InputParamBean getShopDetailAddressParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, address_detail_et.getText().toString(), address_detail_et);
+    }
+
+    @Override
+    public InputParamBean getShopDescriptionParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, description_et.getText().toString(), description_et);
+    }
+
+    @Override
+    public InputParamBean getShopRemarkParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, remark_et.getText().toString(), remark_et);
+    }
+
+    @Override
+    public InputParamBean getShopImagesParam(String key) {
+        return new InputParamBean(this, nested_scroll_view,
+                key, photo_iuv.getNewUploadImageRemoteString(","), photo_iuv);
     }
 }
