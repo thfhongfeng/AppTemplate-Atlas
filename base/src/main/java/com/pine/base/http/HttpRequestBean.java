@@ -13,6 +13,8 @@ import java.util.Map;
  */
 
 public class HttpRequestBean {
+    // 该callback对应的http请求的key
+    private String key;
     private String url;
     private HttpRequestMethod requestMethod;
     private Map<String, String> params;
@@ -42,6 +44,11 @@ public class HttpRequestBean {
     public HttpRequestBean(int what, HttpAbstractBaseCallback callBack) {
         this.what = what;
         this.callBack = callBack;
+        this.key = hashCode() + "_ " + what;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getUrl() {

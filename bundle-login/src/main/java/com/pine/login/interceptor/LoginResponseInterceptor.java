@@ -19,9 +19,9 @@ public class LoginResponseInterceptor implements IHttpResponseInterceptor {
     public boolean onIntercept(int what, HttpRequestBean requestBean, HttpResponse response) {
         if (response.getResponseCode() == ResponseCode.NOT_LOGIN) { // 拦截401错误
             if (LoginManager.getNoAuthRequestMap() != null &&
-                    !LoginManager.getNoAuthRequestMap().containsKey(requestBean.getCallBack().getKey()) &&
+                    !LoginManager.getNoAuthRequestMap().containsKey(requestBean.getKey()) &&
                     !(requestBean.getCallBack() instanceof LoginCallback)) {
-                LoginManager.getNoAuthRequestMap().put(requestBean.getCallBack().getKey(), requestBean);
+                LoginManager.getNoAuthRequestMap().put(requestBean.getKey(), requestBean);
             }
             if (!LoginManager.mIsReLoginProcessing) {
                 BaseApplication.setLogin(false);
@@ -48,7 +48,8 @@ public class LoginResponseInterceptor implements IHttpResponseInterceptor {
             }
         }
         if (IHttpRequestManager.ActionType.RETRY_AFTER_RE_LOGIN == requestBean.getActionType()) {
-            if (LoginManager.getNoAuthRequestMap() != null && LoginManager.getNoAuthRequestMap().containsKey(requestBean.getCallBack().getKey())) {
+            if (LoginManager.getNoAuthRequestMap() != null &&
+                    LoginManager.getNoAuthRequestMap().containsKey(requestBean.getKey())) {
                 LoginManager.getNoAuthRequestMap().remove(requestBean);
             }
         }

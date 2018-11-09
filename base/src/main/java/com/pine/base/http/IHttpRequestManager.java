@@ -3,10 +3,8 @@ package com.pine.base.http;
 import android.content.Context;
 
 import java.net.HttpCookie;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/9/16

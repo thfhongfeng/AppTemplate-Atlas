@@ -167,7 +167,7 @@ public class HttpRequestManager {
                 }
             }
         }
-        mLoadingRequestMap.put(callBack.getKey(), requestBean);
+        mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in string queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
@@ -178,9 +178,9 @@ public class HttpRequestManager {
             for (int i = 1; i < cookies.size(); i++) {
                 cookiesStr += "  " + cookies.get(i).toString();
             }
-            LogUtils.d(TAG, "Cookies:" + cookies.get(0).toString());
+            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
         }
-        mRequestManager.setJsonRequest(requestBean, getResponseListener(callBack));
+        mRequestManager.setJsonRequest(requestBean, getResponseListener(requestBean.getKey(), callBack));
         return true;
     }
 
@@ -266,7 +266,7 @@ public class HttpRequestManager {
                 }
             }
         }
-        mLoadingRequestMap.put(callBack.getKey(), requestBean);
+        mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in download queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
@@ -277,9 +277,9 @@ public class HttpRequestManager {
             for (int i = 1; i < cookies.size(); i++) {
                 cookiesStr += "  " + cookies.get(i).toString();
             }
-            LogUtils.d(TAG, "Cookies:" + cookiesStr);
+            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
         }
-        mRequestManager.setDownloadRequest(requestBean, getDownloadListener(callBack));
+        mRequestManager.setDownloadRequest(requestBean, getDownloadListener(requestBean.getKey(), callBack));
         return true;
     }
 
@@ -367,7 +367,7 @@ public class HttpRequestManager {
                 }
             }
         }
-        mLoadingRequestMap.put(requestCallback.getKey(), requestBean);
+        mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in upload queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
@@ -378,23 +378,22 @@ public class HttpRequestManager {
             for (int i = 1; i < cookies.size(); i++) {
                 cookiesStr += "  " + cookies.get(i).toString();
             }
-            LogUtils.d(TAG, "Cookies:" + cookiesStr);
+            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
         }
-        mRequestManager.setUploadRequest(requestBean, getUploadListener(processCallback), getResponseListener(requestCallback));
+        mRequestManager.setUploadRequest(requestBean, getUploadListener(processCallback),
+                getResponseListener(requestBean.getKey(), requestCallback));
         return true;
-    }
-
-    public static List<HttpCookie> getSessionCookie() {
-        return mRequestManager.getSessionCookie();
     }
 
     /**
      * 标准回调请求
      *
+     * @param requestKey
      * @param callBack
      * @return
      */
-    public static IHttpResponseListener.OnResponseListener getResponseListener(final HttpJsonCallback callBack) {
+    public static IHttpResponseListener.OnResponseListener getResponseListener(final String requestKey,
+                                                                               final HttpJsonCallback callBack) {
         return new IHttpResponseListener.OnResponseListener() {
             @Override
             public void onStart(int what) {
@@ -406,8 +405,8 @@ public class HttpRequestManager {
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
-                    httpRequestBean = mLoadingRequestMap.remove(callBack.getKey());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
+                    httpRequestBean = mLoadingRequestMap.remove(requestKey);
                     httpRequestBean.setResponse(response);
                 }
                 if (mResponseInterceptorList != null) {
@@ -426,15 +425,15 @@ public class HttpRequestManager {
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
                     }
-                    if (mErrorRequestMap.containsKey(callBack.getKey())) {
-                        mErrorRequestMap.remove(callBack.getKey());
+                    if (mErrorRequestMap.containsKey(requestKey)) {
+                        mErrorRequestMap.remove(requestKey);
                     }
-                    mErrorRequestMap.put(callBack.getKey(), mLoadingRequestMap.get(callBack.getKey()));
-                    httpRequestBean = mLoadingRequestMap.remove(callBack.getKey());
+                    mErrorRequestMap.put(requestKey, mLoadingRequestMap.get(requestKey));
+                    httpRequestBean = mLoadingRequestMap.remove(requestKey);
                     httpRequestBean.setResponse(response);
                 }
                 if (mResponseInterceptorList != null) {
@@ -452,30 +451,31 @@ public class HttpRequestManager {
 
             @Override
             public void onFinish(int what) {
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
-                    mLoadingRequestMap.remove(callBack.getKey());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
+                    mLoadingRequestMap.remove(requestKey);
                 }
             }
         };
     }
 
     // 下载callback
-    public static IHttpResponseListener.OnDownloadListener getDownloadListener(final HttpDownloadCallback callBack) {
+    public static IHttpResponseListener.OnDownloadListener getDownloadListener(final String requestKey,
+                                                                               final HttpDownloadCallback callBack) {
         return new IHttpResponseListener.OnDownloadListener() {
             @Override
             public void onDownloadError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onDownloadError in download queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- exception : " + exception.toString());
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
                     }
-                    if (mErrorRequestMap.containsKey(callBack.getKey())) {
-                        mErrorRequestMap.remove(callBack.getKey());
+                    if (mErrorRequestMap.containsKey(requestKey)) {
+                        mErrorRequestMap.remove(requestKey);
                     }
-                    mErrorRequestMap.put(callBack.getKey(), mLoadingRequestMap.get(callBack.getKey()));
-                    mLoadingRequestMap.remove(callBack.getKey());
+                    mErrorRequestMap.put(requestKey, mLoadingRequestMap.get(requestKey));
+                    mLoadingRequestMap.remove(requestKey);
                 }
                 if (!callBack.onError(what, exception)) {
                     defaultDeduceErrorResponse(exception);
@@ -502,8 +502,8 @@ public class HttpRequestManager {
                 LogUtils.d(TAG, "Response onFinish in download queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- filePath : " + filePath);
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
-                    mLoadingRequestMap.remove(callBack.getKey());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
+                    mLoadingRequestMap.remove(requestKey);
                 }
                 callBack.onFinish(what, filePath);
             }
@@ -512,8 +512,8 @@ public class HttpRequestManager {
             public void onCancel(int what) {
                 LogUtils.d(TAG, "Response onCancel in download queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
-                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(callBack.getKey())) {
-                    mLoadingRequestMap.remove(callBack.getKey());
+                if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
+                    mLoadingRequestMap.remove(requestKey);
                 }
                 callBack.onCancel(what);
             }
@@ -558,7 +558,6 @@ public class HttpRequestManager {
 
     private static void defaultDeduceErrorResponse(Exception exception) {
         if (exception instanceof NetworkError) {
-            NetworkError networkError = (NetworkError) exception;
             Toast.makeText(mApplicationContext, mApplicationContext.getString(R.string.base_network_err),
                     Toast.LENGTH_SHORT).show();
         } else {
@@ -579,11 +578,11 @@ public class HttpRequestManager {
         bean.setActionType(ActionType.RETRY_WHEN_ERROR);
         if (bean.getRequestType() == RequestType.UPLOAD) {
             mRequestManager.setUploadRequest(bean, getUploadListener((HttpUploadCallback) bean.getCallBack()),
-                    getResponseListener((HttpJsonCallback) bean.getCallBack()));
+                    getResponseListener(bean.getKey(), (HttpJsonCallback) bean.getCallBack()));
         } else if (bean.getRequestType() == RequestType.DOWNLOAD) {
-            mRequestManager.setDownloadRequest(bean, getDownloadListener((HttpDownloadCallback) bean.getCallBack()));
+            mRequestManager.setDownloadRequest(bean, getDownloadListener(bean.getKey(), (HttpDownloadCallback) bean.getCallBack()));
         } else {
-            mRequestManager.setJsonRequest(bean, getResponseListener((HttpJsonCallback) bean.getCallBack()));
+            mRequestManager.setJsonRequest(bean, getResponseListener(bean.getKey(), (HttpJsonCallback) bean.getCallBack()));
         }
     }
 
@@ -637,11 +636,11 @@ public class HttpRequestManager {
         mRequestManager.setSessionId(sessionId);
     }
 
-    public static void clearCookie() {
-        mRequestManager.clearCookie();
+    public static List<HttpCookie> getSessionCookie() {
+        return mRequestManager.getSessionCookie();
     }
 
-    public static void resetSession() {
-        mRequestManager.setSessionId(null);
+    public static void clearCookie() {
+        mRequestManager.clearCookie();
     }
 }

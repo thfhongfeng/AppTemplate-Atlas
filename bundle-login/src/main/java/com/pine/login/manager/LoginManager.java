@@ -12,6 +12,8 @@ import com.pine.tool.util.LogUtils;
 import com.pine.tool.util.SecurityUtils;
 import com.pine.tool.util.SharePreferenceUtils;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class LoginManager {
     public static volatile boolean mIsReLoginProcessing = false;
     private static String mLoginUrl = LoginUrlConstants.Login;
     private static String mLogoutUrl = LoginUrlConstants.Logout;
+    private static volatile String mMobile;
+    private static volatile String mPassword;
     private static Map<String, HttpRequestBean> mNoAuthRequestMap = new HashMap<String, HttpRequestBean>();
 
     // 登录
@@ -38,14 +42,19 @@ public class LoginManager {
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, securityPwd);
 
+        mMobile = mobile;
+        mPassword = securityPwd;
+
         HttpRequestManager.clearCookie();
         return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
-                LoginCallback.LOGIN_CODE, new LoginCallback(mobile, securityPwd, callback));
+                LoginCallback.LOGIN_CODE, new LoginCallback(callback));
     }
 
     // 退出登录
     public static boolean logout() {
         HttpRequestManager.clearCookie();
+        clearLoginInfo();
+        BaseApplication.setLogin(false);
         return HttpRequestManager.setJsonRequest(mLogoutUrl, new HashMap<String, String>(), TAG,
                 LoginCallback.LOGOUT_CODE, new LoginCallback());
     }
@@ -63,9 +72,13 @@ public class LoginManager {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
+
+        mMobile = mobile;
+        mPassword = password;
+
         HttpRequestManager.clearCookie();
         return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
-                LoginCallback.AUTO_LOGIN_CODE, new LoginCallback(mobile, password, callback));
+                LoginCallback.AUTO_LOGIN_CODE, new LoginCallback(callback));
     }
 
     // 重新登录
@@ -81,11 +94,25 @@ public class LoginManager {
         }
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
+
+        mMobile = mobile;
+        mPassword = password;
+
         HttpRequestManager.clearCookie();
         mReLoginCount++;
         mIsReLoginProcessing = true;
         return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
-                LoginCallback.RE_LOGIN_CODE, new LoginCallback(mobile, password, null));
+                LoginCallback.RE_LOGIN_CODE, new LoginCallback(null));
+    }
+
+    public static void saveLoginInfo(JSONObject jsonObject) {
+        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_MOBILE, mMobile);
+        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
+    }
+
+    public static void clearLoginInfo() {
+        SharePreferenceUtils.cleanCacheKey(LoginConstants.LOGIN_MOBILE);
+        SharePreferenceUtils.cleanCacheKey(LoginConstants.LOGIN_PASSWORD);
     }
 
     public static Map<String, HttpRequestBean> getNoAuthRequestMap() {

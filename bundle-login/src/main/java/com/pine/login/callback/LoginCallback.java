@@ -10,7 +10,6 @@ import com.pine.login.LoginConstants;
 import com.pine.login.manager.LoginManager;
 import com.pine.login.ui.activity.LoginActivity;
 import com.pine.tool.util.AppUtils;
-import com.pine.tool.util.SharePreferenceUtils;
 
 import org.json.JSONObject;
 
@@ -28,17 +27,13 @@ public class LoginCallback extends HttpJsonCallback {
     public static final int LOGOUT_CODE = 2;
     public static final int AUTO_LOGIN_CODE = 3;
     public static final int RE_LOGIN_CODE = 4;
-    private String mMobile;
-    private String mPassword;
     private LoginManager.Callback mCallback;
 
     public LoginCallback() {
 
     }
 
-    public LoginCallback(String mobile, String password, LoginManager.Callback callback) {
-        mMobile = mobile;
-        mPassword = password;
+    public LoginCallback(LoginManager.Callback callback) {
         mCallback = callback;
     }
 
@@ -57,7 +52,7 @@ public class LoginCallback extends HttpJsonCallback {
     @Override
     public void onResponse(int what, JSONObject jsonObject) {
         if (LOGOUT_CODE == what) {
-            clearLoginInfo();
+            LoginManager.clearLoginInfo();
             BaseApplication.setLogin(false);
             return;
         } else {
@@ -71,7 +66,7 @@ public class LoginCallback extends HttpJsonCallback {
                 }
                 return;
             }
-            saveLoginInfo(jsonObject);
+            LoginManager.saveLoginInfo(jsonObject);
             BaseApplication.setLogin(true);
             if (RE_LOGIN_CODE == what) {
                 LoginManager.reloadAllNoAuthRequest();
@@ -92,16 +87,6 @@ public class LoginCallback extends HttpJsonCallback {
             goLoginActivity();
         }
         return false;
-    }
-
-    private void saveLoginInfo(JSONObject jsonObject) {
-        SharePreferenceUtils.cleanCache();
-        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_MOBILE, mMobile);
-        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
-    }
-
-    private void clearLoginInfo() {
-        SharePreferenceUtils.cleanCache();
     }
 
     private void goLoginActivity() {

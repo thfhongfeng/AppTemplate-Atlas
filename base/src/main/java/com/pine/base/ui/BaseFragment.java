@@ -26,7 +26,7 @@ public abstract class BaseFragment extends Fragment {
         findViewOnCreateView(layout);
 
         mUiAccessReady = true;
-        if (!UiAccessManager.getInstance().checkCanAccess(this)) {
+        if (!UiAccessManager.getInstance().checkCanAccess(this, false)) {
             mUiAccessReady = false;
         }
 

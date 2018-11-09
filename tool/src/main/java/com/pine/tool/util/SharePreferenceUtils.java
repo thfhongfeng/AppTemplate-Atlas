@@ -27,6 +27,7 @@ public class SharePreferenceUtils {
         SharedPreferences pref = mApplication.getSharedPreferences(Constants.CACHE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
+        editor.commit();
     }
 
     /**
@@ -41,6 +42,7 @@ public class SharePreferenceUtils {
         SharedPreferences pref = context.getSharedPreferences(Constants.CACHE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
+        editor.commit();
     }
 
     /**
@@ -69,6 +71,7 @@ public class SharePreferenceUtils {
         SharedPreferences pref = mApplication.getSharedPreferences(Constants.CONFIG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
+        editor.commit();
     }
 
     /**
@@ -83,6 +86,7 @@ public class SharePreferenceUtils {
         SharedPreferences pref = context.getSharedPreferences(Constants.CONFIG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
+        editor.commit();
     }
 
     /**

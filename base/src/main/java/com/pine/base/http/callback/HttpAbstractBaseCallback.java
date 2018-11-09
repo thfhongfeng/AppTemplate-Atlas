@@ -5,8 +5,6 @@ package com.pine.base.http.callback;
  */
 
 public abstract class HttpAbstractBaseCallback {
-    // 该callback对应的http请求的key
-    private String key;
     // 该callback对应的http请求标识code
     private int what;
     // 该callback对应的http请求的url
@@ -22,17 +20,12 @@ public abstract class HttpAbstractBaseCallback {
         this.moduleTag = moduleTag;
     }
 
-    public String getKey() {
-        return key;
-    }
-
     public int getWhat() {
         return what;
     }
 
     public void setWhat(int what) {
         this.what = what;
-        this.key = hashCode() + "_ " + what;
     }
 
     public String getUrl() {

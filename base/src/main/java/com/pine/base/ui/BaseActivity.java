@@ -27,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
     private boolean mUiAccessReady, mPermissionReady;
     private boolean onAllAccessRestrictionReleasedMethodCalled;
+    private boolean mPrePause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity
         findViewOnCreate();
 
         mUiAccessReady = true;
-        if (!UiAccessManager.getInstance().checkCanAccess(this)) {
+        if (!UiAccessManager.getInstance().checkCanAccess(this, false)) {
             mUiAccessReady = false;
             finish();
             return;
@@ -102,6 +103,35 @@ public abstract class BaseActivity extends AppCompatActivity
      * onCreate中结束初始化
      */
     protected abstract void afterInitOnCreate();
+
+    @CallSuper
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (mPrePause) {
+            mPrePause = false;
+            if (!UiAccessManager.getInstance().checkCanAccess(this, false)) {
+                return;
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPrePause) {
+            mPrePause = false;
+            if (!UiAccessManager.getInstance().checkCanAccess(this, true)) {
+                return;
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPrePause = true;
+    }
 
     @CallSuper
     @Override

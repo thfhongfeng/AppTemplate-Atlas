@@ -38,7 +38,7 @@ public class MvpShopModel {
     public boolean requestAddShop(final HashMap<String, String> params,
                                   @NonNull final IModelAsyncResponse<MvpShopDetailEntity> callback) {
         String url = MvpUrlConstants.Add_Shop;
-        return HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_DETAIL,
+        return HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_ADD_SHOP,
                 handleHttpResponse(callback));
     }
 

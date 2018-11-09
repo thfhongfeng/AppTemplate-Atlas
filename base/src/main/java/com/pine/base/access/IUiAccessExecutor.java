@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
  */
 
 public interface IUiAccessExecutor {
-    boolean onExecute(Activity activity, String args);
+    boolean onExecute(Activity activity, String args, boolean isResumeUi);
 
-    boolean onExecute(Fragment fragment, String args);
+    boolean onExecute(Fragment fragment, String args, boolean isResumeUi);
 }
