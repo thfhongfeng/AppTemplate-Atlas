@@ -46,11 +46,6 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
                             }
 
                             @Override
-                            public void onException(Bundle returnBundle) {
-                                LogUtils.d(TAG, "onException " + RouterCommand.MAIN_goMainHomeActivity);
-                            }
-
-                            @Override
                             public void onFail(String errorInfo) {
                                 LogUtils.d(TAG, "onFail " + RouterCommand.MAIN_goMainHomeActivity);
                             }

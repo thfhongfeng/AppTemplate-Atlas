@@ -31,20 +31,26 @@ public class MvcBundleRemote implements IRemote {
             RouterAnnotation annotation = mMethods[i].getAnnotation(RouterAnnotation.class);
             if (annotation != null && annotation.CommandName().equals(commandName)) {
                 mMethods[i].setAccessible(true);
+                returnBundle = new Bundle();
                 try {
-                    returnBundle = (Bundle) mMethods[i].invoke(mRemoteService, args);
-                    if (returnBundle == null) {
-                        returnBundle = new Bundle();
-                    }
                     returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_SUCCEED);
+                    Bundle resultBundle = (Bundle) mMethods[i].invoke(mRemoteService, args);
+                    if (resultBundle == null) {
+                        resultBundle = new Bundle();
+                    }
+                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                    returnBundle = new Bundle();
                     returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+                    Bundle resultBundle = new Bundle();
+                    resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, e.toString());
+                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
-                    returnBundle = new Bundle();
                     returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+                    Bundle resultBundle = new Bundle();
+                    resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, e.toString());
+                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 }
                 break;
             }
@@ -52,6 +58,9 @@ public class MvcBundleRemote implements IRemote {
         if (returnBundle == null) {
             returnBundle = new Bundle();
             returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+            Bundle resultBundle = new Bundle();
+            resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, "");
+            returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
         }
         if (callback != null) {
             callback.OnResponse(returnBundle);

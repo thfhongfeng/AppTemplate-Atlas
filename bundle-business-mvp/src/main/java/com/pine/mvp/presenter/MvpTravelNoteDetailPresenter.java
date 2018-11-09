@@ -60,7 +60,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
+        if (!mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
                 finishDataLoadUi();
@@ -79,7 +79,9 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     @Override
@@ -96,7 +98,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         params.put("pageSize", String.valueOf(mTravelNoteDetailAdapter.getPageSize()));
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
+        if (!mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteCommentEntity> list) {
                 finishDataLoadUi();
@@ -114,7 +116,9 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

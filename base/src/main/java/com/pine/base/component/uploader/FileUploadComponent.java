@@ -87,8 +87,9 @@ public class FileUploadComponent {
             fileBean.setLocalTempFilePath(file.getPath());
         }
         HashMap<String, String> params = fileBean.getParams();
-        HttpRequestManager.setPostFileRequest(fileBean.getRequestUrl(), fileBean.hashCode(), params,
-                file, fileBean.getFileName(), fileBean.getFileKey(), fileBean.hashCode(), new HttpUploadCallback() {
+        HttpRequestManager.setPostFileRequest(fileBean.getRequestUrl(), params, file,
+                fileBean.getFileName(), fileBean.getFileKey(), fileBean.hashCode(),
+                fileBean.hashCode(), new HttpUploadCallback() {
                     @Override
                     public void onStart(int what) {
                         if (callback != null) {
@@ -99,10 +100,10 @@ public class FileUploadComponent {
                     @Override
                     public void onCancel(int what) {
                         mRequestMap.remove(fileBean.hashCode());
-                        LogUtils.d(TAG, "Response-onCancel what :" + what);
-                        if (callback != null) {
-                            callback.onCancel(fileBean);
-                        }
+//                        LogUtils.d(TAG, "Response-onCancel what :" + what);
+//                        if (callback != null) {
+//                            callback.onCancel(fileBean);
+//                        }
                         deleteTempFile(fileBean);
                     }
 
@@ -128,10 +129,10 @@ public class FileUploadComponent {
                     @Override
                     public void onFinish(int what) {
                         mRequestMap.remove(fileBean.hashCode());
-                        LogUtils.d(TAG, "Response-onFinish what:" + what);
-                        if (callback != null) {
-                            callback.onFinish(fileBean);
-                        }
+//                        LogUtils.d(TAG, "Response-onFinish what:" + what);
+//                        if (callback != null) {
+//                            callback.onFinish(fileBean);
+//                        }
                         deleteTempFile(fileBean);
                     }
                 }, new HttpJsonCallback() {
@@ -146,7 +147,7 @@ public class FileUploadComponent {
                     @Override
                     public boolean onError(int what, Exception e) {
                         if (callback != null) {
-                            callback.onError(fileBean, e.toString());
+                            callback.onFailed(fileBean, e.toString());
                         }
                         return false;
                     }
@@ -209,17 +210,17 @@ public class FileUploadComponent {
         // 文件开始上传进度回调
         void onProgress(FileUploadBean fileBean, int progress);
 
-        // 文件上传完成回调
-        void onFinish(FileUploadBean fileBean);
-
-        // 文件上传取消回调
-        void onCancel(FileUploadBean fileBean);
-
+        //        // 文件上传完成回调
+//        void onFinish(FileUploadBean fileBean);
+//
+//        // 文件上传取消回调
+//        void onCancel(FileUploadBean fileBean);
+//
         // 文件上传失败回调
         void onFailed(FileUploadBean fileBean, String message);
 
-        // 请求出错回调
-        void onError(FileUploadBean fileBean, String message);
+//        // 请求出错回调
+//        void onError(FileUploadBean fileBean, String message);
 
         // 请求成功回调
         void onSuccess(FileUploadBean fileBean, JSONObject response);

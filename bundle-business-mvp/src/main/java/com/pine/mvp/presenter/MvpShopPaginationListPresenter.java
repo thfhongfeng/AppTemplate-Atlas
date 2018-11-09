@@ -103,7 +103,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
             params.put("longitude", String.valueOf(locations[1]));
         }
         startDataLoadUi();
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
+        if (!mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> list) {
                 finishDataLoadUi();
@@ -126,7 +126,9 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
                 }
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

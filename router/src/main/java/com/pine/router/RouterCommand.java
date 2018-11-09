@@ -19,6 +19,7 @@ public interface RouterCommand {
      */
     String LOGIN_goLoginActivity = "goLoginActivity";
     String LOGIN_autoLogin = "autoLogin";
+    String LOGIN_logout = "logout";
     /**
      * Login bundle remote command end
      */

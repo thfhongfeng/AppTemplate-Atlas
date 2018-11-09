@@ -36,4 +36,11 @@ public class LoginBundleRemoteService {
         });
         return returnBundle;
     }
+
+    @RouterAnnotation(CommandName = RouterCommand.LOGIN_logout)
+    public Bundle logout(Bundle args) {
+        final Bundle returnBundle = new Bundle();
+        LoginManager.logout();
+        return returnBundle;
+    }
 }

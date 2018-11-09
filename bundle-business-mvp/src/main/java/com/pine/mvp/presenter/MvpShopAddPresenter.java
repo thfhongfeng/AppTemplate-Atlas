@@ -133,7 +133,7 @@ public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
         }
 
         startDataLoadUi();
-        mModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
+        if (!mModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
             @Override
             public void onResponse(MvpShopDetailEntity entity) {
                 finishDataLoadUi();
@@ -149,7 +149,9 @@ public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

@@ -33,7 +33,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/dp_8"
-                android:background="@drawable/base_selector_shape_round_00c614_346934"
+                android:background="@drawable/base_selector_round_00c614_346934"
                 android:padding="@dimen/dp_3"
                 android:text="@string/base_all_image"
                 android:textColor="@color/white" />

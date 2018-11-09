@@ -71,7 +71,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     /**
      * 标准回调请求
      */
-    private OnResponseListener getStringListener(final IHttpResponseListener.OnResponseListener listener) {
+    private OnResponseListener getResponseListener(final IHttpResponseListener.OnResponseListener listener) {
         return new OnResponseListener() {
             @Override
             public void onStart(int what) {
@@ -173,14 +173,20 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (head != null) {
             mHeadParams = head;
         }
-        DBCookieStore dbCookieStore = (DBCookieStore) new DBCookieStore(context).setEnable(false);
+        DBCookieStore dbCookieStore = (DBCookieStore) new DBCookieStore(context).setEnable(true);
         dbCookieStore.setCookieStoreListener(new DBCookieStore.CookieStoreListener() {
+            // 当NoHttp的Cookie被保存的时候被调用
             @Override
             public void onSaveCookie(URI uri, HttpCookie cookie) {
-                if ("JSessionId".equals(cookie.getName()))
+                if (SESSION_ID.equals(cookie.getName().toUpperCase())) {
                     cookie.setMaxAge(HeaderUtil.getMaxExpiryMillis());
+                    setSessionId(cookie.getValue());
+                }
+                LogUtils.d(TAG, "setCookie url:" + uri.toString() +
+                        "\r\ncookie:" + cookie.toString());
             }
 
+            // 当NoHttp的Cookie过期时被删除时此方法被调用
             @Override
             public void onRemoveCookie(URI uri, HttpCookie cookie) {
 
@@ -200,8 +206,8 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }
-        addSessionCookie(request);
-        mRequestQueue.add(requestBean.getWhat(), (Request) addParams(request, requestBean.getParams()), getStringListener(listener));
+        addGlobalSessionCookie(request);
+        mRequestQueue.add(requestBean.getWhat(), (Request) addParams(request, requestBean.getParams()), getResponseListener(listener));
     }
 
     @Override
@@ -213,7 +219,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }
-        addSessionCookie(request);
+        addGlobalSessionCookie(request);
         mDownloadQueue.add(requestBean.getWhat(), (DownloadRequest) addParams(request, requestBean.getParams()), getDownloadListener(listener));
     }
 
@@ -250,9 +256,21 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         }
         request.setCancelSign(requestBean.getSign());
 
-        addSessionCookie(request);
-        mRequestQueue.add(requestBean.getWhat(), request, getStringListener(responseListener));
+        addGlobalSessionCookie(request);
+        mRequestQueue.add(requestBean.getWhat(), request, getResponseListener(responseListener));
     }
+
+    private void addGlobalSessionCookie(IBasicRequest request) {
+        if (mHeadParams.size() != 0) {
+            Collection keys = mHeadParams.keySet();
+            for (Iterator iterator = keys.iterator(); iterator.hasNext(); ) {
+                Object key = iterator.next();
+                request.add(key.toString(), mHeadParams.get(key));
+            }
+        }
+        request.addHeader(MOBILE_MODEL_KEY, mMobileModel);
+    }
+
 
     @Override
     public void cancelBySign(Object sign) {
@@ -274,40 +292,14 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         mSessionId = sessionId;
     }
 
-    // 添加SessionCookie
     @Override
-    public void addSessionCookie(Map<String, String> headers) {
-        StringBuilder builder = new StringBuilder();
-        if (mSessionId != null && mSessionId.length() > 0) {
-            builder.append(SESSION_ID);
-            builder.append("=");
-            builder.append(mSessionId);
-        }
-        if (headers.containsKey(COOKIE_KEY)) {
-            builder.append("; ");
-            builder.append(headers.get(COOKIE_KEY));
-        }
-        headers.put(COOKIE_KEY, builder.toString());
-        headers.put(MOBILE_MODEL_KEY, mMobileModel);
+    public void clearCookie() {
+        NoHttp.getCookieManager().getCookieStore().removeAll();
     }
 
-    private void addSessionCookie(IBasicRequest request) {
-        StringBuilder builder = new StringBuilder();
-        if (mSessionId != null && mSessionId.length() > 0) {
-            builder.append(SESSION_ID);
-            builder.append("=");
-            builder.append(mSessionId);
-            builder.append("; ");
-        }
-        request.addHeader(COOKIE_KEY, builder.toString());
-        if (mHeadParams.size() != 0) {
-            Collection keys = mHeadParams.keySet();
-            for (Iterator iterator = keys.iterator(); iterator.hasNext(); ) {
-                Object key = iterator.next();
-                request.add(key.toString(), mHeadParams.get(key));
-            }
-        }
-        request.addHeader(MOBILE_MODEL_KEY, mMobileModel);
+    @Override
+    public List<HttpCookie> getSessionCookie() {
+        return NoHttp.getCookieManager().getCookieStore().getCookies();
     }
 
     // 添加参数

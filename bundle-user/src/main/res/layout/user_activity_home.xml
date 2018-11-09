@@ -15,6 +15,16 @@
         android:gravity="center"
         android:text="User Center" />
 
+    <TextView
+        android:id="@+id/logout_btn_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_30"
+        android:background="@drawable/base_shape_round_70b642_8bb96c"
+        android:gravity="center"
+        android:padding="@dimen/dp_20"
+        android:text="@string/user_logout" />
+
     <com.pine.base.widget.view.BottomTabNavigationBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

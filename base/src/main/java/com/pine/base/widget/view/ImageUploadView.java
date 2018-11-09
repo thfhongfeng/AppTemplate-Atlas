@@ -166,7 +166,7 @@ public class ImageUploadView extends RecyclerView {
     private void startCropPhoto(String filePath) {
         String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         String targetFilePath = PathUtils.getAppFilePath(Environment.DIRECTORY_PICTURES) +
-                File.separator + "crop_" + fileName + "_" + System.currentTimeMillis();
+                File.separator + "crop_" + System.currentTimeMillis() + "_" + fileName;
 
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(Uri.fromFile(new File(filePath)), "image/*");
@@ -314,16 +314,6 @@ public class ImageUploadView extends RecyclerView {
                     }
 
                     @Override
-                    public void onFinish(FileUploadBean fileBean) {
-
-                    }
-
-                    @Override
-                    public void onCancel(FileUploadBean fileBean) {
-
-                    }
-
-                    @Override
                     public void onFailed(final FileUploadBean fileBean, String message) {
                         if (mMainHandler == null) {
                             return;
@@ -335,11 +325,6 @@ public class ImageUploadView extends RecyclerView {
                                 mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
                             }
                         });
-                    }
-
-                    @Override
-                    public void onError(FileUploadBean fileBean, String message) {
-
                     }
 
                     @Override

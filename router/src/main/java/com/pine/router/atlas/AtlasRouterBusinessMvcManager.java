@@ -59,10 +59,11 @@ public class AtlasRouterBusinessMvcManager implements IRouterManager {
                                 if (callback != null) {
                                     switch (bundle.getString(RouterConstants.REMOTE_CALL_STATE_KEY)) {
                                         case RouterConstants.ON_SUCCEED:
-                                            callback.onSuccess(bundle);
+                                            callback.onSuccess(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY));
                                             break;
                                         default:
-                                            callback.onException(bundle);
+                                            callback.onFail(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
+                                                    .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY));
                                             break;
                                     }
                                 }
@@ -101,10 +102,11 @@ public class AtlasRouterBusinessMvcManager implements IRouterManager {
                                 if (callback != null) {
                                     switch (bundle.getString(RouterConstants.REMOTE_CALL_STATE_KEY)) {
                                         case RouterConstants.ON_SUCCEED:
-                                            callback.onSuccess(bundle);
+                                            callback.onSuccess(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY));
                                             break;
                                         default:
-                                            callback.onException(bundle);
+                                            callback.onFail(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
+                                                    .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY));
                                             break;
                                     }
                                 }
@@ -143,10 +145,11 @@ public class AtlasRouterBusinessMvcManager implements IRouterManager {
                                 if (callback != null) {
                                     switch (bundle.getString(RouterConstants.REMOTE_CALL_STATE_KEY)) {
                                         case RouterConstants.ON_SUCCEED:
-                                            callback.onSuccess(bundle);
+                                            callback.onSuccess(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY));
                                             break;
                                         default:
-                                            callback.onException(bundle);
+                                            callback.onFail(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
+                                                    .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY));
                                             break;
                                     }
                                 }

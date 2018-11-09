@@ -58,7 +58,7 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
         params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
+        if (!mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopAndProductEntity> list) {
                 finishDataLoadUi();
@@ -76,7 +76,9 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

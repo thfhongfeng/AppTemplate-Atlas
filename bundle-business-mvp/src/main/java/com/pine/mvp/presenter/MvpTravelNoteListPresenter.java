@@ -65,7 +65,7 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
         params.put("pageSize", String.valueOf(mMvpTravelNoteItemAdapter.getPageSize()));
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
+        if (!mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteItemEntity> list) {
                 finishDataLoadUi();
@@ -83,7 +83,9 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

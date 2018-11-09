@@ -25,10 +25,11 @@ public class VersionModel {
     private static final String TAG = LogUtils.makeLogTag(VersionModel.class);
     private static final int HTTP_QUERY_VERSION_INFO = 1;
 
-    public void requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
+    public boolean requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
         String url = WelcomeUrlConstants.Query_Version_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
+        return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(),
+                TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
     }
 
     private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {

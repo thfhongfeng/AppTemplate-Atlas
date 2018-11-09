@@ -53,7 +53,7 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
+        if (!mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> list) {
                 finishDataLoadUi();
@@ -67,7 +67,9 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     private void startDataLoadUi() {

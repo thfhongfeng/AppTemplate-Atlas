@@ -2,7 +2,10 @@ package com.pine.base.http;
 
 import android.content.Context;
 
+import java.net.HttpCookie;
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,15 +26,17 @@ public interface IHttpRequestManager {
     void setUploadRequest(HttpRequestBean requestBean, IHttpResponseListener.OnUploadListener processListener,
                           IHttpResponseListener.OnResponseListener responseListener);
 
-    void addSessionCookie(Map<String, String> headers);
-
     void cancelBySign(Object sign);
 
     void cancelAll();
 
+    List<HttpCookie> getSessionCookie();
+
     String getSessionId();
 
     void setSessionId(String sessionId);
+
+    void clearCookie();
 
     enum RequestType {
         STRING, // stringRequest

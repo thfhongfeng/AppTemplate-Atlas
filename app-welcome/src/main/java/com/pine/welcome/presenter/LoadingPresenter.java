@@ -156,13 +156,6 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                     }
 
                     @Override
-                    public void onException(Bundle returnBundle) {
-                        if (isUiAlive()) {
-                            goWelcomeActivity();
-                        }
-                    }
-
-                    @Override
                     public void onFail(String errorInfo) {
                         if (isUiAlive()) {
                             goWelcomeActivity();

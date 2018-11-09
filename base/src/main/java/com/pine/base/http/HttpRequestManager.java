@@ -17,6 +17,7 @@ import com.pine.tool.util.LogUtils;
 import com.yanzhenjie.nohttp.error.NetworkError;
 
 import java.io.File;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -77,53 +78,55 @@ public class HttpRequestManager {
         }
     }
 
-    // 默认RequestMethod:POST
-    // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, HttpJsonCallback callBack) {
-        setJsonRequest(url, params, moduleTag, -1, RequestType.STRING, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, Map<String, String> params, String moduleTag, HttpJsonCallback callBack) {
+        return setJsonRequest(url, params, moduleTag, -1, RequestType.STRING, callBack);
     }
 
-    // 默认RequestMethod:POST
-    // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, HttpJsonCallback callBack) {
-        setJsonRequest(url, params, moduleTag, what, IHttpRequestManager.RequestType.STRING, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, HttpJsonCallback callBack) {
+        return setJsonRequest(url, params, moduleTag, what, IHttpRequestManager.RequestType.STRING, callBack);
     }
 
-    // 默认RequestMethod:POST
-    // 里面的moduleTag参数在自己的模块自己封装，无cancelSign
-    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, boolean needLogin, HttpJsonCallback callBack) {
-        setJsonRequest(url, params, moduleTag, what, RequestType.STRING, needLogin, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, boolean needLogin, HttpJsonCallback callBack) {
+        return setJsonRequest(url, params, moduleTag, what, RequestType.STRING, needLogin, callBack);
     }
 
-    // 默认RequestMethod:POST
-    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, HttpJsonCallback callBack) {
-        setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, false, RequestType.STRING, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, HttpJsonCallback callBack) {
+        return setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, false, RequestType.STRING, callBack);
     }
 
-    // 默认RequestMethod:POST
-    public static void setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, boolean needLogin, HttpJsonCallback callBack) {
-        setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, needLogin, RequestType.STRING, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, Map<String, String> params, String moduleTag, int what, Object sign, boolean needLogin, HttpJsonCallback callBack) {
+        return setJsonRequest(url, HttpRequestMethod.POST, params, moduleTag, what, sign, needLogin, RequestType.STRING, callBack);
     }
 
-    public static void setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
-                                      int what, HttpJsonCallback callBack) {
-        setJsonRequest(url, method, params, moduleTag, what, null, false, RequestType.STRING, callBack);
+    // json请求
+    public static boolean setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
+                                         int what, HttpJsonCallback callBack) {
+        return setJsonRequest(url, method, params, moduleTag, what, null, false, RequestType.STRING, callBack);
     }
 
-    public static void setJsonRequest(HttpRequestBean requestBean, ActionType actionType) {
+    // json请求
+    public static boolean setJsonRequest(HttpRequestBean requestBean, ActionType actionType) {
         requestBean.setActionType(actionType);
-        setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
+        return setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
                 requestBean.getModuleTag(), requestBean.getWhat(), requestBean.getSign(), requestBean.isNeedLogin(),
                 requestBean.getRequestType(), (HttpJsonCallback) requestBean.getCallBack());
     }
 
-    public static void setJsonRequest(HttpRequestBean requestBean) {
-        setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
+    // json请求
+    public static boolean setJsonRequest(HttpRequestBean requestBean) {
+        return setJsonRequest(requestBean.getUrl(), requestBean.getRequestMethod(), requestBean.getParams(),
                 requestBean.getModuleTag(), requestBean.getWhat(), requestBean.getSign(), requestBean.isNeedLogin(),
                 requestBean.getRequestType(), (HttpJsonCallback) requestBean.getCallBack());
     }
 
     /**
+     * json请求
+     *
      * @param url         地址
      * @param method      请求方式：GET、POST等
      * @param params      参数
@@ -133,9 +136,10 @@ public class HttpRequestManager {
      * @param needLogin   是否需要登陆
      * @param requestType 请求分类，目前只区分通用和登录
      * @param callBack    回调
+     * @return false表示请求没有被发送出去；true表示请求正常发出
      */
-    public static void setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
-                                      int what, Object sign, boolean needLogin, RequestType requestType, HttpJsonCallback callBack) {
+    public static boolean setJsonRequest(String url, HttpRequestMethod method, Map<String, String> params, String moduleTag,
+                                         int what, Object sign, boolean needLogin, RequestType requestType, HttpJsonCallback callBack) {
         //设置模块名
         if (!TextUtils.isEmpty(moduleTag)) {
             callBack.setModuleTag(moduleTag);
@@ -159,7 +163,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
-                    return;
+                    return false;
                 }
             }
         }
@@ -168,43 +172,68 @@ public class HttpRequestManager {
         LogUtils.d(TAG, "Request in string queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
                 requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
+        List<HttpCookie> cookies = getSessionCookie();
+        if (cookies != null && cookies.size() > 0) {
+            String cookiesStr = cookies.get(0).toString();
+            for (int i = 1; i < cookies.size(); i++) {
+                cookiesStr += "  " + cookies.get(i).toString();
+            }
+            LogUtils.d(TAG, "Cookies:" + cookies.get(0).toString());
+        }
         mRequestManager.setJsonRequest(requestBean, getResponseListener(callBack));
+        return true;
     }
 
     // 下载文件
-    public static void setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
-                                          int what, HttpDownloadCallback callBack) {
-        setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
-                moduleTag, false, true, null, what, false, callBack);
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
+                                             int what, HttpDownloadCallback callBack) {
+        return setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
+                moduleTag, false, true, what, null, false, callBack);
     }
 
     // 下载文件
-    public static void setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
-                                          int what, boolean needLogin, HttpDownloadCallback callBack) {
-        setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
-                moduleTag, false, true, null, what, needLogin, callBack);
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
+                                             int what, boolean needLogin, HttpDownloadCallback callBack) {
+        return setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
+                moduleTag, false, true, what, null, needLogin, callBack);
     }
 
     // 下载文件
-    public static void setDownloadRequest(String url, String fileFolder, String fileName,
-                                          String moduleTag, boolean isContinue, boolean isDeleteOld,
-                                          int what, boolean needLogin, HttpDownloadCallback callBack) {
-        setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
-                moduleTag, isContinue, isDeleteOld, null, what, needLogin, callBack);
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName,
+                                             String moduleTag, boolean isContinue, boolean isDeleteOld,
+                                             int what, boolean needLogin, HttpDownloadCallback callBack) {
+        return setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
+                moduleTag, isContinue, isDeleteOld, what, null, needLogin, callBack);
     }
 
     // 下载文件
-    public static void setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
-                                          HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
-                                          int what, boolean needLogin, HttpDownloadCallback callBack) {
-        setDownloadRequest(url, fileFolder, fileName, method, params, moduleTag, isContinue,
-                isDeleteOld, null, what, needLogin, callBack);
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
+                                             HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
+                                             int what, boolean needLogin, HttpDownloadCallback callBack) {
+        return setDownloadRequest(url, fileFolder, fileName, method, params, moduleTag, isContinue,
+                isDeleteOld, what, null, needLogin, callBack);
     }
 
-    // 下载文件
-    public static void setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
-                                          HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
-                                          Object sign, int what, boolean needLogin, HttpDownloadCallback callBack) {
+    /**
+     * 下载文件
+     *
+     * @param url         地址
+     * @param fileFolder  下载文件保存目录
+     * @param fileName    下载文件保存文件名
+     * @param method      请求方式：GET、POST等
+     * @param params      参数
+     * @param moduleTag   模块标识
+     * @param isContinue  是否继续之前的下载
+     * @param isDeleteOld 是否删除之前的下载
+     * @param what        请求标识code
+     * @param sign        cancel标识
+     * @param needLogin   是否需要登陆
+     * @param callBack    回调
+     * @return false表示请求没有被发送出去；true表示请求正常发出
+     */
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
+                                             HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
+                                             int what, Object sign, boolean needLogin, HttpDownloadCallback callBack) {
         //设置模块名
         if (!TextUtils.isEmpty(moduleTag)) {
             callBack.setModuleTag(moduleTag);
@@ -233,7 +262,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
-                    return;
+                    return false;
                 }
             }
         }
@@ -242,58 +271,71 @@ public class HttpRequestManager {
         LogUtils.d(TAG, "Request in download queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
                 requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
+        List<HttpCookie> cookies = getSessionCookie();
+        if (cookies != null && cookies.size() > 0) {
+            String cookiesStr = cookies.get(0).toString();
+            for (int i = 1; i < cookies.size(); i++) {
+                cookiesStr += "  " + cookies.get(i).toString();
+            }
+            LogUtils.d(TAG, "Cookies:" + cookiesStr);
+        }
         mRequestManager.setDownloadRequest(requestBean, getDownloadListener(callBack));
+        return true;
     }
 
     /**
      * 上传单个文件
      */
-    public static void setPostFileRequest(String url, int what, Map<String, String> params,
-                                          File file, String fileName, String fileKey, Object sign,
-                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        setPostFileRequest(url, what, params, file, fileName, fileKey, sign, false, null, processCallback, requestCallback);
+    public static boolean setPostFileRequest(String url, Map<String, String> params, File file,
+                                             String fileName, String fileKey, int what, Object sign,
+                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+        return setPostFileRequest(url, params, null, file, fileName, fileKey, what, sign,
+                false, processCallback, requestCallback);
     }
 
     /**
      * 上传单个文件
      */
-    public static void setPostFileRequest(String url, int what, Map<String, String> params, File file,
-                                          String fileName, String fileKey, Object sign, boolean needLogin, String moduleTag,
-                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+    public static boolean setPostFileRequest(String url, Map<String, String> params, String moduleTag, File file,
+                                             String fileName, String fileKey, int what, Object sign, boolean needLogin,
+                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         ArrayList<File> fileList = new ArrayList<>();
         fileList.add(file);
         ArrayList<String> fileNameList = new ArrayList<>();
         fileNameList.add(fileName);
-        setPostFileRequest(url, what, params, fileList, fileNameList, fileKey, sign, needLogin, moduleTag, processCallback, requestCallback);
+        return setPostFileRequest(url, params, moduleTag, fileList, fileNameList, fileKey, what,
+                sign, needLogin, processCallback, requestCallback);
     }
 
     /**
      * 上传多个文件
      */
-    public static void setPostFileRequest(String url, int what, Map<String, String> params,
-                                          List<File> fileList, List<String> fileNameList, String fileKey, Object sign,
-                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        setPostFileRequest(url, what, params, fileList, fileNameList, fileKey, sign, false, null, processCallback, requestCallback);
+    public static boolean setPostFileRequest(String url, Map<String, String> params, List<File> fileList,
+                                             List<String> fileNameList, String fileKey, int what, Object sign,
+                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+        return setPostFileRequest(url, params, null, fileList, fileNameList, fileKey,
+                what, sign, false, processCallback, requestCallback);
     }
 
     /**
      * 上传多个文件
      *
-     * @param url
-     * @param what
+     * @param url             地址
      * @param params          普通参数
-     * @param fileList        文件集合
-     * @param fileNameList    文件名集合
+     * @param moduleTag       模块标识
+     * @param fileList        上传文件集合
+     * @param fileNameList    上传文件名集合
      * @param fileKey         文件的key
+     * @param what            请求标识code
      * @param sign            用于取消的sign
      * @param needLogin       是否需要登陆
-     * @param moduleTag       模块标识
      * @param processCallback
      * @param requestCallback
+     * @return false表示请求没有被发送出去；true表示请求正常发出
      */
-    public static void setPostFileRequest(String url, int what, Map<String, String> params, List<File> fileList,
-                                          List<String> fileNameList, String fileKey, Object sign, boolean needLogin, String moduleTag,
-                                          HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+    public static boolean setPostFileRequest(String url, Map<String, String> params, String moduleTag, List<File> fileList,
+                                             List<String> fileNameList, String fileKey, int what, Object sign, boolean needLogin,
+                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         if (!TextUtils.isEmpty(moduleTag)) {
             requestCallback.setModuleTag(moduleTag);
             processCallback.setModuleTag(moduleTag);
@@ -321,7 +363,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
-                    return;
+                    return false;
                 }
             }
         }
@@ -330,13 +372,20 @@ public class HttpRequestManager {
         LogUtils.d(TAG, "Request in upload queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
                 requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
+        List<HttpCookie> cookies = getSessionCookie();
+        if (cookies != null && cookies.size() > 0) {
+            String cookiesStr = cookies.get(0).toString();
+            for (int i = 1; i < cookies.size(); i++) {
+                cookiesStr += "  " + cookies.get(i).toString();
+            }
+            LogUtils.d(TAG, "Cookies:" + cookiesStr);
+        }
         mRequestManager.setUploadRequest(requestBean, getUploadListener(processCallback), getResponseListener(requestCallback));
-
+        return true;
     }
 
-    // 添加SessionCookie
-    public static void addSessionCookie(Map<String, String> headers) {
-        mRequestManager.addSessionCookie(headers);
+    public static List<HttpCookie> getSessionCookie() {
+        return mRequestManager.getSessionCookie();
     }
 
     /**
@@ -589,7 +638,7 @@ public class HttpRequestManager {
     }
 
     public static void clearCookie() {
-        mRequestManager.setSessionId(null);
+        mRequestManager.clearCookie();
     }
 
     public static void resetSession() {

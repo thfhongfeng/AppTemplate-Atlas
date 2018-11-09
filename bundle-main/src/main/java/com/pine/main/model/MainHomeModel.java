@@ -26,10 +26,11 @@ public class MainHomeModel {
     private static final String TAG = LogUtils.makeLogTag(MainHomeModel.class);
     private static final int HTTP_QUERY_BUSINESS_LIST = 1;
 
-    public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
+    public boolean requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
+        return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG,
+                HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
     private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {

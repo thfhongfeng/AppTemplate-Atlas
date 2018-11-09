@@ -12,7 +12,6 @@ import com.pine.login.ui.activity.LoginActivity;
 import com.pine.tool.util.AppUtils;
 import com.pine.tool.util.SharePreferenceUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpCookie;
@@ -26,11 +25,16 @@ import static com.pine.base.http.IHttpRequestManager.SESSION_ID;
 
 public class LoginCallback extends HttpJsonCallback {
     public static final int LOGIN_CODE = 1;
-    public static final int AUTO_LOGIN_CODE = 2;
-    public static final int RE_LOGIN_CODE = 3;
+    public static final int LOGOUT_CODE = 2;
+    public static final int AUTO_LOGIN_CODE = 3;
+    public static final int RE_LOGIN_CODE = 4;
     private String mMobile;
     private String mPassword;
     private LoginManager.Callback mCallback;
+
+    public LoginCallback() {
+
+    }
 
     public LoginCallback(String mobile, String password, LoginManager.Callback callback) {
         mMobile = mobile;
@@ -42,7 +46,7 @@ public class LoginCallback extends HttpJsonCallback {
     public void onResponse(int what, HttpResponse response) {
         List<HttpCookie> list = response.getCookies();
         for (int i = 0; i < list.size(); i++) {
-            if (SESSION_ID.equals(list.get(i).getName())) {
+            if (SESSION_ID.equals(list.get(i).getName().toUpperCase())) {
                 HttpRequestManager.setSessionId(list.get(i).getValue());
                 break;
             }
@@ -52,31 +56,29 @@ public class LoginCallback extends HttpJsonCallback {
 
     @Override
     public void onResponse(int what, JSONObject jsonObject) {
-        // Test code begin
-        String res = "{success:true,code:200,message:'',data:{account:'" + mMobile + "', username:'pine', age:35}}";
-        try {
-            jsonObject = new JSONObject(res);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        // Test code end
-        if (jsonObject == null || !jsonObject.optBoolean(LoginConstants.SUCCESS, false)) {
+        if (LOGOUT_CODE == what) {
+            clearLoginInfo();
             BaseApplication.setLogin(false);
-            if (mCallback != null) {
-                mCallback.onLoginResponse(false, "");
-            }
-            if (AUTO_LOGIN_CODE != what) {
-                goLoginActivity();
-            }
             return;
-        }
-        saveLoginInfo(jsonObject);
-        BaseApplication.setLogin(true);
-        if (RE_LOGIN_CODE == what) {
-            LoginManager.reloadAllNoAuthRequest();
-        }
-        if (mCallback != null) {
-            mCallback.onLoginResponse(true, "");
+        } else {
+            if (jsonObject == null || !jsonObject.optBoolean(LoginConstants.SUCCESS, false)) {
+                BaseApplication.setLogin(false);
+                if (mCallback != null) {
+                    mCallback.onLoginResponse(false, "");
+                }
+                if (AUTO_LOGIN_CODE != what) {
+                    goLoginActivity();
+                }
+                return;
+            }
+            saveLoginInfo(jsonObject);
+            BaseApplication.setLogin(true);
+            if (RE_LOGIN_CODE == what) {
+                LoginManager.reloadAllNoAuthRequest();
+            }
+            if (mCallback != null) {
+                mCallback.onLoginResponse(true, "");
+            }
         }
     }
 
@@ -96,6 +98,10 @@ public class LoginCallback extends HttpJsonCallback {
         SharePreferenceUtils.cleanCache();
         SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_MOBILE, mMobile);
         SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
+    }
+
+    private void clearLoginInfo() {
+        SharePreferenceUtils.cleanCache();
     }
 
     private void goLoginActivity() {

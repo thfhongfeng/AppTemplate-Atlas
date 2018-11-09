@@ -74,11 +74,6 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
                         }
 
                         @Override
-                        public void onException(Bundle returnBundle) {
-
-                        }
-
-                        @Override
                         public void onFail(String errorInfo) {
 
                         }

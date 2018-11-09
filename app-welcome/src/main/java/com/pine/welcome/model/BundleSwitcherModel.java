@@ -26,10 +26,11 @@ public class BundleSwitcherModel {
     private static final String TAG = LogUtils.makeLogTag(BundleSwitcherModel.class);
     private static final int HTTP_REQUEST_QUERY_BUNDLE_SWITCHER = 1;
 
-    public void requestBundleSwitcherData(@NonNull IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {
+    public boolean requestBundleSwitcherData(@NonNull IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {
         String url = WelcomeUrlConstants.Query_BundleSwitcher_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
+        return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(),
+                TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
     }
 
     private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {

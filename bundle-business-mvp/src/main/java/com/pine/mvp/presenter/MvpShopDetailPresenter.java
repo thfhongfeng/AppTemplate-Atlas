@@ -50,7 +50,7 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
         startDataLoadUi();
-        mModel.requestShopDetailData(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
+        if (!mModel.requestShopDetailData(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
             @Override
             public void onResponse(MvpShopDetailEntity entity) {
                 finishDataLoadUi();
@@ -64,7 +64,9 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
                 finishDataLoadUi();
                 return false;
             }
-        });
+        })) {
+            finishDataLoadUi();
+        }
     }
 
     @Override
