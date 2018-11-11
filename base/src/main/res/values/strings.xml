@@ -28,6 +28,7 @@
     <string name="base_upload_image_count_exceeding_msg">上传照片数量已超过%1$d张</string>
     <string name="base_error_no_permission">没有权限</string>
 
+    <string name="base_file_upload_file_is_uploading">文件正在上传中</string>
     <string name="base_file_upload_file_null">文件不存在</string>
     <string name="base_file_upload_compress_file_null">文件压缩失败</string>
 

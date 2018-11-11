@@ -43,8 +43,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -72,12 +72,13 @@ public class ImageUploadView extends RecyclerView {
     private Handler mMainHandler;
     private UploadImageAdapter mUploadImageAdapter;
     private String mAttachId;
-    private HashMap<String, String> mUploadParams;
     // 上传地址
     private String mUploadImageUrl;
     private FileUploadComponent mFileUploadComponent;
     private boolean mIsInit;
-    private UploadResponseAdapter mUploadResultAdapter;
+    private OneByOneUploadAdapter mOneByOneUploadAdapter;
+    private TogetherUploadAdapter mTogetherUploadAdapter;
+    private boolean mTogetherUploadMode;
     private String mCurCropPhotoPath;
     private List<String> mCropPathList = new ArrayList<>();
     private int mCropWidth = 360;
@@ -114,23 +115,47 @@ public class ImageUploadView extends RecyclerView {
         }
     }
 
-    public void init(Activity activity, @NonNull String uploadUrl,
-                     HashMap<String, String> params, boolean editable,
-                     @NonNull UploadResponseAdapter adapter) {
-        init(activity, "", uploadUrl, params, editable, adapter);
+    public void init(Activity activity, @NonNull String uploadUrl, boolean editable,
+                     @NonNull OneByOneUploadAdapter adapter) {
+        init(activity, "", uploadUrl, editable, adapter);
     }
 
     public void init(Activity activity, String attachId, @NonNull String uploadUrl,
-                     HashMap<String, String> params, boolean editable,
-                     @NonNull UploadResponseAdapter adapter) {
+                     boolean editable, @NonNull OneByOneUploadAdapter adapter) {
+        mTogetherUploadMode = false;
         mActivity = activity;
         mAttachId = attachId;
         mUploadImageUrl = uploadUrl;
         if (TextUtils.isEmpty(mUploadImageUrl)) {
             throw new IllegalStateException("Upload url should not be empty");
         }
-        mUploadParams = params;
-        mUploadResultAdapter = adapter;
+        mOneByOneUploadAdapter = adapter;
+        mUploadImageAdapter = new UploadImageAdapter(
+                UploadImageAdapter.UPLOAD_IMAGE_VIEW_HOLDER, editable, mMaxImageCount);
+        addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
+        GridLayoutManager layoutManager = new GridLayoutManager(mActivity, mColumnSize);
+        setLayoutManager(layoutManager);
+        setAdapter(mUploadImageAdapter);
+        mUploadImageAdapter.setData(null);
+        mUploadImageAdapter.notifyDataSetChanged();
+        mIsInit = true;
+    }
+
+    public void init(Activity activity, @NonNull String uploadUrl, boolean editable,
+                     @NonNull TogetherUploadAdapter adapter) {
+        init(activity, "", uploadUrl, editable, adapter);
+    }
+
+    public void init(Activity activity, String attachId, @NonNull String uploadUrl,
+                     boolean editable, @NonNull TogetherUploadAdapter adapter) {
+        mTogetherUploadMode = true;
+        mActivity = activity;
+        mAttachId = attachId;
+        mUploadImageUrl = uploadUrl;
+        if (TextUtils.isEmpty(mUploadImageUrl)) {
+            throw new IllegalStateException("Upload url should not be empty");
+        }
+        mTogetherUploadAdapter = adapter;
         mUploadImageAdapter = new UploadImageAdapter(
                 UploadImageAdapter.UPLOAD_IMAGE_VIEW_HOLDER, editable, mMaxImageCount);
         addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
@@ -224,36 +249,33 @@ public class ImageUploadView extends RecyclerView {
             if (resultCode == Activity.RESULT_OK) {
                 List<String> newSelectList = new ArrayList<>();
                 newSelectList.add(mCurCropPhotoPath);
-                uploadImageOneByOne(newSelectList, false);
+                uploadImageOneByOne(newSelectList);
             }
         } else if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-                List<String> selectedList = data.getStringArrayListExtra(
+                List<String> newSelectList = data.getStringArrayListExtra(
                         ImageSelector.INTENT_SELECTED_IMAGE_LIST);
-                List<String> existLocalList = getValidImageLocalList();
-                List<String> newSelectList = new ArrayList<>();
-                for (String url : selectedList) {
-                    if (!existLocalList.contains(url)) {
-                        newSelectList.add(url);
-                    }
-                }
                 if (newSelectList.size() < 1) {
                     return;
                 }
                 if (mNeedCrop) {
                     startCropPhoto(newSelectList.get(0));
                 } else {
-                    uploadImageOneByOne(newSelectList, false);
+                    if (mTogetherUploadMode) {
+                        uploadImageList(newSelectList);
+                    } else {
+                        uploadImageOneByOne(newSelectList);
+                    }
                 }
             }
         }
     }
 
-    private void uploadImageOneByOne(final List<String> list, final boolean hasCropped) {
+    private void uploadImageOneByOne(final List<String> list) {
         if (!mIsInit) {
             throw new IllegalStateException("You should call init() method before use this view");
         }
-        if (list == null || list.size() < 1) {
+        if (list == null || list.size() < 1 || mOneByOneUploadAdapter == null) {
             return;
         }
         if (mHandlerThread == null) {
@@ -269,13 +291,13 @@ public class ImageUploadView extends RecyclerView {
         for (int i = 0; i < list.size(); i++) {
             fileUploadBean = new FileUploadBean();
             String filePath = list.get(i);
-            fileUploadBean.setFileKey("file");
+            fileUploadBean.setFileKey(mOneByOneUploadAdapter.getFileKey(fileUploadBean));
             fileUploadBean.setFileType(FileUploadComponent.TYPE_IMAGE);
             fileUploadBean.setLocalFilePath(filePath);
             fileUploadBean.setFileName(filePath.substring(filePath.lastIndexOf(File.separator) + 1));
+            fileUploadBean.setParams(mOneByOneUploadAdapter.getUploadParam(fileUploadBean));
             fileUploadBean.setOrderIndex(i);
             fileUploadBean.setRequestUrl(mUploadImageUrl);
-            fileUploadBean.setParams(mUploadParams);
             fileUploadBean.setOriginalBean(list.get(i));
             fileUploadBean.setUploadState(FileUploadBean.UPLOAD_STATE_UPLOADING);
             uploadBeanList.add(fileUploadBean);
@@ -293,7 +315,7 @@ public class ImageUploadView extends RecyclerView {
                     return;
                 }
                 mFileUploadComponent = new FileUploadComponent(mActivity, mMaxImageSize);
-                mFileUploadComponent.start(uploadBeanList, new FileUploadComponent.FileUploadCallback() {
+                mFileUploadComponent.startOneByOne(uploadBeanList, new FileUploadComponent.FileUploadCallback() {
 
                     @Override
                     public void onStart(final FileUploadBean fileBean) {
@@ -311,6 +333,11 @@ public class ImageUploadView extends RecyclerView {
                                 mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
                             }
                         });
+                    }
+
+                    @Override
+                    public void onError(FileUploadBean fileBean, String message) {
+
                     }
 
                     @Override
@@ -335,7 +362,8 @@ public class ImageUploadView extends RecyclerView {
                         mMainHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                String url = mUploadResultAdapter.getRemoteUrl(response);
+                                String url = mOneByOneUploadAdapter
+                                        .getRemoteUrlFromResponse(fileBean, response);
                                 if (TextUtils.isEmpty(url)) {
                                     onFailed(fileBean, "");
                                     return;
@@ -348,6 +376,115 @@ public class ImageUploadView extends RecyclerView {
                         });
                     }
                 });
+            }
+        });
+    }
+
+    private void uploadImageList(final List<String> list) {
+        if (!mIsInit) {
+            throw new IllegalStateException("You should call init() method before use this view");
+        }
+        if (list == null || list.size() < 1 || mTogetherUploadAdapter == null) {
+            return;
+        }
+        if (mHandlerThread == null) {
+            mHandlerThread = new HandlerThread("ImageUploadView");
+            mHandlerThread.start();
+            mThreadHandler = new Handler(mHandlerThread.getLooper());
+        }
+        if (mMainHandler == null) {
+            mMainHandler = new Handler(Looper.getMainLooper());
+        }
+        final List<FileUploadBean> uploadBeanList = new ArrayList<>();
+        FileUploadBean fileUploadBean = null;
+        for (int i = 0; i < list.size(); i++) {
+            fileUploadBean = new FileUploadBean();
+            String filePath = list.get(i);
+            fileUploadBean.setFileKey(mTogetherUploadAdapter.getFileKey(fileUploadBean));
+            fileUploadBean.setFileType(FileUploadComponent.TYPE_IMAGE);
+            fileUploadBean.setLocalFilePath(filePath);
+            fileUploadBean.setFileName(filePath.substring(filePath.lastIndexOf(File.separator) + 1));
+            fileUploadBean.setOrderIndex(i);
+            fileUploadBean.setRequestUrl(mUploadImageUrl);
+            fileUploadBean.setOriginalBean(list.get(i));
+            fileUploadBean.setUploadState(FileUploadBean.UPLOAD_STATE_UPLOADING);
+            uploadBeanList.add(fileUploadBean);
+        }
+        if (uploadBeanList.size() < 1) {
+            return;
+        }
+        int startIndex = mUploadImageAdapter.getAdapterData().size();
+        mUploadImageAdapter.addData(uploadBeanList);
+        mUploadImageAdapter.notifyItemRangeChanged(startIndex, mUploadImageAdapter.getAdapterData().size());
+        mThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isAttachedToWindow()) {
+                    return;
+                }
+                mFileUploadComponent = new FileUploadComponent(mActivity, mMaxImageSize);
+                mFileUploadComponent.startTogether(mUploadImageUrl,
+                        mTogetherUploadAdapter.getUploadParam(uploadBeanList), mTogetherUploadAdapter.getFilesKey(uploadBeanList),
+                        uploadBeanList, new FileUploadComponent.FileUploadListCallback() {
+
+                            @Override
+                            public void onProgress(final List<FileUploadBean> fileBeanList, final int progress) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (FileUploadBean fileBean : fileBeanList) {
+                                            fileBean.setUploadProgress(progress);
+                                        }
+                                        mUploadImageAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailed(final List<FileUploadBean> fileBeanList, String message) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (FileUploadBean fileBean : fileBeanList) {
+                                            fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_FAIL);
+                                        }
+                                        mUploadImageAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onSuccess(final List<FileUploadBean> fileBeanList, final JSONObject response) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<String> urlList = mTogetherUploadAdapter
+                                                .getRemoteUrlListFromResponse(fileBeanList, response);
+                                        if (urlList == null || urlList.size() < 1 ||
+                                                urlList.size() != fileBeanList.size()) {
+                                            onFailed(fileBeanList, "");
+                                            return;
+                                        }
+                                        for (int i = 0; i < fileBeanList.size(); i++) {
+                                            FileUploadBean fileBean = fileBeanList.get(i);
+                                            fileBean.setRemoteFilePath(urlList.get(i));
+                                            fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_SUCCESS);
+                                        }
+                                        mUploadImageAdapter.notifyDataSetChanged();
+                                        mUploadImageAdapter.notifyItemChanged(0);
+                                    }
+                                });
+                            }
+                        });
             }
         });
     }
@@ -446,8 +583,22 @@ public class ImageUploadView extends RecyclerView {
         super.onDetachedFromWindow();
     }
 
-    public interface UploadResponseAdapter {
-        String getRemoteUrl(JSONObject response);
+    public interface OneByOneUploadAdapter {
+        String getFileKey(FileUploadBean fileUploadBean);
+
+        Map<String, String> getUploadParam(FileUploadBean fileUploadBean);
+
+        String getRemoteUrlFromResponse(FileUploadBean fileUploadBean, JSONObject response);
+    }
+
+    public interface TogetherUploadAdapter {
+        String getFileKey(FileUploadBean fileUploadBean);
+
+        String getFilesKey(List<FileUploadBean> fileUploadBeanList);
+
+        Map<String, String> getUploadParam(List<FileUploadBean> fileUploadBeanList);
+
+        List<String> getRemoteUrlListFromResponse(List<FileUploadBean> fileUploadBeanList, JSONObject response);
     }
 
     public class UploadImageAdapter extends BaseNoPaginationListAdapter<FileUploadBean> {

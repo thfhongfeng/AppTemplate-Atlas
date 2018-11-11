@@ -18,6 +18,7 @@ import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
 import com.pine.base.component.map.MapSdkManager;
+import com.pine.base.component.uploader.bean.FileUploadBean;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/10/23
@@ -98,11 +100,22 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
         );
         swipe_refresh_layout.setEnabled(false);
 
-        photo_iuv.init(this, MvpUrlConstants.Add_ShopPhoto,
-                mPresenter.makeUploadParams(), true,
-                new ImageUploadView.UploadResponseAdapter() {
+        photo_iuv.init(this, MvpUrlConstants.Add_ShopPhoto, true,
+                new ImageUploadView.OneByOneUploadAdapter() {
                     @Override
-                    public String getRemoteUrl(JSONObject response) {
+                    public String getFileKey(FileUploadBean fileUploadBean) {
+                        // Test code begin
+                        return "file";
+                        // Test code end
+                    }
+
+                    @Override
+                    public Map<String, String> getUploadParam(FileUploadBean fileUploadBean) {
+                        return mPresenter.makeUploadDefaultParams();
+                    }
+
+                    @Override
+                    public String getRemoteUrlFromResponse(FileUploadBean fileUploadBean, JSONObject response) {
                         // Test code begin
                         if (response == null) {
                             return null;

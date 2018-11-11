@@ -1,10 +1,12 @@
 package com.pine.base.component.uploader;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.pine.base.R;
 import com.pine.base.component.uploader.bean.FileUploadBean;
+import com.pine.base.http.HttpRequestBean;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.base.http.callback.HttpUploadCallback;
@@ -20,7 +22,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +38,7 @@ public class FileUploadComponent {
     public static final int TYPE_TXT = 3;
     private static final String TAG = LogUtils.makeLogTag(FileUploadComponent.class);
     private WeakReference<Context> mContext;
-    private Map<Integer, FileUploadBean> mRequestMap;
+    private Map<Integer, Object> mRequestMap;
     private long mMaxFileSize = 1024 * 1024;
     private int mOutFileWidth = 1440;
     private int mOutFileHeight = 2550;
@@ -58,40 +62,19 @@ public class FileUploadComponent {
         mOutFileHeight = outFileHeight;
     }
 
-    private void start(final FileUploadBean fileBean, final FileUploadCallback callback) {
-        if (TextUtils.isEmpty(fileBean.getLocalFilePath()) || TextUtils.isEmpty(fileBean.getRequestUrl())) {
+    public void startSingle(@NonNull final FileUploadBean fileBean, final FileUploadCallback callback) {
+        File file = checkFile(fileBean, callback);
+        if (file == null) {
+            LogUtils.d(TAG, "upload check fail");
             return;
         }
-        if (mRequestMap.get(fileBean.getLocalFilePath()) != null) {
-            return;
-        }
-        Context context = mContext.get();
-        if (context == null) {
-            return;
-        }
-
-        File file = new File(fileBean.getLocalFilePath());
-        if (!file.exists()) {
-            if (callback != null) {
-                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_file_null));
-            }
-            return;
-        }
-        if (fileBean.getFileType() == TYPE_IMAGE) {
-            String targetPath = context.getExternalCacheDir() + File.separator + fileBean.getFileName();
-            file = compressImage(fileBean.getLocalFilePath(), targetPath);
-            if (file == null) {
-                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_compress_file_null));
-                return;
-            }
-            fileBean.setLocalTempFilePath(file.getPath());
-        }
-        HashMap<String, String> params = fileBean.getParams();
-        HttpRequestManager.setPostFileRequest(fileBean.getRequestUrl(), params, file,
-                fileBean.getFileName(), fileBean.getFileKey(), fileBean.hashCode(),
+        mRequestMap.put(fileBean.hashCode(), fileBean);
+        HttpRequestManager.setUploadRequest(fileBean.getRequestUrl(), fileBean.getParams(),
+                fileBean.getFileKey(), fileBean.getFileName(), file, fileBean.hashCode(),
                 fileBean.hashCode(), new HttpUploadCallback() {
                     @Override
                     public void onStart(int what) {
+                        LogUtils.d(TAG, "onStart what :" + what);
                         if (callback != null) {
                             callback.onStart(fileBean);
                         }
@@ -100,7 +83,7 @@ public class FileUploadComponent {
                     @Override
                     public void onCancel(int what) {
                         mRequestMap.remove(fileBean.hashCode());
-//                        LogUtils.d(TAG, "Response-onCancel what :" + what);
+                        LogUtils.d(TAG, "onCancel what :" + what);
 //                        if (callback != null) {
 //                            callback.onCancel(fileBean);
 //                        }
@@ -109,7 +92,7 @@ public class FileUploadComponent {
 
                     @Override
                     public void onProgress(int what, int progress) {
-                        LogUtils.d(TAG, "Response-inProgress what:" + what + ", progress:" + progress);
+                        LogUtils.d(TAG, "onProgress what:" + what + ", progress:" + progress);
                         if (callback != null) {
                             callback.onProgress(fileBean, progress);
                         }
@@ -118,9 +101,9 @@ public class FileUploadComponent {
                     @Override
                     public boolean onError(int what, Exception e) {
                         mRequestMap.remove(fileBean.hashCode());
-                        LogUtils.d(TAG, "Response-onError Exception :" + e);
+                        LogUtils.d(TAG, "onError Exception :" + e);
                         if (callback != null) {
-                            callback.onFailed(fileBean, e.toString());
+                            callback.onError(fileBean, e.toString());
                         }
                         deleteTempFile(fileBean);
                         return false;
@@ -129,7 +112,7 @@ public class FileUploadComponent {
                     @Override
                     public void onFinish(int what) {
                         mRequestMap.remove(fileBean.hashCode());
-//                        LogUtils.d(TAG, "Response-onFinish what:" + what);
+                        LogUtils.d(TAG, "onFinish what:" + what);
 //                        if (callback != null) {
 //                            callback.onFinish(fileBean);
 //                        }
@@ -139,27 +122,194 @@ public class FileUploadComponent {
 
                     @Override
                     public void onResponse(int what, JSONObject jsonObject) {
+                        mRequestMap.remove(fileBean.hashCode());
+                        LogUtils.d(TAG, "onResponse what:" + what);
                         if (callback != null) {
                             callback.onSuccess(fileBean, jsonObject);
                         }
                     }
 
                     @Override
-                    public boolean onError(int what, Exception e) {
+                    public boolean onFail(int what, Exception e) {
+                        mRequestMap.remove(fileBean.hashCode());
+                        LogUtils.d(TAG, "onError what:" + what);
                         if (callback != null) {
                             callback.onFailed(fileBean, e.toString());
                         }
                         return false;
                     }
                 });
-        mRequestMap.put(fileBean.hashCode(), fileBean);
     }
 
-    private void deleteTempFile(FileUploadBean bean) {
-        if (bean != null && TextUtils.isEmpty(bean.getLocalTempFilePath())) {
-            new File(bean.getLocalTempFilePath()).deleteOnExit();
-            bean.setLocalTempFilePath("");
+    public void startOneByOne(@NonNull List<FileUploadBean> fileBeanList, FileUploadCallback callback) {
+        if (fileBeanList != null && fileBeanList.size() > 0) {
+            for (int i = 0; i < fileBeanList.size(); i++) {
+                startSingle(fileBeanList.get(i), callback);
+            }
         }
+    }
+
+    public void startTogether(@NonNull String url, @NonNull Map<String, String> params,
+                              String fileKey, final @NonNull List<FileUploadBean> fileBeanList,
+                              final FileUploadListCallback callback) {
+        List<HttpRequestBean.HttpFileBean> checkFileList = checkFileList(fileBeanList, callback);
+        if (checkFileList == null) {
+            LogUtils.d(TAG, "upload check fail");
+            return;
+        }
+        final Map<Integer, Integer> progressMap = new HashMap<>();
+        final int totalProgress = checkFileList.size() * 100;
+        HttpRequestManager.setUploadRequest(url, params, fileKey, checkFileList,
+                fileBeanList.hashCode(), fileBeanList.hashCode(), new HttpUploadCallback() {
+                    int preActualProgress = -10;
+
+                    @Override
+                    public void onStart(int what) {
+                        LogUtils.d(TAG, "onStart what :" + what);
+                    }
+
+                    @Override
+                    public void onCancel(int what) {
+                        LogUtils.d(TAG, "onCancel what :" + what);
+                    }
+
+                    @Override
+                    public void onProgress(int what, int progress) {
+                        progressMap.put(what, progress);
+                        int curProgress = 0;
+                        Iterator<Map.Entry<Integer, Integer>> iterator = progressMap.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry<Integer, Integer> entry = iterator.next();
+                            curProgress += entry.getValue();
+                        }
+                        int actualPro = curProgress * 100 / totalProgress;
+                        if (preActualProgress + 5 <= actualPro) {
+                            LogUtils.d(TAG, "onProgress what:" + what + ", progress:" + actualPro);
+                            if (callback != null) {
+                                callback.onProgress(fileBeanList, actualPro);
+                                preActualProgress = actualPro;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public boolean onError(int what, Exception e) {
+                        LogUtils.d(TAG, "onError Exception :" + e);
+                        return false;
+                    }
+
+                    @Override
+                    public void onFinish(int what) {
+                        LogUtils.d(TAG, "onFinish what:" + what);
+                    }
+                }, new HttpJsonCallback() {
+
+                    @Override
+                    public void onResponse(int what, JSONObject jsonObject) {
+                        mRequestMap.remove(fileBeanList.hashCode());
+                        LogUtils.d(TAG, "onResponse what:" + what);
+                        if (callback != null) {
+                            callback.onSuccess(fileBeanList, jsonObject);
+                        }
+                        deleteTempFileList(fileBeanList);
+                    }
+
+                    @Override
+                    public boolean onFail(int what, Exception e) {
+                        mRequestMap.remove(fileBeanList.hashCode());
+                        LogUtils.d(TAG, "onFail what:" + what);
+                        if (callback != null) {
+                            callback.onFailed(fileBeanList, e.toString());
+                        }
+                        deleteTempFileList(fileBeanList);
+                        return false;
+                    }
+                });
+        mRequestMap.put(fileBeanList.hashCode(), fileBeanList);
+    }
+
+    private File checkFile(FileUploadBean fileBean, FileUploadCallback callback) {
+        if (TextUtils.isEmpty(fileBean.getLocalFilePath()) || TextUtils.isEmpty(fileBean.getRequestUrl())) {
+            LogUtils.d(TAG, "file bean is null");
+            return null;
+        }
+        Context context = mContext.get();
+        if (context == null) {
+            return null;
+        }
+        if (mRequestMap.get(fileBean.hashCode()) != null) {
+            LogUtils.d(TAG, "request is in processing");
+            if (callback != null) {
+                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_file_is_uploading));
+            }
+            return null;
+        }
+        File file = new File(fileBean.getLocalFilePath());
+        if (!file.exists()) {
+            if (callback != null) {
+                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_file_null));
+            }
+            return null;
+        }
+        if (fileBean.getFileType() == TYPE_IMAGE) {
+            String targetPath = context.getExternalCacheDir() + File.separator + fileBean.getFileName();
+            file = compressImage(fileBean.getLocalFilePath(), targetPath);
+            if (file == null) {
+                callback.onFailed(fileBean, context.getString(R.string.base_file_upload_compress_file_null));
+                return null;
+            }
+            fileBean.setLocalTempFilePath(file.getPath());
+        }
+        return file;
+    }
+
+    private List<HttpRequestBean.HttpFileBean> checkFileList(@NonNull List<FileUploadBean> fileBeanList,
+                                                             FileUploadListCallback callback) {
+        if (fileBeanList == null && fileBeanList.size() < 1) {
+            LogUtils.d(TAG, "no file bean in list");
+            return null;
+        }
+        Context context = mContext.get();
+        if (context == null) {
+            return null;
+        }
+        if (mRequestMap.get(fileBeanList.hashCode()) != null) {
+            LogUtils.d(TAG, "request is in processing");
+            if (callback != null) {
+                callback.onFailed(fileBeanList, context.getString(R.string.base_file_upload_file_is_uploading));
+            }
+            return null;
+        }
+        List<HttpRequestBean.HttpFileBean> httpFileBeanList = new ArrayList<>();
+        for (int i = 0; i < fileBeanList.size(); i++) {
+            FileUploadBean fileBean = fileBeanList.get(i);
+            if (TextUtils.isEmpty(fileBean.getLocalFilePath())) {
+                if (callback != null) {
+                    callback.onFailed(fileBeanList, context.getString(R.string.base_file_upload_file_null));
+                }
+                return null;
+            }
+            File file = new File(fileBean.getLocalFilePath());
+            if (!file.exists()) {
+                if (callback != null) {
+                    callback.onFailed(fileBeanList, context.getString(R.string.base_file_upload_file_null));
+                }
+                return null;
+            }
+            if (fileBean.getFileType() == TYPE_IMAGE) {
+                String targetPath = context.getExternalCacheDir() + File.separator + fileBean.getFileName();
+                file = compressImage(fileBean.getLocalFilePath(), targetPath);
+                if (file == null) {
+                    callback.onFailed(fileBeanList, context.getString(R.string.base_file_upload_compress_file_null));
+                    return null;
+                }
+                fileBean.setLocalTempFilePath(file.getPath());
+            }
+            HttpRequestBean.HttpFileBean httpFile = new HttpRequestBean.HttpFileBean(fileBean.getFileKey(),
+                    fileBean.getFileName(), file);
+            httpFileBeanList.add(httpFile);
+        }
+        return httpFileBeanList.size() < 1 ? null : httpFileBeanList;
     }
 
     private File compressImage(String srcFilePath, String targetFilePath) {
@@ -179,11 +329,19 @@ public class FileUploadComponent {
         return null;
     }
 
-    public void start(List<FileUploadBean> fileBeanList, FileUploadCallback callback) {
-        if (fileBeanList != null && fileBeanList.size() > 0) {
-            for (int i = 0; i < fileBeanList.size(); i++) {
-                start(fileBeanList.get(i), callback);
-            }
+    private void deleteTempFile(FileUploadBean bean) {
+        if (bean != null && TextUtils.isEmpty(bean.getLocalTempFilePath())) {
+            new File(bean.getLocalTempFilePath()).deleteOnExit();
+            bean.setLocalTempFilePath("");
+        }
+    }
+
+    private void deleteTempFileList(List<FileUploadBean> list) {
+        if (list == null) {
+            return;
+        }
+        for (FileUploadBean bean : list) {
+            deleteTempFile(bean);
         }
     }
 
@@ -193,9 +351,19 @@ public class FileUploadComponent {
         }
     }
 
+    public void cancel(List<FileUploadBean> fileBeanList) {
+        if (fileBeanList != null) {
+            HttpRequestManager.cancelBySign(fileBeanList.hashCode());
+        }
+    }
+
     public void cancelAll() {
-        for (FileUploadBean bean : mRequestMap.values()) {
-            cancel(bean);
+        for (Object object : mRequestMap.values()) {
+            if (object instanceof List) {
+                HttpRequestManager.cancelBySign(object.hashCode());
+            } else if (object instanceof FileUploadBean) {
+                cancel((FileUploadBean) object);
+            }
         }
         mRequestMap.clear();
     }
@@ -210,17 +378,17 @@ public class FileUploadComponent {
         // 文件开始上传进度回调
         void onProgress(FileUploadBean fileBean, int progress);
 
-        //        // 文件上传完成回调
+//        // 文件上传完成回调
 //        void onFinish(FileUploadBean fileBean);
 //
 //        // 文件上传取消回调
 //        void onCancel(FileUploadBean fileBean);
-//
-        // 文件上传失败回调
-        void onFailed(FileUploadBean fileBean, String message);
 
-//        // 请求出错回调
-//        void onError(FileUploadBean fileBean, String message);
+        // 文件上传失败回调
+        void onError(FileUploadBean fileBean, String message);
+
+        // 请求出错回调
+        void onFailed(FileUploadBean fileBean, String message);
 
         // 请求成功回调
         void onSuccess(FileUploadBean fileBean, JSONObject response);
@@ -231,5 +399,13 @@ public class FileUploadComponent {
      */
     public interface FileUploadListCallback {
 
+        // 文件开始上传进度回调
+        void onProgress(List<FileUploadBean> fileBean, int progress);
+
+        // 请求出错回调
+        void onFailed(List<FileUploadBean> fileBean, String message);
+
+        // 请求成功回调
+        void onSuccess(List<FileUploadBean> fileBean, JSONObject response);
     }
 }

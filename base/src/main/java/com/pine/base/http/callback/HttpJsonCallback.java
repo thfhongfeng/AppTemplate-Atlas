@@ -23,7 +23,7 @@ public abstract class HttpJsonCallback extends HttpAbstractBaseCallback {
             onResponse(what, jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
-            if (!onError(what, e)) {
+            if (!onFail(what, e)) {
                 Application application = AppUtils.getApplicationByReflect();
                 Toast.makeText(application, application.getString(R.string.base_json_data_err),
                         Toast.LENGTH_SHORT).show();
@@ -33,5 +33,5 @@ public abstract class HttpJsonCallback extends HttpAbstractBaseCallback {
 
     public abstract void onResponse(int what, JSONObject jsonObject);
 
-    public abstract boolean onError(int what, Exception e);
+    public abstract boolean onFail(int what, Exception e);
 }

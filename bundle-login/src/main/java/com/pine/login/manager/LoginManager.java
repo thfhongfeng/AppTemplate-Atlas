@@ -153,7 +153,7 @@ public class LoginManager {
         if (bean.getResponse().isSucceed()) {
             ((HttpJsonCallback) bean.getCallBack()).onResponse(bean.getWhat(), bean.getResponse());
         } else {
-            ((HttpJsonCallback) bean.getCallBack()).onError(bean.getWhat(), bean.getResponse().getException());
+            ((HttpJsonCallback) bean.getCallBack()).onFail(bean.getWhat(), bean.getResponse().getException());
         }
     }
 

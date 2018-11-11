@@ -45,13 +45,13 @@ public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
 
     @NonNull
     @Override
-    public HashMap<String, String> makeUploadParams() {
+    public HashMap<String, String> makeUploadDefaultParams() {
         HashMap<String, String> params = new HashMap<>();
         // Test code begin
         params.put("bizType", "10");
         params.put("orderNum", "100");
         params.put("orderNum", "100");
-        params.put("descr", "desc");
+        params.put("descr", "");
         params.put("fileType", "1");
         // Test code end
         return params;

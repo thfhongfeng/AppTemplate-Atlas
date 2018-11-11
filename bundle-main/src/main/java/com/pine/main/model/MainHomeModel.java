@@ -52,7 +52,7 @@ public class MainHomeModel {
             }
 
             @Override
-            public boolean onError(int what, Exception e) {
+            public boolean onFail(int what, Exception e) {
                 return callback.onFail(e);
             }
         };

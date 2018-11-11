@@ -27,15 +27,14 @@ public class HttpRequestBean {
     private HttpAbstractBaseCallback callBack;
 
     // for download
-    private String fileFolder;
-    private String fileName;
+    private String saveFolder;
+    private String saveFileName;
     private boolean isContinue;
     private boolean isDeleteOld;
 
     // for upload
-    private String fileKey;
-    private List<String> fileNameList;
-    private List<File> fileList;
+    private String upLoadFileKey;
+    private List<HttpFileBean> uploadFileList;
 
     private ActionType actionType = ActionType.COMMON;
 
@@ -55,7 +54,7 @@ public class HttpRequestBean {
         return url;
     }
 
-    public void setUrl(String url) {
+    protected void setUrl(String url) {
         this.url = url;
     }
 
@@ -63,7 +62,7 @@ public class HttpRequestBean {
         return requestMethod;
     }
 
-    public void setRequestMethod(HttpRequestMethod requestMethod) {
+    protected void setRequestMethod(HttpRequestMethod requestMethod) {
         this.requestMethod = requestMethod;
     }
 
@@ -71,7 +70,7 @@ public class HttpRequestBean {
         return params;
     }
 
-    public void setParams(Map<String, String> params) {
+    protected void setParams(Map<String, String> params) {
         this.params = params;
     }
 
@@ -79,7 +78,7 @@ public class HttpRequestBean {
         return moduleTag;
     }
 
-    public void setModuleTag(String moduleTag) {
+    protected void setModuleTag(String moduleTag) {
         this.moduleTag = moduleTag;
     }
 
@@ -87,7 +86,7 @@ public class HttpRequestBean {
         return what;
     }
 
-    public void setWhat(int what) {
+    protected void setWhat(int what) {
         this.what = what;
     }
 
@@ -95,7 +94,7 @@ public class HttpRequestBean {
         return sign;
     }
 
-    public void setSign(Object sign) {
+    protected void setSign(Object sign) {
         this.sign = sign;
     }
 
@@ -103,7 +102,7 @@ public class HttpRequestBean {
         return needLogin;
     }
 
-    public void setNeedLogin(boolean needLogin) {
+    protected void setNeedLogin(boolean needLogin) {
         this.needLogin = needLogin;
     }
 
@@ -119,7 +118,7 @@ public class HttpRequestBean {
         return callBack;
     }
 
-    public void setCallBack(HttpAbstractBaseCallback callBack) {
+    protected void setCallBack(HttpAbstractBaseCallback callBack) {
         this.callBack = callBack;
     }
 
@@ -139,27 +138,27 @@ public class HttpRequestBean {
         this.response = response;
     }
 
-    public String getFileFolder() {
-        return fileFolder;
+    public String getSaveFolder() {
+        return saveFolder;
     }
 
-    public void setFileFolder(String fileFolder) {
-        this.fileFolder = fileFolder;
+    protected void setSaveFolder(String saveFolder) {
+        this.saveFolder = saveFolder;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getSaveFileName() {
+        return saveFileName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    protected void setSaveFileName(String saveFileName) {
+        this.saveFileName = saveFileName;
     }
 
     public boolean isContinue() {
         return isContinue;
     }
 
-    public void setContinue(boolean aContinue) {
+    protected void setContinue(boolean aContinue) {
         isContinue = aContinue;
     }
 
@@ -167,31 +166,65 @@ public class HttpRequestBean {
         return isDeleteOld;
     }
 
-    public void setDeleteOld(boolean deleteOld) {
+    protected void setDeleteOld(boolean deleteOld) {
         isDeleteOld = deleteOld;
     }
 
-    public String getFileKey() {
-        return fileKey;
+    public String getUpLoadFileKey() {
+        return upLoadFileKey;
     }
 
-    public void setFileKey(String fileKey) {
-        this.fileKey = fileKey;
+    protected void setUpLoadFileKey(String upLoadFileKey) {
+        this.upLoadFileKey = upLoadFileKey;
     }
 
-    public List<File> getFileList() {
-        return fileList;
+    public List<HttpFileBean> getUploadFileList() {
+        return uploadFileList;
     }
 
-    public void setFileList(List<File> fileList) {
-        this.fileList = fileList;
+    protected void setUploadFileList(List<HttpFileBean> uploadFileList) {
+        this.uploadFileList = uploadFileList;
     }
 
-    public List<String> getFileNameList() {
-        return fileNameList;
-    }
+    public static class HttpFileBean {
+        private int what;
+        private String fileKey;
+        private String fileName;
+        private File file;
 
-    public void setFileNameList(List<String> fileNameList) {
-        this.fileNameList = fileNameList;
+        public HttpFileBean(String fileKey, String fileName, File file) {
+            this.fileKey = fileKey;
+            this.fileName = fileName;
+            this.file = file;
+            this.what = hashCode();
+        }
+
+        public int getWhat() {
+            return what;
+        }
+
+        public String getFileKey() {
+            return fileKey;
+        }
+
+        public void setFileKey(String fileKey) {
+            this.fileKey = fileKey;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
     }
 }

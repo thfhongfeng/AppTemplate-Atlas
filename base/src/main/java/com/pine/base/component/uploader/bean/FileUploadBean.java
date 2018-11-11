@@ -2,7 +2,7 @@ package com.pine.base.component.uploader.bean;
 
 import android.view.View;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/11/5
@@ -24,7 +24,7 @@ public class FileUploadBean {
     private String localFilePath;
     private String localTempFilePath;
     private String remoteFilePath;
-    private HashMap<String, String> params;
+    private Map<String, String> params;
     private Object originalBean;
     private View attachView;
     private int orderIndex;
@@ -111,11 +111,11 @@ public class FileUploadBean {
         this.remoteFilePath = remoteFilePath;
     }
 
-    public HashMap<String, String> getParams() {
+    public Map<String, String> getParams() {
         return params;
     }
 
-    public void setParams(HashMap<String, String> params) {
+    public void setParams(Map<String, String> params) {
         this.params = params;
     }
 

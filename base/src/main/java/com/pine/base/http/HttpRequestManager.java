@@ -231,8 +231,9 @@ public class HttpRequestManager {
      * @param callBack    回调
      * @return false表示请求没有被发送出去；true表示请求正常发出
      */
-    public static boolean setDownloadRequest(String url, String fileFolder, String fileName, HttpRequestMethod method,
-                                             HashMap<String, String> params, String moduleTag, boolean isContinue, boolean isDeleteOld,
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName,
+                                             HttpRequestMethod method, HashMap<String, String> params,
+                                             String moduleTag, boolean isContinue, boolean isDeleteOld,
                                              int what, Object sign, boolean needLogin, HttpDownloadCallback callBack) {
         //设置模块名
         if (!TextUtils.isEmpty(moduleTag)) {
@@ -243,8 +244,8 @@ public class HttpRequestManager {
 
         HttpRequestBean requestBean = new HttpRequestBean(what, callBack);
         requestBean.setUrl(url);
-        requestBean.setFileFolder(fileFolder);
-        requestBean.setFileName(fileName);
+        requestBean.setSaveFolder(fileFolder);
+        requestBean.setSaveFileName(fileName);
         requestBean.setRequestMethod(method);
         requestBean.setParams(params);
         requestBean.setModuleTag(moduleTag);
@@ -286,34 +287,52 @@ public class HttpRequestManager {
     /**
      * 上传单个文件
      */
-    public static boolean setPostFileRequest(String url, Map<String, String> params, File file,
-                                             String fileName, String fileKey, int what, Object sign,
-                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        return setPostFileRequest(url, params, null, file, fileName, fileKey, what, sign,
+    public static boolean setUploadRequest(String url, Map<String, String> params,
+                                           String fileKey, String fileName, File file,
+                                           int what, Object sign,
+                                           HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+        return setUploadRequest(url, params, null, fileKey, fileName, file, what, sign,
                 false, processCallback, requestCallback);
     }
 
     /**
      * 上传单个文件
      */
-    public static boolean setPostFileRequest(String url, Map<String, String> params, String moduleTag, File file,
-                                             String fileName, String fileKey, int what, Object sign, boolean needLogin,
-                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        ArrayList<File> fileList = new ArrayList<>();
-        fileList.add(file);
+    public static boolean setUploadRequest(String url, Map<String, String> params, String moduleTag,
+                                           String fileKey, String fileName, File file,
+                                           int what, Object sign, boolean needLogin,
+                                           HttpUploadCallback processCallback,
+                                           HttpJsonCallback requestCallback) {
+        ArrayList<HttpRequestBean.HttpFileBean> fileList = new ArrayList<>();
+        HttpRequestBean.HttpFileBean fileBean = new HttpRequestBean.HttpFileBean(fileKey, fileName, file);
+        fileList.add(fileBean);
         ArrayList<String> fileNameList = new ArrayList<>();
         fileNameList.add(fileName);
-        return setPostFileRequest(url, params, moduleTag, fileList, fileNameList, fileKey, what,
+        return setUploadRequest(url, params, moduleTag, null, fileList, what,
                 sign, needLogin, processCallback, requestCallback);
     }
 
     /**
      * 上传多个文件
      */
-    public static boolean setPostFileRequest(String url, Map<String, String> params, List<File> fileList,
-                                             List<String> fileNameList, String fileKey, int what, Object sign,
-                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
-        return setPostFileRequest(url, params, null, fileList, fileNameList, fileKey,
+    public static boolean setUploadRequest(String url, Map<String, String> params,
+                                           List<HttpRequestBean.HttpFileBean> httpFileList,
+                                           int what, Object sign,
+                                           HttpUploadCallback processCallback,
+                                           HttpJsonCallback requestCallback) {
+        return setUploadRequest(url, params, null, null, httpFileList,
+                what, sign, false, processCallback, requestCallback);
+    }
+
+    /**
+     * 上传多个文件
+     */
+    public static boolean setUploadRequest(String url, Map<String, String> params, String fileKey,
+                                           List<HttpRequestBean.HttpFileBean> httpFileList,
+                                           int what, Object sign,
+                                           HttpUploadCallback processCallback,
+                                           HttpJsonCallback requestCallback) {
+        return setUploadRequest(url, params, null, fileKey, httpFileList,
                 what, sign, false, processCallback, requestCallback);
     }
 
@@ -323,9 +342,8 @@ public class HttpRequestManager {
      * @param url             地址
      * @param params          普通参数
      * @param moduleTag       模块标识
-     * @param fileList        上传文件集合
-     * @param fileNameList    上传文件名集合
      * @param fileKey         文件的key
+     * @param httpFileList    上传文件集合
      * @param what            请求标识code
      * @param sign            用于取消的sign
      * @param needLogin       是否需要登陆
@@ -333,9 +351,10 @@ public class HttpRequestManager {
      * @param requestCallback
      * @return false表示请求没有被发送出去；true表示请求正常发出
      */
-    public static boolean setPostFileRequest(String url, Map<String, String> params, String moduleTag, List<File> fileList,
-                                             List<String> fileNameList, String fileKey, int what, Object sign, boolean needLogin,
-                                             HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
+    public static boolean setUploadRequest(String url, Map<String, String> params, String moduleTag,
+                                           String fileKey, List<HttpRequestBean.HttpFileBean> httpFileList,
+                                           int what, Object sign, boolean needLogin,
+                                           HttpUploadCallback processCallback, HttpJsonCallback requestCallback) {
         if (!TextUtils.isEmpty(moduleTag)) {
             requestCallback.setModuleTag(moduleTag);
             processCallback.setModuleTag(moduleTag);
@@ -347,9 +366,8 @@ public class HttpRequestManager {
 
         HttpRequestBean requestBean = new HttpRequestBean(what, requestCallback);
         requestBean.setUrl(url);
-        requestBean.setFileList(fileList);
-        requestBean.setFileNameList(fileNameList);
-        requestBean.setFileKey(fileKey);
+        requestBean.setUploadFileList(httpFileList);
+        requestBean.setUpLoadFileKey(fileKey);
         requestBean.setRequestMethod(HttpRequestMethod.POST);
         requestBean.setParams(params);
         requestBean.setWhat(what);
@@ -444,7 +462,7 @@ public class HttpRequestManager {
                     }
                 }
                 Exception exception = response.getException();
-                if (!callBack.onError(what, exception)) {
+                if (!callBack.onFail(what, exception)) {
                     defaultDeduceErrorResponse(exception);
                 }
             }
@@ -539,8 +557,8 @@ public class HttpRequestManager {
 
             @Override
             public void onFinish(int what) {
-                LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+//                LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
+//                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
                 callBack.onFinish(what);
             }
 

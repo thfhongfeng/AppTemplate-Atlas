@@ -78,7 +78,7 @@ public class LoginCallback extends HttpJsonCallback {
     }
 
     @Override
-    public boolean onError(int what, Exception e) {
+    public boolean onFail(int what, Exception e) {
         BaseApplication.setLogin(false);
         if (mCallback != null) {
             mCallback.onLoginResponse(false, e.toString());

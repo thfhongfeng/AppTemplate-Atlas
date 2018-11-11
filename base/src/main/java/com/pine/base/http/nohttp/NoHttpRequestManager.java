@@ -1,6 +1,7 @@
 package com.pine.base.http.nohttp;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.pine.base.http.HttpRequestBean;
 import com.pine.base.http.HttpRequestMethod;
@@ -27,7 +28,6 @@ import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.yanzhenjie.nohttp.tools.HeaderUtil;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.HttpCookie;
@@ -214,7 +214,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     public void setDownloadRequest(HttpRequestBean requestBean, IHttpResponseListener.OnDownloadListener listener) {
         IBasicRequest request = NoHttp.createDownloadRequest(requestBean.getUrl(),
                 transferToNoHttpHttpMethod(requestBean.getRequestMethod()),
-                requestBean.getFileFolder(), requestBean.getFileName(),
+                requestBean.getSaveFolder(), requestBean.getSaveFileName(),
                 requestBean.isContinue(), requestBean.isDeleteOld());
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
@@ -226,25 +226,29 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     @Override
     public void setUploadRequest(HttpRequestBean requestBean, IHttpResponseListener.OnUploadListener processListener,
                                  IHttpResponseListener.OnResponseListener responseListener) {
-        if (requestBean.getFileList() == null) {
+        if (requestBean.getUploadFileList() == null) {
             return;
         }
         Request<String> request = NoHttp.createStringRequest(requestBean.getUrl(), RequestMethod.POST);
         List<Binary> binaries = new ArrayList<>();
-        int fileNameListSize = requestBean.getFileNameList().size();
-        for (int i = 0; i < requestBean.getFileList().size(); i++) {
-            File file = requestBean.getFileList().get(i);
-            String fileName = fileNameListSize > i ? requestBean.getFileNameList().get(i) : requestBean.getFileNameList().get(fileNameListSize - 1) + i;
+        boolean isMulFileKey = TextUtils.isEmpty(requestBean.getUpLoadFileKey());
+        for (int i = 0; i < requestBean.getUploadFileList().size(); i++) {
+            HttpRequestBean.HttpFileBean fileBean = requestBean.getUploadFileList().get(i);
             BasicBinary binary = null;
             try {
-                binary = new InputStreamBinary(new FileInputStream(file), fileName);
-                binary.setUploadListener(requestBean.getWhat(), getUploadListener(processListener));
+                binary = new InputStreamBinary(new FileInputStream(fileBean.getFile()), fileBean.getFileName());
+                binary.setUploadListener(fileBean.getWhat(), getUploadListener(processListener));
                 binaries.add(binary);
+                if (isMulFileKey) {
+                    request.add(TextUtils.isEmpty(fileBean.getFileKey()) ? "file" + i : fileBean.getFileKey(), binaries);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        request.add(requestBean.getFileKey(), binaries);
+        if (!isMulFileKey) {
+            request.add(requestBean.getUpLoadFileKey(), binaries);
+        }
         if (requestBean.getParams() != null) {
             Iterator<Map.Entry<String, String>> iterator = requestBean.getParams().entrySet().iterator();
             while (iterator.hasNext()) {
