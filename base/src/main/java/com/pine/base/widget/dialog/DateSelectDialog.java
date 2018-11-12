@@ -45,8 +45,8 @@ public class DateSelectDialog extends Dialog {
     }
 
     public static class Builder {
-        private TextView cancelBtn, confirmBtn;
-        private WheelPicker wheelYear, wheelMonth, wheelDay;
+        private TextView cancel_tv, confirm_tv;
+        private WheelPicker wheel_one, wheel_two, wheel_three;
         private Context context;
         private Calendar selectedDate;
         private int startYear, endYear;
@@ -67,11 +67,11 @@ public class DateSelectDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final DateSelectDialog dialog = new DateSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_date_or_time_select, null);
-            cancelBtn = layout.findViewById(R.id.cancel_tv);
-            confirmBtn = layout.findViewById(R.id.confirm_tv);
-            wheelYear = layout.findViewById(R.id.wheel_one);
-            wheelMonth = layout.findViewById(R.id.wheel_two);
-            wheelDay = layout.findViewById(R.id.wheel_three);
+            cancel_tv = layout.findViewById(R.id.cancel_tv);
+            confirm_tv = layout.findViewById(R.id.confirm_tv);
+            wheel_one = layout.findViewById(R.id.wheel_one);
+            wheel_two = layout.findViewById(R.id.wheel_two);
+            wheel_three = layout.findViewById(R.id.wheel_three);
             initView(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -90,7 +90,7 @@ public class DateSelectDialog extends Dialog {
             for (int i = 0; i <= endYear - startYear; i++) {
                 yearList.add(context.getString(R.string.base_date_year, String.valueOf(startYear + i)));
             }
-            wheelYear.setData(yearList);
+            wheel_one.setData(yearList);
             List<String> monthList = new ArrayList<>();
             for (int i = 0; i < 12; i++) {
                 String monthStr = String.valueOf(i + 1);
@@ -99,17 +99,17 @@ public class DateSelectDialog extends Dialog {
                 }
                 monthList.add(context.getString(R.string.base_date_month, monthStr));
             }
-            wheelMonth.setData(monthList);
+            wheel_two.setData(monthList);
             selectedDate = Calendar.getInstance();
             selectedDate.setTime(new Date());
             showDate(selectedDate);
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
+            cancel_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
-            confirmBtn.setOnClickListener(new View.OnClickListener() {
+            confirm_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -118,20 +118,20 @@ public class DateSelectDialog extends Dialog {
                     }
                 }
             });
-            wheelYear.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_one.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     selectedDate.set(Calendar.YEAR, startYear + i);
                 }
             });
-            wheelMonth.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_two.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     selectedDate.set(Calendar.MONTH, i);
                     showDate(selectedDate);
                 }
             });
-            wheelDay.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_three.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     selectedDate.set(Calendar.DAY_OF_MONTH, i + 1);
@@ -141,7 +141,7 @@ public class DateSelectDialog extends Dialog {
 
         public void showDate(Calendar calendar) {
             int month = calendar.get(Calendar.MONTH);
-            wheelMonth.setSelectedItemPosition(month);
+            wheel_two.setSelectedItemPosition(month);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int dayCount = getMonthDayCount(calendar);
             List<String> dayList = new ArrayList<>();
@@ -152,12 +152,12 @@ public class DateSelectDialog extends Dialog {
                 }
                 dayList.add(context.getString(R.string.base_date_day, dayStr));
             }
-            wheelDay.setData(dayList);
-            wheelDay.setSelectedItemPosition(day - 1);
+            wheel_three.setData(dayList);
+            wheel_three.setSelectedItemPosition(day - 1);
             int year = calendar.get(Calendar.YEAR);
-            int index = wheelYear.getData().indexOf(context.getString(R.string.base_date_year,
+            int index = wheel_one.getData().indexOf(context.getString(R.string.base_date_year,
                     String.valueOf(year)));
-            wheelYear.setSelectedItemPosition(index);
+            wheel_one.setSelectedItemPosition(index);
         }
 
         private int getMonthDayCount(Calendar calendar) {

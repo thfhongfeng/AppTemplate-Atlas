@@ -12,6 +12,8 @@ import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.exception.MessageException;
+import com.pine.base.http.HttpRequestManager;
+import com.pine.base.widget.dialog.ProgressDialog;
 import com.pine.router.IRouterCallback;
 import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterBundleSwitcher;
@@ -83,14 +85,15 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
     }
 
     @Override
-    public void updateVersion() {
+    public void updateVersion(final boolean isForce) {
         ApkVersionManager.getInstance().startUpdate(new ApkVersionManager.UpdateListener() {
 
             @Override
             public void onDownloadStart(boolean isResume, long rangeSize, long allCount) {
-                LogUtils.d(TAG, "onDownloadStart isResume:" + isResume + ", rangeSize:" + rangeSize + ", allCount:" + allCount);
+                LogUtils.d(TAG, "onDownloadStart isResume:" + isResume +
+                        ", rangeSize:" + rangeSize + ", allCount:" + allCount);
                 if (isUiAlive()) {
-                    getUi().showVersionUpdateProgressDialog();
+                    showVersionUpdateProgressDialog(isForce);
                 }
             }
 
@@ -116,7 +119,11 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 if (isUiAlive()) {
                     Toast.makeText(getContext(), R.string.wel_version_update_cancel, Toast.LENGTH_SHORT).show();
                     getUi().dismissVersionUpdateProgressDialog();
-                    autoLogin();
+                    if (isForce) {
+                        getActivity().finish();
+                    } else {
+                        autoLogin();
+                    }
                 }
             }
 
@@ -133,7 +140,11 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                     }
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     getUi().dismissVersionUpdateProgressDialog();
-                    autoLogin();
+                    if (isForce) {
+                        getActivity().finish();
+                    } else {
+                        autoLogin();
+                    }
                 }
             }
         });
@@ -187,11 +198,11 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 if (isUiAlive() && versionEntity != null) {
                     ApkVersionManager.getInstance().setVersionEntity(versionEntity);
                     try {
-                        PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
+                        PackageInfo packageInfo = getContext().getPackageManager()
+                                .getPackageInfo(getContext().getPackageName(), 0);
                         if (packageInfo.versionCode < versionEntity.getVersionCode()) {
                             if (versionEntity.isForce()) {
-                                getUi().showVersionUpdateProgressDialog();
-                                updateVersion();
+                                updateVersion(true);
                             } else {
                                 getUi().showVersionUpdateConfirmDialog(versionEntity.getVersionName());
                             }
@@ -213,6 +224,16 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 return false;
             }
         });
+    }
+
+    private void showVersionUpdateProgressDialog(boolean isForce) {
+        getUi().showVersionUpdateProgressDialog(isForce ? null :
+                new ProgressDialog.IDialogActionListener() {
+                    @Override
+                    public void onCancel() {
+                        HttpRequestManager.cancelBySign(ApkVersionManager.getInstance().CANCEL_SIGN);
+                    }
+                });
     }
 
     private void installNewVersionApk() {

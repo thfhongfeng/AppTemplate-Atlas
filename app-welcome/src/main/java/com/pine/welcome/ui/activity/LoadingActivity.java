@@ -1,7 +1,6 @@
 package com.pine.welcome.ui.activity;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.base.util.DialogUtils;
+import com.pine.base.widget.dialog.ProgressDialog;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.ILoadingContract;
 import com.pine.welcome.presenter.LoadingPresenter;
@@ -71,7 +71,7 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
                 @Override
                 public void onClick(View v) {
                     mUpdateConfirmDialog.dismiss();
-                    mPresenter.updateVersion();
+                    mPresenter.updateVersion(false);
                 }
             });
         }
@@ -99,20 +99,20 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     }
 
     @Override
-    public void showVersionUpdateProgressDialog() {
+    public void showVersionUpdateProgressDialog(ProgressDialog.IDialogActionListener listener) {
         if (mUpdateProgressDialog != null) {
             mUpdateProgressDialog.dismiss();
         }
-        mUpdateProgressDialog = DialogUtils.createProgressDialog(this);
+        mUpdateProgressDialog = DialogUtils.createDownloadProgressDialog(this,
+                0, listener);
         mUpdateProgressDialog.show();
     }
 
     @Override
     public void updateVersionUpdateProgressDialog(int progress) {
-        if (mUpdateProgressDialog == null) {
-            showVersionUpdateProgressDialog();
+        if (mUpdateProgressDialog != null) {
+            mUpdateProgressDialog.setProgress(progress);
         }
-        mUpdateProgressDialog.setProgress(progress);
     }
 
     @Override

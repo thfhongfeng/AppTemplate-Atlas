@@ -139,31 +139,32 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         };
     }
 
-    private OnUploadListener getUploadListener(final IHttpResponseListener.OnUploadListener listener) {
+    private OnUploadListener getUploadListener(final IHttpResponseListener.OnUploadListener listener,
+                                               final HttpRequestBean.HttpFileBean fileBean) {
         return new OnUploadListener() {
             @Override
             public void onStart(int what) {
-                listener.onStart(what);
+                listener.onStart(what, fileBean);
             }
 
             @Override
             public void onCancel(int what) {
-                listener.onCancel(what);
+                listener.onCancel(what, fileBean);
             }
 
             @Override
             public void onProgress(int what, int progress) {
-                listener.onProgress(what, progress);
+                listener.onProgress(what, fileBean, progress);
             }
 
             @Override
             public void onFinish(int what) {
-                listener.onFinish(what);
+                listener.onFinish(what, fileBean);
             }
 
             @Override
             public void onError(int what, Exception exception) {
-                listener.onError(what, exception);
+                listener.onError(what, fileBean, exception);
             }
         };
     }
@@ -202,12 +203,14 @@ public class NoHttpRequestManager implements IHttpRequestManager {
 
     @Override
     public void setJsonRequest(HttpRequestBean requestBean, IHttpResponseListener.OnResponseListener listener) {
-        IBasicRequest request = NoHttp.createStringRequest(requestBean.getUrl(), transferToNoHttpHttpMethod(requestBean.getRequestMethod()));
+        IBasicRequest request = NoHttp.createStringRequest(requestBean.getUrl(),
+                transferToNoHttpHttpMethod(requestBean.getRequestMethod()));
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }
         addGlobalSessionCookie(request);
-        mRequestQueue.add(requestBean.getWhat(), (Request) addParams(request, requestBean.getParams()), getResponseListener(listener));
+        mRequestQueue.add(requestBean.getWhat(), (Request) addParams(request,
+                requestBean.getParams()), getResponseListener(listener));
     }
 
     @Override
@@ -220,7 +223,8 @@ public class NoHttpRequestManager implements IHttpRequestManager {
             request.setCancelSign(requestBean.getSign());
         }
         addGlobalSessionCookie(request);
-        mDownloadQueue.add(requestBean.getWhat(), (DownloadRequest) addParams(request, requestBean.getParams()), getDownloadListener(listener));
+        mDownloadQueue.add(requestBean.getWhat(), (DownloadRequest) addParams(request,
+                requestBean.getParams()), getDownloadListener(listener));
     }
 
     @Override
@@ -237,7 +241,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
             BasicBinary binary = null;
             try {
                 binary = new InputStreamBinary(new FileInputStream(fileBean.getFile()), fileBean.getFileName());
-                binary.setUploadListener(fileBean.getWhat(), getUploadListener(processListener));
+                binary.setUploadListener(fileBean.getWhat(), getUploadListener(processListener, fileBean));
                 binaries.add(binary);
                 if (isMulFileKey) {
                     request.add(TextUtils.isEmpty(fileBean.getFileKey()) ? "file" + i : fileBean.getFileKey(), binaries);
@@ -279,11 +283,13 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     @Override
     public void cancelBySign(Object sign) {
         mRequestQueue.cancelBySign(sign);
+        mDownloadQueue.cancelBySign(sign);
     }
 
     @Override
     public void cancelAll() {
         mRequestQueue.cancelAll();
+        mDownloadQueue.cancelAll();
     }
 
     @Override

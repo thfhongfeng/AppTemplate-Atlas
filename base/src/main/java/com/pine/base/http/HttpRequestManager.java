@@ -185,6 +185,13 @@ public class HttpRequestManager {
     }
 
     // 下载文件
+    public static boolean setDownloadRequest(String url, String fileFolder, String fileName,
+                                             int what, Object sign, HttpDownloadCallback callBack) {
+        return setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
+                null, false, true, what, sign, false, callBack);
+    }
+
+    // 下载文件
     public static boolean setDownloadRequest(String url, String fileFolder, String fileName, String moduleTag,
                                              int what, HttpDownloadCallback callBack) {
         return setDownloadRequest(url, fileFolder, fileName, HttpRequestMethod.GET, new HashMap<String, String>(),
@@ -304,7 +311,8 @@ public class HttpRequestManager {
                                            HttpUploadCallback processCallback,
                                            HttpJsonCallback requestCallback) {
         ArrayList<HttpRequestBean.HttpFileBean> fileList = new ArrayList<>();
-        HttpRequestBean.HttpFileBean fileBean = new HttpRequestBean.HttpFileBean(fileKey, fileName, file);
+        HttpRequestBean.HttpFileBean fileBean = new HttpRequestBean.HttpFileBean(fileKey,
+                fileName, file, 0);
         fileList.add(fileBean);
         ArrayList<String> fileNameList = new ArrayList<>();
         fileNameList.add(fileName);
@@ -541,33 +549,33 @@ public class HttpRequestManager {
     public static IHttpResponseListener.OnUploadListener getUploadListener(final HttpUploadCallback callBack) {
         return new IHttpResponseListener.OnUploadListener() {
             @Override
-            public void onStart(int what) {
-                callBack.onStart(what);
+            public void onStart(int what, HttpRequestBean.HttpFileBean fileBean) {
+                callBack.onStart(what, fileBean);
             }
 
             @Override
-            public void onCancel(int what) {
-                callBack.onCancel(what);
+            public void onCancel(int what, HttpRequestBean.HttpFileBean fileBean) {
+                callBack.onCancel(what, fileBean);
             }
 
             @Override
-            public void onProgress(int what, int progress) {
-                callBack.onProgress(what, progress);
+            public void onProgress(int what, HttpRequestBean.HttpFileBean fileBean, int progress) {
+                callBack.onProgress(what, fileBean, progress);
             }
 
             @Override
-            public void onFinish(int what) {
+            public void onFinish(int what, HttpRequestBean.HttpFileBean fileBean) {
 //                LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
 //                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
-                callBack.onFinish(what);
+                callBack.onFinish(what, fileBean);
             }
 
             @Override
-            public void onError(int what, Exception exception) {
+            public void onError(int what, HttpRequestBean.HttpFileBean fileBean, Exception exception) {
                 LogUtils.d(TAG, "Response onError in upload queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- exception : " + exception.toString());
-                if (!callBack.onError(what, exception)) {
+                if (!callBack.onError(what, fileBean, exception)) {
                     defaultDeduceErrorResponse(exception);
                 }
             }

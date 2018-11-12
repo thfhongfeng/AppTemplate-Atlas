@@ -191,12 +191,14 @@ public class HttpRequestBean {
         private String fileKey;
         private String fileName;
         private File file;
+        private int position;
 
-        public HttpFileBean(String fileKey, String fileName, File file) {
+        public HttpFileBean(String fileKey, String fileName, File file, int position) {
+            this.what = hashCode();
             this.fileKey = fileKey;
             this.fileName = fileName;
             this.file = file;
-            this.what = hashCode();
+            this.position = position;
         }
 
         public int getWhat() {
@@ -225,6 +227,10 @@ public class HttpRequestBean {
 
         public void setFile(File file) {
             this.file = file;
+        }
+
+        public int getPosition() {
+            return position;
         }
     }
 }

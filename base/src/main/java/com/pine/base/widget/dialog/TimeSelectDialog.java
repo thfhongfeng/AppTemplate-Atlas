@@ -46,8 +46,8 @@ public class TimeSelectDialog extends Dialog {
 
     public static class Builder {
         private static final int MAX_YEARS = 10;
-        private TextView cancelBtn, confirmBtn;
-        private WheelPicker wheelHour, wheelMinute, wheelSecond;
+        private TextView cancel_tv, confirm_tv;
+        private WheelPicker wheel_one, wheel_two, wheel_three;
         private Context context;
         private Calendar selectedTime;
 
@@ -72,11 +72,11 @@ public class TimeSelectDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final TimeSelectDialog dialog = new TimeSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_date_or_time_select, null);
-            cancelBtn = layout.findViewById(R.id.cancel_tv);
-            confirmBtn = layout.findViewById(R.id.confirm_tv);
-            wheelHour = layout.findViewById(R.id.wheel_one);
-            wheelMinute = layout.findViewById(R.id.wheel_two);
-            wheelSecond = layout.findViewById(R.id.wheel_three);
+            cancel_tv = layout.findViewById(R.id.cancel_tv);
+            confirm_tv = layout.findViewById(R.id.confirm_tv);
+            wheel_one = layout.findViewById(R.id.wheel_one);
+            wheel_two = layout.findViewById(R.id.wheel_two);
+            wheel_three = layout.findViewById(R.id.wheel_three);
             initView(dialog, dialogSelect, showHour, showMinute, showSecond);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -103,17 +103,17 @@ public class TimeSelectDialog extends Dialog {
                     }
                     hourList.add(context.getString(R.string.base_time_hour, hour));
                 }
-                wheelHour.setData(hourList);
-                wheelHour.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+                wheel_one.setData(hourList);
+                wheel_one.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                         selectedTime.set(Calendar.HOUR_OF_DAY, i);
                     }
                 });
                 int hour = selectedTime.get(Calendar.HOUR_OF_DAY);
-                wheelHour.setSelectedItemPosition(hour);
+                wheel_one.setSelectedItemPosition(hour);
             } else {
-                wheelHour.setVisibility(View.GONE);
+                wheel_one.setVisibility(View.GONE);
             }
             if (showMinute) {
                 List<String> minuteList = new ArrayList<>();
@@ -124,17 +124,17 @@ public class TimeSelectDialog extends Dialog {
                     }
                     minuteList.add(context.getString(R.string.base_time_minute, minute));
                 }
-                wheelMinute.setData(minuteList);
-                wheelMinute.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+                wheel_two.setData(minuteList);
+                wheel_two.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                         selectedTime.set(Calendar.MINUTE, i);
                     }
                 });
                 int minute = selectedTime.get(Calendar.MINUTE);
-                wheelMinute.setSelectedItemPosition(minute);
+                wheel_two.setSelectedItemPosition(minute);
             } else {
-                wheelMinute.setVisibility(View.GONE);
+                wheel_two.setVisibility(View.GONE);
             }
             if (showSecond) {
                 List<String> secondList = new ArrayList<>();
@@ -145,26 +145,26 @@ public class TimeSelectDialog extends Dialog {
                     }
                     secondList.add(context.getString(R.string.base_time_second, second));
                 }
-                wheelSecond.setData(secondList);
-                wheelSecond.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+                wheel_three.setData(secondList);
+                wheel_three.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                         selectedTime.set(Calendar.SECOND, i);
                     }
                 });
                 int second = selectedTime.get(Calendar.SECOND);
-                wheelSecond.setSelectedItemPosition(second);
+                wheel_three.setSelectedItemPosition(second);
             } else {
-                wheelSecond.setVisibility(View.GONE);
+                wheel_three.setVisibility(View.GONE);
             }
 
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
+            cancel_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
-            confirmBtn.setOnClickListener(new View.OnClickListener() {
+            confirm_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();

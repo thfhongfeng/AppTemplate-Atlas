@@ -3,7 +3,6 @@ package com.pine.base.util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.pine.base.component.share.bean.ShareBean;
 import com.pine.base.component.share.manager.ShareManager;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
+import com.pine.base.widget.dialog.ProgressDialog;
 import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
 import com.pine.base.widget.dialog.TimeSelectDialog;
@@ -56,18 +56,16 @@ public class DialogUtils {
     }
 
     /**
-     * 进度提示框
+     * 下载进度提示框
      *
      * @param context
      * @return
      */
-    public static ProgressDialog createProgressDialog(Context context) {
-        ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        dialog.setTitle(R.string.base_downloading);
-        dialog.setProgress(0);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+    public static ProgressDialog createDownloadProgressDialog(Context context,
+                                                              int initProgress,
+                                                              ProgressDialog.IDialogActionListener listener) {
+        final ProgressDialog dialog = new ProgressDialog.Builder(context)
+                .create(initProgress, listener);
         return dialog;
     }
 

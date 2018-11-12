@@ -131,7 +131,7 @@ public class MvpShopAddActivity extends BaseMvpActionBarTextMenuActivity<IMvpSho
                         // Test code end
                     }
                 });
-        photo_iuv.setCropEnable();
+//        photo_iuv.setCropEnable();
     }
 
     @Override

@@ -135,8 +135,8 @@ public class ProvinceSelectDialog extends Dialog {
     }
 
     public static class Builder {
-        private TextView cancelBtn, confirmBtn;
-        private WheelPicker wheelProvince, wheelCity, wheelDistrict;
+        private TextView cancel_tv, confirm_tv;
+        private WheelPicker wheel_one, wheel_two, wheel_three;
         private int curProvinceIndex, curCityIndex, curDistrictIndex;
         private Context context;
 
@@ -149,11 +149,11 @@ public class ProvinceSelectDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final ProvinceSelectDialog dialog = new ProvinceSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_locate_select, null);
-            cancelBtn = layout.findViewById(R.id.cancel_tv);
-            confirmBtn = layout.findViewById(R.id.confirm_tv);
-            wheelProvince = layout.findViewById(R.id.wheel_one);
-            wheelCity = layout.findViewById(R.id.wheel_two);
-            wheelDistrict = layout.findViewById(R.id.wheel_three);
+            cancel_tv = layout.findViewById(R.id.cancel_tv);
+            confirm_tv = layout.findViewById(R.id.confirm_tv);
+            wheel_one = layout.findViewById(R.id.wheel_one);
+            wheel_two = layout.findViewById(R.id.wheel_two);
+            wheel_three = layout.findViewById(R.id.wheel_three);
             initView(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -168,19 +168,19 @@ public class ProvinceSelectDialog extends Dialog {
         }
 
         private void initView(final ProvinceSelectDialog dialog, final IDialogDateSelected dialogSelect) {
-            wheelProvince.setData(mProvinceList);
-            wheelProvince.setSelectedItemPosition(curProvinceIndex);
-            wheelCity.setData(mCityListMap.get(mProvinceList.get(curProvinceIndex)));
-            wheelCity.setSelectedItemPosition(curCityIndex);
-            wheelDistrict.setData(mDistrictListMap.get(mCityListMap.get(mProvinceList.get(curProvinceIndex)).get(curCityIndex)));
-            wheelDistrict.setSelectedItemPosition(curDistrictIndex);
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
+            wheel_one.setData(mProvinceList);
+            wheel_one.setSelectedItemPosition(curProvinceIndex);
+            wheel_two.setData(mCityListMap.get(mProvinceList.get(curProvinceIndex)));
+            wheel_two.setSelectedItemPosition(curCityIndex);
+            wheel_three.setData(mDistrictListMap.get(mCityListMap.get(mProvinceList.get(curProvinceIndex)).get(curCityIndex)));
+            wheel_three.setSelectedItemPosition(curDistrictIndex);
+            cancel_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
-            confirmBtn.setOnClickListener(new View.OnClickListener() {
+            confirm_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -193,21 +193,21 @@ public class ProvinceSelectDialog extends Dialog {
                     }
                 }
             });
-            wheelProvince.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_one.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     curProvinceIndex = i;
                     updateCity();
                 }
             });
-            wheelCity.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_two.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     curCityIndex = i;
                     updateDistrict();
                 }
             });
-            wheelDistrict.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheel_three.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     curDistrictIndex = i;
@@ -216,16 +216,16 @@ public class ProvinceSelectDialog extends Dialog {
         }
 
         private void updateCity() {
-            wheelCity.setData(mCityListMap.get(mProvinceList.get(curProvinceIndex)));
+            wheel_two.setData(mCityListMap.get(mProvinceList.get(curProvinceIndex)));
             curCityIndex = 0;
-            wheelCity.setSelectedItemPosition(curCityIndex);
+            wheel_two.setSelectedItemPosition(curCityIndex);
             updateDistrict();
         }
 
         private void updateDistrict() {
-            wheelDistrict.setData(mDistrictListMap.get(mCityListMap.get(mProvinceList.get(curProvinceIndex)).get(curCityIndex)));
+            wheel_three.setData(mDistrictListMap.get(mCityListMap.get(mProvinceList.get(curProvinceIndex)).get(curCityIndex)));
             curDistrictIndex = 0;
-            wheelDistrict.setSelectedItemPosition(curDistrictIndex);
+            wheel_three.setSelectedItemPosition(curDistrictIndex);
         }
     }
 }

@@ -28,14 +28,14 @@ public interface IHttpResponseListener {
     }
 
     interface OnUploadListener {
-        void onStart(int what);
+        void onStart(int what, HttpRequestBean.HttpFileBean fileBean);
 
-        void onCancel(int what);
+        void onCancel(int what, HttpRequestBean.HttpFileBean fileBean);
 
-        void onProgress(int what, int progress);
+        void onProgress(int what, HttpRequestBean.HttpFileBean fileBean, int progress);
 
-        void onFinish(int what);
+        void onFinish(int what, HttpRequestBean.HttpFileBean fileBean);
 
-        void onError(int what, Exception exception);
+        void onError(int what, HttpRequestBean.HttpFileBean fileBean, Exception exception);
     }
 }

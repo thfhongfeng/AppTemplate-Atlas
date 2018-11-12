@@ -1,6 +1,7 @@
 package com.pine.welcome.contract;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
+import com.pine.base.widget.dialog.ProgressDialog;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -10,7 +11,7 @@ public interface ILoadingContract {
     interface Ui extends IBaseContract.Ui {
         void showVersionUpdateConfirmDialog(String newVersionName);
 
-        void showVersionUpdateProgressDialog();
+        void showVersionUpdateProgressDialog(ProgressDialog.IDialogActionListener listener);
 
         void updateVersionUpdateProgressDialog(int progress);
 
@@ -21,7 +22,7 @@ public interface ILoadingContract {
 
         void loadBundleSwitcherData();
 
-        void updateVersion();
+        void updateVersion(boolean isForce);
 
         void autoLogin();
     }

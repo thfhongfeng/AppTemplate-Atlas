@@ -24,6 +24,7 @@ public class ApkVersionManager {
     private final static String TAG = LogUtils.makeLogTag(ApkVersionManager.class);
     private final static int HTTP_REQUEST_DOWNLOAD = 1;
     private static volatile ApkVersionManager mInstance;
+    public final Object CANCEL_SIGN = new Object();
     private String mDownloadDir = PathUtils.getExternalPublicPath(Environment.DIRECTORY_DOWNLOADS);
     private VersionEntity mVersionEntity;
     private UpdateListener mListener;
@@ -61,7 +62,7 @@ public class ApkVersionManager {
         }
         deleteOldApk();
         HttpRequestManager.setDownloadRequest(mVersionEntity.getPath(), mDownloadDir,
-                mVersionEntity.getFileName(), TAG, HTTP_REQUEST_DOWNLOAD, new HttpDownloadCallback() {
+                mVersionEntity.getFileName(), HTTP_REQUEST_DOWNLOAD, CANCEL_SIGN, new HttpDownloadCallback() {
                     @Override
                     public void onStart(int what, boolean isResume, long rangeSize, long allCount) {
                         if (mListener != null) {

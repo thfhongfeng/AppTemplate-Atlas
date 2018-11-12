@@ -315,67 +315,68 @@ public class ImageUploadView extends RecyclerView {
                     return;
                 }
                 mFileUploadComponent = new FileUploadComponent(mActivity, mMaxImageSize);
-                mFileUploadComponent.startOneByOne(uploadBeanList, new FileUploadComponent.FileUploadCallback() {
+                mFileUploadComponent.startOneByOne(uploadBeanList,
+                        new FileUploadComponent.OneByOneUploadCallback() {
 
-                    @Override
-                    public void onStart(final FileUploadBean fileBean) {
-                    }
-
-                    @Override
-                    public void onProgress(final FileUploadBean fileBean, final int progress) {
-                        if (mMainHandler == null) {
-                            return;
-                        }
-                        mMainHandler.post(new Runnable() {
                             @Override
-                            public void run() {
-                                fileBean.setUploadProgress(progress);
-                                mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
+                            public void onStart(final FileUploadBean fileBean) {
                             }
-                        });
-                    }
 
-                    @Override
-                    public void onError(FileUploadBean fileBean, String message) {
-
-                    }
-
-                    @Override
-                    public void onFailed(final FileUploadBean fileBean, String message) {
-                        if (mMainHandler == null) {
-                            return;
-                        }
-                        mMainHandler.post(new Runnable() {
                             @Override
-                            public void run() {
-                                fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_FAIL);
-                                mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onSuccess(final FileUploadBean fileBean, final JSONObject response) {
-                        if (mMainHandler == null) {
-                            return;
-                        }
-                        mMainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                String url = mOneByOneUploadAdapter
-                                        .getRemoteUrlFromResponse(fileBean, response);
-                                if (TextUtils.isEmpty(url)) {
-                                    onFailed(fileBean, "");
+                            public void onProgress(final FileUploadBean fileBean, final int progress) {
+                                if (mMainHandler == null) {
                                     return;
                                 }
-                                fileBean.setRemoteFilePath(url);
-                                fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_SUCCESS);
-                                mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
-                                mUploadImageAdapter.notifyItemChanged(0);
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fileBean.setUploadProgress(progress);
+                                        mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancel(FileUploadBean uploadBean) {
+
+                            }
+
+                            @Override
+                            public void onFailed(final FileUploadBean fileBean, String message) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_FAIL);
+                                        mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onSuccess(final FileUploadBean fileBean, final JSONObject response) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String url = mOneByOneUploadAdapter
+                                                .getRemoteUrlFromResponse(fileBean, response);
+                                        if (TextUtils.isEmpty(url)) {
+                                            onFailed(fileBean, "");
+                                            return;
+                                        }
+                                        fileBean.setRemoteFilePath(url);
+                                        fileBean.setUploadState(FileUploadBean.UPLOAD_STATE_SUCCESS);
+                                        mUploadImageAdapter.notifyItemChanged(fileBean.getOrderIndex());
+                                        mUploadImageAdapter.notifyItemChanged(0);
+                                    }
+                                });
                             }
                         });
-                    }
-                });
             }
         });
     }
@@ -425,8 +426,7 @@ public class ImageUploadView extends RecyclerView {
                 mFileUploadComponent = new FileUploadComponent(mActivity, mMaxImageSize);
                 mFileUploadComponent.startTogether(mUploadImageUrl,
                         mTogetherUploadAdapter.getUploadParam(uploadBeanList), mTogetherUploadAdapter.getFilesKey(uploadBeanList),
-                        uploadBeanList, new FileUploadComponent.FileUploadListCallback() {
-
+                        uploadBeanList, new FileUploadComponent.SimpleTogetherUploadListCallback() {
                             @Override
                             public void onProgress(final List<FileUploadBean> fileBeanList, final int progress) {
                                 if (mMainHandler == null) {
