@@ -5,7 +5,9 @@ package com.pine.base.component.map;
  */
 
 public class LocationInfo {
+    // Gcj_02坐标系
     private double latitude;
+    // Gcj_02坐标系
     private double longitude;
 
     public double getLatitude() {

@@ -11,6 +11,7 @@ import com.pine.base.component.map.LocationInfo;
 import com.pine.base.component.map.MapSdkManager;
 import com.pine.base.component.map.baidu.location.BdLocationManager;
 import com.pine.base.component.map.baidu.ui.BaiduMapActivity;
+import com.pine.tool.util.GPSUtils;
 import com.pine.tool.util.LogUtils;
 
 /**
@@ -84,8 +85,9 @@ public class BaiduMapManager implements IMapManager {
             return null;
         }
         LocationInfo locationInfo = new LocationInfo();
-        locationInfo.setLatitude(location.getLatitude());
-        locationInfo.setLongitude(location.getLongitude());
+        double[] latLon = GPSUtils.bd09_To_Gcj02(location.getLatitude(), location.getLongitude());
+        locationInfo.setLatitude(latLon[0]);
+        locationInfo.setLongitude(latLon[1]);
         return locationInfo;
     }
 
@@ -99,6 +101,13 @@ public class BaiduMapManager implements IMapManager {
         return getMapActivityIntent(context, mapType, -1, -1);
     }
 
+    /**
+     * @param context
+     * @param mapType
+     * @param latitude  Gcj_02坐标系
+     * @param longitude Gcj_02坐标系
+     * @return
+     */
     @Override
     public Intent getMapActivityIntent(Context context, MapSdkManager.MapType mapType,
                                        double latitude, double longitude) {

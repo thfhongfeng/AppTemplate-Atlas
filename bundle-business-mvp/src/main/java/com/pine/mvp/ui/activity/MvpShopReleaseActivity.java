@@ -176,8 +176,9 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_BAIDU_MAP) {
             if (resultCode == RESULT_OK) {
-                address_marker_tv.setText(DecimalUtils.format(data.getDoubleExtra("latitude", 0d), 6) + "," +
-                        DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6));
+                double latitude = DecimalUtils.format(data.getDoubleExtra("latitude", 0d), 6);
+                double longitude = DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6);
+                address_marker_tv.setText(latitude + "," + longitude);
             }
         }
         photo_iuv.onActivityResult(requestCode, resultCode, data);

@@ -12,7 +12,6 @@ import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
 import com.pine.mvp.model.MvpShopModel;
-import com.pine.tool.util.GPSUtils;
 
 import org.json.JSONException;
 
@@ -99,9 +98,8 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
         params.put("id", mId);
         LocationInfo location = MapSdkManager.getInstance().getLocation();
         if (location != null) {
-            double[] locations = GPSUtils.bd09_To_gps84(location.getLatitude(), location.getLongitude());
-            params.put("latitude", String.valueOf(locations[0]));
-            params.put("longitude", String.valueOf(locations[1]));
+            params.put("latitude", String.valueOf(location.getLatitude()));
+            params.put("longitude", String.valueOf(location.getLongitude()));
         }
         startDataLoadUi();
         if (!mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {

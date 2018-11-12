@@ -24,6 +24,7 @@ import com.pine.base.R;
 import com.pine.base.component.map.MapSdkManager.MapType;
 import com.pine.base.component.map.baidu.location.BdLocationManager;
 import com.pine.base.ui.BaseActionBarTextMenuActivity;
+import com.pine.tool.util.GPSUtils;
 
 /**
  * Created by tanghongfeng on 2018/10/31
@@ -81,8 +82,9 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
         }
         double latitude = getIntent().getDoubleExtra("latitude", -1);
         double longitude = getIntent().getDoubleExtra("longitude", -1);
+        double[] latLon = GPSUtils.gcj02_To_Bd09(latitude, longitude);
         if (latitude != -1 && latitude != -1) {
-            mInitLatLng = new LatLng(latitude, longitude);
+            mInitLatLng = new LatLng(latLon[0], latLon[1]);
         }
         return false;
     }
@@ -111,8 +113,9 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
             public void onClick(View v) {
                 if (mMarkerLatLng != null) {
                     Intent intent = new Intent();
-                    intent.putExtra("latitude", mMarkerLatLng.latitude);
-                    intent.putExtra("longitude", mMarkerLatLng.longitude);
+                    double[] latLon = GPSUtils.bd09_To_Gcj02(mMarkerLatLng.latitude, mMarkerLatLng.longitude);
+                    intent.putExtra("latitude", latLon[0]);
+                    intent.putExtra("longitude", latLon[1]);
                     setResult(RESULT_OK, intent);
                     finish();
                     return;

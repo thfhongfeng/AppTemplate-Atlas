@@ -22,6 +22,13 @@ public interface IMapManager {
 
     Intent getMapActivityIntent(Context context, MapSdkManager.MapType type);
 
+    /**
+     * @param context
+     * @param type
+     * @param latitude  Gcj_02坐标系
+     * @param longitude Gcj_02坐标系
+     * @return
+     */
     Intent getMapActivityIntent(Context context, MapSdkManager.MapType type,
                                 double latitude, double longitude);
 }
