@@ -31,7 +31,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_name_label"
+                        android:text="@string/mvp_shop_release_name_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -57,7 +57,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_type_label"
+                        android:text="@string/mvp_shop_release_type_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -96,7 +96,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_online_date_label"
+                        android:text="@string/mvp_shop_release_online_date_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_contact_label"
+                        android:text="@string/mvp_shop_release_contact_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_address_label"
+                        android:text="@string/mvp_shop_release_address_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -180,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_address_marker_label"
+                        android:text="@string/mvp_shop_release_address_marker_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -203,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_address_detail_label"
+                        android:text="@string/mvp_shop_release_address_detail_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -228,7 +228,7 @@
                         android:gravity="top"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_description_label"
+                        android:text="@string/mvp_shop_release_description_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
@@ -253,7 +253,7 @@
                         android:gravity="top"
                         android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
-                        android:text="@string/mvp_shop_add_remark_label"
+                        android:text="@string/mvp_shop_release_remark_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 

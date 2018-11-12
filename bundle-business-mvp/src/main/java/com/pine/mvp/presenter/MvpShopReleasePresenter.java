@@ -8,7 +8,7 @@ import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopDetailEntity;
-import com.pine.mvp.contract.IMvpShopAddContract;
+import com.pine.mvp.contract.IMvpShopReleaseContract;
 import com.pine.mvp.model.MvpShopModel;
 
 import java.util.HashMap;
@@ -17,13 +17,13 @@ import java.util.HashMap;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
-        implements IMvpShopAddContract.Presenter {
+public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContract.Ui>
+        implements IMvpShopReleaseContract.Presenter {
     private MvpShopModel mModel;
     private boolean mIsLoadProcessing;
 
 
-    public MvpShopAddPresenter() {
+    public MvpShopReleasePresenter() {
         mModel = new MvpShopModel();
     }
 
@@ -64,72 +64,72 @@ public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
         }
         HashMap<String, String> params = new HashMap<>();
 
-        InputParamBean nameBean = getUi().getShopNameParam("name");
-        if (nameBean.checkIsEmpty(R.string.mvp_shop_add_name_need)) {
+        InputParamBean name = getUi().getShopNameParam("name");
+        if (name.checkIsEmpty(R.string.mvp_shop_release_name_need)) {
             return;
         } else {
-            params.put("name", nameBean.getValue());
+            params.put("name", name.getValue());
         }
 
-        InputParamBean typeBean = getUi().getShopTypeParam("type");
-        if (typeBean.checkIsEmpty(R.string.mvp_shop_add_type_need)) {
+        InputParamBean type = getUi().getShopTypeParam("type");
+        if (type.checkIsEmpty(R.string.mvp_shop_release_type_need)) {
             return;
         } else {
-            params.put("type", typeBean.getValue());
+            params.put("type", type.getValue());
         }
 
-        InputParamBean typeNameBean = getUi().getShopTypeNameParam("typeName");
-        if (typeNameBean.checkIsEmpty(R.string.mvp_shop_add_type_need)) {
+        InputParamBean typeName = getUi().getShopTypeNameParam("typeName");
+        if (typeName.checkIsEmpty(R.string.mvp_shop_release_type_need)) {
             return;
         } else {
-            params.put("typeName", typeNameBean.getValue());
+            params.put("typeName", typeName.getValue());
         }
 
-        InputParamBean onlineDateBean = getUi().getShopOnlineDateParam("onlineDate");
-        if (onlineDateBean.checkIsEmpty(R.string.mvp_shop_add_online_date_need)) {
+        InputParamBean onlineDate = getUi().getShopOnlineDateParam("onlineDate");
+        if (onlineDate.checkIsEmpty(R.string.mvp_shop_release_online_date_need)) {
             return;
         } else {
-            params.put("onlineDate", onlineDateBean.getValue());
+            params.put("onlineDate", onlineDate.getValue());
         }
 
-        InputParamBean mobileBean = getUi().getShopContactMobileParam("mobile");
-        if (mobileBean.checkIsEmpty(R.string.mvp_shop_add_contact_need) ||
-                !mobileBean.checkIsPhone(R.string.mvp_shop_add_mobile_incorrect_format)) {
+        InputParamBean mobile = getUi().getShopContactMobileParam("mobile");
+        if (mobile.checkIsEmpty(R.string.mvp_shop_release_contact_need) ||
+                !mobile.checkIsPhone(R.string.mvp_shop_release_mobile_incorrect_format)) {
             return;
         } else {
-            params.put("mobile", mobileBean.getValue());
+            params.put("mobile", mobile.getValue());
         }
 
-        InputParamBean addressBean = getUi().getShopAddressParam("address");
-        if (addressBean.checkIsEmpty(R.string.mvp_shop_add_address_need)) {
+        InputParamBean address = getUi().getShopAddressParam("address");
+        if (address.checkIsEmpty(R.string.mvp_shop_release_address_need)) {
             return;
         } else {
-            params.put("address", addressBean.getValue());
+            params.put("address", address.getValue());
         }
 
-        InputParamBean addressZipCodeBean = getUi().getShopAddressZipCodeParam("addressZipCode");
-        if (addressZipCodeBean.checkIsEmpty(R.string.mvp_shop_add_address_need)) {
+        InputParamBean addressZipCode = getUi().getShopAddressZipCodeParam("addressZipCode");
+        if (addressZipCode.checkIsEmpty(R.string.mvp_shop_release_address_need)) {
             return;
         } else {
-            params.put("addressZipCode", addressZipCodeBean.getValue());
+            params.put("addressZipCode", addressZipCode.getValue());
         }
 
-        InputParamBean locationBean = getUi().getShopLocationParam("location");
-        if (locationBean.checkIsEmpty(R.string.mvp_shop_add_address_location_need)) {
+        InputParamBean location = getUi().getShopLocationParam("location");
+        if (location.checkIsEmpty(R.string.mvp_shop_release_address_location_need)) {
             return;
         } else {
-            params.put("location", locationBean.getValue());
+            params.put("location", location.getValue());
         }
 
         params.put("detailAddress", getUi().getShopDetailAddressParam("detailAddress").getValue());
         params.put("description", getUi().getShopDescriptionParam("description").getValue());
         params.put("remark", getUi().getShopRemarkParam("remark").getValue());
 
-        InputParamBean imagesBean = getUi().getShopImagesParam("images");
-        if (imagesBean.checkIsEmpty(R.string.mvp_shop_add_photo_image_need)) {
+        InputParamBean images = getUi().getShopImagesParam("images");
+        if (images.checkIsEmpty(R.string.mvp_shop_release_photo_image_need)) {
             return;
         } else {
-            params.put("images", imagesBean.getValue());
+            params.put("images", images.getValue());
         }
 
         startDataLoadUi();
@@ -138,7 +138,7 @@ public class MvpShopAddPresenter extends BasePresenter<IMvpShopAddContract.Ui>
             public void onResponse(MvpShopDetailEntity entity) {
                 finishDataLoadUi();
                 if (isUiAlive()) {
-                    Toast.makeText(getContext(), R.string.mvp_shop_add_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.mvp_shop_release_success, Toast.LENGTH_SHORT).show();
                     finishUi();
                     return;
                 }

@@ -16,5 +16,7 @@ public interface IMvpTravelNoteListContract {
         void loadTravelNoteListData(boolean refresh);
 
         MvpTravelNoteItemPaginationAdapter getRecycleViewAdapter();
+
+        void goToAddTravelNoteActivity();
     }
 }

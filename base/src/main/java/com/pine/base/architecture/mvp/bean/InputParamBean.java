@@ -69,6 +69,25 @@ public class InputParamBean {
         return checkIsEmpty(context.getString(failMsgResId));
     }
 
+    public boolean checkNumberRange(String failMessage, int min, int max) {
+        try {
+            int num = Integer.parseInt(value);
+            if (num >= min && num <= max) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+        }
+        if (parentScrollView != null && parentScrollView.isAttachedToWindow()) {
+            ViewActionUtils.scrollToTargetView(context, parentScrollView, inputView);
+        }
+        Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    public boolean checkNumberRange(@StringRes int failMsgResId, int min, int max) {
+        return checkNumberRange(context.getString(failMsgResId), min, max);
+    }
+
     public boolean checkIsPhone(String failMessage) {
         if (!RegexUtils.isMobilePhoneNumber(value)) {
             if (parentScrollView != null && parentScrollView.isAttachedToWindow()) {

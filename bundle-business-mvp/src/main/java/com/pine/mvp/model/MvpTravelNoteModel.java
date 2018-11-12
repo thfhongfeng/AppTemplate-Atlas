@@ -28,9 +28,18 @@ import java.util.Random;
 
 public class MvpTravelNoteModel {
     private static final String TAG = LogUtils.makeLogTag(MvpTravelNoteModel.class);
-    private static final int HTTP_QUERY_TRAVEL_NOTE_DETAIL = 1;
-    private static final int HTTP_QUERY_TRAVEL_NOTE_LIST = 2;
-    private static final int HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST = 3;
+    private static final int HTTP_ADD_TRAVEL_NOTE = 1;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_DETAIL = 2;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_LIST = 3;
+    private static final int HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST = 4;
+
+    public boolean requestAddTravelNote(final HashMap<String, String> params,
+                                        @NonNull final IModelAsyncResponse<MvpTravelNoteDetailEntity> callback) {
+        String url = MvpUrlConstants.Add_TravelNote;
+        HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
+        return HttpRequestManager.setJsonRequest(url, params, TAG,
+                HTTP_ADD_TRAVEL_NOTE, httpStringCallback);
+    }
 
     public boolean requestTravelNoteDetailData(final HashMap<String, String> params,
                                                @NonNull final IModelAsyncResponse<MvpTravelNoteDetailEntity> callback) {
@@ -60,7 +69,18 @@ public class MvpTravelNoteModel {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                if (what == HTTP_QUERY_TRAVEL_NOTE_DETAIL) {
+                if (what == HTTP_ADD_TRAVEL_NOTE) {
+                    // Test code begin
+                    jsonObject = getTravelNoteDetailData();
+                    // Test code end
+                    if (jsonObject.optBoolean(MvpConstants.SUCCESS)) {
+                        T retData = new Gson().fromJson(jsonObject.optString(MvpConstants.DATA), new TypeToken<MvpTravelNoteDetailEntity>() {
+                        }.getType());
+                        callback.onResponse(retData);
+                    } else {
+                        callback.onFail(new Exception(jsonObject.optString("message")));
+                    }
+                } else if (what == HTTP_QUERY_TRAVEL_NOTE_DETAIL) {
                     // Test code begin
                     jsonObject = getTravelNoteDetailData();
                     // Test code end

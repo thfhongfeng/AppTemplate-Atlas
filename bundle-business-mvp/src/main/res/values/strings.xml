@@ -1,40 +1,56 @@
 <resources>
     <string name="mvp_home_title">Business Mvp</string>
 
-    <string name="mvp_web_view_title">Business Mvp Web View</string>
-
-    <string name="mvp_shop_detail_title">Business Mvp Shop Detail</string>
-
-    <string name="mvp_shop_add_title">Business Mvp Shop Add</string>
-    <string name="mvp_shop_add_confirm_menu">确认添加</string>
-    <string name="mvp_shop_add_name_label">名称：</string>
-    <string name="mvp_shop_add_type_label">类别：</string>
-    <string name="mvp_shop_add_online_date_label">上线时间：</string>
-    <string name="mvp_shop_add_contact_label">联系方式：</string>
-    <string name="mvp_shop_add_contact_hint">请输入手机号码</string>
-    <string name="mvp_shop_add_address_label">地址：</string>
-    <string name="mvp_shop_add_address_marker_label">地图选点：</string>
-    <string name="mvp_shop_add_address_detail_label">详细地址：</string>
-    <string name="mvp_shop_add_description_label">介绍：</string>
-    <string name="mvp_shop_add_remark_label">备注：</string>
-    <string name="mvp_shop_add_name_need">名称不能为空</string>
-    <string name="mvp_shop_add_type_need">类别不能为空</string>
-    <string name="mvp_shop_add_online_date_need">上线时间不能为空</string>
-    <string name="mvp_shop_add_contact_need">联系方式不能为空</string>
-    <string name="mvp_shop_add_mobile_incorrect_format">手机号格式不正确</string>
-    <string name="mvp_shop_add_address_need">地址不能为空</string>
-    <string name="mvp_shop_add_address_location_need">定位不能为空</string>
-    <string name="mvp_shop_add_photo_image_need">商户图片不能为空</string>
-    <string name="mvp_shop_add_success">商户添加成功</string>
-
-    <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
-
-    <string name="mvp_travel_note_detail_title">Business Mvp Travel Note Detail</string>
-
     <string name="mvp_share_wei_bo_success">分享成功</string>
     <string name="mvp_share_wei_bo_cancel">分享取消</string>
     <string name="mvp_share_wei_bo_fail">分享失败</string>
 
     <string name="mvp_spread">展开</string>
     <string name="mvp_fold">折叠</string>
+
+    <string name="mvp_web_view_title">Business Mvp Web View</string>
+
+    <string name="mvp_shop_detail_title">Business Mvp Shop Detail</string>
+
+    <string name="mvp_shop_release_title">Business Mvp Shop Release</string>
+    <string name="mvp_shop_release_confirm_menu">确认添加</string>
+    <string name="mvp_shop_release_name_label">名称：</string>
+    <string name="mvp_shop_release_type_label">类别：</string>
+    <string name="mvp_shop_release_online_date_label">上线时间：</string>
+    <string name="mvp_shop_release_contact_label">联系方式：</string>
+    <string name="mvp_shop_release_contact_hint">请输入手机号码</string>
+    <string name="mvp_shop_release_address_label">地址：</string>
+    <string name="mvp_shop_release_address_marker_label">地图选点：</string>
+    <string name="mvp_shop_release_address_detail_label">详细地址：</string>
+    <string name="mvp_shop_release_description_label">介绍：</string>
+    <string name="mvp_shop_release_remark_label">备注：</string>
+    <string name="mvp_shop_release_name_need">名称不能为空</string>
+    <string name="mvp_shop_release_type_need">类别不能为空</string>
+    <string name="mvp_shop_release_online_date_need">上线时间不能为空</string>
+    <string name="mvp_shop_release_contact_need">联系方式不能为空</string>
+    <string name="mvp_shop_release_mobile_incorrect_format">手机号格式不正确</string>
+    <string name="mvp_shop_release_address_need">地址不能为空</string>
+    <string name="mvp_shop_release_address_location_need">定位不能为空</string>
+    <string name="mvp_shop_release_photo_image_need">商户图片不能为空</string>
+    <string name="mvp_shop_release_success">商户添加成功</string>
+
+    <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
+
+    <string name="mvp_travel_note_detail_title">Business Mvp Travel Note Detail</string>
+
+    <string name="mvp_note_release_title">Business Mvp Travel Note Release</string>
+    <string name="mvp_note_release_confirm_menu">确认添加</string>
+    <string name="mvp_note_release_title_label">游记标题：</string>
+    <string name="mvp_note_release_set_out_date_label">出发日期：</string>
+    <string name="mvp_note_release_day_count_label">游玩天数：</string>
+    <string name="mvp_shop_release_day_count_hint">请输入游玩天数</string>
+    <string name="mvp_note_release_belong_shops_label">所属商户：</string>
+    <string name="mvp_note_release_preface_label">前言</string>
+    <string name="mvp_note_release_title_need">游记标题不能为空</string>
+    <string name="mvp_note_release_set_out_date_need">出发日期不能为空</string>
+    <string name="mvp_note_release_day_count_need">游玩天数不能为空</string>
+    <string name="mvp_note_release_belong_shops_need">所属商户不能为空</string>
+    <string name="mvp_note_release_preface_need">前言不能为空</string>
+    <string name="mvp_note_release_day_count_incorrect">游玩天数必要大于1</string>
+    <string name="mvp_note_release_success">游记添加成功</string>
 </resources>

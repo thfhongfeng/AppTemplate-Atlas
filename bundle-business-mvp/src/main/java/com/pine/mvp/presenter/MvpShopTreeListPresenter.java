@@ -2,6 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.mvp.MvpConstants;
 import com.pine.mvp.adapter.MvpShopItemPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpShopTreeListContract;
@@ -54,8 +55,8 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
         if (!refresh) {
             pageNo = mMvpHomeItemAdapter.getPageNo() + 1;
         }
-        params.put("pageNo", String.valueOf(pageNo));
-        params.put("pageSize", String.valueOf(mMvpHomeItemAdapter.getPageSize()));
+        params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
+        params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpHomeItemAdapter.getPageSize()));
         params.put("id", mId);
         startDataLoadUi();
         if (!mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {

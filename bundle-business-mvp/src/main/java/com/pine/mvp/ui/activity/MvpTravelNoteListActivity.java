@@ -17,7 +17,8 @@ import com.pine.mvp.presenter.MvpTravelNoteListPresenter;
  * Created by tanghongfeng on 2018/10/22
  */
 
-public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivity<IMvpTravelNoteListContract.Ui, MvpTravelNoteListPresenter>
+public class MvpTravelNoteListActivity extends
+        BaseMvpActionBarCustomMenuActivity<IMvpTravelNoteListContract.Ui, MvpTravelNoteListPresenter>
         implements IMvpTravelNoteListContract.Ui, SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipe_refresh_layout;
     private RecyclerView recycle_view;
@@ -88,6 +89,12 @@ public class MvpTravelNoteListActivity extends BaseMvpActionBarCustomMenuActivit
             public void onClick(View v) {
                 finish();
                 return;
+            }
+        });
+        menuContainer.findViewById(R.id.menu_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.goToAddTravelNoteActivity();
             }
         });
     }

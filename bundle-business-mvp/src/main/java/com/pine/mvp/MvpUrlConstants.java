@@ -16,6 +16,7 @@ public interface MvpUrlConstants extends BaseUrlConstants {
     String Add_ShopPhoto = "http://10.10.128.134:8011/" + "/mobile/bizFile/addBizFile.htm";
     // Test code end
 
+    String Add_TravelNote = BASE_URL + "";
     String Query_TravelNoteList = BASE_URL + "";
     String Query_TravelNoteDetail = BASE_URL + "";
     String Query_TravelNoteCommentList = BASE_URL + "";

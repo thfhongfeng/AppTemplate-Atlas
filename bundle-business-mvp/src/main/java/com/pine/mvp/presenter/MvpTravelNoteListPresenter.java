@@ -1,13 +1,16 @@
 package com.pine.mvp.presenter;
 
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.mvp.MvpConstants;
 import com.pine.mvp.adapter.MvpTravelNoteItemPaginationAdapter;
 import com.pine.mvp.bean.MvpTravelNoteItemEntity;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
 import com.pine.mvp.model.MvpTravelNoteModel;
+import com.pine.mvp.ui.activity.MvpTravelNoteReleaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +55,12 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
     }
 
     @Override
+    public void goToAddTravelNoteActivity() {
+        Intent intent = new Intent(getContext(), MvpTravelNoteReleaseActivity.class);
+        getContext().startActivity(intent);
+    }
+
+    @Override
     public void loadTravelNoteListData(final boolean refresh) {
         if (mIsLoadProcessing) {
             return;
@@ -61,8 +70,8 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
         if (!refresh) {
             pageNo = mMvpTravelNoteItemAdapter.getPageNo() + 1;
         }
-        params.put("pageNo", String.valueOf(pageNo));
-        params.put("pageSize", String.valueOf(mMvpTravelNoteItemAdapter.getPageSize()));
+        params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
+        params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpTravelNoteItemAdapter.getPageSize()));
         params.put("id", mId);
         startDataLoadUi();
         if (!mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
