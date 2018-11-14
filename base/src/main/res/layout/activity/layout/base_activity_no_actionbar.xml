@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/base_status_bar_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"></View>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/base_status_bar_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"></View>
+
+        <ViewStub
+            android:id="@+id/base_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white" />
+    </LinearLayout>
 
     <ViewStub
-        android:id="@+id/content_layout"
+        android:id="@+id/base_loading_layout"
+        android:inflatedId="@+id/base_loading_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white" />
+        android:layout_height="match_parent" />
+</RelativeLayout>
 
-</LinearLayout>

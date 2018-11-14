@@ -25,7 +25,7 @@ import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
 import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
-import com.pine.base.widget.view.ImageUploadView;
+import com.pine.base.component.uploader.ui.ImageUploadView;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpShopReleaseContract;
@@ -101,7 +101,7 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
         );
         swipe_refresh_layout.setEnabled(false);
 
-        photo_iuv.init(this, MvpUrlConstants.Add_ShopPhoto, true,
+        photo_iuv.init(this, MvpUrlConstants.Upload_File, true,
                 new ImageUploadView.OneByOneUploadAdapter() {
                     @Override
                     public String getFileKey(FileUploadBean fileUploadBean) {
@@ -181,7 +181,6 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
                 address_marker_tv.setText(latitude + "," + longitude);
             }
         }
-        photo_iuv.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -266,20 +265,6 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
     }
 
     @Override
-    public void setSwipeRefreshLayoutRefresh(boolean processing) {
-        if (swipe_refresh_layout == null) {
-            return;
-        }
-        if (processing) {
-            if (!swipe_refresh_layout.isRefreshing()) {
-                swipe_refresh_layout.setRefreshing(processing);
-            }
-        } else {
-            swipe_refresh_layout.setRefreshing(processing);
-        }
-    }
-
-    @Override
     public InputParamBean getShopNameParam(String key) {
         return new InputParamBean(this, nested_scroll_view,
                 key, name_et.getText().toString(), name_et);
@@ -360,5 +345,19 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
     public InputParamBean getShopImagesParam(String key) {
         return new InputParamBean(this, nested_scroll_view,
                 key, photo_iuv.getNewUploadImageRemoteString(","), photo_iuv);
+    }
+
+    @Override
+    public void setSwipeRefreshLayoutRefresh(boolean processing) {
+        if (swipe_refresh_layout == null) {
+            return;
+        }
+        if (processing) {
+            if (!swipe_refresh_layout.isRefreshing()) {
+                swipe_refresh_layout.setRefreshing(processing);
+            }
+        } else {
+            swipe_refresh_layout.setRefreshing(processing);
+        }
     }
 }

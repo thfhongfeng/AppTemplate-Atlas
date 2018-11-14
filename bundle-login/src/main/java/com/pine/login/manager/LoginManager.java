@@ -168,6 +168,6 @@ public class LoginManager {
     }
 
     public interface Callback {
-        void onLoginResponse(boolean isSuccess, String msg);
+        boolean onLoginResponse(boolean isSuccess, String msg);
     }
 }

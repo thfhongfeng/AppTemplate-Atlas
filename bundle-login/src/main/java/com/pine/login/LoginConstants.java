@@ -11,4 +11,6 @@ public interface LoginConstants extends BaseConstants {
     String LOGIN_PASSWORD = "password";
 
     String SUCCESS = "success";
+    String CODE = "code";
+    String MESSAGE = "message";
 }

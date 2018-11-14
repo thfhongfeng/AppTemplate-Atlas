@@ -2,6 +2,7 @@ package com.pine.login.remote.atlas;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.pine.login.manager.LoginManager;
 import com.pine.login.ui.activity.LoginActivity;
@@ -29,9 +30,10 @@ public class LoginBundleRemoteService {
         final Bundle returnBundle = new Bundle();
         LoginManager.autoLogin(new LoginManager.Callback() {
             @Override
-            public void onLoginResponse(boolean isSuccess, String msg) {
+            public boolean onLoginResponse(boolean isSuccess, String msg) {
                 returnBundle.putBoolean("success", isSuccess);
                 returnBundle.putString("msg", msg);
+                return true;
             }
         });
         return returnBundle;

@@ -3,7 +3,6 @@ package com.pine.base.architecture.mvp.bean;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,17 +13,17 @@ import com.pine.tool.util.ViewActionUtils;
  * Created by tanghongfeng on 2018/11/8
  */
 
-public class InputParamBean {
+public class InputParamBean<T> {
     private Context context;
-    private View parentScrollView;
+    private View containerView;
     private String key;
-    private String value;
+    private T value;
     private View inputView;
 
-    public InputParamBean(@NonNull Context context, View parentScrollView,
-                          @NonNull String key, String value, @NonNull View inputView) {
+    public InputParamBean(@NonNull Context context, View containerView,
+                          @NonNull String key, T value, @NonNull View inputView) {
         this.context = context;
-        this.parentScrollView = parentScrollView;
+        this.containerView = containerView;
         this.key = key;
         this.value = value;
         this.inputView = inputView;
@@ -38,11 +37,11 @@ public class InputParamBean {
         this.key = key;
     }
 
-    public String getValue() {
+    public T getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
@@ -54,12 +53,23 @@ public class InputParamBean {
         this.inputView = inputView;
     }
 
-    public boolean checkIsEmpty(String failMessage) {
-        if (TextUtils.isEmpty(value)) {
-            if (parentScrollView != null && parentScrollView.isAttachedToWindow()) {
-                ViewActionUtils.scrollToTargetView(context, parentScrollView, inputView);
-            }
+    public void scrollToTargetViewAndToast(String failMessage) {
+        if (containerView != null && containerView.isAttachedToWindow()) {
+            ViewActionUtils.scrollToTargetView(context, containerView, inputView);
             Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void scrollToTargetViewAndToast(@StringRes int failMsgResId) {
+        if (containerView != null && containerView.isAttachedToWindow()) {
+            ViewActionUtils.scrollToTargetView(context, containerView, inputView);
+            Toast.makeText(context, failMsgResId, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean checkIsEmpty(String failMessage) {
+        if (value == null || "".equals(value.toString())) {
+            scrollToTargetViewAndToast(failMessage);
             return true;
         }
         return false;
@@ -71,16 +81,13 @@ public class InputParamBean {
 
     public boolean checkNumberRange(String failMessage, int min, int max) {
         try {
-            int num = Integer.parseInt(value);
+            int num = Integer.parseInt(value.toString());
             if (num >= min && num <= max) {
                 return true;
             }
         } catch (NumberFormatException e) {
         }
-        if (parentScrollView != null && parentScrollView.isAttachedToWindow()) {
-            ViewActionUtils.scrollToTargetView(context, parentScrollView, inputView);
-        }
-        Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
+        scrollToTargetViewAndToast(failMessage);
         return false;
     }
 
@@ -89,11 +96,8 @@ public class InputParamBean {
     }
 
     public boolean checkIsPhone(String failMessage) {
-        if (!RegexUtils.isMobilePhoneNumber(value)) {
-            if (parentScrollView != null && parentScrollView.isAttachedToWindow()) {
-                ViewActionUtils.scrollToTargetView(context, parentScrollView, inputView);
-            }
-            Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
+        if (!RegexUtils.isMobilePhoneNumber(value.toString())) {
+            scrollToTargetViewAndToast(failMessage);
             return false;
         }
         return true;

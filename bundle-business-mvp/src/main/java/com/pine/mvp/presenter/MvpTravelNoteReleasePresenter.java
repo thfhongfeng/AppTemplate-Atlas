@@ -1,17 +1,29 @@
 package com.pine.mvp.presenter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.pine.base.BaseConstants;
 import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.component.editor.bean.EditorItemData;
+import com.pine.base.component.editor.ui.TextImageEditorView;
+import com.pine.base.component.uploader.bean.FileUploadBean;
+import com.pine.base.component.uploader.ui.UploadFileLinearLayout;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
 import com.pine.mvp.contract.IMvpTravelNoteReleaseContract;
 import com.pine.mvp.model.MvpTravelNoteModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/9/13
@@ -38,17 +50,46 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
     }
 
     @NonNull
-    @Override
-    public HashMap<String, String> makeUploadDefaultParams() {
-        HashMap<String, String> params = new HashMap<>();
-        // Test code begin
-        params.put("bizType", "10");
-        params.put("orderNum", "100");
-        params.put("orderNum", "100");
-        params.put("descr", "");
-        params.put("fileType", "1");
-        // Test code end
-        return params;
+    public UploadFileLinearLayout.OneByOneUploadAdapter getUploadAdapter() {
+        return new UploadFileLinearLayout.OneByOneUploadAdapter() {
+
+            @Override
+            public String getFileKey(FileUploadBean fileUploadBean) {
+                // Test code begin
+                return "file";
+                // Test code end
+            }
+
+            @Override
+            public Map<String, String> getUploadParam(FileUploadBean fileUploadBean) {
+                HashMap<String, String> params = new HashMap<>();
+                // Test code begin
+                params.put("bizType", "10");
+                params.put("orderNum", "100");
+                params.put("orderNum", "100");
+                params.put("descr", "");
+                params.put("fileType", "1");
+                // Test code end
+                return params;
+            }
+
+            @Override
+            public String getRemoteUrlFromResponse(FileUploadBean fileUploadBean, JSONObject response) {
+                // Test code begin
+                if (response == null) {
+                    return null;
+                }
+                if (!response.optBoolean(BaseConstants.SUCCESS)) {
+                    return null;
+                }
+                JSONObject data = response.optJSONObject(BaseConstants.DATA);
+                if (data == null) {
+                    return null;
+                }
+                return data.optString("fileUrl");
+                // Test code end
+            }
+        };
     }
 
     @Override
@@ -58,21 +99,21 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
         }
         HashMap<String, String> params = new HashMap<>();
 
-        InputParamBean title = getUi().getNoteTitleParam("title");
+        InputParamBean<String> title = getUi().getNoteTitleParam("title");
         if (title.checkIsEmpty(R.string.mvp_note_release_title_need)) {
             return;
         } else {
             params.put("title", title.getValue());
         }
 
-        InputParamBean setOutDate = getUi().getNoteSetOutDateParam("setOutDate");
+        InputParamBean<String> setOutDate = getUi().getNoteSetOutDateParam("setOutDate");
         if (setOutDate.checkIsEmpty(R.string.mvp_note_release_set_out_date_need)) {
             return;
         } else {
             params.put("setOutDay", setOutDate.getValue());
         }
 
-        InputParamBean dayCount = getUi().getNoteTravelDayCountParam("dayCount");
+        InputParamBean<String> dayCount = getUi().getNoteTravelDayCountParam("dayCount");
         if (dayCount.checkIsEmpty(R.string.mvp_note_release_day_count_need) ||
                 !dayCount.checkNumberRange(R.string.mvp_note_release_day_count_incorrect,
                         1, Integer.MAX_VALUE)) {
@@ -81,21 +122,65 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
             params.put("dayCount", dayCount.getValue());
         }
 
-        InputParamBean belongShops = getUi().getNoteBelongShopsParam("belongShops");
+        InputParamBean<String> belongShops = getUi().getNoteBelongShopsParam("belongShops");
         if (belongShops.checkIsEmpty(R.string.mvp_note_release_belong_shops_need)) {
             return;
         } else {
             params.put("belongShops", belongShops.getValue());
         }
 
-        InputParamBean preface = getUi().getNotePrefaceParam("preface");
+        InputParamBean<String> preface = getUi().getNotePrefaceParam("preface");
         if (preface.checkIsEmpty(R.string.mvp_note_release_preface_need)) {
             return;
         } else {
             params.put("preface", preface.getValue());
         }
 
-        params.put("content", getUi().getNoteContentParam("content").getValue());
+        InputParamBean<List<List<EditorItemData>>> contentBean = getUi().getNoteContentParam("content");
+        if (contentBean.checkIsEmpty(R.string.mvp_note_release_note_content_need)) {
+            return;
+        } else {
+            JSONArray contentArr = new JSONArray();
+            try {
+                for (int i = 0; i < contentBean.getValue().size(); i++) {
+                    List<EditorItemData> dayContentList = contentBean.getValue().get(i);
+                    if (dayContentList == null || dayContentList.size() < 1) {
+                        contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_need);
+                        return;
+                    }
+                    JSONArray dayContentArr = new JSONArray();
+                    for (int j = 0; j < dayContentList.size(); j++) {
+                        EditorItemData itemData = dayContentList.get(i);
+                        switch (itemData.getType()) {
+                            case TextImageEditorView.TYPE_TEXT:
+                                if (TextUtils.isEmpty(itemData.getText())) {
+                                    contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_text_need);
+                                    return;
+                                }
+                                break;
+                            case TextImageEditorView.TYPE_NULL:
+                                if (TextUtils.isEmpty(itemData.getRemoteFilePath())) {
+                                    contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_image_need);
+                                    return;
+                                }
+                                break;
+                            default:
+                                contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_content_incorrect);
+                                return;
+                        }
+                        JSONObject object = new JSONObject();
+                        object.put("type", itemData.getType());
+                        object.put("text", itemData.getText());
+                        object.put("imgUrl", itemData.getRemoteFilePath());
+                        dayContentArr.put(object);
+                    }
+                    contentArr.put(dayContentArr);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            params.put("content", contentArr.toString());
+        }
 
         startDataLoadUi();
         if (!mModel.requestAddTravelNote(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {

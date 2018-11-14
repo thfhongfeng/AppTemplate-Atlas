@@ -24,9 +24,14 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     protected final void setContentView() {
         setContentView(R.layout.base_activity_actionbar_custom_menu);
 
-        ViewStub content_layout = findViewById(R.id.content_layout);
-        content_layout.setLayoutResource(getActivityLayoutResId());
-        content_layout.inflate();
+        ViewStub base_content_layout = findViewById(R.id.base_content_layout);
+        base_content_layout.setLayoutResource(getActivityLayoutResId());
+        base_content_layout.inflate();
+
+        ViewStub base_loading_layout = findViewById(R.id.base_loading_layout);
+        base_loading_layout.setLayoutResource(getLoadingUiResId());
+        base_loading_layout.inflate();
+        findViewById(R.id.base_loading_layout).setVisibility(View.GONE);
 
         initImmersionBar();
     }
@@ -48,10 +53,10 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     @Override
     protected void afterInitOnCreate() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
-        ViewStub content_layout = findViewById(R.id.custom_menu_container_vs);
-        content_layout.setLayoutResource(getMenuBarLayoutResId());
+        ViewStub base_content_layout = findViewById(R.id.custom_menu_container_vs);
+        base_content_layout.setLayoutResource(getMenuBarLayoutResId());
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
-                (TextView) action_bar_ll.findViewById(R.id.title), content_layout.inflate());
+                (TextView) action_bar_ll.findViewById(R.id.title), base_content_layout.inflate());
     }
 
     /**
@@ -62,10 +67,6 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     protected abstract int getMenuBarLayoutResId();
 
     protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
-
-    public void setKeyboardListener(OnKeyboardListener listener) {
-        mImmersionBar.setOnKeyboardListener(listener);
-    }
 
     @Override
     protected void onPause() {
@@ -83,5 +84,21 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
             mImmersionBar.destroy();
         }
         super.onDestroy();
+    }
+
+    public void setKeyboardListener(OnKeyboardListener listener) {
+        mImmersionBar.setOnKeyboardListener(listener);
+    }
+
+    protected int getLoadingUiResId() {
+        return R.layout.base_loading;
+    }
+
+    public void startLoadingUi() {
+        findViewById(R.id.base_loading_layout).setVisibility(View.VISIBLE);
+    }
+
+    public void finishLoadingUi() {
+        findViewById(R.id.base_loading_layout).setVisibility(View.GONE);
     }
 }

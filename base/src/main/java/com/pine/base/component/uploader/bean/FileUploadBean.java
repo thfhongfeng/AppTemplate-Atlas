@@ -9,11 +9,6 @@ import java.util.Map;
  */
 
 public class FileUploadBean {
-    public static final int UPLOAD_STATE_DEFAULT = 0;
-    public static final int UPLOAD_STATE_UPLOADING = 1;
-    public static final int UPLOAD_STATE_FAIL = 2;
-    public static final int UPLOAD_STATE_SUCCESS = 3;
-
     private int id;
     private int bizId;
     private int requestCode;
@@ -29,7 +24,7 @@ public class FileUploadBean {
     private View attachView;
     private int orderIndex;
     private int uploadProgress;
-    private int uploadState = UPLOAD_STATE_DEFAULT;
+    private FileUploadState uploadState = FileUploadState.UPLOAD_STATE_DEFAULT;
 
     public int getId() {
         return id;
@@ -151,11 +146,11 @@ public class FileUploadBean {
         this.uploadProgress = uploadProgress;
     }
 
-    public int getUploadState() {
+    public FileUploadState getUploadState() {
         return uploadState;
     }
 
-    public void setUploadState(int uploadState) {
+    public void setUploadState(FileUploadState uploadState) {
         this.uploadState = uploadState;
     }
 }

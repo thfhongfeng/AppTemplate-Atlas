@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="base_network_err">网络错误，请重试</string>
+    <string name="base_network_err">网络错误，请检查网络后重试</string>
     <string name="base_server_err">服务器错误，请稍后重试</string>
     <string name="base_json_data_err">获取数据错误，请重试</string>
 
@@ -20,12 +20,18 @@
     <string name="base_submit">提交</string>
     <string name="base_update">升级</string>
 
+    <string name="base_text">文字</string>
+    <string name="base_image">图片</string>
+    <string name="base_add_label">添加：</string>
+    <string name="base_delete_content_confirm_msg">是否确认删除此段内容？</string>
+
+
     <string name="base_image_select">选择图片</string>
     <string name="base_choose">选择</string>
     <string name="base_all_image">所有图片</string>
     <string name="base_preview">预览</string>
     <string name="base_preview_format">预览(%1$d)</string>
-    <string name="base_upload_image_count_exceeding_msg">上传照片数量已超过%1$d张</string>
+    <string name="base_upload_file_count_exceeding_msg">上传文件数量已超过%1$d张</string>
     <string name="base_error_no_permission">没有权限</string>
 
     <string name="base_file_upload_file_is_uploading">文件正在上传中</string>

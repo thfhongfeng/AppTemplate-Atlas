@@ -1,5 +1,6 @@
 package com.pine.login.presenter;
 
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.pine.base.architecture.mvp.bean.InputParamBean;
@@ -27,23 +28,30 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
 
     @Override
     public void login() {
-        InputParamBean mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
-        InputParamBean pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
+        InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
+        InputParamBean<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
         if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 pwdBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {
             return;
         }
+        getUi().startLoadingUi();
         LoginManager.login(mobileBean.getValue(), pwdBean.getValue(), new LoginManager.Callback() {
             @Override
-            public void onLoginResponse(boolean isSuccess, String msg) {
+            public boolean onLoginResponse(boolean isSuccess, String msg) {
                 if (isUiAlive()) {
+                    getUi().finishLoadingUi();
                     if (!isSuccess) {
-                        Toast.makeText(getContext(), R.string.login_login_fail, Toast.LENGTH_SHORT).show();
+                        if (TextUtils.isEmpty(msg)) {
+                            return false;
+                        } else {
+                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         finishUi();
                     }
                 }
+                return true;
             }
         });
     }

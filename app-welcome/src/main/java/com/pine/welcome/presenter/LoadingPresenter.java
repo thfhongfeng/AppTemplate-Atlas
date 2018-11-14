@@ -63,14 +63,15 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
         mBundleSwitcherModel.requestBundleSwitcherData(new IModelAsyncResponse<ArrayList<BundleSwitcherEntity>>() {
             @Override
             public void onResponse(ArrayList<BundleSwitcherEntity> bundleSwitcherEntities) {
-                if (bundleSwitcherEntities == null) {
-                    return;
+                if (bundleSwitcherEntities != null) {
+                    for (int i = 0; i < bundleSwitcherEntities.size(); i++) {
+                        RouterBundleSwitcher.setBundleSwitchState(bundleSwitcherEntities.get(i).getBundleKey(),
+                                bundleSwitcherEntities.get(i).isOpen());
+                    }
                 }
-                for (int i = 0; i < bundleSwitcherEntities.size(); i++) {
-                    RouterBundleSwitcher.setBundleSwitchState(bundleSwitcherEntities.get(i).getBundleKey(),
-                            bundleSwitcherEntities.get(i).isOpen());
+                if (isUiAlive()) {
+                    checkVersion();
                 }
-                checkVersion();
                 return;
             }
 
@@ -79,7 +80,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 if (isUiAlive()) {
                     checkVersion();
                 }
-                return false;
+                return true;
             }
         });
     }

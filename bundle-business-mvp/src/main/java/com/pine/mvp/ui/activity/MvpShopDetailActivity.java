@@ -91,13 +91,13 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     }
 
     @Override
-    public void setupShopDetail(MvpShopDetailEntity entity) {
-        description_tv.setText(entity.getDescription());
+    public void onRefresh() {
+        mPresenter.loadShopDetailData();
     }
 
     @Override
-    public void onRefresh() {
-        mPresenter.loadShopDetailData();
+    public void setupShopDetail(MvpShopDetailEntity entity) {
+        description_tv.setText(entity.getDescription());
     }
 
     @Override

@@ -9,9 +9,9 @@ import com.pine.mvp.bean.MvpShopDetailEntity;
 
 public interface IMvpShopDetailContract {
     interface Ui extends IBaseContract.Ui {
-        void setSwipeRefreshLayoutRefresh(boolean processing);
-
         void setupShopDetail(MvpShopDetailEntity entity);
+
+        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {

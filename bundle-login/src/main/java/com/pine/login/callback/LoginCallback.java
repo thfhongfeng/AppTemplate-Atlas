@@ -59,7 +59,8 @@ public class LoginCallback extends HttpJsonCallback {
             if (jsonObject == null || !jsonObject.optBoolean(LoginConstants.SUCCESS, false)) {
                 BaseApplication.setLogin(false);
                 if (mCallback != null) {
-                    mCallback.onLoginResponse(false, "");
+                    mCallback.onLoginResponse(false, jsonObject == null ?
+                            "" : jsonObject.optString(LoginConstants.MESSAGE));
                 }
                 if (AUTO_LOGIN_CODE != what) {
                     goLoginActivity();
@@ -80,13 +81,14 @@ public class LoginCallback extends HttpJsonCallback {
     @Override
     public boolean onFail(int what, Exception e) {
         BaseApplication.setLogin(false);
+        boolean consumed = false;
         if (mCallback != null) {
-            mCallback.onLoginResponse(false, e.toString());
+            consumed = mCallback.onLoginResponse(false, "");
         }
         if (AUTO_LOGIN_CODE != what) {
             goLoginActivity();
         }
-        return false;
+        return consumed;
     }
 
     private void goLoginActivity() {

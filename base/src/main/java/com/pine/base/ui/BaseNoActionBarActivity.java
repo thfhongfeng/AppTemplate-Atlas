@@ -2,6 +2,7 @@ package com.pine.base.ui;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
+import android.view.View;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 
@@ -21,9 +22,14 @@ public abstract class BaseNoActionBarActivity extends BaseActivity {
     protected final void setContentView() {
         setContentView(R.layout.base_activity_no_actionbar);
 
-        ViewStub content_layout = findViewById(R.id.content_layout);
-        content_layout.setLayoutResource(getActivityLayoutResId());
-        content_layout.inflate();
+        ViewStub base_content_layout = findViewById(R.id.base_content_layout);
+        base_content_layout.setLayoutResource(getActivityLayoutResId());
+        base_content_layout.inflate();
+
+        ViewStub base_loading_layout = findViewById(R.id.base_loading_layout);
+        base_loading_layout.setLayoutResource(getLoadingUiResId());
+        base_loading_layout.inflate();
+        findViewById(R.id.base_loading_layout).setVisibility(View.GONE);
 
         initImmersionBar();
     }
@@ -69,4 +75,15 @@ public abstract class BaseNoActionBarActivity extends BaseActivity {
         mImmersionBar.setOnKeyboardListener(listener);
     }
 
+    protected int getLoadingUiResId() {
+        return R.layout.base_loading;
+    }
+
+    public void startLoadingUi() {
+        findViewById(R.id.base_loading_layout).setVisibility(View.VISIBLE);
+    }
+
+    public void finishLoadingUi() {
+        findViewById(R.id.base_loading_layout).setVisibility(View.GONE);
+    }
 }

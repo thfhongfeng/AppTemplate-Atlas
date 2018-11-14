@@ -271,11 +271,11 @@
                 </TableRow>
             </TableLayout>
 
-            <com.pine.base.widget.view.ImageUploadView
+            <com.pine.base.component.uploader.ui.ImageUploadView
                 android:id="@+id/photo_iuv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_10"></com.pine.base.widget.view.ImageUploadView>
+                android:layout_margin="@dimen/dp_10"></com.pine.base.component.uploader.ui.ImageUploadView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

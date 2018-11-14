@@ -9,6 +9,10 @@ import android.app.Activity;
 public interface IBaseContract {
     interface Ui {
         Activity getContextActivity();
+
+        void startLoadingUi();
+
+        void finishLoadingUi();
     }
 
     interface Presenter {

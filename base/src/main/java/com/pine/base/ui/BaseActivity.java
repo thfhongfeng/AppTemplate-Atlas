@@ -13,9 +13,13 @@ import com.pine.base.permission.AppSettingsDialog;
 import com.pine.base.permission.AppSettingsDialogHolderActivity;
 import com.pine.base.permission.EasyPermissions;
 import com.pine.base.permission.PermissionsAnnotation;
+import com.pine.base.widget.ILifeCircleView;
 import com.pine.tool.util.LogUtils;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tanghongfeng on 2018/9/28
@@ -28,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity
     private boolean mUiAccessReady, mPermissionReady;
     private boolean onAllAccessRestrictionReleasedMethodCalled;
     private boolean mPrePause;
+    private Map<Integer, ILifeCircleView> mLifeCircleViewMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,8 @@ public abstract class BaseActivity extends AppCompatActivity
             mPrePause = false;
             if (!UiAccessManager.getInstance().checkCanAccess(this, false)) {
                 return;
+            } else {
+                tryOnAllRestrictionReleased();
             }
         }
     }
@@ -123,6 +130,8 @@ public abstract class BaseActivity extends AppCompatActivity
             mPrePause = false;
             if (!UiAccessManager.getInstance().checkCanAccess(this, true)) {
                 return;
+            } else {
+                tryOnAllRestrictionReleased();
             }
         }
     }
@@ -133,11 +142,20 @@ public abstract class BaseActivity extends AppCompatActivity
         mPrePause = true;
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mLifeCircleViewMap != null && mLifeCircleViewMap.size() > 0) {
+            mLifeCircleViewMap.clear();
+        }
+        super.onDestroy();
+    }
+
     @CallSuper
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        LogUtils.d(TAG, "onActivityResult requestCode:" + requestCode +
+                ", resultCode:" + resultCode);
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             String[] permissions = data.getStringArrayExtra(AppSettingsDialogHolderActivity.REQUEST_PERMISSIONS_KEY);
             if (!EasyPermissions.hasPermissions(this, permissions)) {
@@ -145,6 +163,17 @@ public abstract class BaseActivity extends AppCompatActivity
             } else {
                 mPermissionReady = true;
                 tryOnAllRestrictionReleased();
+            }
+        }
+
+        if (mLifeCircleViewMap != null) {
+            Iterator<Map.Entry<Integer, ILifeCircleView>> iterator = mLifeCircleViewMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, ILifeCircleView> entry = iterator.next();
+                ILifeCircleView view = entry.getValue();
+                if (view != null) {
+                    view.onActivityResult(requestCode, resultCode, data);
+                }
             }
         }
     }
@@ -203,5 +232,9 @@ public abstract class BaseActivity extends AppCompatActivity
             onAllAccessRestrictionReleasedMethodCalled = true;
             onAllAccessRestrictionReleased();
         }
+    }
+
+    public void attachCircleView(ILifeCircleView view) {
+        mLifeCircleViewMap.put(view.hashCode(), view);
     }
 }

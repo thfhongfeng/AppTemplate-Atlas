@@ -70,5 +70,9 @@ public abstract class BaseFragment extends Fragment {
      */
     protected abstract void afterInitOnCreateView();
 
+    public void startLoadingUi() {
+    }
 
+    public void finishLoadingUi() {
+    }
 }

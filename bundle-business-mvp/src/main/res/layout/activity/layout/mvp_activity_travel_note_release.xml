@@ -84,9 +84,9 @@
                             android:id="@+id/set_out_date_tv"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp_40"
+                            android:layout_marginRight="@dimen/dp_30"
                             android:gravity="center_vertical"
                             android:paddingLeft="@dimen/dp_10"
-                            android:layout_marginRight="@dimen/dp_30"
                             android:textColor="#929292"
                             android:textSize="@dimen/sp_15" />
 
@@ -130,9 +130,9 @@
                             android:id="@+id/day_count_tv"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp_40"
+                            android:layout_marginRight="@dimen/dp_30"
                             android:gravity="center_vertical"
                             android:paddingLeft="@dimen/dp_10"
-                            android:layout_marginRight="@dimen/dp_30"
                             android:textColor="#929292"
                             android:textSize="@dimen/sp_15" />
 
@@ -238,8 +238,8 @@
                 android:lines="5"
                 android:maxLength="500"
                 android:padding="@dimen/dp_10"
-                android:textColor="#C9C9C9"
-                android:textSize="@dimen/sp_12" />
+                android:textColor="#929292"
+                android:textSize="@dimen/sp_13" />
 
             <LinearLayout
                 android:id="@+id/day_note_ll"

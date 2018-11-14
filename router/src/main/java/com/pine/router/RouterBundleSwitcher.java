@@ -14,6 +14,12 @@ public class RouterBundleSwitcher {
 
     private static Map<String, Boolean> mBundleSwitcherStateMap = new HashMap<String, Boolean>();
 
+    static {
+        RouterBundleSwitcher.setBundleSwitchState(RouterBundleKey.LOGIN_BUNDLE_KEY, true);
+        RouterBundleSwitcher.setBundleSwitchState(RouterBundleKey.MAIN_BUNDLE_KEY, true);
+        RouterBundleSwitcher.setBundleSwitchState(RouterBundleKey.USER_BUNDLE_KEY, true);
+    }
+
     public static void setBundleSwitchState(String key, boolean isOpen) {
         mBundleSwitcherStateMap.put(key, isOpen);
         LogUtils.releaseLog(TAG, "Set " + key + " bundle " + (isOpen ? "open" : "close"));

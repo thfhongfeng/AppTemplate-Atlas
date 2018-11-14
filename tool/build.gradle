@@ -35,4 +35,6 @@ dependencies {
     compile build_dependency["appcompat_v7"]
     compile build_dependency["support_design"]
     // android官方 dependency end
+
+    compile  build_dependency["vdurmont_emoji"]
 }

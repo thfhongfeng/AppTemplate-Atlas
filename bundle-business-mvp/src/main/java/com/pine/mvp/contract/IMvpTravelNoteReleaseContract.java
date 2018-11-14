@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.contract.IBaseContract;
+import com.pine.base.component.editor.bean.EditorItemData;
+import com.pine.base.component.uploader.ui.UploadFileLinearLayout;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -13,7 +15,7 @@ import java.util.HashMap;
 
 public interface IMvpTravelNoteReleaseContract {
     interface Ui extends IBaseContract.Ui {
-        void setSwipeRefreshLayoutRefresh(boolean processing);
+        void onDayCountSet(int dayCount, List<List<EditorItemData>> dayList);
 
         @NonNull
         InputParamBean getNoteTitleParam(String key);
@@ -35,11 +37,13 @@ public interface IMvpTravelNoteReleaseContract {
 
         @NonNull
         InputParamBean getNoteContentParam(String key);
+
+        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {
         @NonNull
-        HashMap<String, String> makeUploadDefaultParams();
+        UploadFileLinearLayout.OneByOneUploadAdapter getUploadAdapter();
 
         void addNote();
     }

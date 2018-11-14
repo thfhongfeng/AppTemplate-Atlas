@@ -13,8 +13,6 @@ import java.util.HashMap;
 
 public interface IMvpShopReleaseContract {
     interface Ui extends IBaseContract.Ui {
-        void setSwipeRefreshLayoutRefresh(boolean processing);
-
         @NonNull
         InputParamBean getShopNameParam(String key);
 
@@ -50,6 +48,8 @@ public interface IMvpShopReleaseContract {
 
         @NonNull
         InputParamBean getShopImagesParam(String key);
+
+        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {

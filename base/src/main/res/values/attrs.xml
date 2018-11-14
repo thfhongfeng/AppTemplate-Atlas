@@ -4,9 +4,9 @@
         <attr name="baseSelectedItem" format="integer"></attr>
     </declare-styleable>
 
-    <declare-styleable name="BaseImageUploadView">
-        <attr name="baseMaxImageCount" format="integer"></attr>
+    <declare-styleable name="BaseFileUploadView">
+        <attr name="baseMaxFileCount" format="integer"></attr>
         <attr name="baseColumnSize" format="integer"></attr>
-        <attr name="baseMaxImageSize" format="integer"></attr>
+        <attr name="baseMaxFileSize" format="integer"></attr>
     </declare-styleable>
 </resources>

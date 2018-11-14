@@ -17,14 +17,19 @@ import com.pine.base.access.UiAccessAnnotation;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
+import com.pine.base.component.editor.bean.EditorItemData;
+import com.pine.base.component.editor.ui.TextImageEditorView;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
+import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpTravelNoteReleaseContract;
 import com.pine.mvp.presenter.MvpTravelNoteReleasePresenter;
+import com.pine.tool.util.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -146,6 +151,7 @@ public class MvpTravelNoteReleaseActivity extends
                             @Override
                             public void onSubmitClick(Dialog dialog, List<String> textList) {
                                 day_count_tv.setText(textList.get(0));
+                                onDayCountSet(Integer.parseInt(textList.get(0)), null);
                             }
 
                             @Override
@@ -160,21 +166,33 @@ public class MvpTravelNoteReleaseActivity extends
         }
     }
 
+    private void addDayView(List<EditorItemData> list, int day) {
+        TextImageEditorView view = new TextImageEditorView(this);
+        String title = getString(R.string.mvp_note_release_day_note_title, StringUtils.toChineseNumber(day));
+        view.init(this, MvpUrlConstants.Upload_File, day, title,
+                mPresenter.getUploadAdapter());
+        if (list != null) {
+            view.setData(list);
+        }
+        day_note_ll.addView(view);
+    }
+
     private void onAddNoteBtnClicked() {
         mPresenter.addNote();
     }
 
     @Override
-    public void setSwipeRefreshLayoutRefresh(boolean processing) {
-        if (swipe_refresh_layout == null) {
-            return;
-        }
-        if (processing) {
-            if (!swipe_refresh_layout.isRefreshing()) {
-                swipe_refresh_layout.setRefreshing(processing);
+    public void onDayCountSet(int dayCount, List<List<EditorItemData>> dayList) {
+        int childCount = day_note_ll.getChildCount();
+        if (dayCount > childCount) {
+            for (int i = childCount; i < dayCount; i++) {
+                addDayView(dayList == null ? null : dayList.get(i + 1), i + 1);
             }
-        } else {
-            swipe_refresh_layout.setRefreshing(processing);
+        } else if (dayCount < childCount) {
+            day_note_ll.removeViews(dayCount, childCount - dayCount);
+        }
+        if (dayCount == 1 && day_note_ll.getChildAt(0) instanceof TextImageEditorView) {
+            ((TextImageEditorView) day_note_ll.getChildAt(0)).setTitle("");
         }
     }
 
@@ -223,7 +241,25 @@ public class MvpTravelNoteReleaseActivity extends
     @NonNull
     @Override
     public InputParamBean getNoteContentParam(String key) {
+        List<List<EditorItemData>> list = new ArrayList<>();
+        for (int i = 0; i < day_note_ll.getChildCount(); i++) {
+            list.add(((TextImageEditorView) (day_count_ll.getChildAt(i))).getData());
+        }
         return new InputParamBean(this, nested_scroll_view,
-                key, "", day_note_ll);
+                key, list, day_note_ll);
+    }
+
+    @Override
+    public void setSwipeRefreshLayoutRefresh(boolean processing) {
+        if (swipe_refresh_layout == null) {
+            return;
+        }
+        if (processing) {
+            if (!swipe_refresh_layout.isRefreshing()) {
+                swipe_refresh_layout.setRefreshing(processing);
+            }
+        } else {
+            swipe_refresh_layout.setRefreshing(processing);
+        }
     }
 }
