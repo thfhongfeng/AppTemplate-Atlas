@@ -21,6 +21,7 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     private TextView login_btn_tv;
     private EditText mobile_et;
     private EditText password_et;
+    private TextView go_register_tv;
 
     @Override
     protected LoginPresenter createPresenter() {
@@ -37,11 +38,13 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
         mobile_et = findViewById(R.id.mobile_et);
         password_et = findViewById(R.id.password_et);
         login_btn_tv = findViewById(R.id.login_btn_tv);
+        go_register_tv = findViewById(R.id.go_register_tv);
     }
 
     @Override
     protected void initOnCreate() {
         login_btn_tv.setOnClickListener(this);
+        go_register_tv.setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +57,8 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
         int id = view.getId();
         if (id == R.id.login_btn_tv) {
             mPresenter.login();
+        } else if (id == R.id.go_register_tv) {
+            mPresenter.goRegister();
         }
     }
 

@@ -10,7 +10,7 @@ import com.pine.base.component.image_loader.glide.GlideImageLoaderManager;
 
 public class ImageLoaderManager {
     static {
-        getInstance().initConfig(R.mipmap.base_iv_no_item);
+        getInstance().initConfig(R.mipmap.base_ic_default_image);
     }
 
     private ImageLoaderManager() {

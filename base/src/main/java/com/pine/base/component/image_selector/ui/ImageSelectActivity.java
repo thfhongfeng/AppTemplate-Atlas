@@ -139,6 +139,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
             @Override
             public void onClick(View v) {
                 ImageViewer.create()
+                        .origin(mSelectedImageList)
                         .count(mMaxImgCount)
                         .canSelect(true)
                         .selected(mSelectedImageList)

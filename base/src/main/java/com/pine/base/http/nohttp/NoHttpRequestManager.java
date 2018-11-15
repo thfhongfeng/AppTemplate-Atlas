@@ -208,7 +208,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }
-        addGlobalSessionCookie(request);
+        insertGlobalSessionCookie(request);
         mRequestQueue.add(requestBean.getWhat(), (Request) addParams(request,
                 requestBean.getParams()), getResponseListener(listener));
     }
@@ -222,7 +222,7 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         if (requestBean.getSign() != null) {
             request.setCancelSign(requestBean.getSign());
         }
-        addGlobalSessionCookie(request);
+        insertGlobalSessionCookie(request);
         mDownloadQueue.add(requestBean.getWhat(), (DownloadRequest) addParams(request,
                 requestBean.getParams()), getDownloadListener(listener));
     }
@@ -264,11 +264,11 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         }
         request.setCancelSign(requestBean.getSign());
 
-        addGlobalSessionCookie(request);
+        insertGlobalSessionCookie(request);
         mRequestQueue.add(requestBean.getWhat(), request, getResponseListener(responseListener));
     }
 
-    private void addGlobalSessionCookie(IBasicRequest request) {
+    private void insertGlobalSessionCookie(IBasicRequest request) {
         if (mHeadParams.size() != 0) {
             Collection keys = mHeadParams.keySet();
             for (Iterator iterator = keys.iterator(); iterator.hasNext(); ) {
@@ -278,7 +278,6 @@ public class NoHttpRequestManager implements IHttpRequestManager {
         }
         request.addHeader(MOBILE_MODEL_KEY, mMobileModel);
     }
-
 
     @Override
     public void cancelBySign(Object sign) {
@@ -290,6 +289,24 @@ public class NoHttpRequestManager implements IHttpRequestManager {
     public void cancelAll() {
         mRequestQueue.cancelAll();
         mDownloadQueue.cancelAll();
+    }
+
+    @Override
+    public void addGlobalSessionCookie(HashMap<String, String> headerMap) {
+        if (headerMap == null) {
+            return;
+        }
+        mHeadParams.putAll(headerMap);
+    }
+
+    @Override
+    public void removeGlobalSessionCookie(List<String> keyList) {
+        if (keyList == null || keyList.size() < 1) {
+            return;
+        }
+        for (String key : keyList) {
+            mHeadParams.remove(key);
+        }
     }
 
     @Override

@@ -28,6 +28,10 @@ public interface IHttpRequestManager {
 
     void cancelAll();
 
+    void addGlobalSessionCookie(HashMap<String, String> headerMap);
+
+    void removeGlobalSessionCookie(List<String> keyList);
+
     List<HttpCookie> getSessionCookie();
 
     String getSessionId();

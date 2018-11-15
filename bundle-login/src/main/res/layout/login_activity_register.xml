@@ -6,9 +6,10 @@
     android:background="@mipmap/login_bg"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.pine.login.ui.activity.LoginActivity">
+    tools:context="com.pine.login.ui.activity.RegisterActivity">
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -16,8 +17,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@mipmap/login_bg_table"
             android:layout_marginBottom="@dimen/dp_20"
+            android:background="@mipmap/login_bg_table"
             android:orientation="vertical"
             android:padding="@dimen/dp_15">
 
@@ -25,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_20"
-                android:src="@mipmap/login_iv_login_logo" />
+                android:src="@mipmap/login_iv_register_logo" />
 
             <EditText
                 android:id="@+id/mobile_et"
@@ -41,6 +42,35 @@
                 android:padding="@dimen/dp_10"
                 android:textSize="@dimen/sp_15" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_20"
+
+                android:layout_marginTop="@dimen/dp_5"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/verify_code_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/login_bord_edit_text"
+                    android:hint="@string/login_verify_code_hint"
+                    android:maxLength="11"
+                    android:padding="@dimen/dp_10"
+                    android:textSize="@dimen/sp_15" />
+
+                <com.pine.base.widget.view.PicVerifyCodeImageView
+                    android:id="@+id/verify_code_iv"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
             <EditText
                 android:id="@+id/password_et"
                 android:layout_width="match_parent"
@@ -55,8 +85,22 @@
                 android:padding="@dimen/dp_10"
                 android:textSize="@dimen/sp_15" />
 
+            <EditText
+                android:id="@+id/confirm_pwd_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/login_bord_edit_text"
+                android:hint="@string/login_confirm_pwd_hint"
+                android:inputType="textPassword"
+                android:padding="@dimen/dp_10"
+                android:textSize="@dimen/sp_15" />
+
             <TextView
-                android:id="@+id/login_btn_tv"
+                android:id="@+id/register_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -67,59 +111,9 @@
                 android:paddingLeft="@dimen/dp_30"
                 android:paddingRight="@dimen/dp_30"
                 android:paddingTop="@dimen/dp_10"
-                android:text="@string/login_login_btn"
+                android:text="@string/login_register_btn"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_16" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="@dimen/dp_5"
-                android:text="@string/login_forget_pwd"
-                android:textColor="@color/cadet_blue"
-                android:textSize="@dimen/sp_15" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"></View>
-
-            <LinearLayout
-                android:id="@+id/other_login_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_10">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_5"
-                        android:src="@mipmap/login_ic_qq" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_5"
-                        android:src="@mipmap/login_ic_weixin" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_use_third_account_login"
-                    android:textColor="@color/dark_slate_gray"
-                    android:textSize="@dimen/sp_15" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -131,15 +125,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/login_no_account"
+                    android:text="@string/login_register_agreement_before"
                     android:textColor="@color/slate_grey"
                     android:textSize="@dimen/sp_15" />
 
                 <TextView
-                    android:id="@+id/go_register_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/login_free_register"
+                    android:text="@string/login_register_agreement"
                     android:textColor="@color/dark_green"
                     android:textSize="@dimen/sp_15" />
             </LinearLayout>

@@ -30,6 +30,6 @@
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/dp_5"
             android:layout_toLeftOf="@id/choose_tv"
-            android:background="@drawable/base_selector_check" />
+            android:background="@drawable/base_selector_check_big" />
     </RelativeLayout>
 </RelativeLayout>

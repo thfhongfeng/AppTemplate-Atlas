@@ -1,5 +1,6 @@
 package com.pine.login.presenter;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import com.pine.login.LoginConstants;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.manager.LoginManager;
+import com.pine.login.ui.activity.RegisterActivity;
 
 /**
  * Created by tanghongfeng on 2018/9/12
@@ -54,5 +56,11 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
                 return true;
             }
         });
+    }
+
+    @Override
+    public void goRegister() {
+        getContext().startActivity(new Intent(getContext(), RegisterActivity.class));
+        finishUi();
     }
 }
