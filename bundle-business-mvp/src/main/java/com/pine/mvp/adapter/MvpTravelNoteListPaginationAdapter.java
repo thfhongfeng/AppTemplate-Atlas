@@ -18,10 +18,10 @@ import com.pine.mvp.ui.activity.MvpTravelNoteDetailActivity;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpTravelNoteItemPaginationAdapter extends BasePaginationListAdapter {
+public class MvpTravelNoteListPaginationAdapter extends BasePaginationListAdapter {
     public static final int TRAVEL_NOTE_VIEW_HOLDER = 1;
 
-    public MvpTravelNoteItemPaginationAdapter(int defaultItemViewType) {
+    public MvpTravelNoteListPaginationAdapter(int defaultItemViewType) {
         super(defaultItemViewType);
     }
 

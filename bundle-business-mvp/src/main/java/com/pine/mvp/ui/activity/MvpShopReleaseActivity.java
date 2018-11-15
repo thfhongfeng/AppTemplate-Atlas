@@ -20,12 +20,12 @@ import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
 import com.pine.base.component.map.MapSdkManager;
 import com.pine.base.component.uploader.bean.FileUploadBean;
+import com.pine.base.component.uploader.ui.ImageUploadView;
 import com.pine.base.util.DialogUtils;
 import com.pine.base.widget.dialog.DateSelectDialog;
 import com.pine.base.widget.dialog.InputTextDialog;
 import com.pine.base.widget.dialog.ProvinceSelectDialog;
 import com.pine.base.widget.dialog.SelectItemDialog;
-import com.pine.base.component.uploader.ui.ImageUploadView;
 import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.contract.IMvpShopReleaseContract;
@@ -44,7 +44,8 @@ import java.util.Map;
  */
 
 @UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, Args = {""})
-public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMvpShopReleaseContract.Ui, MvpShopReleasePresenter>
+public class MvpShopReleaseActivity extends
+        BaseMvpActionBarTextMenuActivity<IMvpShopReleaseContract.Ui, MvpShopReleasePresenter>
         implements IMvpShopReleaseContract.Ui, View.OnClickListener {
     private final int REQUEST_CODE_BAIDU_MAP = 1;
     private SwipeRefreshLayout swipe_refresh_layout;
@@ -131,20 +132,13 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
                         return data.optString("fileUrl");
                         // Test code end
                     }
-                });
-        photo_iuv.setCropEnable();
+                }, 100);
+        photo_iuv.setCropEnable(101);
     }
 
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         titleTv.setText(R.string.mvp_shop_release_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
         menuBtnTv.setText(R.string.mvp_shop_release_confirm_menu);
         menuBtnTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,85 +260,88 @@ public class MvpShopReleaseActivity extends BaseMvpActionBarTextMenuActivity<IMv
 
     @Override
     public InputParamBean getShopNameParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, name_et.getText().toString(), name_et);
+        return new InputParamBean(this, key, name_et.getText().toString(),
+                nested_scroll_view, name_et);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopTypeParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, type_tv.getTag() == null ? "" : type_tv.getTag().toString(), type_tv);
+        return new InputParamBean(this, key,
+                type_tv.getTag() == null ? "" : type_tv.getTag().toString(),
+                nested_scroll_view, type_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopTypeNameParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, type_tv.getText().toString(), type_tv);
+        return new InputParamBean(this, key, type_tv.getText().toString(),
+                nested_scroll_view, type_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopOnlineDateParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, online_date_tv.getText().toString(), online_date_tv);
+        return new InputParamBean(this, key, online_date_tv.getText().toString(),
+                nested_scroll_view, online_date_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopContactMobileParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, contact_tv.getText().toString(), contact_tv);
+        return new InputParamBean(this, key, contact_tv.getText().toString(),
+                nested_scroll_view, contact_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopLocationParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, address_marker_tv.getText().toString(), address_marker_tv);
+        return new InputParamBean(this, key, address_marker_tv.getText().toString(),
+                nested_scroll_view, address_marker_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopAddressParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, address_tv.getText().toString(), address_tv);
+        return new InputParamBean(this, key, address_tv.getText().toString(),
+                nested_scroll_view, address_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopAddressZipCodeParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, address_tv.getTag() == null ? "" : address_tv.getTag().toString(), address_tv);
+        return new InputParamBean(this,
+                key, address_tv.getTag() == null ? "" : address_tv.getTag().toString(),
+                nested_scroll_view, address_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopDetailAddressParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, address_detail_et.getText().toString(), address_detail_et);
+        return new InputParamBean(this, key, address_detail_et.getText().toString(),
+                nested_scroll_view, address_detail_et);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopDescriptionParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, description_et.getText().toString(), description_et);
+        return new InputParamBean(this, key, description_et.getText().toString(),
+                nested_scroll_view, description_et);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopRemarkParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, remark_et.getText().toString(), remark_et);
+        return new InputParamBean(this, key, remark_et.getText().toString(),
+                nested_scroll_view, remark_et);
     }
 
     @NonNull
     @Override
     public InputParamBean getShopImagesParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, photo_iuv.getNewUploadImageRemoteString(","), photo_iuv);
+        return new InputParamBean(this,
+                key, photo_iuv.getNewUploadImageRemoteString(","),
+                nested_scroll_view, photo_iuv);
     }
 
     @Override

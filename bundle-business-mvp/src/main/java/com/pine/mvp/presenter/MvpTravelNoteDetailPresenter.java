@@ -46,7 +46,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
     }
 
     @Override
-    public MvpTravelNoteDetailComplexAdapter getRecycleViewAdapter() {
+    public MvpTravelNoteDetailComplexAdapter getListAdapter() {
         if (mTravelNoteDetailAdapter == null) {
             mTravelNoteDetailAdapter = new MvpTravelNoteDetailComplexAdapter();
         }

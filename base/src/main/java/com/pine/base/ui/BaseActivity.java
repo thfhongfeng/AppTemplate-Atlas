@@ -97,6 +97,11 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * 用于分析传入参数是否非法
+     *
+     * @return true表示非法， false表示合法
+     */
     protected abstract boolean parseIntentDataOnCreate();
 
     /**

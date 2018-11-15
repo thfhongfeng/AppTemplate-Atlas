@@ -8,7 +8,7 @@ import com.pine.base.component.map.ILocationListener;
 import com.pine.base.component.map.LocationInfo;
 import com.pine.base.component.map.MapSdkManager;
 import com.pine.mvp.MvpConstants;
-import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
 import com.pine.mvp.model.MvpShopModel;
@@ -26,7 +26,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
         implements IMvpShopPaginationContract.Presenter {
     private String mId;
     private MvpShopModel mModel;
-    private MvpShopItemPaginationAdapter mMvpHomeItemAdapter;
+    private MvpShopListPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     private ILocationListener mLocationListener = new ILocationListener() {
@@ -75,10 +75,10 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
     }
 
     @Override
-    public MvpShopItemPaginationAdapter getRecycleViewAdapter() {
+    public MvpShopListPaginationAdapter getListAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpShopItemPaginationAdapter(
-                    MvpShopItemPaginationAdapter.HOME_SHOP_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpShopListPaginationAdapter(
+                    MvpShopListPaginationAdapter.SHOP_VIEW_HOLDER);
         }
         return mMvpHomeItemAdapter;
     }

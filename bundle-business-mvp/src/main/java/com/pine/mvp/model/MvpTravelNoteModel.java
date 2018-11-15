@@ -18,8 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -33,7 +33,7 @@ public class MvpTravelNoteModel {
     private static final int HTTP_QUERY_TRAVEL_NOTE_LIST = 3;
     private static final int HTTP_QUERY_TRAVEL_NOTE_COMMENT_LIST = 4;
 
-    public boolean requestAddTravelNote(final HashMap<String, String> params,
+    public boolean requestAddTravelNote(final Map<String, String> params,
                                         @NonNull final IModelAsyncResponse<MvpTravelNoteDetailEntity> callback) {
         String url = MvpUrlConstants.Add_TravelNote;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
@@ -41,7 +41,7 @@ public class MvpTravelNoteModel {
                 HTTP_ADD_TRAVEL_NOTE, httpStringCallback);
     }
 
-    public boolean requestTravelNoteDetailData(final HashMap<String, String> params,
+    public boolean requestTravelNoteDetailData(final Map<String, String> params,
                                                @NonNull final IModelAsyncResponse<MvpTravelNoteDetailEntity> callback) {
         String url = MvpUrlConstants.Query_TravelNoteDetail;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
@@ -49,7 +49,7 @@ public class MvpTravelNoteModel {
                 HTTP_QUERY_TRAVEL_NOTE_DETAIL, httpStringCallback);
     }
 
-    public boolean requestTravelNoteListData(final HashMap<String, String> params,
+    public boolean requestTravelNoteListData(final Map<String, String> params,
                                              @NonNull final IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>> callback) {
         String url = MvpUrlConstants.Query_TravelNoteList;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
@@ -57,7 +57,7 @@ public class MvpTravelNoteModel {
                 HTTP_QUERY_TRAVEL_NOTE_LIST, httpStringCallback);
     }
 
-    public boolean requestTravelNoteCommentData(final HashMap<String, String> params,
+    public boolean requestTravelNoteCommentData(final Map<String, String> params,
                                                 @NonNull final IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>> callback) {
         String url = MvpUrlConstants.Query_TravelNoteCommentList;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);

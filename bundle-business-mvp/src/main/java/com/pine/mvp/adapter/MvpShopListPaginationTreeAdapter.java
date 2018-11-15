@@ -26,9 +26,9 @@ import java.util.List;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdapter<MvpShopAndProductEntity> {
-    public static final int HOME_SHOP_VIEW_HOLDER = 1;
-    public static final int HOME_SHOP_PRODUCT_VIEW_HOLDER = 2;
+public class MvpShopListPaginationTreeAdapter extends BasePaginationTreeListAdapter<MvpShopAndProductEntity> {
+    public static final int SHOP_VIEW_HOLDER = 1;
+    public static final int SHOP_PRODUCT_VIEW_HOLDER = 2;
 
     @Override
     public List<BaseListAdapterItemEntity<MvpShopAndProductEntity>> parseTreeData(List<MvpShopAndProductEntity> data,
@@ -40,7 +40,7 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
                 MvpShopAndProductEntity entity = data.get(i);
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(entity);
-                adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_VIEW_HOLDER);
+                adapterEntity.getPropertyEntity().setItemViewType(SHOP_VIEW_HOLDER);
                 List<MvpShopAndProductEntity.ProductsBean> productList = entity.getProducts();
                 adapterEntity.getPropertyEntity().setSubItemViewCount(productList == null ? 0 : productList.size());
                 adapterData.add(adapterEntity);
@@ -48,7 +48,7 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
                     for (int j = 0; j < productList.size(); j++) {
                         adapterEntity = new BaseListAdapterItemEntity();
                         adapterEntity.setData(productList.get(j));
-                        adapterEntity.getPropertyEntity().setItemViewType(HOME_SHOP_PRODUCT_VIEW_HOLDER);
+                        adapterEntity.getPropertyEntity().setItemViewType(SHOP_PRODUCT_VIEW_HOLDER);
                         adapterData.add(adapterEntity);
                     }
                 }
@@ -61,25 +61,25 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
     public BaseListViewHolder getViewHolder(ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
         switch (viewType) {
-            case HOME_SHOP_VIEW_HOLDER:
-                viewHolder = new HomeShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+            case SHOP_VIEW_HOLDER:
+                viewHolder = new ShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.mvp_item_shop_tree, parent, false));
                 break;
-            case HOME_SHOP_PRODUCT_VIEW_HOLDER:
-                viewHolder = new HomeShopProductViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+            case SHOP_PRODUCT_VIEW_HOLDER:
+                viewHolder = new ShopProductViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.mvp_item_shop_product, parent, false));
                 break;
         }
         return viewHolder;
     }
 
-    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
+    public class ShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
         private Context mContext;
         private LinearLayout container;
         private ImageView photo_iv;
         private TextView title_tv, toggle_btn_tv;
 
-        public HomeShopViewHolder(Context context, View itemView) {
+        public ShopViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             container = itemView.findViewById(R.id.container);
@@ -120,12 +120,12 @@ public class MvpShopItemPaginationTreeAdapter extends BasePaginationTreeListAdap
         }
     }
 
-    public class HomeShopProductViewHolder extends BaseListViewHolder<MvpShopAndProductEntity.ProductsBean> {
+    public class ShopProductViewHolder extends BaseListViewHolder<MvpShopAndProductEntity.ProductsBean> {
         private Context mContext;
         private LinearLayout container;
         private TextView title_tv;
 
-        public HomeShopProductViewHolder(Context context, View itemView) {
+        public ShopProductViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             container = itemView.findViewById(R.id.container);

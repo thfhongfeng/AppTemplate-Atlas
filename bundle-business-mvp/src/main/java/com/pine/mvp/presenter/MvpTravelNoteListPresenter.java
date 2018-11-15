@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.MvpConstants;
-import com.pine.mvp.adapter.MvpTravelNoteItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpTravelNoteListPaginationAdapter;
 import com.pine.mvp.bean.MvpTravelNoteItemEntity;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
 import com.pine.mvp.model.MvpTravelNoteModel;
@@ -23,7 +23,7 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
         implements IMvpTravelNoteListContract.Presenter {
     private String mId;
     private MvpTravelNoteModel mModel;
-    private MvpTravelNoteItemPaginationAdapter mMvpTravelNoteItemAdapter;
+    private MvpTravelNoteListPaginationAdapter mMvpTravelNoteItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpTravelNoteListPresenter() {
@@ -46,10 +46,10 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
     }
 
     @Override
-    public MvpTravelNoteItemPaginationAdapter getRecycleViewAdapter() {
+    public MvpTravelNoteListPaginationAdapter getListAdapter() {
         if (mMvpTravelNoteItemAdapter == null) {
-            mMvpTravelNoteItemAdapter = new MvpTravelNoteItemPaginationAdapter(
-                    MvpTravelNoteItemPaginationAdapter.TRAVEL_NOTE_VIEW_HOLDER);
+            mMvpTravelNoteItemAdapter = new MvpTravelNoteListPaginationAdapter(
+                    MvpTravelNoteListPaginationAdapter.TRAVEL_NOTE_VIEW_HOLDER);
         }
         return mMvpTravelNoteItemAdapter;
     }

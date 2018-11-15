@@ -65,7 +65,7 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
                 }
             }
         });
-        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+        recycle_view.setAdapter(mPresenter.getListAdapter());
 
         swipe_refresh_layout.post(new Runnable() {
             @Override
@@ -79,13 +79,6 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.mvp_travel_note_detail_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
     }
 
     @Override

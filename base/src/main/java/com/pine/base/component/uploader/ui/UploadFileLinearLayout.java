@@ -34,7 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by tanghongfeng on 2018/11/13
@@ -42,8 +41,6 @@ import java.util.Random;
 
 public abstract class UploadFileLinearLayout extends LinearLayout implements ILifeCircleView {
     private static final String TAG = LogUtils.makeLogTag(UploadFileLinearLayout.class);
-    private final int REQUEST_CODE_CROP = 10000 + hashCode() % 10000 + new Random().nextInt(100);
-    private final int REQUEST_CODE_SELECT_IMAGE = REQUEST_CODE_CROP + 1;
     // 每次选择文件最大允数
     private final int MAX_PER_UPLOAD_FILE_COUNT = 10;
     protected BaseActivity mActivity;
@@ -58,6 +55,8 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
     protected int mMaxFileCount = 30;
     // 文件上传组件
     protected FileUploadComponent mFileUploadComponent;
+    private int mRequestCodeCrop = 90100;
+    private int mRequestCodeSelectImage = 90101;
     private int mFileType = FileUploadComponent.TYPE_IMAGE;
     // 是否支持图片裁剪
     private boolean mEnableCrop;
@@ -89,7 +88,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
     }
 
     protected void initUpload(@NonNull BaseActivity activity, @NonNull String uploadUrl,
-                              int fileType, @NonNull OneByOneUploadAdapter adapter) {
+                              int fileType, @NonNull OneByOneUploadAdapter adapter, int requestCodeSelectImage) {
         mActivity = activity;
         if (mActivity == null) {
             throw new IllegalStateException("Activity should not be empty");
@@ -102,6 +101,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
         }
         mFileType = fileType;
         mOneByOneUploadAdapter = adapter;
+        mRequestCodeSelectImage = requestCodeSelectImage;
         if (mMainHandler == null) {
             mMainHandler = new Handler(Looper.getMainLooper());
         }
@@ -109,7 +109,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
     }
 
     public void initUpload(@NonNull BaseActivity activity, @NonNull String uploadUrl,
-                           int fileType, @NonNull TogetherUploadAdapter adapter) {
+                           int fileType, @NonNull TogetherUploadAdapter adapter, int requestCodeSelectImage) {
         mActivity = activity;
         if (mActivity == null) {
             throw new IllegalStateException("Activity should not be empty");
@@ -122,21 +122,26 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
         }
         mFileType = fileType;
         mTogetherUploadAdapter = adapter;
+        mRequestCodeSelectImage = requestCodeSelectImage;
         if (mMainHandler == null) {
             mMainHandler = new Handler(Looper.getMainLooper());
         }
         mIsInit = true;
     }
 
-    public void setCropEnable() {
+    public void setCropEnable(int cropRequestCode) {
         mEnableCrop = mFileType == FileUploadComponent.TYPE_IMAGE;
+        if (mEnableCrop) {
+            mRequestCodeCrop = cropRequestCode;
+        }
     }
 
-    public void setCropEnable(int cropWidth, int cropHeight) {
+    public void setCropEnable(int cropRequestCode, int cropWidth, int cropHeight) {
         if (mFileType == FileUploadComponent.TYPE_IMAGE) {
             mEnableCrop = true;
             mCropWidth = cropWidth;
             mCropHeight = cropHeight;
+            mRequestCodeCrop = cropRequestCode;
         } else {
             mEnableCrop = false;
         }
@@ -185,7 +190,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
         mCurCropPhotoPath = targetFilePath;
         mCropPathList.add(targetFilePath);
         LogUtils.d(TAG, "startCropPhoto filePath:" + filePath);
-        mActivity.startActivityForResult(intent, REQUEST_CODE_CROP);
+        mActivity.startActivityForResult(intent, mRequestCodeCrop);
     }
 
     protected void selectUploadObjects() {
@@ -212,7 +217,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
                 ", allowCount:" + allowCount);
         ImageSelector.create()
                 .count(mEnableCrop ? 1 : allowCount)
-                .start(mActivity, REQUEST_CODE_SELECT_IMAGE);
+                .start(mActivity, mRequestCodeSelectImage);
     }
 
     /**
@@ -278,7 +283,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_CROP) {
+        if (requestCode == mRequestCodeCrop) {
             if (resultCode == Activity.RESULT_OK) {
                 List<String> newSelectList = new ArrayList<>();
                 newSelectList.add(mCurCropPhotoPath);
@@ -286,7 +291,7 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
                         " mCurCropPhotoPath:" + mCurCropPhotoPath);
                 uploadFileOneByOne(newSelectList);
             }
-        } else if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
+        } else if (requestCode == mRequestCodeSelectImage) {
             if (resultCode == Activity.RESULT_OK) {
                 List<String> newSelectList = data.getStringArrayListExtra(
                         ImageSelector.INTENT_SELECTED_IMAGE_LIST);

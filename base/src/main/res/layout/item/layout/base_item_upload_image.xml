@@ -62,5 +62,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/base_ic_delete" />
+        android:src="@mipmap/base_ic_delete_black" />
 </RelativeLayout>

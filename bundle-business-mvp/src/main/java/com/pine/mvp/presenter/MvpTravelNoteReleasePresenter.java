@@ -1,5 +1,6 @@
 package com.pine.mvp.presenter;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -16,11 +17,13 @@ import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
 import com.pine.mvp.contract.IMvpTravelNoteReleaseContract;
 import com.pine.mvp.model.MvpTravelNoteModel;
+import com.pine.mvp.ui.activity.MvpShopSearchCheckActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +34,12 @@ import java.util.Map;
 
 public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteReleaseContract.Ui>
         implements IMvpTravelNoteReleaseContract.Presenter {
+    public final int REQUEST_CODE_SELECT_BELONG_SHOP = 1;
+
     private MvpTravelNoteModel mModel;
     private boolean mIsLoadProcessing;
-
+    private ArrayList<String> mBelongShopIdList;
+    private ArrayList<String> mBelongShopNameList;
 
     public MvpTravelNoteReleasePresenter() {
         mModel = new MvpTravelNoteModel();
@@ -93,6 +99,29 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
     }
 
     @Override
+    public void selectBelongShop() {
+        Intent intent = new Intent(getContext(), MvpShopSearchCheckActivity.class);
+        intent.putStringArrayListExtra(MvpShopSearchCheckPresenter.REQUEST_CHECKED_IDS_KEY, mBelongShopIdList);
+        getActivity().startActivityForResult(intent, REQUEST_CODE_SELECT_BELONG_SHOP);
+    }
+
+    @Override
+    public void onBelongShopSelected(Intent data) {
+        mBelongShopIdList = data.getStringArrayListExtra(MvpShopSearchCheckPresenter.RESULT_CHECKED_IDS_KEY);
+        mBelongShopNameList = data.getStringArrayListExtra(MvpShopSearchCheckPresenter.RESULT_CHECKED_NAMES_KEY);
+        if (mBelongShopIdList != null && mBelongShopNameList != null &&
+                mBelongShopIdList.size() == mBelongShopNameList.size() && mBelongShopIdList.size() > 0) {
+            String ids = mBelongShopIdList.get(0);
+            String names = mBelongShopNameList.get(0);
+            for (int i = 1; i < mBelongShopIdList.size(); i++) {
+                ids += "," + mBelongShopIdList.get(i);
+                names += "," + mBelongShopNameList.get(i);
+            }
+            getUi().setBelongShop(ids, names);
+        }
+    }
+
+    @Override
     public void addNote() {
         if (mIsLoadProcessing) {
             return;
@@ -103,14 +132,14 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
         if (title.checkIsEmpty(R.string.mvp_note_release_title_need)) {
             return;
         } else {
-            params.put("title", title.getValue());
+            params.put(title.getKey(), title.getValue());
         }
 
         InputParamBean<String> setOutDate = getUi().getNoteSetOutDateParam("setOutDate");
         if (setOutDate.checkIsEmpty(R.string.mvp_note_release_set_out_date_need)) {
             return;
         } else {
-            params.put("setOutDay", setOutDate.getValue());
+            params.put(setOutDate.getKey(), setOutDate.getValue());
         }
 
         InputParamBean<String> dayCount = getUi().getNoteTravelDayCountParam("dayCount");
@@ -119,21 +148,28 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
                         1, Integer.MAX_VALUE)) {
             return;
         } else {
-            params.put("dayCount", dayCount.getValue());
+            params.put(dayCount.getKey(), dayCount.getValue());
         }
 
         InputParamBean<String> belongShops = getUi().getNoteBelongShopsParam("belongShops");
         if (belongShops.checkIsEmpty(R.string.mvp_note_release_belong_shops_need)) {
             return;
         } else {
-            params.put("belongShops", belongShops.getValue());
+            params.put(belongShops.getKey(), belongShops.getValue());
+        }
+
+        InputParamBean<String> belongShopNames = getUi().getNoteBelongShopNamesParam("belongShopNames");
+        if (belongShops.checkIsEmpty(R.string.mvp_note_release_belong_shops_need)) {
+            return;
+        } else {
+            params.put(belongShopNames.getKey(), belongShopNames.getValue());
         }
 
         InputParamBean<String> preface = getUi().getNotePrefaceParam("preface");
         if (preface.checkIsEmpty(R.string.mvp_note_release_preface_need)) {
             return;
         } else {
-            params.put("preface", preface.getValue());
+            params.put(preface.getKey(), preface.getValue());
         }
 
         InputParamBean<List<List<EditorItemData>>> contentBean = getUi().getNoteContentParam("content");
@@ -145,27 +181,27 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
                 for (int i = 0; i < contentBean.getValue().size(); i++) {
                     List<EditorItemData> dayContentList = contentBean.getValue().get(i);
                     if (dayContentList == null || dayContentList.size() < 1) {
-                        contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_need);
+                        contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_need);
                         return;
                     }
                     JSONArray dayContentArr = new JSONArray();
                     for (int j = 0; j < dayContentList.size(); j++) {
-                        EditorItemData itemData = dayContentList.get(i);
+                        EditorItemData itemData = dayContentList.get(j);
                         switch (itemData.getType()) {
                             case TextImageEditorView.TYPE_TEXT:
                                 if (TextUtils.isEmpty(itemData.getText())) {
-                                    contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_text_need);
+                                    contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_text_need);
                                     return;
                                 }
                                 break;
-                            case TextImageEditorView.TYPE_NULL:
+                            case TextImageEditorView.TYPE_IMAGE:
                                 if (TextUtils.isEmpty(itemData.getRemoteFilePath())) {
-                                    contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_image_need);
+                                    contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_image_need);
                                     return;
                                 }
                                 break;
                             default:
-                                contentBean.scrollToTargetViewAndToast(R.string.mvp_note_release_day_note_content_incorrect);
+                                contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_content_incorrect);
                                 return;
                         }
                         JSONObject object = new JSONObject();
@@ -179,7 +215,7 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            params.put("content", contentArr.toString());
+            params.put(contentBean.getKey(), contentArr.toString());
         }
 
         startDataLoadUi();

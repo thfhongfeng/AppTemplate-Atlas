@@ -47,13 +47,6 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.login_login_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
     }
 
     @Override
@@ -66,11 +59,11 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
 
     @Override
     public InputParamBean getUserMobileParam(String key) {
-        return new InputParamBean(this, null, key, mobile_et.getText().toString(), mobile_et);
+        return new InputParamBean(this, key, mobile_et.getText().toString());
     }
 
     @Override
     public InputParamBean getUserPasswordParam(String key) {
-        return new InputParamBean(this, null, key, password_et.getText().toString(), password_et);
+        return new InputParamBean(this, key, password_et.getText().toString());
     }
 }

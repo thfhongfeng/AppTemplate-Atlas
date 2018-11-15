@@ -1,5 +1,6 @@
 package com.pine.mvp.contract;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.pine.base.architecture.mvp.bean.InputParamBean;
@@ -16,6 +17,8 @@ import java.util.List;
 public interface IMvpTravelNoteReleaseContract {
     interface Ui extends IBaseContract.Ui {
         void onDayCountSet(int dayCount, List<List<EditorItemData>> dayList);
+
+        void setBelongShop(String ids, String names);
 
         @NonNull
         InputParamBean getNoteTitleParam(String key);
@@ -44,6 +47,10 @@ public interface IMvpTravelNoteReleaseContract {
     interface Presenter extends IBaseContract.Presenter {
         @NonNull
         UploadFileLinearLayout.OneByOneUploadAdapter getUploadAdapter();
+
+        void selectBelongShop();
+
+        void onBelongShopSelected(Intent data);
 
         void addNote();
     }

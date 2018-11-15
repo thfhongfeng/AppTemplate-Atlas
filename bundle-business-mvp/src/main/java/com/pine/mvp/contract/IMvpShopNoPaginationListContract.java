@@ -1,7 +1,7 @@
 package com.pine.mvp.contract;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.mvp.adapter.MvpShopItemNoPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListNoPaginationAdapter;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -15,6 +15,6 @@ public interface IMvpShopNoPaginationListContract {
     interface Presenter extends IBaseContract.Presenter {
         void loadShopNoPaginationListData();
 
-        MvpShopItemNoPaginationAdapter getRecycleViewAdapter();
+        MvpShopListNoPaginationAdapter getListAdapter();
     }
 }

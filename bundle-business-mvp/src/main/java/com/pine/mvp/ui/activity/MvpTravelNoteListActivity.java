@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarCustomMenuActivity;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
 import com.pine.mvp.presenter.MvpTravelNoteListPresenter;
 
@@ -65,12 +65,12 @@ public class MvpTravelNoteListActivity extends
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopItemPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpShopListPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
                     onLoadingMore();
                 }
             }
         });
-        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+        recycle_view.setAdapter(mPresenter.getListAdapter());
 
         swipe_refresh_layout.post(new Runnable() {
             @Override
@@ -84,13 +84,6 @@ public class MvpTravelNoteListActivity extends
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer) {
         titleTv.setText(R.string.mvp_travel_note_list_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
         menuContainer.findViewById(R.id.menu_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

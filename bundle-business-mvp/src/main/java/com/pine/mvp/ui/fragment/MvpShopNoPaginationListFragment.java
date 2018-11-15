@@ -53,7 +53,7 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycle_view.setLayoutManager(linearLayoutManager);
         recycle_view.setHasFixedSize(true);
-        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+        recycle_view.setAdapter(mPresenter.getListAdapter());
 
         swipe_refresh_layout.post(new Runnable() {
             @Override

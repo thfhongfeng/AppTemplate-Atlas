@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.contract.IBaseContract;
@@ -124,9 +126,36 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
         }
     }
 
+    /**
+     * 用于分析传入参数是否非法
+     *
+     * @return true表示非法， false表示合法
+     */
     public abstract boolean parseIntentDataOnCreate();
 
+    /**
+     * UI状态回调
+     *
+     * @param state UI_STATE_ON_CREATE,UI_STATE_ON_START,UI_STATE_ON_RESUME,UI_STATE_ON_PAUSE,
+     *              UI_STATE_ON_STOP,UI_STATE_ON_DETACH
+     */
     public abstract void onUiState(int state);
+
+    public void showShortToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showShortToast(@StringRes int resId) {
+        Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showLongToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    public void showLongToast(@StringRes int resId) {
+        Toast.makeText(getContext(), resId, Toast.LENGTH_LONG).show();
+    }
 
     /**
      * 得到Bundle

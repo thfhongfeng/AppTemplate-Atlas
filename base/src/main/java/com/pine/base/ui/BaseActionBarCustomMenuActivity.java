@@ -55,6 +55,12 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         ViewStub base_content_layout = findViewById(R.id.custom_menu_container_vs);
         base_content_layout.setLayoutResource(getMenuBarLayoutResId());
+        action_bar_ll.findViewById(R.id.go_back_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title), base_content_layout.inflate());
     }

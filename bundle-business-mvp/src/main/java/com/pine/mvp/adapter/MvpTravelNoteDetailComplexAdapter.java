@@ -36,12 +36,12 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
     }
 
     @Override
-    public List<BaseListAdapterItemEntity<MvpTravelNoteDetailEntity>> parseHeadData(List<?> data) {
+    public List<BaseListAdapterItemEntity<MvpTravelNoteDetailEntity>> parseHeadData(List<MvpTravelNoteDetailEntity> data) {
         List<BaseListAdapterItemEntity<MvpTravelNoteDetailEntity>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
             for (int i = 0; i < data.size(); i++) {
-                MvpTravelNoteDetailEntity entity = (MvpTravelNoteDetailEntity) data.get(i);
+                MvpTravelNoteDetailEntity entity = data.get(i);
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(entity);
                 adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_HEAD_VIEW_HOLDER);
@@ -65,7 +65,7 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
     }
 
     @Override
-    public List<BaseListAdapterItemEntity<MvpTravelNoteCommentEntity>> parseTailData(List<?> data) {
+    public List<BaseListAdapterItemEntity<MvpTravelNoteCommentEntity>> parseTailData(List<MvpTravelNoteCommentEntity> data) {
         List<BaseListAdapterItemEntity<MvpTravelNoteCommentEntity>> adapterData = new ArrayList<>();
         if (data != null) {
             BaseListAdapterItemEntity adapterEntity;
@@ -126,9 +126,6 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
         @Override
         public void updateData(MvpTravelNoteDetailEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), person_civ);
-            // Test code begin
-            ImageLoaderManager.getInstance().loadImage(mContext, R.mipmap.base_ic_launcher, person_civ);
-            // Test code end
             title_tv.setText(content.getTitle());
             sub_title_tv.setText(content.getSubTitle());
             name_tv.setText(content.getName());
@@ -188,9 +185,6 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
         @Override
         public void updateData(MvpTravelNoteCommentEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), person_civ);
-            // Test code begin
-            ImageLoaderManager.getInstance().loadImage(mContext, R.mipmap.base_ic_launcher, person_civ);
-            // Test code end
             name_tv.setText(content.getName());
             create_time_tv.setText(content.getCreateTime());
             content_tv.setText(content.getContent());

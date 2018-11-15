@@ -184,9 +184,9 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         return mIsInitState;
     }
 
-    public abstract List<BaseListAdapterItemEntity<T>> parseHeadData(List<? extends Object> data);
+    public abstract List<BaseListAdapterItemEntity<T>> parseHeadData(List<T> data);
 
-    public abstract List<BaseListAdapterItemEntity<B>> parseTailData(List<? extends Object> data);
+    public abstract List<BaseListAdapterItemEntity<B>> parseTailData(List<B> data);
 
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 

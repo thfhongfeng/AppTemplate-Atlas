@@ -17,6 +17,6 @@ public interface IMvpTravelNoteDetailContract {
 
         void loadTravelNoteCommentData(boolean refresh);
 
-        MvpTravelNoteDetailComplexAdapter getRecycleViewAdapter();
+        MvpTravelNoteDetailComplexAdapter getListAdapter();
     }
 }

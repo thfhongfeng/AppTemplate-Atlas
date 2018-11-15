@@ -3,7 +3,7 @@ package com.pine.mvp.presenter;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.MvpConstants;
-import com.pine.mvp.adapter.MvpShopItemPaginationTreeAdapter;
+import com.pine.mvp.adapter.MvpShopListPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpShopTreeListContract;
 import com.pine.mvp.model.MvpShopModel;
@@ -19,7 +19,7 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
         implements IMvpShopTreeListContract.Presenter {
     private String mId;
     private MvpShopModel mModel;
-    private MvpShopItemPaginationTreeAdapter mMvpHomeItemAdapter;
+    private MvpShopListPaginationTreeAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpShopTreeListPresenter() {
@@ -38,9 +38,9 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
     }
 
     @Override
-    public MvpShopItemPaginationTreeAdapter getRecycleViewAdapter() {
+    public MvpShopListPaginationTreeAdapter getListAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpShopItemPaginationTreeAdapter();
+            mMvpHomeItemAdapter = new MvpShopListPaginationTreeAdapter();
         }
         return mMvpHomeItemAdapter;
     }

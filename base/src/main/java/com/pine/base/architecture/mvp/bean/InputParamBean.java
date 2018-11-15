@@ -20,12 +20,18 @@ public class InputParamBean<T> {
     private T value;
     private View inputView;
 
-    public InputParamBean(@NonNull Context context, View containerView,
-                          @NonNull String key, T value, @NonNull View inputView) {
+    public InputParamBean(@NonNull Context context, @NonNull String key, T value) {
         this.context = context;
-        this.containerView = containerView;
         this.key = key;
         this.value = value;
+    }
+
+    public InputParamBean(@NonNull Context context, @NonNull String key, T value,
+                          View containerView, View inputView) {
+        this.context = context;
+        this.key = key;
+        this.value = value;
+        this.containerView = containerView;
         this.inputView = inputView;
     }
 
@@ -53,23 +59,23 @@ public class InputParamBean<T> {
         this.inputView = inputView;
     }
 
-    public void scrollToTargetViewAndToast(String failMessage) {
-        if (containerView != null && containerView.isAttachedToWindow()) {
+    public void toastAndTryScrollTo(String failMessage) {
+        if (containerView != null && containerView.isAttachedToWindow() && inputView != null) {
             ViewActionUtils.scrollToTargetView(context, containerView, inputView);
-            Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(context, failMessage, Toast.LENGTH_SHORT).show();
     }
 
-    public void scrollToTargetViewAndToast(@StringRes int failMsgResId) {
-        if (containerView != null && containerView.isAttachedToWindow()) {
+    public void toastAndTryScrollTo(@StringRes int failMsgResId) {
+        if (containerView != null && containerView.isAttachedToWindow() && inputView != null) {
             ViewActionUtils.scrollToTargetView(context, containerView, inputView);
-            Toast.makeText(context, failMsgResId, Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(context, failMsgResId, Toast.LENGTH_SHORT).show();
     }
 
     public boolean checkIsEmpty(String failMessage) {
         if (value == null || "".equals(value.toString())) {
-            scrollToTargetViewAndToast(failMessage);
+            toastAndTryScrollTo(failMessage);
             return true;
         }
         return false;
@@ -87,7 +93,7 @@ public class InputParamBean<T> {
             }
         } catch (NumberFormatException e) {
         }
-        scrollToTargetViewAndToast(failMessage);
+        toastAndTryScrollTo(failMessage);
         return false;
     }
 
@@ -97,7 +103,7 @@ public class InputParamBean<T> {
 
     public boolean checkIsPhone(String failMessage) {
         if (!RegexUtils.isMobilePhoneNumber(value.toString())) {
-            scrollToTargetViewAndToast(failMessage);
+            toastAndTryScrollTo(failMessage);
             return false;
         }
         return true;

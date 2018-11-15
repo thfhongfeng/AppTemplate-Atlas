@@ -2,7 +2,7 @@ package com.pine.mvp.presenter;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.mvp.adapter.MvpShopItemNoPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListNoPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopNoPaginationListContract;
 import com.pine.mvp.model.MvpShopModel;
@@ -18,7 +18,7 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
         implements IMvpShopNoPaginationListContract.Presenter {
     private String mId;
     private MvpShopModel mModel;
-    private MvpShopItemNoPaginationAdapter mMvpHomeItemAdapter;
+    private MvpShopListNoPaginationAdapter mMvpHomeItemAdapter;
     private boolean mIsLoadProcessing;
 
     public MvpShopNoPaginationListPresenter() {
@@ -37,10 +37,10 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
     }
 
     @Override
-    public MvpShopItemNoPaginationAdapter getRecycleViewAdapter() {
+    public MvpShopListNoPaginationAdapter getListAdapter() {
         if (mMvpHomeItemAdapter == null) {
-            mMvpHomeItemAdapter = new MvpShopItemNoPaginationAdapter(
-                    MvpShopItemNoPaginationAdapter.HOME_SHOP_VIEW_HOLDER);
+            mMvpHomeItemAdapter = new MvpShopListNoPaginationAdapter(
+                    MvpShopListNoPaginationAdapter.SHOP_VIEW_HOLDER);
         }
         return mMvpHomeItemAdapter;
     }

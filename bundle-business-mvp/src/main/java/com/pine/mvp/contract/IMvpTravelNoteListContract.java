@@ -1,7 +1,7 @@
 package com.pine.mvp.contract;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.mvp.adapter.MvpTravelNoteItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpTravelNoteListPaginationAdapter;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -15,7 +15,7 @@ public interface IMvpTravelNoteListContract {
     interface Presenter extends IBaseContract.Presenter {
         void loadTravelNoteListData(boolean refresh);
 
-        MvpTravelNoteItemPaginationAdapter getRecycleViewAdapter();
+        MvpTravelNoteListPaginationAdapter getListAdapter();
 
         void goToAddTravelNoteActivity();
     }

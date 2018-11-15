@@ -70,14 +70,14 @@ public class TextImageEditorView extends UploadFileLinearLayout {
     }
 
     public void init(@NonNull BaseActivity activity, @NonNull String uploadUrl, int index,
-                     String title, OneByOneUploadAdapter adapter) {
-        initUpload(activity, uploadUrl, FileUploadComponent.TYPE_IMAGE, adapter);
+                     String title, OneByOneUploadAdapter adapter, int requestCodeSelectImage) {
+        initUpload(activity, uploadUrl, FileUploadComponent.TYPE_IMAGE, adapter, requestCodeSelectImage);
         initView(index, title);
     }
 
     public void init(@NonNull BaseActivity activity, @NonNull String uploadUrl, int index,
-                     String title, TogetherUploadAdapter adapter) {
-        initUpload(activity, uploadUrl, FileUploadComponent.TYPE_IMAGE, adapter);
+                     String title, TogetherUploadAdapter adapter, int requestCodeSelectImage) {
+        initUpload(activity, uploadUrl, FileUploadComponent.TYPE_IMAGE, adapter, requestCodeSelectImage);
         initView(index, title);
     }
 
@@ -101,6 +101,9 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         final View view = LayoutInflater.from(mActivity).inflate(R.layout.base_text_image_editor_item_text, null);
 
         setupEditorView(position, view);
+        if (position == mInitChildViewCount - 1) {
+            view.findViewById(R.id.text_rl).setVisibility(GONE);
+        }
 
         addView(view, position);
         view.setTag(data);
@@ -165,8 +168,6 @@ public class TextImageEditorView extends UploadFileLinearLayout {
                             });
                 }
             });
-        } else {
-            view.findViewById(R.id.text_rl).setVisibility(GONE);
         }
         view.findViewById(R.id.add_text_btn_tv).setOnClickListener(new OnClickListener() {
             @Override
@@ -221,7 +222,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         if (getChildCount() > mInitChildViewCount) {
             for (int i = mInitChildViewCount; i < getChildCount(); i++) {
                 EditorItemData data = (EditorItemData) getChildAt(i).getTag();
-                if (TYPE_IMAGE.equals(data.getType()) && data != null &&
+                if (data != null && TYPE_IMAGE.equals(data.getType()) &&
                         (data.getUploadState() != FileUploadState.UPLOAD_STATE_UPLOADING ||
                                 data.getUploadState() == FileUploadState.UPLOAD_STATE_SUCCESS)) {
                     imageItemUrlList.add(data);
@@ -238,6 +239,8 @@ public class TextImageEditorView extends UploadFileLinearLayout {
             View view = getChildAt(i);
             EditorItemData itemData = (EditorItemData) view.getTag();
             if (itemData != null) {
+                EditText editText = view.findViewById(R.id.text_et);
+                itemData.setText(editText.getText().toString());
                 data.add(itemData);
             }
         }

@@ -69,13 +69,6 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
         titleTv.setText(R.string.mvp_home_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
         menuBtnIv.setImageResource(R.mipmap.base_ic_add);
         menuBtnIv.setOnClickListener(new View.OnClickListener() {
             @Override

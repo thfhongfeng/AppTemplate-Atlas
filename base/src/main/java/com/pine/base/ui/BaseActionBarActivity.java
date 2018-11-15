@@ -63,6 +63,13 @@ public abstract class BaseActionBarActivity extends BaseActivity {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         if ((getActionBarType() & ACTION_BAR_NO_GO_BACK_TAG) == ACTION_BAR_NO_GO_BACK_TAG) {
             action_bar_ll.findViewById(R.id.go_back_iv).setVisibility(View.GONE);
+        } else {
+            action_bar_ll.findViewById(R.id.go_back_iv).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
         initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title));

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
-import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
+import com.pine.base.list.adapter.BasePaginationListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopItemEntity;
@@ -23,10 +23,10 @@ import com.pine.tool.util.DecimalUtils;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopItemNoPaginationAdapter extends BaseNoPaginationListAdapter {
-    public static final int HOME_SHOP_VIEW_HOLDER = 1;
+public class MvpShopListPaginationAdapter extends BasePaginationListAdapter {
+    public static final int SHOP_VIEW_HOLDER = 1;
 
-    public MvpShopItemNoPaginationAdapter(int defaultItemViewType) {
+    public MvpShopListPaginationAdapter(int defaultItemViewType) {
         super(defaultItemViewType);
     }
 
@@ -34,21 +34,21 @@ public class MvpShopItemNoPaginationAdapter extends BaseNoPaginationListAdapter 
     public BaseListViewHolder getViewHolder(ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
         switch (viewType) {
-            case HOME_SHOP_VIEW_HOLDER:
-                viewHolder = new HomeShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
+            case SHOP_VIEW_HOLDER:
+                viewHolder = new ShopViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.mvp_item_shop, parent, false));
                 break;
         }
         return viewHolder;
     }
 
-    public class HomeShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
+    public class ShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
         private Context mContext;
         private LinearLayout location_ll;
         private ImageView photo_iv;
         private TextView title_tv, location_tv;
 
-        public HomeShopViewHolder(Context context, View itemView) {
+        public ShopViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             photo_iv = itemView.findViewById(R.id.photo_iv);

@@ -120,13 +120,6 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
         titleTv.setText(R.string.mvp_web_view_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
         menuBtnIv.setImageResource(R.mipmap.base_ic_share);
 
         mShareDialog = ShareManager.getInstance().createShareDialog(this, mPresenter.getShareBeanList());

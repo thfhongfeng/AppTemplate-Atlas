@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -93,13 +94,6 @@ public class MvpTravelNoteReleaseActivity extends
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         titleTv.setText(R.string.mvp_note_release_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
         menuBtnTv.setText(R.string.mvp_note_release_confirm_menu);
         menuBtnTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +117,11 @@ public class MvpTravelNoteReleaseActivity extends
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == mPresenter.REQUEST_CODE_SELECT_BELONG_SHOP) {
+            if (resultCode == RESULT_OK) {
+                mPresenter.onBelongShopSelected(data);
+            }
+        }
     }
 
     @Override
@@ -150,8 +149,11 @@ public class MvpTravelNoteReleaseActivity extends
 
                             @Override
                             public void onSubmitClick(Dialog dialog, List<String> textList) {
-                                day_count_tv.setText(textList.get(0));
-                                onDayCountSet(Integer.parseInt(textList.get(0)), null);
+                                if (textList != null && textList.size() > 0 &&
+                                        !TextUtils.isEmpty(textList.get(0))) {
+                                    day_count_tv.setText(textList.get(0));
+                                    onDayCountSet(Integer.parseInt(textList.get(0)), null);
+                                }
                             }
 
                             @Override
@@ -162,17 +164,17 @@ public class MvpTravelNoteReleaseActivity extends
             }
             mDayCountInputDialog.show();
         } else if (v.getId() == R.id.belong_shop_ll) {
-
+            mPresenter.selectBelongShop();
         }
     }
 
-    private void addDayView(List<EditorItemData> list, int day) {
+    private void addDayView(List<EditorItemData> data, int day) {
         TextImageEditorView view = new TextImageEditorView(this);
         String title = getString(R.string.mvp_note_release_day_note_title, StringUtils.toChineseNumber(day));
         view.init(this, MvpUrlConstants.Upload_File, day, title,
-                mPresenter.getUploadAdapter());
-        if (list != null) {
-            view.setData(list);
+                mPresenter.getUploadAdapter(), 100 + day);
+        if (data != null) {
+            view.setData(data);
         }
         day_note_ll.addView(view);
     }
@@ -191,51 +193,62 @@ public class MvpTravelNoteReleaseActivity extends
         } else if (dayCount < childCount) {
             day_note_ll.removeViews(dayCount, childCount - dayCount);
         }
-        if (dayCount == 1 && day_note_ll.getChildAt(0) instanceof TextImageEditorView) {
+        if (dayCount == 1) {
             ((TextImageEditorView) day_note_ll.getChildAt(0)).setTitle("");
+        } else if (dayCount > 1) {
+            ((TextImageEditorView) day_note_ll.getChildAt(0))
+                    .setTitle(getString(R.string.mvp_note_release_day_note_title,
+                            StringUtils.toChineseNumber(1)));
         }
+    }
+
+    @Override
+    public void setBelongShop(String ids, String names) {
+        belong_shop_tv.setText(names);
+        belong_shop_tv.setTag(ids);
     }
 
     @NonNull
     @Override
     public InputParamBean getNoteTitleParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, title_et.getText().toString(), title_et);
+        return new InputParamBean(this, key, title_et.getText().toString(),
+                nested_scroll_view, title_et);
     }
 
     @NonNull
     @Override
     public InputParamBean getNoteSetOutDateParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, set_out_date_tv.getText().toString(), set_out_date_tv);
+        return new InputParamBean(this, key, set_out_date_tv.getText().toString(),
+                nested_scroll_view, set_out_date_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getNoteTravelDayCountParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, day_count_tv.getText().toString(), day_count_tv);
+        return new InputParamBean(this, key, day_count_tv.getText().toString(),
+                nested_scroll_view, day_count_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getNoteBelongShopsParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, belong_shop_tv.getTag() == null ? "" : belong_shop_tv.getTag().toString(), belong_shop_tv);
+        return new InputParamBean(this,
+                key, belong_shop_tv.getTag() == null ? "" : belong_shop_tv.getTag().toString(),
+                nested_scroll_view, belong_shop_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getNoteBelongShopNamesParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, belong_shop_tv.getText().toString(), belong_shop_tv);
+        return new InputParamBean(this, key, belong_shop_tv.getText().toString(),
+                nested_scroll_view, belong_shop_tv);
     }
 
     @NonNull
     @Override
     public InputParamBean getNotePrefaceParam(String key) {
-        return new InputParamBean(this, nested_scroll_view,
-                key, preface_et.getText().toString(), preface_et);
+        return new InputParamBean(this, key, preface_et.getText().toString(),
+                nested_scroll_view, preface_et);
     }
 
     @NonNull
@@ -243,10 +256,9 @@ public class MvpTravelNoteReleaseActivity extends
     public InputParamBean getNoteContentParam(String key) {
         List<List<EditorItemData>> list = new ArrayList<>();
         for (int i = 0; i < day_note_ll.getChildCount(); i++) {
-            list.add(((TextImageEditorView) (day_count_ll.getChildAt(i))).getData());
+            list.add(((TextImageEditorView) day_note_ll.getChildAt(i)).getData());
         }
-        return new InputParamBean(this, nested_scroll_view,
-                key, list, day_note_ll);
+        return new InputParamBean(this, key, list);
     }
 
     @Override

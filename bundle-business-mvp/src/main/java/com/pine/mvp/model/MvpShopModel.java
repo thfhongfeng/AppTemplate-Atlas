@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -42,21 +43,21 @@ public class MvpShopModel {
                 handleHttpResponse(callback));
     }
 
-    public boolean requestShopDetailData(final HashMap<String, String> params,
+    public boolean requestShopDetailData(final Map<String, String> params,
                                          @NonNull final IModelAsyncResponse<MvpShopDetailEntity> callback) {
         String url = MvpUrlConstants.Query_ShopDetail;
         return HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_DETAIL,
                 handleHttpResponse(callback));
     }
 
-    public boolean requestShopListData(final HashMap<String, String> params,
+    public boolean requestShopListData(final Map<String, String> params,
                                        @NonNull final IModelAsyncResponse<ArrayList<MvpShopItemEntity>> callback) {
         String url = MvpUrlConstants.Query_ShopList;
         return HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_LIST,
                 handleHttpResponse(callback));
     }
 
-    public boolean requestShopAndProductListData(HashMap<String, String> params,
+    public boolean requestShopAndProductListData(Map<String, String> params,
                                                  @NonNull final IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>> callback) {
         String url = MvpUrlConstants.Query_ShopAndProductList;
         return HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_QUERY_SHOP_AND_PRODUCT_LIST,

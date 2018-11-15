@@ -58,6 +58,11 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * 用于分析传入参数是否非法
+     *
+     * @return true表示非法， false表示合法
+     */
     protected abstract boolean parseArgumentsOnCreateView();
 
     /**

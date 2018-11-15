@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpShopItemPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
 import com.pine.mvp.presenter.MvpShopPaginationListPresenter;
 
@@ -57,12 +57,12 @@ public class MvpShopPaginationListFragment extends BaseMvpFragment<IMvpShopPagin
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopItemPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpShopListPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
                     onLoadingMore();
                 }
             }
         });
-        recycle_view.setAdapter(mPresenter.getRecycleViewAdapter());
+        recycle_view.setAdapter(mPresenter.getListAdapter());
 
         swipe_refresh_layout.post(new Runnable() {
             @Override

@@ -72,13 +72,6 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     @Override
     protected void initActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.mvp_shop_detail_title);
-        goBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                return;
-            }
-        });
     }
 
     @Override

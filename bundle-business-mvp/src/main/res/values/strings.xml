@@ -7,6 +7,9 @@
 
     <string name="mvp_spread">展开</string>
     <string name="mvp_fold">折叠</string>
+    <string name="mvp_complete">完成</string>
+    <string name="mvp_cancel">取消</string>
+    <string name="mvp_clear">清空</string>
 
     <string name="mvp_web_view_title">Business Mvp Web View</string>
 
@@ -58,6 +61,8 @@
     <string name="mvp_note_release_day_note_image_need">游记图片内容不能空</string>
     <string name="mvp_note_release_day_note_content_incorrect">错误的游记内容</string>
     <string name="mvp_note_release_success">游记添加成功</string>
-
     <string name="mvp_note_release_day_note_title">第%s天</string>
+
+    <string name="mvp_shop_check_title">商户选择</string>
+    <string name="mvp_shop_check_item_need">请至少选择一个商户</string>
 </resources>
