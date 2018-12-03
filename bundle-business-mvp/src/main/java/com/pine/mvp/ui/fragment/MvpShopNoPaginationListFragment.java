@@ -36,7 +36,7 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
     }
 
     @Override
-    protected void initOnCreateView() {
+    protected void init() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,

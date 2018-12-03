@@ -27,7 +27,7 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
     }
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         mId = getStringExtra("id", "");
         return false;
     }

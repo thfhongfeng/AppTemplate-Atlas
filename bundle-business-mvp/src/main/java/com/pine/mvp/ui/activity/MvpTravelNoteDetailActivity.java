@@ -40,7 +40,7 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -60,7 +60,7 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpTravelNoteDetailComplexAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpTravelNoteDetailComplexAdapter.isLastViewMoreView(recyclerView)) {
                     onLoadingMore();
                 }
             }

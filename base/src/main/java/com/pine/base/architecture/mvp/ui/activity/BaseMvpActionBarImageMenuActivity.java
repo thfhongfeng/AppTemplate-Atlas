@@ -24,17 +24,17 @@ public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.
     protected abstract P createPresenter();
 
     @Override
-    protected final boolean parseIntentDataOnCreate() {
+    protected final boolean parseIntentData() {
         if (mPresenter != null) {
-            return mPresenter.parseIntentDataOnCreate();
+            return mPresenter.parseIntentData();
         }
         return false;
     }
 
     @CallSuper
     @Override
-    protected void afterInitOnCreate() {
-        super.afterInitOnCreate();
+    protected void afterInit() {
+        super.afterInit();
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
         }

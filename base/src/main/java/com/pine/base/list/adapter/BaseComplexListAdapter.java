@@ -26,7 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
-    protected final static int FOOTER_VIEW_HOLDER = -10001;
+    protected final static int MORE_VIEW_HOLDER = -10001;
+    protected final static int COMPLETE_VIEW_HOLDER = -10002;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
@@ -34,18 +35,31 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
     protected List<BaseListAdapterItemEntity<T>> mHeadNoPaginationData = null;
     protected List<BaseListAdapterItemEntity<B>> mTailPaginationData = null;
     private boolean mIsInitState = true;
+    private boolean mShowEmpty = true;
+    private boolean mShowMore = true;
+    private boolean mShowComplete = true;
 
     public BaseComplexListAdapter() {
 
     }
 
-    public static boolean isLastVisibleViewFooter(RecyclerView recyclerView) {
+    public static boolean isLastViewMoreView(RecyclerView recyclerView) {
         LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        return recyclerView.getAdapter().getItemViewType(manager.findLastVisibleItemPosition()) == FOOTER_VIEW_HOLDER;
+        return recyclerView.getAdapter().getItemViewType(manager.findLastVisibleItemPosition()) == MORE_VIEW_HOLDER;
     }
 
-    public BaseListViewHolder<Boolean> getFooterViewHolder(ViewGroup parent) {
-        return new FooterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_footer, parent, false));
+    public void showEmptyMoreComplete(boolean showEmptyView, boolean showMoreView, boolean showCompleteView) {
+        mShowEmpty = showEmptyView;
+        mShowMore = showMoreView;
+        mShowComplete = showCompleteView;
+    }
+
+    public BaseListViewHolder<String> getCompleteViewHolder(ViewGroup parent) {
+        return new CompleteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_complete, parent, false));
+    }
+
+    public BaseListViewHolder<String> getMoreViewHolder(ViewGroup parent) {
+        return new MoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_more, parent, false));
     }
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
@@ -58,11 +72,14 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
     public BaseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
         switch (viewType) {
-            case FOOTER_VIEW_HOLDER:
-                viewHolder = getFooterViewHolder(parent);
-                break;
             case EMPTY_BACKGROUND_VIEW_HOLDER:
                 viewHolder = getEmptyBackgroundViewHolder(parent);
+                break;
+            case MORE_VIEW_HOLDER:
+                viewHolder = getMoreViewHolder(parent);
+                break;
+            case COMPLETE_VIEW_HOLDER:
+                viewHolder = getCompleteViewHolder(parent);
                 break;
             default:
                 viewHolder = getViewHolder(parent, viewType);
@@ -79,8 +96,12 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
             holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
-        if (isFooterView(mHasMore, position, topSize, bottomSize)) {
-            holder.updateData(mHasMore, new BaseListAdapterItemPropertyEntity(), position);
+        if (isMoreView(position)) {
+            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            return;
+        }
+        if (isCompleteView(position)) {
+            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
         if (mHeadNoPaginationData != null && position < mHeadNoPaginationData.size()) {
@@ -98,11 +119,11 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         }
         int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
         int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
-        if (topSize == 0 && bottomSize == 0) {
+        if (topSize == 0 && bottomSize == 0 && mShowEmpty) {
             return 1;
         }
         int actualSize = topSize + bottomSize;
-        if (hasFooterView(mHasMore, bottomSize)) {
+        if (hasMoreView() || hasCompleteView()) {
             return actualSize + 1;
         }
         return actualSize;
@@ -115,8 +136,11 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         if (topSize == 0 && bottomSize == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
-        if (isFooterView(true, position, topSize, bottomSize)) {
-            return FOOTER_VIEW_HOLDER;
+        if (isMoreView(position)) {
+            return MORE_VIEW_HOLDER;
+        }
+        if (isCompleteView(position)) {
+            return COMPLETE_VIEW_HOLDER;
         }
         if (mHeadNoPaginationData != null && position < mHeadNoPaginationData.size()) {
             return mHeadNoPaginationData.get(position).getPropertyEntity().getItemViewType();
@@ -136,6 +160,7 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         List<BaseListAdapterItemEntity<B>> parseData = parseTailData(newData);
         if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
+            notifyDataSetChanged();
             return;
         }
         if (mTailPaginationData == null) {
@@ -160,12 +185,24 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         notifyDataSetChanged();
     }
 
-    private boolean hasFooterView(boolean hasMore, int dataSize) {
-        return hasMore && dataSize >= getPageSize();
+    private boolean hasMoreView() {
+        return mShowMore && mHasMore && mTailPaginationData != null && mTailPaginationData.size() != 0;
     }
 
-    private boolean isFooterView(boolean hasMore, int position, int topDataSize, int bottomDataSize) {
-        return hasMore && bottomDataSize >= getPageSize() && position == topDataSize + bottomDataSize;
+    private boolean hasCompleteView() {
+        return mShowComplete && !mHasMore && mTailPaginationData != null && mTailPaginationData.size() != 0;
+    }
+
+    private boolean isMoreView(int position) {
+        int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
+        int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
+        return mShowMore && mHasMore && position != 0 && position == topSize + bottomSize;
+    }
+
+    private boolean isCompleteView(int position) {
+        int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
+        int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
+        return mShowComplete && !mHasMore && position != 0 && position == topSize + bottomSize;
     }
 
     public void resetAndGetPageNo() {
@@ -191,30 +228,6 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
-     * 底部holder
-     *
-     * @param
-     */
-    public class FooterViewHolder extends BaseListViewHolder<Boolean> {
-        private TextView footer_tv;
-
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            itemView.setTag("footer");
-            footer_tv = (TextView) itemView.findViewById(R.id.footer_tv);
-        }
-
-        @Override
-        public void updateData(Boolean show, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
-            if (show) {
-                footer_tv.setVisibility(View.VISIBLE);
-            } else {
-                footer_tv.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
      * 空背景
      */
     public class EmptyBackgroundViewHolder extends BaseListViewHolder<String> {
@@ -225,7 +238,7 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         public EmptyBackgroundViewHolder(Context context, View itemView) {
             super(itemView);
             this.context = context;
-            container = (RelativeLayout) itemView.findViewById(R.id.container);
+            container = itemView.findViewById(R.id.container);
         }
 
         @Override
@@ -236,6 +249,46 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
             TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT);
             container.setLayoutParams(params);
+        }
+    }
+
+    /**
+     * 加载更多holder
+     *
+     * @param
+     */
+    public class MoreViewHolder extends BaseListViewHolder<String> {
+        private TextView more_tv;
+
+        public MoreViewHolder(View itemView) {
+            super(itemView);
+            itemView.setTag("more");
+            more_tv = itemView.findViewById(R.id.more_tv);
+        }
+
+        @Override
+        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+
+        }
+    }
+
+    /**
+     * 全部加载完成holder
+     *
+     * @param
+     */
+    public class CompleteViewHolder extends BaseListViewHolder<String> {
+        private TextView complete_tv;
+
+        public CompleteViewHolder(View itemView) {
+            super(itemView);
+            itemView.setTag("complete");
+            complete_tv = itemView.findViewById(R.id.complete_tv);
+        }
+
+        @Override
+        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+
         }
     }
 }

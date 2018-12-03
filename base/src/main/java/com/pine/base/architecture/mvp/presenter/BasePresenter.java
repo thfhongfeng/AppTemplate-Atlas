@@ -131,7 +131,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
      *
      * @return true表示非法， false表示合法
      */
-    public abstract boolean parseIntentDataOnCreate();
+    public abstract boolean parseIntentData();
 
     /**
      * UI状态回调

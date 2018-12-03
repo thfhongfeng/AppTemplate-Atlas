@@ -15,7 +15,7 @@ public abstract class BaseMvcFragment extends BaseFragment {
 
     @CallSuper
     @Override
-    protected void afterInitOnCreateView() {
+    protected void afterInit() {
 
     }
 

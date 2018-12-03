@@ -24,6 +24,14 @@ public interface IImageLoaderManager {
     IImageLoaderManager initConfig(@NonNull int emptyImageResId, @NonNull int loadingImageResId);
 
     /**
+     * 设置下载请求监听
+     *
+     * @param listener
+     * @return
+     */
+    IImageLoaderManager downloadListener(IImageDownloadListener listener);
+
+    /**
      * 加载本地Res图片
      *
      * @param context   Context
@@ -40,8 +48,17 @@ public interface IImageLoaderManager {
      * @param url       图片地址
      * @param imageView
      */
-    void loadImage(@NonNull Context context,
-                   @NonNull String url, @NonNull ImageView imageView);
+    void loadImage(@NonNull Context context, @NonNull String url, @NonNull ImageView imageView);
+
+    /**
+     * 加载网络图片
+     *
+     * @param context   Context
+     * @param url       图片地址
+     * @param imageView
+     */
+    void loadImage(@NonNull Context context, @NonNull String url, @NonNull ImageView imageView,
+                   ImageCacheStrategy cacheStrategy);
 
     /**
      * 加载本地File图片

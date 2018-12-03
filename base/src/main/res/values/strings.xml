@@ -10,7 +10,8 @@
     <string name="base_upload_fail">上传失败</string>
 
     <string name="base_no_item">暂无数据哦</string>
-    <string name="base_item_footer">正在加载...</string>
+    <string name="base_item_more">正在加载...</string>
+    <string name="base_item_complete">没有更多了</string>
 
     <string name="base_share_to">分享至</string>
 

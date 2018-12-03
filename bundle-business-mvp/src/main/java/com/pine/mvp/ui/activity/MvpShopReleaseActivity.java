@@ -88,7 +88,7 @@ public class MvpShopReleaseActivity extends
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         type_ll.setOnClickListener(this);
         online_date_ll.setOnClickListener(this);
         contact_tv.setOnClickListener(this);

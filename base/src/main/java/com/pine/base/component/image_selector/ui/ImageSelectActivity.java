@@ -78,7 +78,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected boolean parseIntentDataOnCreate() {
+    protected boolean parseIntentData() {
         if (getIntent().hasExtra(ImageSelector.INTENT_MAX_SELECTED_COUNT)) {
             mMaxImgCount = getIntent().getIntExtra(ImageSelector.INTENT_MAX_SELECTED_COUNT, DEFAULT_MAX_IMAGE_COUNT);
         }
@@ -95,7 +95,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         mContentResolver = getContentResolver();
         mAllImageFolder = new ImageFolderBean();
         mAllImageFolder.setDir("/" + getString(R.string.base_all_image));

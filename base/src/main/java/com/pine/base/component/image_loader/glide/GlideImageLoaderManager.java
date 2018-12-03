@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.pine.base.component.image_loader.IImageDownloadListener;
 import com.pine.base.component.image_loader.IImageLoaderManager;
+import com.pine.base.component.image_loader.ImageCacheStrategy;
+import com.pine.base.component.image_loader.glide.loader.HttpRequestLoader;
 import com.pine.tool.util.LogUtils;
 
 import java.io.File;
@@ -34,6 +37,7 @@ public class GlideImageLoaderManager implements IImageLoaderManager {
                 }
             }
         }
+        HttpRequestLoader.listener = null;
         return mInstance;
     }
 
@@ -51,6 +55,12 @@ public class GlideImageLoaderManager implements IImageLoaderManager {
                 .placeholder(loadingImageResId)   //加载图
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
+        return mInstance;
+    }
+
+    @Override
+    public IImageLoaderManager downloadListener(IImageDownloadListener listener) {
+        HttpRequestLoader.listener = listener;
         return mInstance;
     }
 
@@ -85,6 +95,42 @@ public class GlideImageLoaderManager implements IImageLoaderManager {
                 .apply(mDefaultOption.clone().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
                 .into(imageView);
     }
+
+    /**
+     * 加载网络图片
+     *
+     * @param context       Context
+     * @param url           图片地址
+     * @param imageView
+     * @param cacheStrategy
+     */
+    @Override
+    public void loadImage(@NonNull Context context, @NonNull String url,
+                          @NonNull ImageView imageView, ImageCacheStrategy cacheStrategy) {
+        RequestOptions options = mDefaultOption.clone();
+        switch (cacheStrategy) {
+            case NONE:
+                options.diskCacheStrategy(DiskCacheStrategy.NONE);
+                break;
+            case DATA:
+                options.diskCacheStrategy(DiskCacheStrategy.DATA);
+                break;
+            case RESOURCE:
+                options.diskCacheStrategy(DiskCacheStrategy.DATA);
+                break;
+            case ALL:
+                options.diskCacheStrategy(DiskCacheStrategy.ALL);
+                break;
+            case AUTOMATIC:
+                options.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                break;
+        }
+        Glide.with(context)
+                .load(url)
+                .apply(options)
+                .into(imageView);
+    }
+
 
     /**
      * 加载本地File图片

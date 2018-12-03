@@ -27,26 +27,40 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
-    protected final static int FOOTER_VIEW_HOLDER = -10001;
+    protected final static int MORE_VIEW_HOLDER = -10001;
+    protected final static int COMPLETE_VIEW_HOLDER = -10002;
     // 1: 表示第一页（计数从1开始）
     protected AtomicInteger mPageNo = new AtomicInteger(1);
     protected AtomicInteger mPageSize = new AtomicInteger(10);
     protected Boolean mHasMore = true;
     protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
+    private boolean mShowEmpty = true;
+    private boolean mShowMore = true;
+    private boolean mShowComplete = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
 
     public BasePaginationListAdapter(int defaultItemViewType) {
         mDefaultItemViewType = defaultItemViewType;
     }
 
-    public static boolean isLastVisibleViewFooter(RecyclerView recyclerView) {
+    public static boolean isLastViewMoreView(RecyclerView recyclerView) {
         LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        return recyclerView.getAdapter().getItemViewType(manager.findLastVisibleItemPosition()) == FOOTER_VIEW_HOLDER;
+        return recyclerView.getAdapter().getItemViewType(manager.findLastVisibleItemPosition()) == MORE_VIEW_HOLDER;
     }
 
-    public BaseListViewHolder<Boolean> getFooterViewHolder(ViewGroup parent) {
-        return new FooterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_footer, parent, false));
+    public void showEmptyMoreComplete(boolean showEmptyView, boolean showMoreView, boolean showCompleteView) {
+        mShowEmpty = showEmptyView;
+        mShowMore = showMoreView;
+        mShowComplete = showCompleteView;
+    }
+
+    public BaseListViewHolder<String> getCompleteViewHolder(ViewGroup parent) {
+        return new CompleteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_complete, parent, false));
+    }
+
+    public BaseListViewHolder<String> getMoreViewHolder(ViewGroup parent) {
+        return new MoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_more, parent, false));
     }
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
@@ -56,14 +70,17 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
 
     @NonNull
     @Override
-    public BaseListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         BaseListViewHolder viewHolder = null;
         switch (viewType) {
-            case FOOTER_VIEW_HOLDER:
-                viewHolder = getFooterViewHolder(parent);
-                break;
             case EMPTY_BACKGROUND_VIEW_HOLDER:
                 viewHolder = getEmptyBackgroundViewHolder(parent);
+                break;
+            case MORE_VIEW_HOLDER:
+                viewHolder = getMoreViewHolder(parent);
+                break;
+            case COMPLETE_VIEW_HOLDER:
+                viewHolder = getCompleteViewHolder(parent);
                 break;
             default:
                 viewHolder = getViewHolder(parent, viewType);
@@ -78,8 +95,12 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
             holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
-        if (isFooterView(mHasMore, position, mData.size())) {
-            holder.updateData(mHasMore, new BaseListAdapterItemPropertyEntity(), position);
+        if (isMoreView(position)) {
+            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            return;
+        }
+        if (isCompleteView(position)) {
+            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
         holder.updateData(mData.get(position).getData(), mData.get(position).getPropertyEntity(), position);
@@ -90,11 +111,11 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
         if (mIsInitState()) {
             return 0;
         }
-        if (mData == null || mData.size() == 0) {
+        if ((mData == null || mData.size() == 0) && mShowEmpty) {
             return 1;
         }
         int actualSize = mData.size();
-        if (hasFooterView(mHasMore, actualSize)) {
+        if (hasMoreView() || hasCompleteView()) {
             return actualSize + 1;
         }
         return actualSize;
@@ -105,26 +126,38 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
-        if (isFooterView(true, position, mData.size())) {
-            return FOOTER_VIEW_HOLDER;
+        if (isMoreView(position)) {
+            return MORE_VIEW_HOLDER;
+        }
+        if (isCompleteView(position)) {
+            return COMPLETE_VIEW_HOLDER;
         }
         BaseListAdapterItemEntity itemEntity = mData.get(position);
         return itemEntity != null && itemEntity.getPropertyEntity().getItemViewType() != -10000 ?
                 itemEntity.getPropertyEntity().getItemViewType() : mDefaultItemViewType;
     }
 
-    private boolean hasFooterView(boolean hasMore, int dataSize) {
-        return hasMore && dataSize >= getPageSize();
+    private boolean hasMoreView() {
+        return mShowMore && mHasMore && mData != null && mData.size() != 0;
     }
 
-    private boolean isFooterView(boolean hasMore, int position, int dataSize) {
-        return hasMore && dataSize >= getPageSize() && position == dataSize;
+    private boolean hasCompleteView() {
+        return mShowComplete && !mHasMore && mData != null && mData.size() != 0;
+    }
+
+    private boolean isMoreView(int position) {
+        return mShowMore && mHasMore && position != 0 && position == mData.size();
+    }
+
+    private boolean isCompleteView(int position) {
+        return mShowComplete && !mHasMore && position != 0 && position == mData.size();
     }
 
     public final void addData(List<T> newData) {
         List<BaseListAdapterItemEntity<T>> parseData = parseData(newData, false);
         if (parseData == null || parseData.size() == 0) {
             mHasMore = false;
+            notifyDataSetChanged();
             return;
         }
         if (mData == null) {
@@ -190,30 +223,6 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
     public abstract BaseListViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
-     * 底部holder
-     *
-     * @param
-     */
-    public class FooterViewHolder extends BaseListViewHolder<Boolean> {
-        private TextView footer_tv;
-
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            itemView.setTag("footer");
-            footer_tv = itemView.findViewById(R.id.footer_tv);
-        }
-
-        @Override
-        public void updateData(Boolean show, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
-            if (show) {
-                footer_tv.setVisibility(View.VISIBLE);
-            } else {
-                footer_tv.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
      * 空背景
      */
     public class EmptyBackgroundViewHolder extends BaseListViewHolder<String> {
@@ -235,6 +244,46 @@ public abstract class BasePaginationListAdapter<T> extends RecyclerView.Adapter<
             TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT);
             container.setLayoutParams(params);
+        }
+    }
+
+    /**
+     * 加载更多holder
+     *
+     * @param
+     */
+    public class MoreViewHolder extends BaseListViewHolder<String> {
+        private TextView more_tv;
+
+        public MoreViewHolder(View itemView) {
+            super(itemView);
+            itemView.setTag("more");
+            more_tv = itemView.findViewById(R.id.more_tv);
+        }
+
+        @Override
+        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+
+        }
+    }
+
+    /**
+     * 全部加载完成holder
+     *
+     * @param
+     */
+    public class CompleteViewHolder extends BaseListViewHolder<String> {
+        private TextView complete_tv;
+
+        public CompleteViewHolder(View itemView) {
+            super(itemView);
+            itemView.setTag("complete");
+            complete_tv = itemView.findViewById(R.id.complete_tv);
+        }
+
+        @Override
+        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+
         }
     }
 }

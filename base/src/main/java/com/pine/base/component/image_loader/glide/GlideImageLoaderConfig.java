@@ -10,10 +10,13 @@ import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.AppGlideModule;
+import com.pine.base.component.image_loader.glide.loader.HttpRequestLoader;
 import com.pine.tool.util.PathUtils;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Created by tanghongfeng on 2018/10/11
@@ -21,9 +24,10 @@ import java.io.File;
 
 @GlideModule
 public class GlideImageLoaderConfig extends AppGlideModule {
+
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
-
+        registry.replace(GlideUrl.class, InputStream.class, new HttpRequestLoader.Factory());
     }
 
     @Override

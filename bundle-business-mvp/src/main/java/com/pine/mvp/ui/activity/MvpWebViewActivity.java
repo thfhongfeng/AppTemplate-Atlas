@@ -53,7 +53,7 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         initEvent();
         initWebView();
     }

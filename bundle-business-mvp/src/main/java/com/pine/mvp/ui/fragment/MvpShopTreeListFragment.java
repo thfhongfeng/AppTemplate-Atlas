@@ -37,7 +37,7 @@ public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListCon
     }
 
     @Override
-    protected void initOnCreateView() {
+    protected void init() {
         swipe_refresh_layout.setOnRefreshListener(this);
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.red,
@@ -57,7 +57,7 @@ public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListCon
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopListPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpShopListPaginationAdapter.isLastViewMoreView(recyclerView)) {
                     onLoadingMore();
                 }
             }

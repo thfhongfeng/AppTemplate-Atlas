@@ -50,7 +50,7 @@ public abstract class BaseActionBarTextMenuActivity extends BaseActivity {
 
     @CallSuper
     @Override
-    protected void afterInitOnCreate() {
+    protected void afterInit() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         if ((getActionBarType() & ACTION_BAR_NO_GO_BACK_TAG) == ACTION_BAR_NO_GO_BACK_TAG) {
             action_bar_ll.findViewById(R.id.go_back_iv).setVisibility(View.GONE);

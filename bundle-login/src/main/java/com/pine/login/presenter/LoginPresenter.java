@@ -19,7 +19,7 @@ import com.pine.login.ui.activity.RegisterActivity;
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

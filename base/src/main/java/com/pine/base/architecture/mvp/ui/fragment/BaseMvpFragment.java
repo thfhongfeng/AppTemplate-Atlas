@@ -24,16 +24,16 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     protected abstract P createPresenter();
 
     @Override
-    protected final boolean parseArgumentsOnCreateView() {
+    protected final boolean parseArguments() {
         if (mPresenter != null) {
-            return mPresenter.parseIntentDataOnCreate();
+            return mPresenter.parseIntentData();
         }
         return false;
     }
 
     @CallSuper
     @Override
-    protected void afterInitOnCreateView() {
+    protected void afterInit() {
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
         }

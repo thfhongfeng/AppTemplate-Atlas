@@ -91,9 +91,9 @@ public abstract class BaseActivity extends AppCompatActivity
     protected abstract void findViewOnCreate();
 
     private void onAllAccessRestrictionReleased() {
-        if (!parseIntentDataOnCreate()) {
-            initOnCreate();
-            afterInitOnCreate();
+        if (!parseIntentData()) {
+            init();
+            afterInit();
         }
     }
 
@@ -102,17 +102,17 @@ public abstract class BaseActivity extends AppCompatActivity
      *
      * @return true表示非法， false表示合法
      */
-    protected abstract boolean parseIntentDataOnCreate();
+    protected abstract boolean parseIntentData();
 
     /**
      * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
      */
-    protected abstract void initOnCreate();
+    protected abstract void init();
 
     /**
      * onCreate中结束初始化
      */
-    protected abstract void afterInitOnCreate();
+    protected abstract void afterInit();
 
     @CallSuper
     @Override

@@ -51,7 +51,7 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
 
     @CallSuper
     @Override
-    protected void afterInitOnCreate() {
+    protected void afterInit() {
         View action_bar_ll = findViewById(R.id.action_bar_ll);
         ViewStub base_content_layout = findViewById(R.id.custom_menu_container_vs);
         base_content_layout.setLayoutResource(getMenuBarLayoutResId());

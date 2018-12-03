@@ -38,7 +38,7 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     }
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

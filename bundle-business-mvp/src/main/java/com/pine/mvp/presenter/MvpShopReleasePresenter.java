@@ -28,7 +28,7 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
     }
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

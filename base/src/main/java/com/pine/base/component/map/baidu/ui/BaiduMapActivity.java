@@ -67,7 +67,7 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
     }
 
     @Override
-    protected boolean parseIntentDataOnCreate() {
+    protected boolean parseIntentData() {
         int mapTypeOrdinal = getIntent().getIntExtra("mapTypeOrdinal", 0);
         switch (MapType.values()[mapTypeOrdinal]) {
             case MAP_TYPE_NORMAL:
@@ -90,7 +90,7 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         location_iv.setOnClickListener(this);
 
         setupBaiduMap();

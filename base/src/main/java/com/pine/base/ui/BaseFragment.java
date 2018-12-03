@@ -51,9 +51,9 @@ public abstract class BaseFragment extends Fragment {
 
     private void tryOnAllRestrictionReleased() {
         if (mUiAccessReady) {
-            if (!parseArgumentsOnCreateView()) {
-                initOnCreateView();
-                afterInitOnCreateView();
+            if (!parseArguments()) {
+                init();
+                afterInit();
             }
         }
     }
@@ -63,17 +63,17 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return true表示非法， false表示合法
      */
-    protected abstract boolean parseArgumentsOnCreateView();
+    protected abstract boolean parseArguments();
 
     /**
      * 所有准入条件(如：登陆限制，权限限制等)全部解除后回调（界面的数据业务初始化动作推荐在此进行）
      */
-    protected abstract void initOnCreateView();
+    protected abstract void init();
 
     /**
      * onCreate中结束初始化
      */
-    protected abstract void afterInitOnCreateView();
+    protected abstract void afterInit();
 
     public void startLoadingUi() {
     }

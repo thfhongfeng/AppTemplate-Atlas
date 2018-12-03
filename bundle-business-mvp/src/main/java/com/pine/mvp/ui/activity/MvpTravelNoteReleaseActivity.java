@@ -78,7 +78,7 @@ public class MvpTravelNoteReleaseActivity extends
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         set_out_date_ll.setOnClickListener(this);
         belong_shop_ll.setOnClickListener(this);
         day_count_ll.setOnClickListener(this);

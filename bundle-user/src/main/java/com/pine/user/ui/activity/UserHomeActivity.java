@@ -40,7 +40,7 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         logout_btn_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

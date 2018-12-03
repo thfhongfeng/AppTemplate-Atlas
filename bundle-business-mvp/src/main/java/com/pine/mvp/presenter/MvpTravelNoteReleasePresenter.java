@@ -46,7 +46,7 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
     }
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

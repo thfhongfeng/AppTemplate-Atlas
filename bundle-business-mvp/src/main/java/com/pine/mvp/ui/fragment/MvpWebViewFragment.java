@@ -46,7 +46,7 @@ public class MvpWebViewFragment extends BaseMvpFragment implements View.OnClickL
     }
 
     @Override
-    protected void initOnCreateView() {
+    protected void init() {
         initWebView();
         initEvent();
         loadUrl();

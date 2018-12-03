@@ -52,7 +52,7 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected boolean parseIntentDataOnCreate() {
+    protected boolean parseIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST)) {
             mImageBeanList = (ArrayList<ImageItemBean>) intent.getSerializableExtra(ImageViewer.INTENT_IMAGE_BEAN_LIST);
@@ -74,7 +74,7 @@ public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         mContentResolver = getContentResolver();
         if (mNoImageList) {
             getThumbnail();

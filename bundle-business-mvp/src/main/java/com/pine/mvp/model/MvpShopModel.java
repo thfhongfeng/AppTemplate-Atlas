@@ -146,6 +146,14 @@ public class MvpShopModel {
     }
 
     private JSONObject getShopListData() {
+        if (new Random().nextInt(10) == 9) {
+            try {
+                return new JSONObject("{success:true,code:200,message:'',data:[]}");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         double endLatBd = 31.221367;
         double endLonBd = 121.635707;
         double startLatBd = DecimalUtils.add(endLatBd, new Random().nextDouble(), 6);
@@ -174,6 +182,14 @@ public class MvpShopModel {
     }
 
     private JSONObject getShopAndProductListData() {
+        if (new Random().nextInt(5) == 4) {
+            try {
+                return new JSONObject("{success:true,code:200,message:'',data:[]}");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         double endLatBd = 31.221367;
         double endLonBd = 121.635707;
         double startLatBd = DecimalUtils.add(endLatBd, new Random().nextDouble(), 6);

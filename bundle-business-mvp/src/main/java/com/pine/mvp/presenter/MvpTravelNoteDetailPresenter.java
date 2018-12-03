@@ -31,7 +31,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
     }
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         mId = getStringExtra("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();

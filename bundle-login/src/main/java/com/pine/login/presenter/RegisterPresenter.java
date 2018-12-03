@@ -10,7 +10,7 @@ import com.pine.login.contract.IRegisterContract;
 public class RegisterPresenter extends BasePresenter<IRegisterContract.Ui>
         implements IRegisterContract.Presenter {
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

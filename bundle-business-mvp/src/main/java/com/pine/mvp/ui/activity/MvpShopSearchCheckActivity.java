@@ -66,7 +66,7 @@ public class MvpShopSearchCheckActivity extends
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         search_iv.setOnClickListener(this);
         search_key_clear_iv.setOnClickListener(this);
         clear_check_tv.setOnClickListener(this);
@@ -101,7 +101,7 @@ public class MvpShopSearchCheckActivity extends
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopListPaginationAdapter.isLastVisibleViewFooter(recyclerView)) {
+                if (MvpShopListPaginationAdapter.isLastViewMoreView(recyclerView)) {
                     onLoadingMore();
                 }
             }

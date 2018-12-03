@@ -31,7 +31,7 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         mPresenter.loadBusinessBundleData();
     }
 

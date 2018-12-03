@@ -14,7 +14,7 @@ public class MvpHomePresenter extends BasePresenter<IMvpHomeContract.Ui>
         implements IMvpHomeContract.Presenter {
 
     @Override
-    public boolean parseIntentDataOnCreate() {
+    public boolean parseIntentData() {
         return false;
     }
 

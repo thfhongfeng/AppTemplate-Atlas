@@ -150,6 +150,14 @@ public class MvpTravelNoteModel {
     }
 
     private JSONObject getTravelNoteListData() {
+        if (new Random().nextInt(10) == 9) {
+            try {
+                return new JSONObject("{success:true,code:200,message:'',data:[]}");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         int startIndex = new Random().nextInt(10000);
         String res = "{success:true,code:200,message:'',data:" +
                 "[{id:'" + startIndex + "',title:'Travel Note Item " + startIndex + "'," +
@@ -169,6 +177,14 @@ public class MvpTravelNoteModel {
     }
 
     private JSONObject getTravelNoteCommentData() {
+        if (new Random().nextInt(10) == 9) {
+            try {
+                return new JSONObject("{success:true,code:200,message:'',data:[]}");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         int startIndex = new Random().nextInt(10000);
         String res = "{success:true,code:200,message:'',data:" +
                 "[{id:'" + startIndex + "',content:'Comment Item " + startIndex + "'," +

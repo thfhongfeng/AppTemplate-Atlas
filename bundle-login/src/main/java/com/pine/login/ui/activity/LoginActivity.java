@@ -42,7 +42,7 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         login_btn_tv.setOnClickListener(this);
         go_register_tv.setOnClickListener(this);
     }

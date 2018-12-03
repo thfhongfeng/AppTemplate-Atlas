@@ -25,12 +25,24 @@ import java.util.List;
 
 public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapter<BaseListViewHolder> {
     protected final static int EMPTY_BACKGROUND_VIEW_HOLDER = -10000;
+    protected final static int COMPLETE_VIEW_HOLDER = -10001;
     protected List<BaseListAdapterItemEntity<T>> mData = null;
     private boolean mIsInitState = true;
+    private boolean mShowEmpty = true;
+    private boolean mShowComplete = true;
     private int mDefaultItemViewType = EMPTY_BACKGROUND_VIEW_HOLDER;
 
     public BaseNoPaginationListAdapter(int defaultItemViewType) {
         mDefaultItemViewType = defaultItemViewType;
+    }
+
+    public void showEmptyComplete(boolean showEmptyView, boolean showCompleteView) {
+        mShowEmpty = showEmptyView;
+        mShowComplete = showCompleteView;
+    }
+
+    public BaseListViewHolder<String> getCompleteViewHolder(ViewGroup parent) {
+        return new CompleteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_complete, parent, false));
     }
 
     public BaseListViewHolder<String> getEmptyBackgroundViewHolder(ViewGroup parent) {
@@ -46,6 +58,9 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
             case EMPTY_BACKGROUND_VIEW_HOLDER:
                 viewHolder = getEmptyBackgroundViewHolder(parent);
                 break;
+            case COMPLETE_VIEW_HOLDER:
+                viewHolder = getCompleteViewHolder(parent);
+                break;
             default:
                 viewHolder = getViewHolder(parent, viewType);
                 break;
@@ -59,6 +74,10 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
             holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
             return;
         }
+        if (isCompleteView(position)) {
+            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            return;
+        }
         holder.updateData(mData.get(position).getData(), mData.get(position).getPropertyEntity(), position);
     }
 
@@ -67,10 +86,14 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
         if (mIsInitState()) {
             return 0;
         }
-        if (mData == null || mData.size() == 0) {
+        if ((mData == null || mData.size() == 0) && mShowEmpty) {
             return 1;
         }
-        return mData.size();
+        int actualSize = mData.size();
+        if (hasCompleteView()) {
+            return actualSize + 1;
+        }
+        return actualSize;
     }
 
     @Override
@@ -78,8 +101,19 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
         if (mData == null || mData.size() == 0) {
             return EMPTY_BACKGROUND_VIEW_HOLDER;
         }
+        if (isCompleteView(position)) {
+            return COMPLETE_VIEW_HOLDER;
+        }
         BaseListAdapterItemEntity itemEntity = mData.get(position);
         return itemEntity.getPropertyEntity().getItemViewType();
+    }
+
+    private boolean hasCompleteView() {
+        return mShowComplete && mData != null && mData.size() != 0;
+    }
+
+    private boolean isCompleteView(int position) {
+        return mShowComplete && position != 0 && position == mData.size();
     }
 
     public final void setData(List<T> data) {
@@ -91,6 +125,7 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
     public final void addData(List<T> newData) {
         List<BaseListAdapterItemEntity<T>> parseData = parseData(newData, false);
         if (parseData == null || parseData.size() == 0) {
+            notifyDataSetChanged();
             return;
         }
         if (mData == null) {
@@ -143,7 +178,7 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
         public EmptyBackgroundViewHolder(Context context, View itemView) {
             super(itemView);
             this.context = context;
-            container = (RelativeLayout) itemView.findViewById(R.id.container);
+            container = itemView.findViewById(R.id.container);
         }
 
         @Override
@@ -154,6 +189,26 @@ public abstract class BaseNoPaginationListAdapter<T> extends RecyclerView.Adapte
             TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT);
             container.setLayoutParams(params);
+        }
+    }
+
+    /**
+     * 全部加载完成holder
+     *
+     * @param
+     */
+    public class CompleteViewHolder extends BaseListViewHolder<String> {
+        private TextView complete_tv;
+
+        public CompleteViewHolder(View itemView) {
+            super(itemView);
+            itemView.setTag("complete");
+            complete_tv = itemView.findViewById(R.id.complete_tv);
+        }
+
+        @Override
+        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+
         }
     }
 }

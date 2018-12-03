@@ -49,7 +49,7 @@ public abstract class BaseNoActionBarActivity extends BaseActivity {
 
     @CallSuper
     @Override
-    protected void afterInitOnCreate() {
+    protected void afterInit() {
 
     }
 

@@ -53,7 +53,7 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     }
 
     @Override
-    protected void initOnCreate() {
+    protected void init() {
         setupViewPage();
     }
 

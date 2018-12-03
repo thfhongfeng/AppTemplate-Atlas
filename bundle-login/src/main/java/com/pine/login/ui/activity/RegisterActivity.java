@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.pine.base.architecture.mvp.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.base.widget.view.PicVerifyCodeImageView;
+import com.pine.login.LoginUrlConstants;
 import com.pine.login.R;
 import com.pine.login.contract.IRegisterContract;
 import com.pine.login.presenter.RegisterPresenter;
@@ -55,9 +56,15 @@ public class RegisterActivity extends
     }
 
     @Override
-    protected void initOnCreate() {
-        verify_code_iv.setOnClickListener(this);
+    protected void init() {
+        verify_code_iv.init(LoginUrlConstants.Verify_Code_Image);
         register_btn_tv.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        verify_code_iv.onResume();
+        super.onResume();
     }
 
     @NonNull
