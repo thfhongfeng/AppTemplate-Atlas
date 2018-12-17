@@ -108,9 +108,9 @@ public class DateSelectDialog extends Dialog {
         private void initView(final DateSelectDialog dialog, final IDialogDateSelected dialogSelect) {
             selectedDate = Calendar.getInstance();
             selectedDate.setTime(new Date());
-            showYear(selectedDate);
-            showMonth(selectedDate);
-            showDate(selectedDate);
+            showYear();
+            showMonth();
+            showDate();
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,8 +130,8 @@ public class DateSelectDialog extends Dialog {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     selectedDate.set(Calendar.YEAR, startYear + i);
-                    showMonth(selectedDate);
-                    showDate(selectedDate);
+                    showMonth();
+                    showDate();
                 }
             });
             wheelMonth.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
@@ -142,8 +142,8 @@ public class DateSelectDialog extends Dialog {
                     if (year == startYear) {
                         start = startDate.get(Calendar.MONTH);
                     }
-                    selectedDate.set(Calendar.MONTH, i + start);
-                    showDate(selectedDate);
+                    setMonth(i + start);
+                    showDate();
                 }
             });
             wheelDay.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
@@ -160,9 +160,22 @@ public class DateSelectDialog extends Dialog {
             });
         }
 
-        public void showYear(Calendar calendar) {
+        private void setMonth(int monthIndex) {
+            int oldDay = selectedDate.get(Calendar.DAY_OF_MONTH);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(selectedDate.get(Calendar.YEAR), monthIndex, 1);
+            int newMonthDayCount = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (oldDay > newMonthDayCount) {
+                selectedDate.set(Calendar.DAY_OF_MONTH, newMonthDayCount);
+                selectedDate.set(Calendar.MONTH, monthIndex);
+            } else {
+                selectedDate.set(Calendar.MONTH, monthIndex);
+            }
+        }
+
+        public void showYear() {
             int position = 0;
-            int year = calendar.get(Calendar.YEAR);
+            int year = selectedDate.get(Calendar.YEAR);
             List<String> yearList = new ArrayList<>();
             for (int i = 0; i <= endYear - startYear; i++) {
                 yearList.add(context.getString(R.string.base_date_year, String.valueOf(startYear + i)));
@@ -175,10 +188,10 @@ public class DateSelectDialog extends Dialog {
             selectedDate.set(Calendar.YEAR, startYear + position);
         }
 
-        public void showMonth(Calendar calendar) {
+        public void showMonth() {
             int position = 0;
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
+            int year = selectedDate.get(Calendar.YEAR);
+            int month = selectedDate.get(Calendar.MONTH);
             int start = 0;
             int end = 11;
             if (year == startYear) {
@@ -200,16 +213,16 @@ public class DateSelectDialog extends Dialog {
             }
             wheelMonth.setData(monthList);
             wheelMonth.setSelectedItemPosition(position);
-            selectedDate.set(Calendar.MONTH, start + position);
+            setMonth(start + position);
         }
 
-        public void showDate(Calendar calendar) {
+        public void showDate() {
             int position = 0;
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int year = selectedDate.get(Calendar.YEAR);
+            int month = selectedDate.get(Calendar.MONTH);
+            int day = selectedDate.get(Calendar.DAY_OF_MONTH);
             int start = 0;
-            int end = getMonthDayCount(calendar) - 1;
+            int end = selectedDate.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
             if (year == startYear && month == startMonth) {
                 start = startDate.get(Calendar.DAY_OF_MONTH) - 1;
             }
@@ -230,14 +243,6 @@ public class DateSelectDialog extends Dialog {
             wheelDay.setData(dayList);
             wheelDay.setSelectedItemPosition(position);
             selectedDate.set(Calendar.DAY_OF_MONTH, start + position + 1);
-        }
-
-        private int getMonthDayCount(Calendar calendar) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(calendar.getTime());
-            c.set(Calendar.DATE, 1);
-            c.roll(Calendar.DATE, -1);
-            return c.get(Calendar.DATE);
         }
     }
 }
