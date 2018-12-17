@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class DateSelectDialog extends Dialog {
-    private Builder mBuilder;
+    private Builder builder;
 
     private DateSelectDialog(@NonNull Context context) {
         super(context);
@@ -37,7 +37,7 @@ public class DateSelectDialog extends Dialog {
     }
 
     public Builder getBuilder() {
-        return mBuilder;
+        return builder;
     }
 
     public interface IDialogDateSelected {
@@ -45,11 +45,12 @@ public class DateSelectDialog extends Dialog {
     }
 
     public static class Builder {
-        private TextView cancel_tv, confirm_tv;
-        private WheelPicker wheel_one, wheel_two, wheel_three;
+        TextView cancelBtn, confirmBtn;
+        WheelPicker wheelYear, wheelMonth, wheelDay;
         private Context context;
         private Calendar selectedDate;
-        private int startYear, endYear;
+        private Calendar startDate, endDate;
+        private int startYear, endYear, startMonth, endMonth;
 
         public Builder(Context context) {
             this.context = context;
@@ -57,21 +58,40 @@ public class DateSelectDialog extends Dialog {
 
         public DateSelectDialog create(IDialogDateSelected dialogSelect) {
             int year = Calendar.getInstance().get(Calendar.YEAR);
-            return this.create(dialogSelect, year, year + 1);
+            Calendar startDate = Calendar.getInstance();
+            startDate.set(year, 0, 1);
+            Calendar endDate = Calendar.getInstance();
+            endDate.set(year + 1, 11, 31);
+            return this.create(dialogSelect, startDate, endDate);
         }
 
         public DateSelectDialog create(IDialogDateSelected dialogSelect, int startYear, int endYear) {
-            this.startYear = startYear;
-            this.endYear = endYear;
+            Calendar startDate = Calendar.getInstance();
+            startDate.set(startYear, 0, 1);
+            Calendar endDate = Calendar.getInstance();
+            endDate.set(endYear, 11, 31);
+            return this.create(dialogSelect, startDate, endDate);
+        }
+
+        public DateSelectDialog create(IDialogDateSelected dialogSelect, Calendar startDate, Calendar endDate) {
+            if (startDate.getTimeInMillis() >= endDate.getTimeInMillis()) {
+                return null;
+            }
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.startYear = startDate.get(Calendar.YEAR);
+            this.endYear = endDate.get(Calendar.YEAR);
+            this.startMonth = startDate.get(Calendar.MONTH);
+            this.endMonth = endDate.get(Calendar.MONTH);
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final DateSelectDialog dialog = new DateSelectDialog(context, R.style.BaseSelectDialogStyle);
             View layout = inflater.inflate(R.layout.base_dialog_date_or_time_select, null);
-            cancel_tv = layout.findViewById(R.id.cancel_tv);
-            confirm_tv = layout.findViewById(R.id.confirm_tv);
-            wheel_one = layout.findViewById(R.id.wheel_one);
-            wheel_two = layout.findViewById(R.id.wheel_two);
-            wheel_three = layout.findViewById(R.id.wheel_three);
+            cancelBtn = (TextView) layout.findViewById(R.id.cancel_tv);
+            confirmBtn = (TextView) layout.findViewById(R.id.confirm_tv);
+            wheelYear = (WheelPicker) layout.findViewById(R.id.wheel_one);
+            wheelMonth = (WheelPicker) layout.findViewById(R.id.wheel_two);
+            wheelDay = (WheelPicker) layout.findViewById(R.id.wheel_three);
             initView(dialog, dialogSelect);
             dialog.setContentView(layout);
             Window window = dialog.getWindow();
@@ -81,35 +101,23 @@ public class DateSelectDialog extends Dialog {
             WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
             p.width = d.getWidth(); //宽度设置为屏幕
             dialog.getWindow().setAttributes(p); //设置生效
-            dialog.mBuilder = this;
+            dialog.builder = this;
             return dialog;
         }
 
         private void initView(final DateSelectDialog dialog, final IDialogDateSelected dialogSelect) {
-            List<String> yearList = new ArrayList<>();
-            for (int i = 0; i <= endYear - startYear; i++) {
-                yearList.add(context.getString(R.string.base_date_year, String.valueOf(startYear + i)));
-            }
-            wheel_one.setData(yearList);
-            List<String> monthList = new ArrayList<>();
-            for (int i = 0; i < 12; i++) {
-                String monthStr = String.valueOf(i + 1);
-                if (i < 9) {
-                    monthStr = "0" + monthStr;
-                }
-                monthList.add(context.getString(R.string.base_date_month, monthStr));
-            }
-            wheel_two.setData(monthList);
             selectedDate = Calendar.getInstance();
             selectedDate.setTime(new Date());
+            showYear(selectedDate);
+            showMonth(selectedDate);
             showDate(selectedDate);
-            cancel_tv.setOnClickListener(new View.OnClickListener() {
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
-            confirm_tv.setOnClickListener(new View.OnClickListener() {
+            confirmBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -118,46 +126,110 @@ public class DateSelectDialog extends Dialog {
                     }
                 }
             });
-            wheel_one.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheelYear.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
                     selectedDate.set(Calendar.YEAR, startYear + i);
-                }
-            });
-            wheel_two.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
-                    selectedDate.set(Calendar.MONTH, i);
+                    showMonth(selectedDate);
                     showDate(selectedDate);
                 }
             });
-            wheel_three.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            wheelMonth.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
-                    selectedDate.set(Calendar.DAY_OF_MONTH, i + 1);
+                    int year = selectedDate.get(Calendar.YEAR);
+                    int start = 0;
+                    if (year == startYear) {
+                        start = startDate.get(Calendar.MONTH);
+                    }
+                    selectedDate.set(Calendar.MONTH, i + start);
+                    showDate(selectedDate);
+                }
+            });
+            wheelDay.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(WheelPicker wheelPicker, Object o, int i) {
+                    int year = selectedDate.get(Calendar.YEAR);
+                    int month = selectedDate.get(Calendar.MONTH);
+                    int start = 1;
+                    if (year == startYear && month == startMonth) {
+                        start = startDate.get(Calendar.DAY_OF_MONTH);
+                    }
+                    selectedDate.set(Calendar.DAY_OF_MONTH, i + start);
                 }
             });
         }
 
-        public void showDate(Calendar calendar) {
+        public void showYear(Calendar calendar) {
+            int position = 0;
+            int year = calendar.get(Calendar.YEAR);
+            List<String> yearList = new ArrayList<>();
+            for (int i = 0; i <= endYear - startYear; i++) {
+                yearList.add(context.getString(R.string.base_date_year, String.valueOf(startYear + i)));
+                if (year == startYear + i) {
+                    position = i;
+                }
+            }
+            wheelYear.setData(yearList);
+            wheelYear.setSelectedItemPosition(position);
+            selectedDate.set(Calendar.YEAR, startYear + position);
+        }
+
+        public void showMonth(Calendar calendar) {
+            int position = 0;
+            int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
-            wheel_two.setSelectedItemPosition(month);
+            int start = 0;
+            int end = 11;
+            if (year == startYear) {
+                start = startDate.get(Calendar.MONTH);
+            }
+            if (year == endYear) {
+                end = endDate.get(Calendar.MONTH);
+            }
+            List<String> monthList = new ArrayList<>();
+            for (int i = start; i <= end; i++) {
+                String monthStr = String.valueOf(i + 1);
+                if (i < 9) {
+                    monthStr = "0" + monthStr;
+                }
+                monthList.add(context.getString(R.string.base_date_month, monthStr));
+                if (month == i) {
+                    position = i - start;
+                }
+            }
+            wheelMonth.setData(monthList);
+            wheelMonth.setSelectedItemPosition(position);
+            selectedDate.set(Calendar.MONTH, start + position);
+        }
+
+        public void showDate(Calendar calendar) {
+            int position = 0;
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int dayCount = getMonthDayCount(calendar);
+            int start = 0;
+            int end = getMonthDayCount(calendar) - 1;
+            if (year == startYear && month == startMonth) {
+                start = startDate.get(Calendar.DAY_OF_MONTH) - 1;
+            }
+            if (year == endYear && month == endMonth) {
+                end = endDate.get(Calendar.DAY_OF_MONTH) - 1;
+            }
             List<String> dayList = new ArrayList<>();
-            for (int i = 0; i < dayCount; i++) {
+            for (int i = start; i <= end; i++) {
                 String dayStr = String.valueOf(i + 1);
                 if (i < 9) {
                     dayStr = "0" + dayStr;
                 }
                 dayList.add(context.getString(R.string.base_date_day, dayStr));
+                if (day - 1 == i) {
+                    position = i - start;
+                }
             }
-            wheel_three.setData(dayList);
-            wheel_three.setSelectedItemPosition(day - 1);
-            int year = calendar.get(Calendar.YEAR);
-            int index = wheel_one.getData().indexOf(context.getString(R.string.base_date_year,
-                    String.valueOf(year)));
-            wheel_one.setSelectedItemPosition(index);
+            wheelDay.setData(dayList);
+            wheelDay.setSelectedItemPosition(position);
+            selectedDate.set(Calendar.DAY_OF_MONTH, start + position + 1);
         }
 
         private int getMonthDayCount(Calendar calendar) {
