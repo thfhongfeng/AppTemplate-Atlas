@@ -22,8 +22,8 @@ public class MvpWebViewPresenter extends BasePresenter<IMvpWebViewContract.Ui>
     }
 
     @Override
-    public void onUiState(int state) {
-        if (state == BasePresenter.UI_STATE_ON_CREATE) {
+    public void onUiState(BasePresenter.UiState state) {
+        if (state == UiState.UI_STATE_ON_CREATE) {
             getUi().loadUrl(mH5Url);
         }
     }

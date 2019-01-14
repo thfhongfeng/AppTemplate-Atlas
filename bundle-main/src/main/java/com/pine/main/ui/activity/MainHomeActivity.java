@@ -6,9 +6,12 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
+import com.pine.base.component.novice_guide.NoviceGuideView;
 import com.pine.main.R;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.presenter.MainHomePresenter;
+
+import java.util.ArrayList;
 
 public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContract.Ui, MainHomePresenter>
         implements IMainHomeContract.Ui {

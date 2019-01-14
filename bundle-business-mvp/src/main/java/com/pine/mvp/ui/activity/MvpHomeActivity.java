@@ -33,7 +33,7 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     @Override
     protected void beforeInitOnCreate() {
         super.beforeInitOnCreate();
-        setActionBarType(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
+        setActionBarTag(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
+    protected void setupActionBar(ImageView goBackIv, TextView titleTv, ImageView menuBtnIv) {
         titleTv.setText(R.string.mvp_home_title);
         menuBtnIv.setImageResource(R.mipmap.base_ic_add);
         menuBtnIv.setOnClickListener(new View.OnClickListener() {

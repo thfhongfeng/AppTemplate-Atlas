@@ -16,10 +16,10 @@ public class UserBundleRemoteService {
 
     @RouterAnnotation(CommandName = RouterCommand.USER_goUserCenterActivity)
     public Bundle goUserCenterActivity(Bundle args) {
-        Bundle returnBundle = new Bundle();
+        Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), UserHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         AppUtils.getApplicationByReflect().startActivity(intent);
-        return returnBundle;
+        return responseBundle;
     }
 }

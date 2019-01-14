@@ -6,8 +6,9 @@ import android.os.Handler;
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.router.IRouterCallback;
+import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterCommand;
-import com.pine.router.RouterFactory;
+import com.pine.router.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.contract.IWelcomeContract;
 
@@ -27,7 +28,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 
@@ -36,18 +37,18 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                RouterFactory.getMainBundleManager().callUiCommand(BaseApplication.mCurResumedActivity,
+                RouterManager.getBundleManager(RouterBundleKey.MAIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
                         RouterCommand.MAIN_goMainHomeActivity, null, new IRouterCallback() {
                             @Override
-                            public void onSuccess(Bundle returnBundle) {
+                            public void onSuccess(Bundle responseBundle) {
                                 LogUtils.d(TAG, "onSuccess " + RouterCommand.MAIN_goMainHomeActivity);
                                 finishUi();
                                 return;
                             }
 
                             @Override
-                            public void onFail(String errorInfo) {
-                                LogUtils.d(TAG, "onFail " + RouterCommand.MAIN_goMainHomeActivity);
+                            public boolean onFail(String errorInfo) {
+                                return false;
                             }
                         });
 

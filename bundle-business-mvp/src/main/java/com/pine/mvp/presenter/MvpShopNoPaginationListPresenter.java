@@ -32,7 +32,7 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

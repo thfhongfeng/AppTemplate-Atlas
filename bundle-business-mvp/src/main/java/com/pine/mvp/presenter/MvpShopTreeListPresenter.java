@@ -33,7 +33,7 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

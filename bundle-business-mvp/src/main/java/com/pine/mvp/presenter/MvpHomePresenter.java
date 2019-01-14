@@ -19,7 +19,7 @@ public class MvpHomePresenter extends BasePresenter<IMvpHomeContract.Ui>
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

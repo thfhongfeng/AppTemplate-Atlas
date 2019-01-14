@@ -61,7 +61,7 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
                 finish();
             }
         });
-        initActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
+        setupActionBar((ImageView) action_bar_ll.findViewById(R.id.go_back_iv),
                 (TextView) action_bar_ll.findViewById(R.id.title), base_content_layout.inflate());
     }
 
@@ -72,7 +72,7 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
      */
     protected abstract int getMenuBarLayoutResId();
 
-    protected abstract void initActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
+    protected abstract void setupActionBar(ImageView goBackIv, TextView titleTv, View menuContainer);
 
     @Override
     protected void onPause() {

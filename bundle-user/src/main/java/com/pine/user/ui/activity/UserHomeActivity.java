@@ -47,13 +47,13 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
                 AtlasRouterLoginManager.getInstance().callOpCommand(UserHomeActivity.this,
                         RouterCommand.LOGIN_logout, null, new IRouterCallback() {
                             @Override
-                            public void onSuccess(Bundle returnBundle) {
+                            public void onSuccess(Bundle responseBundle) {
                                 finish();
                             }
 
                             @Override
-                            public void onFail(String errorInfo) {
-
+                            public boolean onFail(String errorInfo) {
+                                return false;
                             }
                         });
             }

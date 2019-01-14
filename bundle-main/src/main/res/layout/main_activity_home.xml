@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.pine.main.ui.activity.MainHomeActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title_label_tv"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_20"
-        android:text="@string/main_home_title"
-        android:textSize="@dimen/sp_20"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/dp_20">
-
-        <GridView
-            android:id="@+id/business_gv"
+        <TextView
+            android:id="@+id/title_label_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:horizontalSpacing="@dimen/dp_8"
-            android:numColumns="3"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/dp_8"></GridView>
-    </RelativeLayout>
+            android:layout_margin="@dimen/dp_20"
+            android:text="@string/main_home_title"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold" />
 
-    <com.pine.base.widget.view.BottomTabNavigationBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:baseSelectedItem="0"></com.pine.base.widget.view.BottomTabNavigationBar>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/dp_20">
 
-</LinearLayout>
+            <GridView
+                android:id="@+id/business_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="@dimen/dp_8"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/dp_8"></GridView>
+        </RelativeLayout>
+
+        <com.pine.base.widget.view.BottomTabNavigationBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:baseSelectedItem="0"></com.pine.base.widget.view.BottomTabNavigationBar>
+    </LinearLayout>
+
+</FrameLayout>

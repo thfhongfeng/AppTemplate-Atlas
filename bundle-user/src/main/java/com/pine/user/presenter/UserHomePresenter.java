@@ -15,7 +15,7 @@ public class UserHomePresenter extends BasePresenter<IUserHomeContract.Ui> imple
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 }

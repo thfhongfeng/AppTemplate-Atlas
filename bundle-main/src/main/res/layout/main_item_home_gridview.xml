@@ -2,14 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_bg_gridview_item"
+    android:background="@drawable/base_shape_round_gradient_9aff9a"
     android:gravity="center">
 
     <TextView
         android:id="@+id/title_tv"
         android:layout_width="wrap_content"
-        android:layout_height="60dip"
-        android:padding="3dip"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="14dip" />
+        android:paddingBottom="@dimen/dp_20"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_20"
+        android:textSize="@dimen/sp_14" />
 </LinearLayout>

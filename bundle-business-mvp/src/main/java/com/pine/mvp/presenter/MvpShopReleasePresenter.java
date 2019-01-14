@@ -33,7 +33,7 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

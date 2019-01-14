@@ -38,7 +38,7 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

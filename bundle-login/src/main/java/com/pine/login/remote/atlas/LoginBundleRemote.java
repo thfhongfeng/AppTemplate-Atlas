@@ -26,46 +26,46 @@ public class LoginBundleRemote implements IRemote {
 
     @Override
     public Bundle call(String commandName, Bundle args, IResponse callback) {
-        Bundle returnBundle = null;
+        Bundle responseBundle = null;
         for (int i = 0; i < mMethods.length; i++) {
             RouterAnnotation annotation = mMethods[i].getAnnotation(RouterAnnotation.class);
             if (annotation != null && annotation.CommandName().equals(commandName)) {
                 mMethods[i].setAccessible(true);
-                returnBundle = new Bundle();
+                responseBundle = new Bundle();
                 try {
-                    returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_SUCCEED);
+                    responseBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_SUCCEED);
                     Bundle resultBundle = (Bundle) mMethods[i].invoke(mRemoteService, args);
                     if (resultBundle == null) {
                         resultBundle = new Bundle();
                     }
-                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
+                    responseBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                    returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+                    responseBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
                     Bundle resultBundle = new Bundle();
                     resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, e.toString());
-                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
+                    responseBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
-                    returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+                    responseBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
                     Bundle resultBundle = new Bundle();
                     resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, e.toString());
-                    returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
+                    responseBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
                 }
                 break;
             }
         }
-        if (returnBundle == null) {
-            returnBundle = new Bundle();
-            returnBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
+        if (responseBundle == null) {
+            responseBundle = new Bundle();
+            responseBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_EXCEPTION);
             Bundle resultBundle = new Bundle();
             resultBundle.putString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY, "");
-            returnBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
+            responseBundle.putBundle(RouterConstants.REMOTE_CALL_RESULT_KEY, resultBundle);
         }
         if (callback != null) {
-            callback.OnResponse(returnBundle);
+            callback.OnResponse(responseBundle);
         }
-        return returnBundle;
+        return responseBundle;
     }
 
     @Override

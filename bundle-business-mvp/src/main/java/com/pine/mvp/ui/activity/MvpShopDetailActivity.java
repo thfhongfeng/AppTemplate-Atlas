@@ -70,7 +70,7 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+    protected void setupActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.mvp_shop_detail_title);
     }
 

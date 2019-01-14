@@ -43,7 +43,7 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

@@ -15,11 +15,11 @@ import com.pine.tool.util.AppUtils;
 public class MvpBundleRemoteService {
 
     @RouterAnnotation(CommandName = RouterCommand.BUSINESS_goBusinessMvpHomeActivity)
-    public Bundle goBusinessMvpHomeActivity(Bundle args) {
-        Bundle returnBundle = new Bundle();
+    public Bundle goBusinessHomeActivity(Bundle args) {
+        Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), MvpHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         AppUtils.getApplicationByReflect().startActivity(intent);
-        return returnBundle;
+        return responseBundle;
     }
 }

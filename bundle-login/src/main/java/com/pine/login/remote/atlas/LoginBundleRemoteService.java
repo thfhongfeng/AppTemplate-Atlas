@@ -18,31 +18,31 @@ public class LoginBundleRemoteService {
 
     @RouterAnnotation(CommandName = RouterCommand.LOGIN_goLoginActivity)
     public Bundle goLoginActivity(Bundle args) {
-        Bundle returnBundle = new Bundle();
+        Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         AppUtils.getApplicationByReflect().startActivity(intent);
-        return returnBundle;
+        return responseBundle;
     }
 
     @RouterAnnotation(CommandName = RouterCommand.LOGIN_autoLogin)
     public Bundle autoLogin(Bundle args) {
-        final Bundle returnBundle = new Bundle();
+        final Bundle responseBundle = new Bundle();
         LoginManager.autoLogin(new LoginManager.Callback() {
             @Override
             public boolean onLoginResponse(boolean isSuccess, String msg) {
-                returnBundle.putBoolean("success", isSuccess);
-                returnBundle.putString("msg", msg);
+                responseBundle.putBoolean("success", isSuccess);
+                responseBundle.putString("msg", msg);
                 return true;
             }
         });
-        return returnBundle;
+        return responseBundle;
     }
 
     @RouterAnnotation(CommandName = RouterCommand.LOGIN_logout)
     public Bundle logout(Bundle args) {
-        final Bundle returnBundle = new Bundle();
+        final Bundle responseBundle = new Bundle();
         LoginManager.logout();
-        return returnBundle;
+        return responseBundle;
     }
 }

@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+// atlas配置 begin
+apply plugin: 'com.taobao.atlas'
+
+atlas {
+    bundleConfig {
+        awbBundle true
+    }
+}
+// atlas配置 end
+
+android {
+    compileSdkVersion build_versions.compileSdkVersion
+    buildToolsVersion build_versions.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion build_versions.minSdkVersion
+        targetSdkVersion build_versions.targetSdkVersion
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            res.srcDirs += [
+                    'src/main/res_novice_guide'
+            ]
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []    //disable automatic ndk-build
+        }
+    }
+    resourcePrefix "demo_"
+}
+
+repositories {
+    flatDir {
+        dirs 'libs', '../base/libs'
+    }
+}
+
+/**
+ * 主dex中已经打入了必要的公用代码，在runtime时，atlas框架会自动找到主dex中的class使用，可以使用providedCompile，表示不需要再重复打入
+ */
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // 测试 dependency begin
+    androidTestCompile(build_dependency["test_espresso_core"], {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile build_dependency["test_junit"]
+    // 测试 dependency end
+
+    // android官方 dependency begin
+    compile build_dependency["appcompat_v7"]
+    // android官方 dependency end
+
+    // 主体基础模块 begin
+    providedCompile project(':base')
+    // 主体基础模块 end
+}

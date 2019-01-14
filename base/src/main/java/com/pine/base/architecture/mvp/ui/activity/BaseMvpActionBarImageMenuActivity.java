@@ -36,7 +36,7 @@ public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.
     protected void afterInit() {
         super.afterInit();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_CREATE);
+            mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_CREATE);
         }
     }
 
@@ -44,7 +44,7 @@ public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.
     protected void onStart() {
         super.onStart();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_START);
+            mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_START);
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_RESUME);
+            mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_RESUME);
         }
     }
 
@@ -60,14 +60,14 @@ public abstract class BaseMvpActionBarImageMenuActivity<V extends IBaseContract.
     protected void onPause() {
         super.onPause();
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_PAUSE);
+            mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_PAUSE);
         }
     }
 
     @Override
     protected void onStop() {
         if (mPresenter != null) {
-            mPresenter.onUiState(BasePresenter.UI_STATE_ON_STOP);
+            mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_STOP);
         }
         super.onStop();
     }

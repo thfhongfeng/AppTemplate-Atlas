@@ -23,12 +23,15 @@ import java.util.ArrayList;
  */
 
 public abstract class BasePresenter<V extends IBaseContract.Ui> {
-    public final static int UI_STATE_ON_CREATE = 1;
-    public final static int UI_STATE_ON_START = 2;
-    public final static int UI_STATE_ON_RESUME = 3;
-    public final static int UI_STATE_ON_PAUSE = 4;
-    public final static int UI_STATE_ON_STOP = 5;
-    public final static int UI_STATE_ON_DETACH = 6;
+    public enum UiState {
+        UI_STATE_UNDEFINE,
+        UI_STATE_ON_CREATE,
+        UI_STATE_ON_START,
+        UI_STATE_ON_RESUME,
+        UI_STATE_ON_PAUSE,
+        UI_STATE_ON_STOP,
+        UI_STATE_ON_DETACH
+    }
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
     /**
      * UI的弱引用
@@ -51,7 +54,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
     @CallSuper
     public void detachUi() {
         if (mUiRef != null) {
-            onUiState(BasePresenter.UI_STATE_ON_DETACH);
+            onUiState(BasePresenter.UiState.UI_STATE_ON_DETACH);
             mUiRef.clear();
         }
     }
@@ -139,7 +142,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
      * @param state UI_STATE_ON_CREATE,UI_STATE_ON_START,UI_STATE_ON_RESUME,UI_STATE_ON_PAUSE,
      *              UI_STATE_ON_STOP,UI_STATE_ON_DETACH
      */
-    public abstract void onUiState(int state);
+    public abstract void onUiState(BasePresenter.UiState state);
 
     public void showShortToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();

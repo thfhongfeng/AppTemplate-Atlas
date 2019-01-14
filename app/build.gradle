@@ -149,6 +149,8 @@ dependencies {
 
     bundleCompile project(':bundle-business-mvc')
     bundleCompile project(':bundle-business-mvp')
+    bundleCompile project(':bundle-business-mvvm')
+    bundleCompile project(':bundle-business-demo')
     // bundle模块 end
     // atlas配置 end
 }

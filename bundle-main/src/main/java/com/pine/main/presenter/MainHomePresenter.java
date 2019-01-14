@@ -9,7 +9,7 @@ import com.pine.main.bean.MainHomeGridViewEntity;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.model.MainHomeModel;
 import com.pine.router.IRouterCallback;
-import com.pine.router.RouterFactory;
+import com.pine.router.RouterManager;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 
@@ -44,8 +44,8 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
             public void onResponse(ArrayList<MainHomeGridViewEntity> entityList) {
                 if (entityList != null && entityList.size() > 0 && isUiAlive()) {
                     mGridViewNames = new String[entityList.size()];
-                    mGridViewBundleList = new ArrayList<String>();
-                    mGridViewCommandList = new ArrayList<String>();
+                    mGridViewBundleList = new ArrayList<>();
+                    mGridViewCommandList = new ArrayList<>();
                     for (int i = 0; i < entityList.size(); i++) {
                         MainHomeGridViewEntity entity = entityList.get(i);
                         mGridViewNames[i] = entity.getName();
@@ -66,16 +66,16 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
     @Override
     public void onBusinessItemClick(int position) {
         if (getUi() != null) {
-            RouterFactory.getBundleManager(mGridViewBundleList.get(position)).callUiCommand(BaseApplication.mCurResumedActivity,
+            RouterManager.getBundleManager(mGridViewBundleList.get(position)).callUiCommand(BaseApplication.mCurResumedActivity,
                     mGridViewCommandList.get(position), null, new IRouterCallback() {
                         @Override
-                        public void onSuccess(Bundle returnBundle) {
+                        public void onSuccess(Bundle responseBundle) {
 
                         }
 
                         @Override
-                        public void onFail(String errorInfo) {
-
+                        public boolean onFail(String errorInfo) {
+                            return false;
                         }
                     });
         }

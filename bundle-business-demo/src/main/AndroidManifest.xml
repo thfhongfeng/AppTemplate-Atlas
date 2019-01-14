@@ -1,0 +1,27 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pine.demo">
+
+    <application
+        android:name=".app.DemoApplication"
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".DemoHomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <activity
+            android:name=".novice_guide.DemoNoviceGuideActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+
+        <!-- atlas remote router begin -->
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.DemoBundleRemoteAction"
+            android:value="com.pine.demo.remote.atlas.DemoBundleRemote" />
+        <!-- atlas remote router end -->
+    </application>
+</manifest>

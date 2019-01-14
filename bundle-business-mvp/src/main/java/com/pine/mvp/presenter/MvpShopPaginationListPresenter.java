@@ -53,7 +53,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
         switch (state) {
             case UI_STATE_ON_CREATE:
                 break;

@@ -8,8 +8,9 @@ import android.widget.Toast;
 import com.pine.base.BaseApplication;
 import com.pine.base.access.IUiAccessExecutor;
 import com.pine.router.IRouterCallback;
+import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterCommand;
-import com.pine.router.RouterFactory;
+import com.pine.router.RouterManager;
 
 /**
  * Created by tanghongfeng on 2018/9/16
@@ -31,20 +32,21 @@ public class UiAccessLoginExecutor implements IUiAccessExecutor {
                     activity.finish();
                 }
             } else {
-                RouterFactory.getLoginBundleManager().callUiCommand(BaseApplication.mCurResumedActivity,
+                RouterManager.getBundleManager(RouterBundleKey.LOGIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
                         RouterCommand.LOGIN_goLoginActivity, null, new IRouterCallback() {
                             @Override
-                            public void onSuccess(Bundle returnBundle) {
+                            public void onSuccess(Bundle responseBundle) {
                                 if (activity != null && !activity.isFinishing()) {
                                     activity.finish();
                                 }
                             }
 
                             @Override
-                            public void onFail(String errorInfo) {
+                            public boolean onFail(String errorInfo) {
                                 if (activity != null && !activity.isFinishing()) {
                                     activity.finish();
                                 }
+                                return true;
                             }
                         });
                 if (mForbiddenToastResId > 0) {

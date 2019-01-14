@@ -151,7 +151,7 @@ public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
+    protected void setupActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         goBackIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

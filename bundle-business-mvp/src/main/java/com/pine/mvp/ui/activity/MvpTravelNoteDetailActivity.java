@@ -77,7 +77,7 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv) {
+    protected void setupActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.mvp_travel_note_detail_title);
     }
 

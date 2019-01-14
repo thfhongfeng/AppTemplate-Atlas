@@ -15,7 +15,7 @@ public class RegisterPresenter extends BasePresenter<IRegisterContract.Ui>
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

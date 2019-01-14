@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_label_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_20"
+            android:text="@string/demo_home_title"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/dp_20">
+
+            <GridView
+                android:id="@+id/business_gv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="@dimen/dp_8"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/dp_8"></GridView>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <com.pine.base.component.novice_guide.NoviceGuideView
+        android:id="@+id/novice_guide_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.pine.base.component.novice_guide.NoviceGuideView>
+</FrameLayout>

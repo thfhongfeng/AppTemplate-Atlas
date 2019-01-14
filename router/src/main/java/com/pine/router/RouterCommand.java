@@ -55,4 +55,12 @@ public interface RouterCommand {
     /**
      * Business mvvm bundle remote command end
      */
+
+    /**
+     * Business demo bundle remote command begin
+     */
+    String BUSINESS_goBusinessDemoHomeActivity = "goBusinessDemoHomeActivity";
+    /**
+     * Business demo bundle remote command end
+     */
 }

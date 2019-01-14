@@ -41,7 +41,7 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
     }
 
     @Override
-    public void onUiState(int state) {
+    public void onUiState(BasePresenter.UiState state) {
 
     }
 

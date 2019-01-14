@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pine.mvvm">
+
+    <application
+        android:name=".app.MvvmApplication"
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <!-- atlas remote router begin -->
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.MvvmBundleRemoteAction"
+            android:value="com.pine.mvvm.remote.atlas.MvvmBundleRemote" />
+        <!-- atlas remote router end -->
+    </application>
+</manifest>

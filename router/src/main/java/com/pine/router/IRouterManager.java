@@ -8,6 +8,7 @@ import android.os.Bundle;
  */
 
 public interface IRouterManager {
+
     void callUiCommand(Activity activity, final String commandName, final Bundle args, final IRouterCallback callback);
 
     void callDataCommand(Activity activity, final String commandName, final Bundle args, final IRouterCallback callback);

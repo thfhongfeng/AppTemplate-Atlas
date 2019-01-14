@@ -39,7 +39,7 @@ public class MvpShopSearchCheckActivity extends
     }
 
     @Override
-    protected void initActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
+    protected void setupActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         titleTv.setText(R.string.mvp_shop_check_title);
         menuBtnTv.setText(R.string.mvp_complete);
         menuBtnTv.setOnClickListener(new View.OnClickListener() {

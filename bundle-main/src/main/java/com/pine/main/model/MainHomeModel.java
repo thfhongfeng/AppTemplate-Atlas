@@ -10,6 +10,8 @@ import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
 import com.pine.main.bean.MainHomeGridViewEntity;
+import com.pine.router.RouterBundleKey;
+import com.pine.router.RouterCommand;
 import com.pine.tool.util.LogUtils;
 
 import org.json.JSONException;
@@ -61,8 +63,14 @@ public class MainHomeModel {
     // Test code begin
     private JSONObject getBusinessListData() {
         String res = "{success:true,code:200,message:'',data:" +
-                "[{name:'Business Mvc',bundle:business_mvc_bundle,command:goBusinessMvcHomeActivity}," +
-                "{name:'Business Mvp',bundle:business_mvp_bundle,command:goBusinessMvpHomeActivity}]}";
+                "[{name:'Business Mvc',bundle:" + RouterBundleKey.BUSINESS_MVC_BUNDLE_KEY
+                + ",command:" + RouterCommand.BUSINESS_goBusinessMvcHomeActivity + "},"
+                + "{name:'Business Mvp',bundle:" + RouterBundleKey.BUSINESS_MVP_BUNDLE_KEY
+                + ",command:" + RouterCommand.BUSINESS_goBusinessMvpHomeActivity + "},"
+                + "{name:'Business Mvvm',bundle:" + RouterBundleKey.BUSINESS_MVVM_BUNDLE_KEY
+                + ",command:" + RouterCommand.BUSINESS_goBusinessMvvmHomeActivity + "},"
+                + "{name:'Business Demo',bundle:" + RouterBundleKey.BUSINESS_DEMO_BUNDLE_KEY
+                + ",command:" + RouterCommand.BUSINESS_goBusinessDemoHomeActivity + "}]}";
         try {
             return new JSONObject(res);
         } catch (JSONException e) {
