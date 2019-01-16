@@ -79,7 +79,7 @@ public class ApkVersionManager {
 
                     @Override
                     public void onFinish(int what, String filePath) {
-                        SharePreferenceUtils.saveStringToConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH, filePath);
+                        SharePreferenceUtils.saveToConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH, filePath);
                         if (mListener != null) {
                             mListener.onDownloadComplete(filePath);
                         }
@@ -118,11 +118,11 @@ public class ApkVersionManager {
     }
 
     public String getDownLoadFilePath() {
-        return SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH);
+        return SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH, "");
     }
 
     public File getDownLoadFile() {
-        String apkFilePath = SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH);
+        String apkFilePath = SharePreferenceUtils.readStringFromConfig(WelcomeConstants.APK_DOWNLOAD_FILE_PATH, "");
         return new File(apkFilePath);
     }
 

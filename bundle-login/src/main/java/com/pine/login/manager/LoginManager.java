@@ -106,8 +106,8 @@ public class LoginManager {
     }
 
     public static void saveLoginInfo(JSONObject jsonObject) {
-        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_MOBILE, mMobile);
-        SharePreferenceUtils.saveStringToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
+        SharePreferenceUtils.saveToCache(LoginConstants.LOGIN_MOBILE, mMobile);
+        SharePreferenceUtils.saveToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
     }
 
     public static void clearLoginInfo() {

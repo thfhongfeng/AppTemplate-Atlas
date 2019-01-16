@@ -1,28 +1,25 @@
 package com.pine.demo;
 
-import android.content.Intent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pine.base.ui.BaseActionBarActivity;
+import com.pine.base.widget.rv_space.GridSpacingItemDecoration;
+import com.pine.demo.adapter.DemoAdapter;
+import com.pine.demo.bean.DemoItemEntity;
 import com.pine.demo.novice_guide.DemoNoviceGuideActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by tanghongfeng on 2019/1/14
  */
 
 public class DemoHomeActivity extends BaseActionBarActivity {
-    private GridView business_gv;
-    private String[] mDemoNameList = {
-            "新手引导"
-    };
-    private Class[] mDemoClassList = {
-            DemoNoviceGuideActivity.class
-    };
+    private RecyclerView demo_rv;
+    private DemoAdapter mDemoAdapter;
 
     @Override
     protected void beforeInitOnCreate() {
@@ -42,7 +39,7 @@ public class DemoHomeActivity extends BaseActionBarActivity {
 
     @Override
     protected void findViewOnCreate() {
-        business_gv = findViewById(R.id.business_gv);
+        demo_rv = findViewById(R.id.demo_rv);
     }
 
     @Override
@@ -52,14 +49,20 @@ public class DemoHomeActivity extends BaseActionBarActivity {
 
     @Override
     protected void init() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-                R.layout.demo_item_home_gridview, R.id.title_tv, mDemoNameList);
-        business_gv.setAdapter(arrayAdapter);
-        business_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(DemoHomeActivity.this, mDemoClassList[position]));
-            }
-        });
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        demo_rv.setLayoutManager(layoutManager);
+        demo_rv.addItemDecoration(new GridSpacingItemDecoration(3,
+                getResources().getDimensionPixelOffset(R.dimen.dp_10), true));
+        demo_rv.setHasFixedSize(true);
+        mDemoAdapter = new DemoAdapter(
+                DemoAdapter.DEMO_VIEW_HOLDER);
+        mDemoAdapter.showEmptyComplete(true, false);
+        ArrayList<DemoItemEntity> list = new ArrayList<>();
+        DemoItemEntity entity = new DemoItemEntity();
+        entity.setName("新手引导");
+        entity.setClazz(DemoNoviceGuideActivity.class);
+        list.add(entity);
+        mDemoAdapter.setData(list);
+        demo_rv.setAdapter(mDemoAdapter);
     }
 }

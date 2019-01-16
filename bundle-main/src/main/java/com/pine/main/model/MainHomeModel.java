@@ -9,7 +9,7 @@ import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
-import com.pine.main.bean.MainHomeGridViewEntity;
+import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterCommand;
 import com.pine.tool.util.LogUtils;
@@ -28,7 +28,7 @@ public class MainHomeModel {
     private static final String TAG = LogUtils.makeLogTag(MainHomeModel.class);
     private static final int HTTP_QUERY_BUSINESS_LIST = 1;
 
-    public boolean requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>> callback) {
+    public boolean requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainBusinessItemEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
         return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG,
@@ -44,7 +44,7 @@ public class MainHomeModel {
                     jsonObject = getBusinessListData();
                     // Test code end
                     if (jsonObject.optBoolean(MainConstants.SUCCESS)) {
-                        T retData = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainHomeGridViewEntity>>() {
+                        T retData = new Gson().fromJson(jsonObject.optString(MainConstants.DATA), new TypeToken<ArrayList<MainBusinessItemEntity>>() {
                         }.getType());
                         callback.onResponse(retData);
                     } else {

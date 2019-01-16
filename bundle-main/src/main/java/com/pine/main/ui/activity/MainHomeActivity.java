@@ -1,13 +1,13 @@
 package com.pine.main.ui.activity;
 
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
-import com.pine.base.component.novice_guide.NoviceGuideView;
+import com.pine.base.widget.rv_space.GridSpacingItemDecoration;
 import com.pine.main.R;
+import com.pine.main.adapter.MainBusinessAdapter;
+import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.presenter.MainHomePresenter;
 
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContract.Ui, MainHomePresenter>
         implements IMainHomeContract.Ui {
 
-    private GridView business_gv;
+    private RecyclerView business_rv;
+    private MainBusinessAdapter mMainBusinessAdapter;
 
     @Override
     protected MainHomePresenter createPresenter() {
@@ -30,7 +31,16 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
 
     @Override
     protected void findViewOnCreate() {
-        business_gv = findViewById(R.id.business_gv);
+        business_rv = findViewById(R.id.business_rv);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        business_rv.setLayoutManager(layoutManager);
+        business_rv.addItemDecoration(new GridSpacingItemDecoration(3,
+                getResources().getDimensionPixelOffset(R.dimen.dp_10), true));
+        business_rv.setHasFixedSize(true);
+        mMainBusinessAdapter = new MainBusinessAdapter(
+                MainBusinessAdapter.BUSINESS_VIEW_HOLDER);
+        mMainBusinessAdapter.showEmptyComplete(true, false);
+        business_rv.setAdapter(mMainBusinessAdapter);
     }
 
     @Override
@@ -44,15 +54,7 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     }
 
     @Override
-    public void setBusinessBundleAdapter(String[] names) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-                R.layout.main_item_home_gridview, R.id.title_tv, names);
-        business_gv.setAdapter(arrayAdapter);
-        business_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mPresenter.onBusinessItemClick(position);
-            }
-        });
+    public void setBusinessBundleData(ArrayList<MainBusinessItemEntity> list) {
+        mMainBusinessAdapter.setData(list);
     }
 }

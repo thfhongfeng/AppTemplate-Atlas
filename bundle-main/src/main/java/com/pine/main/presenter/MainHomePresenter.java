@@ -1,15 +1,10 @@
 package com.pine.main.presenter;
 
-import android.os.Bundle;
-
-import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.main.bean.MainHomeGridViewEntity;
+import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.main.contract.IMainHomeContract;
 import com.pine.main.model.MainHomeModel;
-import com.pine.router.IRouterCallback;
-import com.pine.router.RouterManager;
 
 import java.util.ArrayList;
 
@@ -39,20 +34,11 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
 
     @Override
     public void loadBusinessBundleData() {
-        mModel.requestBusinessListData(new IModelAsyncResponse<ArrayList<MainHomeGridViewEntity>>() {
+        mModel.requestBusinessListData(new IModelAsyncResponse<ArrayList<MainBusinessItemEntity>>() {
             @Override
-            public void onResponse(ArrayList<MainHomeGridViewEntity> entityList) {
+            public void onResponse(ArrayList<MainBusinessItemEntity> entityList) {
                 if (entityList != null && entityList.size() > 0 && isUiAlive()) {
-                    mGridViewNames = new String[entityList.size()];
-                    mGridViewBundleList = new ArrayList<>();
-                    mGridViewCommandList = new ArrayList<>();
-                    for (int i = 0; i < entityList.size(); i++) {
-                        MainHomeGridViewEntity entity = entityList.get(i);
-                        mGridViewNames[i] = entity.getName();
-                        mGridViewBundleList.add(entity.getBundle());
-                        mGridViewCommandList.add(entity.getCommand());
-                    }
-                    getUi().setBusinessBundleAdapter(mGridViewNames);
+                    getUi().setBusinessBundleData(entityList);
                 }
             }
 
@@ -61,23 +47,5 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onBusinessItemClick(int position) {
-        if (getUi() != null) {
-            RouterManager.getBundleManager(mGridViewBundleList.get(position)).callUiCommand(BaseApplication.mCurResumedActivity,
-                    mGridViewCommandList.get(position), null, new IRouterCallback() {
-                        @Override
-                        public void onSuccess(Bundle responseBundle) {
-
-                        }
-
-                        @Override
-                        public boolean onFail(String errorInfo) {
-                            return false;
-                        }
-                    });
-        }
     }
 }

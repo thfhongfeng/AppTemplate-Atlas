@@ -4,7 +4,7 @@ package com.pine.main.bean;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class MainHomeGridViewEntity {
+public class MainBusinessItemEntity {
 
     /**
      * name : Business

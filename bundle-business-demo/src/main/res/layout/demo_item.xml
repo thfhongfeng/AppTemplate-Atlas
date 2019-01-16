@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/base_shape_round_gradient_9aff9a"
     android:gravity="center">
 
     <TextView
-        android:id="@+id/title_tv"
+        android:id="@+id/name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="@dimen/dp_20"
-        android:paddingBottom="@dimen/dp_20"
-        android:paddingLeft="@dimen/dp_5"
-        android:paddingRight="@dimen/dp_5"
+        android:padding="@dimen/dp_15"
         android:textSize="@dimen/sp_14" />
-
 </LinearLayout>

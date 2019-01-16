@@ -36,6 +36,10 @@ public class NoviceGuideItemView extends RelativeLayout {
                                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
             mOffsetLocation = new int[2];
             v.getLocationInWindow(mOffsetLocation);
+            int[] location = new int[2];
+            getLocationInWindow(location);
+            mOffsetLocation[0] -= location[0];
+            mOffsetLocation[1] -= location[1];
             mNeedReLayoutOffsetView = true;
             requestLayout();
         }
@@ -76,50 +80,59 @@ public class NoviceGuideItemView extends RelativeLayout {
                 }
             });
         }
-        LinearLayout container = new LinearLayout(mContext);
-        container.setOrientation(LinearLayout.VERTICAL);
-        container.setGravity(Gravity.CENTER_HORIZONTAL);
+        ImageView descIv = null;
         if (mBean.getDescImageViewResId() != 0) {
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT);
-            ImageView image_view = new ImageView(mContext);
-            image_view.setImageResource(mBean.getDescImageViewResId());
-            image_view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            container.addView(image_view, layoutParams);
+            descIv = new ImageView(mContext);
+            descIv.setImageResource(mBean.getDescImageViewResId());
+            descIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
+        ImageView actionIv = null;
         if (mBean.getActionImageViewResId() != 0) {
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT);
-            if (mBean.getDescImageViewResId() != 0) {
-                layoutParams.setMargins(0, mBean.getDescToActionViewGapPx(), 0, 0);
-            }
-            ImageView image_view = new ImageView(mContext);
-            image_view.setImageResource(mBean.getActionImageViewResId());
-            image_view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            image_view.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        mListener.onNext(NoviceGuideItemView.this, position);
-                    }
-                    if (mBean.getListener() != null) {
+            actionIv = new ImageView(mContext);
+            actionIv.setImageResource(mBean.getActionImageViewResId());
+            actionIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            if (mBean.getListener() != null) {
+                actionIv.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            mListener.onNext(NoviceGuideItemView.this, position);
+                        }
                         mBean.getListener().doAction(NoviceGuideItemView.this, position);
                     }
-                }
-            });
-            container.addView(image_view, layoutParams);
+                });
+            } else if (mBean.getAnimator() != null) {
+                mBean.getAnimator().setTarget(actionIv);
+            }
         }
-        if (mBean.getAnimator() != null) {
-            mBean.getAnimator().setTarget(container);
-        }
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (bean.getTargetView() == null) {
-            layoutParams.addRule(CENTER_IN_PARENT);
-            addView(container, layoutParams);
-        } else {
-            addView(container, layoutParams);
+        if (bean.getTargetView() != null) {
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT);
+            if (descIv != null) {
+                addView(descIv, layoutParams);
+            }
+            if (actionIv != null) {
+                addView(actionIv, layoutParams);
+            }
             bean.getTargetView().addOnLayoutChangeListener(mTargetViewOnLayoutChangeListener);
+        } else {
+            LinearLayout container = new LinearLayout(mContext);
+            container.setOrientation(LinearLayout.VERTICAL);
+            container.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (descIv != null) {
+                container.addView(descIv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+            if (actionIv != null) {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.topMargin = mBean.getDescToActionViewGapPx();
+                container.addView(actionIv, layoutParams);
+            }
+            LayoutParams containerParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            containerParams.addRule(CENTER_IN_PARENT);
+            addView(container, containerParams);
         }
     }
 
@@ -164,12 +177,7 @@ public class NoviceGuideItemView extends RelativeLayout {
             return;
         }
         View targetView = mBean.getTargetView();
-        View child = getChildAt(0);
-        if (mNeedReLayoutOffsetView && mOffsetLocation != null && child != null) {
-            int[] location = new int[2];
-            getLocationInWindow(location);
-            mOffsetLocation[0] -= location[0];
-            mOffsetLocation[1] -= location[1];
+        if (mNeedReLayoutOffsetView && mOffsetLocation != null && getChildCount() > 0) {
             int targetViewWidth = targetView.getRight() - targetView.getLeft();
             int targetViewHeight = targetView.getBottom() - targetView.getTop();
             int targetViewCenterX = mOffsetLocation[0] + targetViewWidth / 2;
@@ -190,60 +198,125 @@ public class NoviceGuideItemView extends RelativeLayout {
             mHoleCenterX = targetViewCenterX;
             mHoleCenterY = targetViewCenterY;
             mHoleRadius = holeCircleRadius;
-            int left = l;
-            int top = t;
-            int right = r;
-            int bottom = b;
-            switch (mBean.getGuideViewLocation()) {
-                case GuideBean.LOCATION_ON_TOP_LEFT:
-                    bottom = targetViewCenterY
-                            - (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
-                            + mBean.getGuideViewOffsetMarginY();
-                    left = mOffsetLocation[0] + mBean.getGuideViewOffsetMarginX();
-                    top = bottom - child.getMeasuredHeight();
-                    right = left + child.getMeasuredWidth();
-                    break;
-                case GuideBean.LOCATION_ON_TOP_RIGHT:
-                    bottom = targetViewCenterY
-                            - (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
-                            + mBean.getGuideViewOffsetMarginY();
-                    right = mOffsetLocation[0] + targetViewWidth + mBean.getGuideViewOffsetMarginX();
-                    top = bottom - child.getMeasuredHeight();
-                    left = right - child.getMeasuredWidth();
-                    break;
-                case GuideBean.LOCATION_ON_BOTTOM_LEFT:
-                    top = targetViewCenterY
-                            + (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
-                            + mBean.getGuideViewOffsetMarginY();
-                    left = mOffsetLocation[0] + mBean.getGuideViewOffsetMarginX();
-                    bottom = top + child.getMeasuredHeight();
-                    right = left + child.getMeasuredWidth();
-                    break;
-                case GuideBean.LOCATION_ON_BOTTOM_RIGHT:
-                    top = targetViewCenterY
-                            + (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
-                            + mBean.getGuideViewOffsetMarginY();
-                    right = mOffsetLocation[0] + targetViewWidth + mBean.getGuideViewOffsetMarginX();
-                    bottom = top + child.getMeasuredHeight();
-                    left = right - child.getMeasuredWidth();
-                    break;
-                case GuideBean.LOCATION_ON_TOP_CENTER:
-                    bottom = mOffsetLocation[1] + mBean.getGuideViewOffsetMarginY();
-                    left = targetViewCenterX - child.getMeasuredWidth() / 2 + mBean.getGuideViewOffsetMarginX();
-                    top = bottom - child.getMeasuredHeight();
-                    right = left + child.getMeasuredWidth();
-                    break;
-                case GuideBean.LOCATION_ON_BOTTOM_CENTER:
-                    top = mOffsetLocation[1] + targetViewHeight + mBean.getGuideViewOffsetMarginY();
-                    left = targetViewCenterX - child.getMeasuredWidth() / 2 + mBean.getGuideViewOffsetMarginX();
-                    bottom = top + child.getMeasuredHeight();
-                    right = left + child.getMeasuredWidth();
-                    break;
+            int width = r - l;
+            int height = b - t;
+            float scale = calculateScale(width, height);
+            mBean.setScale(scale);
+            int[] curItemLocation = new int[2];
+            curItemLocation[0] = mOffsetLocation[0];
+            curItemLocation[1] = mOffsetLocation[1];
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                int childWidth = (int) (child.getMeasuredWidth() * scale);
+                int childHeight = (int) (child.getMeasuredHeight() * scale);
+                int left = 0;
+                int top = 0;
+                int right = 0;
+                int bottom = 0;
+                switch (mBean.getGuideViewLocation()) {
+                    case GuideBean.LOCATION_ON_TOP_LEFT:
+                        bottom = targetViewCenterY
+                                - (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
+                                + mBean.getGuideViewOffsetMarginY();
+                        right = curItemLocation[0] + targetViewWidth + mBean.getGuideViewOffsetMarginX();
+                        top = bottom - childHeight;
+                        left = right - childWidth;
+                        curItemLocation[1] = curItemLocation[1] - childHeight - mBean.getDescToActionViewGapPx();
+                        break;
+                    case GuideBean.LOCATION_ON_TOP_RIGHT:
+                        bottom = targetViewCenterY
+                                - (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
+                                + mBean.getGuideViewOffsetMarginY();
+                        left = curItemLocation[0] + mBean.getGuideViewOffsetMarginX();
+                        top = bottom - childHeight;
+                        right = left + childWidth;
+                        curItemLocation[1] = curItemLocation[1] - childHeight - mBean.getDescToActionViewGapPx();
+                        break;
+                    case GuideBean.LOCATION_ON_BOTTOM_LEFT:
+                        top = targetViewCenterY
+                                + (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
+                                + mBean.getGuideViewOffsetMarginY();
+                        right = curItemLocation[0] + targetViewWidth + mBean.getGuideViewOffsetMarginX();
+                        bottom = top + childHeight;
+                        left = right - childWidth;
+                        curItemLocation[1] = curItemLocation[1] + childHeight + mBean.getDescToActionViewGapPx();
+                        break;
+                    case GuideBean.LOCATION_ON_BOTTOM_RIGHT:
+                        top = targetViewCenterY
+                                + (mBean.isHasHole() ? (int) holeCircleRadius : targetViewHeight / 2)
+                                + mBean.getGuideViewOffsetMarginY();
+                        left = curItemLocation[0] + mBean.getGuideViewOffsetMarginX();
+                        bottom = top + childHeight;
+                        right = left + childWidth;
+                        curItemLocation[1] = curItemLocation[1] + childHeight + mBean.getDescToActionViewGapPx();
+                        break;
+                    case GuideBean.LOCATION_ON_TOP_CENTER:
+                        bottom = curItemLocation[1] + mBean.getGuideViewOffsetMarginY();
+                        left = targetViewCenterX - childWidth / 2 + mBean.getGuideViewOffsetMarginX();
+                        top = bottom - childHeight;
+                        right = left + childWidth;
+                        curItemLocation[1] = curItemLocation[1] - childHeight - mBean.getDescToActionViewGapPx();
+                        break;
+                    case GuideBean.LOCATION_ON_BOTTOM_CENTER:
+                        top = curItemLocation[1] + targetViewHeight + mBean.getGuideViewOffsetMarginY();
+                        left = targetViewCenterX - childWidth / 2 + mBean.getGuideViewOffsetMarginX();
+                        bottom = top + childHeight;
+                        right = left + childWidth;
+                        curItemLocation[1] = curItemLocation[1] + childHeight + mBean.getDescToActionViewGapPx();
+                        break;
+                }
+                child.layout(left < 0 ? 0 : left, top < 0 ? 0 : top,
+                        right > width ? width : right, bottom > height ? height : bottom);
             }
-            child.layout(left < l ? l : left, top < t ? t : top,
-                    right > r ? r : right, bottom > b ? b : bottom);
             mNeedReLayoutOffsetView = false;
         }
+    }
+
+    private float calculateScale(int width, int height) {
+        float widthScale = 1;
+        int childrenMaxWidth = 0;
+        int childrenTotalHeight = 0;
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            childrenTotalHeight = childrenTotalHeight + child.getMeasuredHeight();
+            childrenMaxWidth = Math.max(childrenMaxWidth, child.getMeasuredWidth());
+        }
+        int fitWidth = 0;
+        int fitHeight = 0;
+        switch (mBean.getGuideViewLocation()) {
+            case GuideBean.LOCATION_ON_TOP_LEFT:
+                fitWidth = mOffsetLocation[0];
+                fitHeight = mOffsetLocation[1];
+                break;
+            case GuideBean.LOCATION_ON_TOP_RIGHT:
+                fitWidth = width - mOffsetLocation[0];
+                fitHeight = mOffsetLocation[1];
+                break;
+            case GuideBean.LOCATION_ON_BOTTOM_LEFT:
+                fitWidth = mOffsetLocation[0];
+                fitHeight = height - mOffsetLocation[1];
+                break;
+            case GuideBean.LOCATION_ON_BOTTOM_RIGHT:
+                fitWidth = width - mOffsetLocation[0];
+                fitHeight = height - mOffsetLocation[1];
+                break;
+            case GuideBean.LOCATION_ON_TOP_CENTER:
+                fitWidth = width;
+                fitHeight = mOffsetLocation[1];
+                break;
+            case GuideBean.LOCATION_ON_BOTTOM_CENTER:
+                fitWidth = width;
+                fitHeight = height - mOffsetLocation[1];
+                break;
+        }
+        if (childrenMaxWidth > 0 && childrenMaxWidth > fitWidth) {
+            widthScale = fitWidth / (float) childrenMaxWidth;
+        }
+        float heightScale = 1;
+        if (childrenTotalHeight > 0 && childrenTotalHeight > fitHeight) {
+            heightScale = fitHeight / (float) childrenTotalHeight;
+        }
+        return Math.min(widthScale, heightScale);
     }
 
     @Override

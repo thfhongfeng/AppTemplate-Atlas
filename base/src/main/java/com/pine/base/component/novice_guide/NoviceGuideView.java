@@ -70,9 +70,9 @@ public class NoviceGuideView extends RelativeLayout {
             textView.setText("跳过");
             textView.setTextColor(Color.parseColor("#FFFFFF"));
             textView.setTextSize(12);
-            textView.setPadding(getResources().getDimensionPixelOffset(R.dimen.dp_5),
-                    getResources().getDimensionPixelOffset(R.dimen.dp_5),
-                    getResources().getDimensionPixelOffset(R.dimen.dp_5),
+            textView.setPadding(getResources().getDimensionPixelOffset(R.dimen.dp_8),
+                    getResources().getDimensionPixelOffset(R.dimen.dp_6),
+                    getResources().getDimensionPixelOffset(R.dimen.dp_8),
                     getResources().getDimensionPixelOffset(R.dimen.dp_5));
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -139,6 +139,12 @@ public class NoviceGuideView extends RelativeLayout {
         private boolean hasHole = true;
         private float holdRadius = -1f;  //px
 
+        private float mScale = 1f;
+
+        public void setScale(float scale) {
+            mScale = scale;
+        }
+
         public String getName() {
             return name;
         }
@@ -172,6 +178,9 @@ public class NoviceGuideView extends RelativeLayout {
         }
 
         public int getGuideViewOffsetMarginX() {
+            if (mScale != 1f) {
+                return (int) (guideViewOffsetMarginX * mScale);
+            }
             return guideViewOffsetMarginX;
         }
 
@@ -180,6 +189,9 @@ public class NoviceGuideView extends RelativeLayout {
         }
 
         public int getGuideViewOffsetMarginY() {
+            if (mScale != 1f) {
+                return (int) (guideViewOffsetMarginY * mScale);
+            }
             return guideViewOffsetMarginY;
         }
 
@@ -188,6 +200,9 @@ public class NoviceGuideView extends RelativeLayout {
         }
 
         public int getDescToActionViewGapPx() {
+            if (mScale != 1f) {
+                return (int) (descToActionViewGapPx * mScale);
+            }
             return descToActionViewGapPx;
         }
 

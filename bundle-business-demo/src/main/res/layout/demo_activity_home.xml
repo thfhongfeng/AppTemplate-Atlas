@@ -17,23 +17,12 @@
             android:textSize="@dimen/sp_20"
             android:textStyle="bold" />
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/demo_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/dp_20">
-
-            <GridView
-                android:id="@+id/business_gv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="@dimen/dp_8"
-                android:numColumns="3"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="@dimen/dp_8"></GridView>
-        </RelativeLayout>
+            android:padding="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 
