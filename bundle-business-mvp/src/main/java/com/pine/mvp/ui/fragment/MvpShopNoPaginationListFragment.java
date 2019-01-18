@@ -20,11 +20,6 @@ public class MvpShopNoPaginationListFragment extends BaseMvpFragment<IMvpShopNoP
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpShopNoPaginationListPresenter createPresenter() {
-        return new MvpShopNoPaginationListPresenter();
-    }
-
-    @Override
     protected int getFragmentLayoutResId() {
         return R.layout.mvp_fragment_shop_no_pagination_list;
     }

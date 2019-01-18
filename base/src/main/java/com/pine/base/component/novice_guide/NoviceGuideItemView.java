@@ -158,7 +158,6 @@ public class NoviceGuideItemView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        startAnim();
     }
 
     @Override

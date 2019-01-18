@@ -24,11 +24,6 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpTravelNoteDetailPresenter createPresenter() {
-        return new MvpTravelNoteDetailPresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_travel_note_detail;
     }

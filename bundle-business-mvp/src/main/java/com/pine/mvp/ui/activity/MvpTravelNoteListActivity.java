@@ -24,11 +24,6 @@ public class MvpTravelNoteListActivity extends
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpTravelNoteListPresenter createPresenter() {
-        return new MvpTravelNoteListPresenter();
-    }
-
-    @Override
     protected int getMenuBarLayoutResId() {
         return R.layout.mvp_travel_note_list_menu;
     }

@@ -1,22 +1,22 @@
-package com.pine.base.architecture.mvp.ui.fragment;
+package com.pine.base.architecture.mvp.ui.activity;
 
 import android.app.Activity;
 import android.support.annotation.CallSuper;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.ui.BaseFragment;
+import com.pine.base.ui.BaseActivity;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends BasePresenter<V>>
-        extends BaseFragment implements IBaseContract.Ui {
+public abstract class BaseMvpActivity<V extends IBaseContract.Ui, P extends BasePresenter<V>>
+        extends BaseActivity implements IBaseContract.Ui {
     protected P mPresenter;
 
     @CallSuper
     @Override
-    protected void beforeInitOnCreateView() {
+    protected void beforeInitOnCreate() {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter == null) {
@@ -26,7 +26,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
                 presenterClazz = (Class) ((ParameterizedType) type).getActualTypeArguments()[1];
                 try {
                     mPresenter = (P) presenterClazz.newInstance();
-                } catch (java.lang.InstantiationException e) {
+                } catch (InstantiationException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -35,6 +35,8 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
         }
         if (mPresenter != null) {
             mPresenter.attachUi((V) this);
+        } else {
+            throw new RuntimeException("must initialize a presenter!");
         }
     }
 
@@ -43,7 +45,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    protected final boolean parseArguments() {
+    protected final boolean parseIntentData() {
         if (mPresenter != null) {
             return mPresenter.parseIntentData();
         }
@@ -59,7 +61,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_START);
@@ -67,7 +69,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_RESUME);
@@ -75,7 +77,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_PAUSE);
@@ -83,7 +85,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_STOP);
         }
@@ -91,16 +93,16 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     }
 
     @Override
-    public void onDestroyView() {
+    protected void onDestroy() {
+        super.onDestroy();
         //解除绑定
         if (mPresenter != null) {
             mPresenter.detachUi();
         }
-        super.onDestroyView();
     }
 
     @Override
     public Activity getContextActivity() {
-        return getActivity();
+        return this;
     }
 }

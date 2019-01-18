@@ -53,11 +53,6 @@ public class MvpTravelNoteReleaseActivity extends
     private DateSelectDialog mSetOutDateSelectDialog;
 
     @Override
-    protected MvpTravelNoteReleasePresenter createPresenter() {
-        return new MvpTravelNoteReleasePresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_travel_note_release;
     }

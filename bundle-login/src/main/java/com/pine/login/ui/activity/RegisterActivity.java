@@ -30,11 +30,6 @@ public class RegisterActivity extends
     private EditText password_et, confirm_pwd_et;
 
     @Override
-    protected RegisterPresenter createPresenter() {
-        return new RegisterPresenter();
-    }
-
-    @Override
     protected void setupActionBar(ImageView goBackIv, TextView titleTv) {
         titleTv.setText(R.string.login_register_title);
     }

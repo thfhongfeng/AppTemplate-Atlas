@@ -24,11 +24,6 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     private TextView go_register_tv;
 
     @Override
-    protected LoginPresenter createPresenter() {
-        return new LoginPresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.login_activity_login;
     }

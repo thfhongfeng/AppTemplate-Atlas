@@ -21,11 +21,6 @@ public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListCon
     private RecyclerView recycle_view;
 
     @Override
-    protected MvpShopTreeListPresenter createPresenter() {
-        return new MvpShopTreeListPresenter();
-    }
-
-    @Override
     protected int getFragmentLayoutResId() {
         return R.layout.mvp_fragment_shop_tree_list;
     }

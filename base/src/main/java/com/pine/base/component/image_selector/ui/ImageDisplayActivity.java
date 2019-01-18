@@ -17,15 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.R;
+import com.pine.base.architecture.mvc.activity.BaseMvcActionBarTextMenuActivity;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.component.image_selector.ImageViewer;
 import com.pine.base.component.image_selector.bean.ImageItemBean;
-import com.pine.base.ui.BaseActionBarTextMenuActivity;
 import com.pine.tool.widget.ZoomImageView;
 
 import java.util.ArrayList;
 
-public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
+public class ImageDisplayActivity extends BaseMvcActionBarTextMenuActivity {
     private ViewPager view_pager;
     private TextView choose_tv;
     private Button check_btn;

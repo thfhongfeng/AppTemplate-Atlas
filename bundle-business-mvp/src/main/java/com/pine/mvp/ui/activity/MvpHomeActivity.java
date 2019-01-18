@@ -35,12 +35,7 @@ public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeC
         super.beforeInitOnCreate();
         setActionBarTag(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
-
-    @Override
-    protected MvpHomePresenter createPresenter() {
-        return new MvpHomePresenter();
-    }
-
+    
     @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_home;

@@ -20,11 +20,6 @@ public class MainHomeActivity extends BaseMvpNoActionBarActivity<IMainHomeContra
     private MainBusinessAdapter mMainBusinessAdapter;
 
     @Override
-    protected MainHomePresenter createPresenter() {
-        return new MainHomePresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.main_activity_home;
     }

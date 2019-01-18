@@ -38,11 +38,6 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
     private TextView refresh_btn_tv;
 
     @Override
-    protected MvpWebViewPresenter createPresenter() {
-        return new MvpWebViewPresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_web_view;
     }

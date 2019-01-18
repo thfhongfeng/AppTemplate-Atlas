@@ -25,11 +25,6 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
     private TextView logout_btn_tv;
 
     @Override
-    protected UserHomePresenter createPresenter() {
-        return new UserHomePresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.user_activity_home;
     }

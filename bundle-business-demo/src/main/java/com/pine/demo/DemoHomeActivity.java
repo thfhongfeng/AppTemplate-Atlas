@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.ui.BaseActionBarActivity;
+import com.pine.base.architecture.mvc.activity.BaseMvcActionBarActivity;
 import com.pine.base.widget.rv_space.GridSpacingItemDecoration;
 import com.pine.demo.adapter.DemoAdapter;
 import com.pine.demo.bean.DemoItemEntity;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by tanghongfeng on 2019/1/14
  */
 
-public class DemoHomeActivity extends BaseActionBarActivity {
+public class DemoHomeActivity extends BaseMvcActionBarActivity {
     private RecyclerView demo_rv;
     private DemoAdapter mDemoAdapter;
 

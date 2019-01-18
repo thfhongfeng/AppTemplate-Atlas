@@ -60,11 +60,6 @@ public class MvpShopReleaseActivity extends
     private ProvinceSelectDialog mProvinceSelectDialog;
 
     @Override
-    protected MvpShopReleasePresenter createPresenter() {
-        return new MvpShopReleasePresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_shop_release;
     }

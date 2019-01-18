@@ -32,6 +32,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
         UI_STATE_ON_STOP,
         UI_STATE_ON_DETACH
     }
+
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
     /**
      * UI的弱引用

@@ -9,11 +9,6 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
         implements IWelcomeContract.Ui {
 
     @Override
-    protected WelcomePresenter createPresenter() {
-        return new WelcomePresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.wel_activity_welcome;
     }

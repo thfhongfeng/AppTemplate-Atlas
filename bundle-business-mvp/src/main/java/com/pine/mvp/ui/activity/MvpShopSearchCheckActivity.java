@@ -34,11 +34,6 @@ public class MvpShopSearchCheckActivity extends
     private TextView clear_check_tv;
 
     @Override
-    protected MvpShopSearchCheckPresenter createPresenter() {
-        return new MvpShopSearchCheckPresenter();
-    }
-
-    @Override
     protected void setupActionBar(ImageView goBackIv, TextView titleTv, TextView menuBtnTv) {
         titleTv.setText(R.string.mvp_shop_check_title);
         menuBtnTv.setText(R.string.mvp_complete);

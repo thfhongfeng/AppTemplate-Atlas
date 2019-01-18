@@ -21,16 +21,16 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.pine.base.R;
+import com.pine.base.architecture.mvc.activity.BaseMvcActionBarTextMenuActivity;
 import com.pine.base.component.map.MapSdkManager.MapType;
 import com.pine.base.component.map.baidu.location.BdLocationManager;
-import com.pine.base.ui.BaseActionBarTextMenuActivity;
 import com.pine.tool.util.GPSUtils;
 
 /**
  * Created by tanghongfeng on 2018/10/31
  */
 
-public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements View.OnClickListener {
+public class BaiduMapActivity extends BaseMvcActionBarTextMenuActivity implements View.OnClickListener {
     private MapView map_view;
     private ImageView location_iv;
 

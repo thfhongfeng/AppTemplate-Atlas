@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class NoviceGuideView extends RelativeLayout {
     private Context mContext;
     private ArrayList<NoviceGuideItemView> mGuideItemViewList = new ArrayList<>();
-    private int mCurPosition;
+    private int mCurPosition = -1;
 
     public NoviceGuideView(@NonNull Context context) {
         super(context);
@@ -88,14 +88,16 @@ public class NoviceGuideView extends RelativeLayout {
             });
             addView(textView, params);
         }
-        mGuideItemViewList.get(0).setVisibility(VISIBLE);
-        mCurPosition = 0;
     }
 
     private void goNext(int position) {
         if (position < mGuideItemViewList.size() - 1) {
-            mGuideItemViewList.get(position).setVisibility(GONE);
+            if (position >= 0) {
+                mGuideItemViewList.get(position).cancelAnim();
+                mGuideItemViewList.get(position).setVisibility(GONE);
+            }
             mGuideItemViewList.get(position + 1).setVisibility(VISIBLE);
+            mGuideItemViewList.get(position + 1).startAnim();
         } else {
             finalFinish();
         }
@@ -107,15 +109,21 @@ public class NoviceGuideView extends RelativeLayout {
     }
 
     public void startAnim() {
-        if (mCurPosition < mGuideItemViewList.size()) {
+        if (mCurPosition >= 0 && mCurPosition < mGuideItemViewList.size()) {
             mGuideItemViewList.get(mCurPosition).startAnim();
         }
     }
 
     public void cancelAnim() {
-        if (mCurPosition < mGuideItemViewList.size()) {
+        if (mCurPosition >= 0 && mCurPosition < mGuideItemViewList.size()) {
             mGuideItemViewList.get(mCurPosition).cancelAnim();
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        goNext(mCurPosition);
     }
 
     public static class GuideBean {

@@ -19,11 +19,6 @@ public class LoadingActivity extends BaseMvpNoActionBarActivity<ILoadingContract
     private ProgressDialog mUpdateProgressDialog;
 
     @Override
-    protected LoadingPresenter createPresenter() {
-        return new LoadingPresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.wel_activity_loading;
     }

@@ -23,11 +23,6 @@ public class MvpShopDetailActivity extends BaseMvpActionBarActivity<IMvpShopDeta
     private TextView go_travel_note_list_btn_tv;
 
     @Override
-    protected MvpShopDetailPresenter createPresenter() {
-        return new MvpShopDetailPresenter();
-    }
-
-    @Override
     protected int getActivityLayoutResId() {
         return R.layout.mvp_activity_shop_detail;
     }
