@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.pine.base.BaseConstants;
 import com.pine.base.access.UiAccessAnnotation;
 import com.pine.base.access.UiAccessType;
-import com.pine.base.architecture.mvp.bean.InputParamBean;
+import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
 import com.pine.base.component.map.MapSdkManager;
 import com.pine.base.component.uploader.bean.FileUploadBean;

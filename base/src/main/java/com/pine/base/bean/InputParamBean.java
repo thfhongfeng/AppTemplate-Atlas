@@ -1,4 +1,4 @@
-package com.pine.base.architecture.mvp.bean;
+package com.pine.base.bean;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

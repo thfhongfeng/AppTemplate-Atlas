@@ -3,7 +3,7 @@ package com.pine.mvp.presenter;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.pine.base.architecture.mvp.bean.InputParamBean;
+import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.R;

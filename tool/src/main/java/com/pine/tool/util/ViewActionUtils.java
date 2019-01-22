@@ -11,16 +11,20 @@ import com.pine.tool.R;
 
 public class ViewActionUtils {
     public static void scrollToTargetView(Context context, View parentScrollView, View view) {
+        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_50);
+        scrollToTargetView(context, parentScrollView, view, offset);
+    }
+
+    public static void scrollToTargetView(Context context, View parentScrollView, View view, int offset) {
         if (view == null) {
             return;
         }
-        int offset = context.getResources().getDimensionPixelOffset(R.dimen.dp_20);
         int[] location = new int[2];
         int[] scrollViewLocation = new int[2];
         view.getLocationOnScreen(location);
         parentScrollView.getLocationOnScreen(scrollViewLocation);
         int scrollY = parentScrollView.getScrollY();
-        int targetY = location[1] + scrollY - scrollViewLocation[1] - view.getHeight() - offset;
+        int targetY = location[1] - scrollViewLocation[1] + scrollY - offset;
         if (targetY < 0) {
             targetY = 0;
         }

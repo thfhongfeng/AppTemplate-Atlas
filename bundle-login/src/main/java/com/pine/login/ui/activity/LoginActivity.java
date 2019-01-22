@@ -5,7 +5,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.architecture.mvp.bean.InputParamBean;
+import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;

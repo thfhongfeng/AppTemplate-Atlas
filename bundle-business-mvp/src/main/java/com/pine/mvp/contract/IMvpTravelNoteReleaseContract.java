@@ -3,7 +3,7 @@ package com.pine.mvp.contract;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.pine.base.architecture.mvp.bean.InputParamBean;
+import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 import com.pine.base.component.editor.bean.EditorItemData;
 import com.pine.base.component.uploader.ui.UploadFileLinearLayout;
