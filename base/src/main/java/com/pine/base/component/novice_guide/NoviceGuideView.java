@@ -23,6 +23,7 @@ public class NoviceGuideView extends RelativeLayout {
     private Context mContext;
     private ArrayList<NoviceGuideItemView> mGuideItemViewList = new ArrayList<>();
     private int mCurPosition = -1;
+    private IGuideViewListener mListener;
 
     public NoviceGuideView(@NonNull Context context) {
         super(context);
@@ -40,14 +41,23 @@ public class NoviceGuideView extends RelativeLayout {
     }
 
     public void init(ArrayList<GuideBean> guideBeans) {
-        init(guideBeans, false, true);
+        init(guideBeans, null, false, true);
+    }
+
+    public void init(ArrayList<GuideBean> guideBeans, IGuideViewListener listener) {
+        init(guideBeans, listener, false, true);
     }
 
     public void init(ArrayList<GuideBean> guideBeans, boolean canBelowClick, boolean showSkip) {
+        init(guideBeans, null, canBelowClick, showSkip);
+    }
+
+    public void init(ArrayList<GuideBean> guideBeans, IGuideViewListener listener, boolean canBelowClick, boolean showSkip) {
         if (guideBeans == null || guideBeans.size() < 1) {
             setVisibility(GONE);
             return;
         }
+        mListener = listener;
         removeAllViews();
         canBelowClick = guideBeans.size() == 1 && canBelowClick;
         for (int i = 0; i < guideBeans.size(); i++) {
@@ -71,9 +81,9 @@ public class NoviceGuideView extends RelativeLayout {
             textView.setTextColor(Color.parseColor("#FFFFFF"));
             textView.setTextSize(12);
             textView.setPadding(getResources().getDimensionPixelOffset(R.dimen.dp_8),
-                    getResources().getDimensionPixelOffset(R.dimen.dp_6),
+                    getResources().getDimensionPixelOffset(R.dimen.dp_3),
                     getResources().getDimensionPixelOffset(R.dimen.dp_8),
-                    getResources().getDimensionPixelOffset(R.dimen.dp_5));
+                    getResources().getDimensionPixelOffset(R.dimen.dp_3));
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             params.rightMargin = getResources().getDimensionPixelOffset(R.dimen.dp_16);
@@ -91,6 +101,7 @@ public class NoviceGuideView extends RelativeLayout {
     }
 
     private void goNext(int position) {
+        mCurPosition = position + 1;
         if (position < mGuideItemViewList.size() - 1) {
             if (position >= 0) {
                 mGuideItemViewList.get(position).cancelAnim();
@@ -98,25 +109,36 @@ public class NoviceGuideView extends RelativeLayout {
             }
             mGuideItemViewList.get(position + 1).setVisibility(VISIBLE);
             mGuideItemViewList.get(position + 1).startAnim();
+            if (mListener != null) {
+                mListener.onItemViewShow(mGuideItemViewList.get(mCurPosition), mCurPosition);
+            }
         } else {
             finalFinish();
         }
-        mCurPosition = position + 1;
     }
 
     public void finalFinish() {
         setVisibility(GONE);
-    }
-
-    public void startAnim() {
-        if (mCurPosition >= 0 && mCurPosition < mGuideItemViewList.size()) {
-            mGuideItemViewList.get(mCurPosition).startAnim();
+        if (mListener != null) {
+            mListener.onFinish();
         }
     }
 
-    public void cancelAnim() {
-        if (mCurPosition >= 0 && mCurPosition < mGuideItemViewList.size()) {
-            mGuideItemViewList.get(mCurPosition).cancelAnim();
+    public void startAnim(int position) {
+        if (position >= 0 && position < mGuideItemViewList.size()) {
+            mGuideItemViewList.get(position).startAnim();
+        }
+    }
+
+    public void cancelAnim(int position) {
+        if (position >= 0 && position < mGuideItemViewList.size()) {
+            mGuideItemViewList.get(position).cancelAnim();
+        }
+    }
+
+    public void cancelAllAnim() {
+        for (int i = 0; i < mGuideItemViewList.size(); i++) {
+            mGuideItemViewList.get(i).cancelAnim();
         }
     }
 
@@ -124,6 +146,12 @@ public class NoviceGuideView extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         goNext(mCurPosition);
+    }
+
+    public interface IGuideViewListener {
+        void onItemViewShow(NoviceGuideItemView view, int position);
+
+        void onFinish();
     }
 
     public static class GuideBean {
