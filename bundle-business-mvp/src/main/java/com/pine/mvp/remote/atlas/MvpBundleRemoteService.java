@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pine.mvp.ui.activity.MvpHomeActivity;
-import com.pine.router.RouterCommand;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.router.command.RouterCommand;
 import com.pine.tool.util.AppUtils;
 
 /**
@@ -14,7 +14,7 @@ import com.pine.tool.util.AppUtils;
 
 public class MvpBundleRemoteService {
 
-    @RouterAnnotation(CommandName = RouterCommand.BUSINESS_goBusinessMvpHomeActivity)
+    @RouterAnnotation(CommandName = RouterCommand.MVP_goMvpHomeActivity)
     public Bundle goBusinessHomeActivity(Bundle args) {
         Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), MvpHomeActivity.class);

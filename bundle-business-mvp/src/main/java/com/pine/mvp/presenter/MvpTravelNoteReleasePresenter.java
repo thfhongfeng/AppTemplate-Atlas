@@ -6,9 +6,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.pine.base.BaseConstants;
-import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.bean.InputParamBean;
 import com.pine.base.component.editor.bean.EditorItemData;
 import com.pine.base.component.editor.ui.TextImageEditorView;
 import com.pine.base.component.uploader.bean.FileUploadBean;

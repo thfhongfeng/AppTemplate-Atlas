@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 
 import com.pine.base.R;
 import com.pine.router.RouterBundleKey;
-import com.pine.router.RouterCommand;
-import com.pine.router.RouterManager;
+import com.pine.router.command.RouterCommand;
+import com.pine.router.manager.RouterManager;
 
 /**
  * Created by tanghongfeng on 2018/9/13
@@ -72,13 +72,13 @@ public class BottomTabNavigationBar extends FrameLayout implements View.OnClickL
         int id = view.getId();
         if (id == R.id.bottom_main_home_ll) {
             if (mCurrentItem != 0) {
-                RouterManager.getBundleManager(RouterBundleKey.MAIN_BUNDLE_KEY).callUiCommand((Activity) mContext,
+                RouterManager.getInstance(RouterBundleKey.MAIN_BUNDLE_KEY).callUiCommand((Activity) mContext,
                         RouterCommand.MAIN_goMainHomeActivity, null, null);
             }
         } else if (id == R.id.bottom_user_center_ll) {
             if (mCurrentItem != 1) {
-                RouterManager.getBundleManager(RouterBundleKey.USER_BUNDLE_KEY).callUiCommand((Activity) mContext,
-                        RouterCommand.USER_goUserCenterActivity, null, null);
+                RouterManager.getInstance(RouterBundleKey.USER_BUNDLE_KEY).callUiCommand((Activity) mContext,
+                        RouterCommand.USER_goUserHomeActivity, null, null);
             }
         }
     }

@@ -10,6 +10,8 @@ android {
         versionCode build_versions.versionCode
         versionName build_versions.versionName
 
+        buildConfigField "String", "APP_THIRD_ROUTER_PROVIDER", "\"${app_third_sdk_provider.router_provider}\""
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }

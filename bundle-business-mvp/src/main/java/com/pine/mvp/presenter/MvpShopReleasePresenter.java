@@ -3,9 +3,9 @@ package com.pine.mvp.presenter;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.bean.InputParamBean;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopReleaseContract;

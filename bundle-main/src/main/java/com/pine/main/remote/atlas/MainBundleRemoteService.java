@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pine.main.ui.activity.MainHomeActivity;
-import com.pine.router.RouterCommand;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.router.command.RouterCommand;
 import com.pine.tool.util.AppUtils;
 
 /**

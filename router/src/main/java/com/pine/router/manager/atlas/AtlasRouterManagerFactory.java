@@ -1,7 +1,7 @@
-package com.pine.router.atlas;
+package com.pine.router.manager.atlas;
 
-import com.pine.router.IRouterManager;
 import com.pine.router.RouterBundleKey;
+import com.pine.router.manager.IRouterManager;
 
 /**
  * Created by tanghongfeng on 2019/1/14
@@ -9,52 +9,52 @@ import com.pine.router.RouterBundleKey;
 
 public class AtlasRouterManagerFactory {
 
-    public static IRouterManager getBundleManager(String bundleKey) {
+    public static IRouterManager getManager(String bundleKey) {
         switch (bundleKey) {
             case RouterBundleKey.LOGIN_BUNDLE_KEY:
-                return getLoginBundleManager();
+                return getLoginManager();
             case RouterBundleKey.MAIN_BUNDLE_KEY:
-                return getMainBundleManager();
+                return getMainManager();
             case RouterBundleKey.USER_BUNDLE_KEY:
-                return getUserBundleManager();
+                return getUserManager();
             case RouterBundleKey.BUSINESS_MVC_BUNDLE_KEY:
-                return getBusinessMvcBundleManager();
+                return getBusinessMvcManager();
             case RouterBundleKey.BUSINESS_MVP_BUNDLE_KEY:
-                return getBusinessMvpBundleManager();
+                return getBusinessMvpManager();
             case RouterBundleKey.BUSINESS_MVVM_BUNDLE_KEY:
-                return getBusinessMvvmBundleManager();
+                return getBusinessMvvmManager();
             case RouterBundleKey.BUSINESS_DEMO_BUNDLE_KEY:
-                return getBusinessDemoBundleManager();
+                return getBusinessDemoManager();
             default:
                 return null;
         }
     }
 
-    public static IRouterManager getLoginBundleManager() {
+    public static IRouterManager getLoginManager() {
         return AtlasRouterLoginManager.getInstance();
     }
 
-    public static IRouterManager getMainBundleManager() {
+    public static IRouterManager getMainManager() {
         return AtlasRouterMainManager.getInstance();
     }
 
-    public static IRouterManager getUserBundleManager() {
+    public static IRouterManager getUserManager() {
         return AtlasRouterUserManager.getInstance();
     }
 
-    public static IRouterManager getBusinessMvcBundleManager() {
+    public static IRouterManager getBusinessMvcManager() {
         return AtlasRouterBusinessMvcManager.getInstance();
     }
 
-    public static IRouterManager getBusinessMvpBundleManager() {
+    public static IRouterManager getBusinessMvpManager() {
         return AtlasRouterBusinessMvpManager.getInstance();
     }
 
-    public static IRouterManager getBusinessMvvmBundleManager() {
+    public static IRouterManager getBusinessMvvmManager() {
         return AtlasRouterBusinessMvvmManager.getInstance();
     }
 
-    public static IRouterManager getBusinessDemoBundleManager() {
+    public static IRouterManager getBusinessDemoManager() {
         return AtlasRouterBusinessDemoManager.getInstance();
     }
 }

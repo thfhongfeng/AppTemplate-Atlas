@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.bean.InputParamBean;
 import com.pine.login.LoginConstants;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;

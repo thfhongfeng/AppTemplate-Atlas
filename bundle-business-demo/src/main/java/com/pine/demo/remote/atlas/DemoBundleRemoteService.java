@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pine.demo.DemoHomeActivity;
-import com.pine.router.RouterCommand;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.router.command.RouterCommand;
 import com.pine.tool.util.AppUtils;
 
 /**
@@ -14,7 +14,7 @@ import com.pine.tool.util.AppUtils;
 
 public class DemoBundleRemoteService {
 
-    @RouterAnnotation(CommandName = RouterCommand.BUSINESS_goBusinessDemoHomeActivity)
+    @RouterAnnotation(CommandName = RouterCommand.DEMO_goDemoHomeActivity)
     public Bundle goBusinessHomeActivity(Bundle args) {
         Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), DemoHomeActivity.class);

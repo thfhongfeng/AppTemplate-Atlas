@@ -9,8 +9,8 @@ import com.pine.base.BaseApplication;
 import com.pine.base.access.IUiAccessExecutor;
 import com.pine.router.IRouterCallback;
 import com.pine.router.RouterBundleKey;
-import com.pine.router.RouterCommand;
-import com.pine.router.RouterManager;
+import com.pine.router.command.RouterCommand;
+import com.pine.router.manager.RouterManager;
 
 /**
  * Created by tanghongfeng on 2018/9/16
@@ -32,7 +32,7 @@ public class UiAccessLoginExecutor implements IUiAccessExecutor {
                     activity.finish();
                 }
             } else {
-                RouterManager.getBundleManager(RouterBundleKey.LOGIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
+                RouterManager.getInstance(RouterBundleKey.LOGIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
                         RouterCommand.LOGIN_goLoginActivity, null, new IRouterCallback() {
                             @Override
                             public void onSuccess(Bundle responseBundle) {

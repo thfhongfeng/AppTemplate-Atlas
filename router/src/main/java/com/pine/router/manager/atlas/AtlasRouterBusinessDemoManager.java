@@ -1,4 +1,4 @@
-package com.pine.router.atlas;
+package com.pine.router.manager.atlas;
 
 import android.content.Context;
 import android.content.Intent;

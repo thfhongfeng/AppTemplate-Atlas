@@ -14,7 +14,7 @@ import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.main.R;
 import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.router.IRouterCallback;
-import com.pine.router.RouterManager;
+import com.pine.router.manager.RouterManager;
 
 /**
  * Created by tanghongfeng on 2019/1/16
@@ -56,7 +56,7 @@ public class MainBusinessAdapter extends BaseNoPaginationListAdapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RouterManager.getBundleManager(content.getBundle()).callUiCommand(BaseApplication.mCurResumedActivity,
+                    RouterManager.getInstance(content.getBundle()).callUiCommand(BaseApplication.mCurResumedActivity,
                             content.getCommand(), null, new IRouterCallback() {
                                 @Override
                                 public void onSuccess(Bundle responseBundle) {

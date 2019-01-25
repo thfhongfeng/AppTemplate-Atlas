@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
+import com.pine.base.bean.InputParamBean;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 import com.pine.mvp.contract.IMvpShopSearchCheckContract;

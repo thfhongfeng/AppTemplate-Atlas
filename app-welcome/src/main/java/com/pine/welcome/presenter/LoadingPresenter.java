@@ -17,8 +17,8 @@ import com.pine.base.widget.dialog.ProgressDialog;
 import com.pine.router.IRouterCallback;
 import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterBundleSwitcher;
-import com.pine.router.RouterCommand;
-import com.pine.router.RouterManager;
+import com.pine.router.command.RouterCommand;
+import com.pine.router.manager.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.R;
 import com.pine.welcome.bean.BundleSwitcherEntity;
@@ -158,7 +158,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                 goWelcomeActivity();
             }
         }
-        RouterManager.getBundleManager(RouterBundleKey.LOGIN_BUNDLE_KEY)
+        RouterManager.getInstance(RouterBundleKey.LOGIN_BUNDLE_KEY)
                 .callOpCommand(BaseApplication.mCurResumedActivity, RouterCommand.LOGIN_autoLogin,
                         null, new IRouterCallback() {
                             @Override

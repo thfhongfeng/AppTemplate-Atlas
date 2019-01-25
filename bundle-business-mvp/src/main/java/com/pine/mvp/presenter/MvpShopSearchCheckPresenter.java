@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.pine.base.bean.InputParamBean;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.bean.InputParamBean;
 import com.pine.mvp.MvpConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopCheckListPaginationAdapter;

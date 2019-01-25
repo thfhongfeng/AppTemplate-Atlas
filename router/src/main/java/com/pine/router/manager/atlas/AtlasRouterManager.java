@@ -1,4 +1,4 @@
-package com.pine.router.atlas;
+package com.pine.router.manager.atlas;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,12 +9,16 @@ import android.taobao.atlas.remote.RemoteFactory;
 import android.taobao.atlas.remote.transactor.RemoteTransactor;
 
 import com.pine.router.IRouterCallback;
-import com.pine.router.IRouterManager;
 import com.pine.router.R;
 import com.pine.router.RouterBundleKey;
 import com.pine.router.RouterBundleSwitcher;
 import com.pine.router.RouterConstants;
+import com.pine.router.manager.IRouterManager;
 import com.pine.tool.util.LogUtils;
+
+import static com.pine.router.RouterConstants.TYPE_DATA_COMMAND;
+import static com.pine.router.RouterConstants.TYPE_OP_COMMAND;
+import static com.pine.router.RouterConstants.TYPE_UI_COMMAND;
 
 /**
  * Created by tanghongfeng on 2019/1/14
@@ -26,9 +30,6 @@ public abstract class AtlasRouterManager implements IRouterManager {
     protected final int FAIL_CODE_REQUEST_FAIL = 3;
     protected final int FAIL_CODE_REMOTE_FAIL = 4;
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
-    protected String TYPE_UI_COMMAND = "ui_command";
-    protected String TYPE_DATA_COMMAND = "data_command";
-    protected String TYPE_OP_COMMAND = "op_command";
 
     private void callCommand(final String commandType, final Activity activity, final String commandName,
                              final Bundle args, final IRouterCallback callback) {
