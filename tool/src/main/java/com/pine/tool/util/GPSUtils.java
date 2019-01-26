@@ -67,7 +67,7 @@ public class GPSUtils {
      *
      * @param lat
      * @param lon
-     * @return
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] gps84_To_Gcj02(double lat, double lon) {
         if (outOfChina(lat, lon)) {
@@ -91,7 +91,7 @@ public class GPSUtils {
      *
      * @param lon
      * @param lat
-     * @return
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] gcj02_To_Gps84(double lat, double lon) {
         double[] gps = transform(lat, lon);
@@ -106,6 +106,7 @@ public class GPSUtils {
      *
      * @param lat
      * @param lon
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] gcj02_To_Bd09(double lat, double lon) {
         double x = lon, y = lat;
@@ -123,7 +124,7 @@ public class GPSUtils {
      *
      * @param lat
      * @param lon
-     * @return
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] bd09_To_Gcj02(double lat, double lon) {
         double x = lon - 0.0065, y = lat - 0.006;
@@ -140,7 +141,7 @@ public class GPSUtils {
      *
      * @param lat
      * @param lon
-     * @return
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] gps84_To_bd09(double lat, double lon) {
         double[] gcj02 = gps84_To_Gcj02(lat, lon);
@@ -153,7 +154,7 @@ public class GPSUtils {
      *
      * @param lat
      * @param lon
-     * @return
+     * @return 纬度lat(index = 0), 经度lng(index = 1)
      */
     public static double[] bd09_To_gps84(double lat, double lon) {
         double[] gcj02 = bd09_To_Gcj02(lat, lon);
