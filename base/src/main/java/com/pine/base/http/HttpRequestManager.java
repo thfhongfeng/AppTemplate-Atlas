@@ -169,7 +169,7 @@ public class HttpRequestManager {
         }
         mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
-        LogUtils.d(TAG, "Request in string queue - " + requestBean.getModuleTag() +
+        LogUtils.d(TAG, "Request in json queue - " + requestBean.getModuleTag() +
                 "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
                 requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
         List<HttpCookie> cookies = getSessionCookie();
@@ -178,7 +178,7 @@ public class HttpRequestManager {
             for (int i = 1; i < cookies.size(); i++) {
                 cookiesStr += "  " + cookies.get(i).toString();
             }
-            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
+            LogUtils.d(TAG, "Request in json queue - Cookies:" + cookiesStr);
         }
         mRequestManager.setJsonRequest(requestBean, getResponseListener(requestBean.getKey(), callBack));
         return true;
@@ -427,7 +427,7 @@ public class HttpRequestManager {
 
             @Override
             public void onSucceed(int what, HttpResponse response) {
-                LogUtils.d(TAG, "Response onSucceed in string queue - " + callBack.getModuleTag() +
+                LogUtils.d(TAG, "Response onSucceed in json queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
@@ -447,7 +447,7 @@ public class HttpRequestManager {
 
             @Override
             public void onFailed(int what, HttpResponse response) {
-                LogUtils.d(TAG, "Response onFailed in string queue - " + callBack.getModuleTag() +
+                LogUtils.d(TAG, "Response onFailed in json queue - " + callBack.getModuleTag() +
                         "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
                         " \r\n- response : " + response.getData());
                 HttpRequestBean httpRequestBean = null;
