@@ -46,11 +46,6 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
 
     @Override
     protected void onPause() {
-        //如果软键盘已弹出，收回软键盘
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-        }
         super.onPause();
     }
 
@@ -71,6 +66,7 @@ public abstract class BaseMvpNoActionBarActivity<V extends IBaseContract.Ui, P e
     }
 
     public void startLoadingUi() {
+        hideSoftInputFromWindow();
         findViewById(R.id.base_loading_layout).setVisibility(View.VISIBLE);
     }
 

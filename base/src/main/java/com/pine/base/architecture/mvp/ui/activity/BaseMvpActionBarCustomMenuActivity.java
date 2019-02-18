@@ -75,11 +75,6 @@ public abstract class BaseMvpActionBarCustomMenuActivity<V extends IBaseContract
 
     @Override
     protected void onPause() {
-        //如果软键盘已弹出，收回软键盘
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-        }
         super.onPause();
     }
 
@@ -100,6 +95,7 @@ public abstract class BaseMvpActionBarCustomMenuActivity<V extends IBaseContract
     }
 
     public void startLoadingUi() {
+        hideSoftInputFromWindow();
         findViewById(R.id.base_loading_layout).setVisibility(View.VISIBLE);
     }
 

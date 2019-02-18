@@ -1,10 +1,12 @@
 package com.pine.base.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.inputmethod.InputMethodManager;
 
 import com.pine.base.R;
 import com.pine.base.access.UiAccessManager;
@@ -143,6 +145,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
+        hideSoftInputFromWindow();
         super.onPause();
         mPrePause = true;
     }
@@ -241,5 +244,13 @@ public abstract class BaseActivity extends AppCompatActivity
 
     public void attachCircleView(ILifeCircleView view) {
         mLifeCircleViewMap.put(view.hashCode(), view);
+    }
+
+    public void hideSoftInputFromWindow() {
+        //如果软键盘已弹出，收回软键盘
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
     }
 }
