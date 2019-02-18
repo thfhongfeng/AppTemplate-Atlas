@@ -1,7 +1,7 @@
 package com.pine.base.component.map;
 
-import com.pine.base.BuildConfig;
 import com.pine.base.component.map.baidu.BaiduMapManager;
+import com.pine.config.BuildConfig;
 
 /**
  * Created by tanghongfeng on 2018/10/31

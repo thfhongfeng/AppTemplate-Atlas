@@ -5,5 +5,5 @@ package com.pine.router.command;
  */
 
 public interface RouterMvpCommand {
-    String MVP_goMvpHomeActivity = "goMvpHomeActivity";
+    String goMvpHomeActivity = "goMvpHomeActivity";
 }

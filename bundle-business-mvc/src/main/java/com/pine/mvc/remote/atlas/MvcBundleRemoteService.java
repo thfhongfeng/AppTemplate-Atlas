@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.pine.mvc.ui.activity.MvcHomeActivity;
 import com.pine.router.annotation.RouterAnnotation;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterMvcCommand;
 import com.pine.tool.util.AppUtils;
 
 /**
@@ -14,7 +14,7 @@ import com.pine.tool.util.AppUtils;
 
 public class MvcBundleRemoteService {
 
-    @RouterAnnotation(CommandName = RouterCommand.MVC_goMvcHomeActivity)
+    @RouterAnnotation(CommandName = RouterMvcCommand.goMvcHomeActivity)
     public Bundle goBusinessHomeActivity(Bundle args) {
         Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), MvcHomeActivity.class);

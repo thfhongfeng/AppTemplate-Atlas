@@ -11,13 +11,22 @@ build_versions.storeFile = "../template.jks"
 build_versions.storePassword = "pine123"
 build_versions.keyAlias = "AppTemplate"
 build_versions.keyPassword = "pine123"
-
 build_versions.applicationId = "com.pine.template"
 build_versions.versionCode = 1
 build_versions.versionName = "1.0.1"
-
 build_versions.apk_head_name = "pine_app_template"
 build_versions.app_name = "App模板"
+
+//build_versions.storeFile = "../project1.jks"
+//build_versions.storePassword = "pine123"
+//build_versions.keyAlias = "AppProject1"
+//build_versions.keyPassword = "pine123"
+//build_versions.applicationId = "com.pine.project1"
+//build_versions.versionCode = 1
+//build_versions.versionName = "1.0.1"
+//build_versions.apk_head_name = "pine_app_project1"
+//build_versions.app_name = "AppProject1"
+
 ext.build_versions = build_versions
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,9 +37,11 @@ ext.build_versions = build_versions
  * url地址
  */
 def build_url = [:]
+
 build_url.base_url = "https://suggest.taobao.com/sug?code=utf-8&q=android"
 
 build_url.wei_bo_redirect_url = "https://api.weibo.com/oauth2/default.html"
+
 ext.build_url = build_url
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,6 +52,7 @@ ext.build_url = build_url
  * 第三方KEY
  */
 def build_app_key = [:]
+
 build_app_key.qq_for_app_id = "1107820499"
 build_app_key.wx_for_app_id = "wxa1785555bc28855b"
 build_app_key.wx_secret_key = "faf7a17b7ef08adf96d6d19372b0895c"
@@ -49,6 +61,7 @@ build_app_key.baidu_for_app_key = "eaR8Y8d2cAxelTNIVTAWkIGEgF22XHL3"
 
 build_app_key.wei_bo_for_app_key = "1125184506"
 build_app_key.wei_bo_secret_key = "15256daac5dc83e0b0aec9dabafc3620"
+
 ext.build_app_key = build_app_key
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +72,7 @@ ext.build_app_key = build_app_key
  * app第三方SDK提供者
  */
 def app_third_sdk_provider = [:]
+
 // 路由提供者，默认使用atlas(目前可供选择项：atlas)
 app_third_sdk_provider.router_provider = "atlas"
 // 第三方地图提供者，默认使用baidu地图(目前可供选择项：baidu)
@@ -67,6 +81,7 @@ app_third_sdk_provider.map_provider = "baidu"
 app_third_sdk_provider.image_loader_provider = "glide"
 // 第三方http请求框架提供者，默认使用nohttp(目前可供选择项：nohttp)
 app_third_sdk_provider.http_request_provider = "nohttp"
+
 ext.app_third_sdk_provider = app_third_sdk_provider
 
 /////////////////////////////////////////////////////////////////////////////////////////////

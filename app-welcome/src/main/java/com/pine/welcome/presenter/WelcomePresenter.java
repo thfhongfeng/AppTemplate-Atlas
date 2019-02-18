@@ -6,8 +6,7 @@ import android.os.Handler;
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.router.IRouterCallback;
-import com.pine.router.RouterBundleKey;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterMainCommand;
 import com.pine.router.manager.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.contract.IWelcomeContract;
@@ -37,11 +36,11 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                RouterManager.getInstance(RouterBundleKey.MAIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
-                        RouterCommand.MAIN_goMainHomeActivity, null, new IRouterCallback() {
+                RouterManager.getMainRouter().callUiCommand(BaseApplication.mCurResumedActivity,
+                        RouterMainCommand.goMainHomeActivity, null, new IRouterCallback() {
                             @Override
                             public void onSuccess(Bundle responseBundle) {
-                                LogUtils.d(TAG, "onSuccess " + RouterCommand.MAIN_goMainHomeActivity);
+                                LogUtils.d(TAG, "onSuccess " + RouterMainCommand.goMainHomeActivity);
                                 finishUi();
                                 return;
                             }

@@ -7,11 +7,14 @@ import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
+import com.pine.config.ConfigBundleKey;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
 import com.pine.main.bean.MainBusinessItemEntity;
-import com.pine.router.RouterBundleKey;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterDemoCommand;
+import com.pine.router.command.RouterMvcCommand;
+import com.pine.router.command.RouterMvpCommand;
+import com.pine.router.command.RouterMvvmCommand;
 import com.pine.tool.util.LogUtils;
 
 import org.json.JSONException;
@@ -63,14 +66,14 @@ public class MainHomeModel {
     // Test code begin
     private JSONObject getBusinessListData() {
         String res = "{success:true,code:200,message:'',data:" +
-                "[{name:'Business Mvc',bundle:" + RouterBundleKey.BUSINESS_MVC_BUNDLE_KEY
-                + ",command:" + RouterCommand.MVC_goMvcHomeActivity + "},"
-                + "{name:'Business Mvp',bundle:" + RouterBundleKey.BUSINESS_MVP_BUNDLE_KEY
-                + ",command:" + RouterCommand.MVP_goMvpHomeActivity + "},"
-                + "{name:'Business Mvvm',bundle:" + RouterBundleKey.BUSINESS_MVVM_BUNDLE_KEY
-                + ",command:" + RouterCommand.MVVM_goMvvmHomeActivity + "},"
-                + "{name:'Business Demo',bundle:" + RouterBundleKey.BUSINESS_DEMO_BUNDLE_KEY
-                + ",command:" + RouterCommand.DEMO_goDemoHomeActivity + "}]}";
+                "[{name:'Business Mvc',bundle:" + ConfigBundleKey.BUSINESS_MVC_BUNDLE_KEY
+                + ",command:" + RouterMvcCommand.goMvcHomeActivity + "},"
+                + "{name:'Business Mvp',bundle:" + ConfigBundleKey.BUSINESS_MVP_BUNDLE_KEY
+                + ",command:" + RouterMvpCommand.goMvpHomeActivity + "},"
+                + "{name:'Business Mvvm',bundle:" + ConfigBundleKey.BUSINESS_MVVM_BUNDLE_KEY
+                + ",command:" + RouterMvvmCommand.goMvvmHomeActivity + "},"
+                + "{name:'Business Demo',bundle:" + ConfigBundleKey.BUSINESS_DEMO_BUNDLE_KEY
+                + ",command:" + RouterDemoCommand.goDemoHomeActivity + "}]}";
         try {
             return new JSONObject(res);
         } catch (JSONException e) {

@@ -1,7 +1,7 @@
 package com.pine.router.manager;
 
-import com.pine.router.BuildConfig;
-import com.pine.router.RouterBundleKey;
+import com.pine.config.BuildConfig;
+import com.pine.config.ConfigBundleKey;
 import com.pine.router.manager.atlas.AtlasRouterManagerFactory;
 
 /**
@@ -18,31 +18,31 @@ public class RouterManager {
         }
     }
 
-    public static IRouterManager getLoginManager() {
-        return getInstance(RouterBundleKey.LOGIN_BUNDLE_KEY);
+    public static IRouterManager getLoginRouter() {
+        return getInstance(ConfigBundleKey.LOGIN_BUNDLE_KEY);
     }
 
-    public static IRouterManager getMainManager() {
-        return getInstance(RouterBundleKey.MAIN_BUNDLE_KEY);
+    public static IRouterManager getMainRouter() {
+        return getInstance(ConfigBundleKey.MAIN_BUNDLE_KEY);
     }
 
-    public static IRouterManager getUserManager() {
-        return getInstance(RouterBundleKey.USER_BUNDLE_KEY);
+    public static IRouterManager getUserRouter() {
+        return getInstance(ConfigBundleKey.USER_BUNDLE_KEY);
     }
 
-    public static IRouterManager getBusinessMvcManager() {
-        return getInstance(RouterBundleKey.BUSINESS_MVC_BUNDLE_KEY);
+    public static IRouterManager getBusinessMvcRouter() {
+        return getInstance(ConfigBundleKey.BUSINESS_MVC_BUNDLE_KEY);
     }
 
-    public static IRouterManager getBusinessMvpManager() {
-        return getInstance(RouterBundleKey.BUSINESS_MVP_BUNDLE_KEY);
+    public static IRouterManager getBusinessMvpRouter() {
+        return getInstance(ConfigBundleKey.BUSINESS_MVP_BUNDLE_KEY);
     }
 
-    public static IRouterManager getBusinessMvvmManager() {
-        return getInstance(RouterBundleKey.BUSINESS_MVVM_BUNDLE_KEY);
+    public static IRouterManager getBusinessMvvmRouter() {
+        return getInstance(ConfigBundleKey.BUSINESS_MVVM_BUNDLE_KEY);
     }
 
-    public static IRouterManager getBusinessDemoManager() {
-        return getInstance(RouterBundleKey.BUSINESS_DEMO_BUNDLE_KEY);
+    public static IRouterManager getBusinessDemoRouter() {
+        return getInstance(ConfigBundleKey.BUSINESS_DEMO_BUNDLE_KEY);
     }
 }

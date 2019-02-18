@@ -1,8 +1,8 @@
 package com.pine.base.component.image_loader;
 
-import com.pine.base.BuildConfig;
 import com.pine.base.R;
 import com.pine.base.component.image_loader.glide.GlideImageLoaderManager;
+import com.pine.config.BuildConfig;
 
 /**
  * Created by tanghongfeng on 2018/10/12

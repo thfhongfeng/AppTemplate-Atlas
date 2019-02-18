@@ -8,8 +8,7 @@ import android.widget.Toast;
 import com.pine.base.BaseApplication;
 import com.pine.base.access.IUiAccessExecutor;
 import com.pine.router.IRouterCallback;
-import com.pine.router.RouterBundleKey;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterLoginCommand;
 import com.pine.router.manager.RouterManager;
 
 /**
@@ -32,8 +31,8 @@ public class UiAccessLoginExecutor implements IUiAccessExecutor {
                     activity.finish();
                 }
             } else {
-                RouterManager.getInstance(RouterBundleKey.LOGIN_BUNDLE_KEY).callUiCommand(BaseApplication.mCurResumedActivity,
-                        RouterCommand.LOGIN_goLoginActivity, null, new IRouterCallback() {
+                RouterManager.getLoginRouter().callUiCommand(BaseApplication.mCurResumedActivity,
+                        RouterLoginCommand.goLoginActivity, null, new IRouterCallback() {
                             @Override
                             public void onSuccess(Bundle responseBundle) {
                                 if (activity != null && !activity.isFinishing()) {

@@ -5,5 +5,5 @@ package com.pine.router.command;
  */
 
 public interface RouterDemoCommand {
-    String DEMO_goDemoHomeActivity = "goDemoHomeActivity";
+    String goDemoHomeActivity = "goDemoHomeActivity";
 }

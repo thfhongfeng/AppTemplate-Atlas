@@ -1,5 +1,7 @@
 package com.pine.base;
 
+import com.pine.config.BuildConfig;
+
 /**
  * Created by tanghongfeng on 2018/9/13
  */

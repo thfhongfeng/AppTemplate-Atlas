@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="@dimen/dp_60"
         android:layout_height="@dimen/dp_60"
-        android:src="@mipmap/base_ic_launcher" />
+        android:src="@mipmap/config_ic_launcher" />
 
     <TextView
         android:id="@+id/reason_tv"

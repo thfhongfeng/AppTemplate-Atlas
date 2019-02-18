@@ -8,10 +8,10 @@ import android.taobao.atlas.remote.IRemoteTransactor;
 import android.taobao.atlas.remote.RemoteFactory;
 import android.taobao.atlas.remote.transactor.RemoteTransactor;
 
+import com.pine.config.ConfigBundleKey;
+import com.pine.config.switcher.ConfigBundleSwitcher;
 import com.pine.router.IRouterCallback;
 import com.pine.router.R;
-import com.pine.router.RouterBundleKey;
-import com.pine.router.RouterBundleSwitcher;
 import com.pine.router.RouterConstants;
 import com.pine.router.manager.IRouterManager;
 import com.pine.tool.util.LogUtils;
@@ -34,14 +34,14 @@ public abstract class AtlasRouterManager implements IRouterManager {
     private void callCommand(final String commandType, final Activity activity, final String commandName,
                              final Bundle args, final IRouterCallback callback) {
         if (getRemoteIntent() == null) {
-            LogUtils.releaseLog(TAG, "this intent of " + RouterBundleKey.USER_BUNDLE_KEY + " is null");
+            LogUtils.releaseLog(TAG, "this intent of " + ConfigBundleKey.USER_BUNDLE_KEY + " is null");
             if (callback != null && !callback.onFail("intent is null")) {
                 onCommandFail(commandType, activity, FAIL_CODE_NULL_INTENT, "");
             }
             return;
         }
-        if (!RouterBundleSwitcher.isBundleOpen(RouterBundleKey.USER_BUNDLE_KEY)) {
-            LogUtils.releaseLog(TAG, RouterBundleKey.USER_BUNDLE_KEY + " is not opened");
+        if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.USER_BUNDLE_KEY)) {
+            LogUtils.releaseLog(TAG, ConfigBundleKey.USER_BUNDLE_KEY + " is not opened");
             if (callback != null && !callback.onFail(activity.getString(R.string.router_bundle_not_open))) {
                 onCommandFail(commandType, activity, FAIL_CODE_BUNDLE_NOT_OPEN, activity.getString(R.string.router_bundle_not_open));
             }
@@ -76,7 +76,7 @@ public abstract class AtlasRouterManager implements IRouterManager {
 
                     @Override
                     public void onFailed(String errorInfo) {
-                        LogUtils.releaseLog(TAG, "request " + RouterBundleKey.USER_BUNDLE_KEY + " onFailed");
+                        LogUtils.releaseLog(TAG, "request " + ConfigBundleKey.USER_BUNDLE_KEY + " onFailed");
                         if (callback != null && !callback.onFail(errorInfo)) {
                             onCommandFail(commandType, activity, FAIL_CODE_REQUEST_FAIL, errorInfo);
                         }

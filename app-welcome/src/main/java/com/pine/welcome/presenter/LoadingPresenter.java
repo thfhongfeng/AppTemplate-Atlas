@@ -14,10 +14,10 @@ import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.exception.MessageException;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.widget.dialog.ProgressDialog;
+import com.pine.config.ConfigBundleKey;
+import com.pine.config.switcher.ConfigBundleSwitcher;
 import com.pine.router.IRouterCallback;
-import com.pine.router.RouterBundleKey;
-import com.pine.router.RouterBundleSwitcher;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterLoginCommand;
 import com.pine.router.manager.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.R;
@@ -65,7 +65,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
             public void onResponse(ArrayList<BundleSwitcherEntity> bundleSwitcherEntities) {
                 if (bundleSwitcherEntities != null) {
                     for (int i = 0; i < bundleSwitcherEntities.size(); i++) {
-                        RouterBundleSwitcher.setBundleSwitchState(bundleSwitcherEntities.get(i).getBundleKey(),
+                        ConfigBundleSwitcher.setBundleState(bundleSwitcherEntities.get(i).getBundleKey(),
                                 bundleSwitcherEntities.get(i).isOpen());
                     }
                 }
@@ -153,29 +153,29 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
 
     @Override
     public void autoLogin() {
-        if (!RouterBundleSwitcher.isBundleOpen(RouterBundleKey.LOGIN_BUNDLE_KEY)) {
+        if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.LOGIN_BUNDLE_KEY)) {
             if (isUiAlive()) {
                 goWelcomeActivity();
             }
         }
-        RouterManager.getInstance(RouterBundleKey.LOGIN_BUNDLE_KEY)
-                .callOpCommand(BaseApplication.mCurResumedActivity, RouterCommand.LOGIN_autoLogin,
-                        null, new IRouterCallback() {
-                            @Override
-                            public void onSuccess(Bundle responseBundle) {
-                                if (isUiAlive()) {
-                                    goWelcomeActivity();
-                                }
-                            }
+        RouterManager.getLoginRouter().callOpCommand(BaseApplication.mCurResumedActivity,
+                RouterLoginCommand.autoLogin,
+                null, new IRouterCallback() {
+                    @Override
+                    public void onSuccess(Bundle responseBundle) {
+                        if (isUiAlive()) {
+                            goWelcomeActivity();
+                        }
+                    }
 
-                            @Override
-                            public boolean onFail(String errorInfo) {
-                                if (isUiAlive()) {
-                                    goWelcomeActivity();
-                                }
-                                return true;
-                            }
-                        });
+                    @Override
+                    public boolean onFail(String errorInfo) {
+                        if (isUiAlive()) {
+                            goWelcomeActivity();
+                        }
+                        return true;
+                    }
+                });
     }
 
     private void goWelcomeActivity() {

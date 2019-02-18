@@ -5,5 +5,5 @@ package com.pine.router.command;
  */
 
 public interface RouterMvcCommand {
-    String MVC_goMvcHomeActivity = "goMvcHomeActivity";
+    String goMvcHomeActivity = "goMvcHomeActivity";
 }

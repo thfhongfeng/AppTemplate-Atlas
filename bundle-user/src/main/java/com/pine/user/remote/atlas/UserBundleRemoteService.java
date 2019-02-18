@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pine.router.annotation.RouterAnnotation;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterUserCommand;
 import com.pine.tool.util.AppUtils;
 import com.pine.user.ui.activity.UserHomeActivity;
 
@@ -14,7 +14,7 @@ import com.pine.user.ui.activity.UserHomeActivity;
 
 public class UserBundleRemoteService {
 
-    @RouterAnnotation(CommandName = RouterCommand.USER_goUserHomeActivity)
+    @RouterAnnotation(CommandName = RouterUserCommand.goUserHomeActivity)
     public Bundle goUserCenterActivity(Bundle args) {
         Bundle responseBundle = new Bundle();
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), UserHomeActivity.class);

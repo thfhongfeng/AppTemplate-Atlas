@@ -8,7 +8,7 @@ import com.pine.base.access.UiAccessAnnotation;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.router.IRouterCallback;
-import com.pine.router.command.RouterCommand;
+import com.pine.router.command.RouterLoginCommand;
 import com.pine.router.manager.RouterManager;
 import com.pine.user.R;
 import com.pine.user.contract.IUserHomeContract;
@@ -39,8 +39,8 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
         logout_btn_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RouterManager.getLoginManager().callOpCommand(UserHomeActivity.this,
-                        RouterCommand.LOGIN_logout, null, new IRouterCallback() {
+                RouterManager.getLoginRouter().callOpCommand(UserHomeActivity.this,
+                        RouterLoginCommand.logout, null, new IRouterCallback() {
                             @Override
                             public void onSuccess(Bundle responseBundle) {
                                 finish();

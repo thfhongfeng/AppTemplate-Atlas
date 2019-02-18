@@ -5,7 +5,7 @@ package com.pine.router.command;
  */
 
 public interface RouterLoginCommand {
-    String LOGIN_goLoginActivity = "goLoginActivity";
-    String LOGIN_autoLogin = "autoLogin";
-    String LOGIN_logout = "logout";
+    String goLoginActivity = "goLoginActivity";
+    String autoLogin = "autoLogin";
+    String logout = "logout";
 }

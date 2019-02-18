@@ -14,6 +14,7 @@
       <module fileurl="file://$PROJECT_DIR$/bundle-login/bundle-login.iml" filepath="$PROJECT_DIR$/bundle-login/bundle-login.iml" />
       <module fileurl="file://$PROJECT_DIR$/bundle-main/bundle-main.iml" filepath="$PROJECT_DIR$/bundle-main/bundle-main.iml" />
       <module fileurl="file://$PROJECT_DIR$/bundle-user/bundle-user.iml" filepath="$PROJECT_DIR$/bundle-user/bundle-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/config/config.iml" filepath="$PROJECT_DIR$/config/config.iml" />
       <module fileurl="file://$PROJECT_DIR$/router/router.iml" filepath="$PROJECT_DIR$/router/router.iml" />
       <module fileurl="file://$PROJECT_DIR$/tool/tool.iml" filepath="$PROJECT_DIR$/tool/tool.iml" />
     </modules>

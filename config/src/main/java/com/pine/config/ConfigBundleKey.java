@@ -1,10 +1,10 @@
-package com.pine.router;
+package com.pine.config;
 
 /**
  * Created by tanghongfeng on 2018/9/13
  */
 
-public interface RouterBundleKey {
+public interface ConfigBundleKey {
     String LOGIN_BUNDLE_KEY = "login_bundle";
     String MAIN_BUNDLE_KEY = "main_bundle";
     String USER_BUNDLE_KEY = "user_bundle";

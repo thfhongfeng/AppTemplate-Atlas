@@ -1,5 +1,7 @@
 package com.pine.welcome.ui.activity;
 
+import android.widget.TextView;
+
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.welcome.R;
 import com.pine.welcome.contract.IWelcomeContract;
@@ -15,7 +17,6 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
 
     @Override
     protected void findViewOnCreate() {
-
     }
 
     @Override

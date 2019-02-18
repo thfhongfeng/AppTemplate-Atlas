@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion build_versions.compileSdkVersion
+    buildToolsVersion build_versions.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion build_versions.minSdkVersion
+        targetSdkVersion build_versions.targetSdkVersion
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
+
+        buildConfigField "String", "APPLICATION_PACKAGE", "\"${build_versions.applicationId}\""
+        buildConfigField "String", "APP_NAME", "\"${build_versions.app_name}\""
+
+        buildConfigField "String", "BASE_URL", "\"${build_url.base_url}\""
+        buildConfigField "String", "WEI_BO_REDIRECT_URL", "\"${build_url.wei_bo_secret_key}\""
+
+        buildConfigField "String", "QQ_FOR_APP_ID", "\"${build_app_key.qq_for_app_id}\""
+        buildConfigField "String", "WX_FOR_APP_ID", "\"${build_app_key.wx_for_app_id}\""
+        buildConfigField "String", "WX_SECRET_KEY", "\"${build_app_key.wx_secret_key}\""
+        buildConfigField "String", "WEI_BO_FOR_APP_KEY", "\"${build_app_key.wei_bo_for_app_key}\""
+        buildConfigField "String", "WEI_BO_SECRET_KEY", "\"${build_app_key.wei_bo_secret_key}\""
+
+        buildConfigField "String", "APP_THIRD_ROUTER_PROVIDER", "\"${app_third_sdk_provider.router_provider}\""
+        buildConfigField "String", "APP_THIRD_MAP_PROVIDER", "\"${app_third_sdk_provider.map_provider}\""
+        buildConfigField "String", "APP_THIRD_IMAGE_LOADER_PROVIDER", "\"${app_third_sdk_provider.image_loader_provider}\""
+        buildConfigField "String", "APP_THIRD_HTTP_REQUEST_PROVIDER", "\"${app_third_sdk_provider.http_request_provider}\""
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            switch ("${build_versions.applicationId}"){
+                case "com.pine.project1":
+                    java.srcDirs += ['src/project1/java']
+                    res.srcDirs += ['src/project1/res']
+                    break
+                default:
+                    java.srcDirs += ['src/default/java']
+                    res.srcDirs += ['src/default/res']
+                    break
+            }
+        }
+    }
+
+    resourcePrefix "config_"
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // 测试 dependency begin
+    androidTestCompile(build_dependency["test_espresso_core"], {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile build_dependency["test_junit"]
+    // 测试 dependency end
+
+    // android官方 dependency begin
+    compile build_dependency["appcompat_v7"]
+    // android官方 dependency end
+
+    // 公共工具模块 begin
+    compile project(':tool')
+    // 公共工具模块 end
+}

@@ -1,7 +1,7 @@
 package com.pine.base.http;
 
-import com.pine.base.BuildConfig;
 import com.pine.base.http.nohttp.NoHttpRequestManager;
+import com.pine.config.BuildConfig;
 
 /**
  * Created by tanghongfeng on 2018/9/16
