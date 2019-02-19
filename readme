@@ -1,32 +1,81 @@
 atlas官方文档地址：https://alibaba.github.io/atlas/
 atlas的demo的github地址：https://github.com/alibaba/atlas/tree/master/atlas-demo
 
-模块说明：
+
+模块说明，从下到上：
 1. tool模块为公共模块，与项目和业务无关，主要是一些通用的工具类和控件类。
-2. router模块为路由模块，用于bundle模块间的通信。
-3. base模块为主体基础模块，该模块放置了所有项目和业务通用基础库（与项目相关，但不与具体业务模块相关）。
-4. app为构建模块，主要用于项目初始化，构建和打包，与具体业务无关。
+2. config模块为配置模块，该模块与config.gradle中的配置项相配合， 主要进行项目的配置，比如：项目常量设置，项目模块开关及业务功能开关等。
+3. router模块为路由模块，用于bundle模块间的通信。
+4. base模块为主体基础模块，该模块放置了所有项目和业务通用基础库（与项目相关，但不与具体业务相关）。
 5. app-welcome为入口模块，用于App入口界面的启动。主要包括loading界面（app初始数据的获取：例如版本更新情况等）和welcome界面。
-6. bundle-business-xxx为"xxx"业务模块。
-7. xxx-lib-yyy为 "xxx"模块对应的lib库"yyy"。
+6. app为构建模块，主要用于项目初始化，构建和打包，与具体业务无关。
+以上为项目必不可少的模块，为项目的主体模块。
+7. bundle-xxx为常用基础业务模块，包括：bundle-main, bundle-login, bundle-user
+8. bundle-business-xxx为"xxx"具体业务模块。
+9. xxx-lib-yyy为 "xxx"模块对应的lib库"yyy"。
+
+
+模块多渠道配置说明：
+由于atlas不能进行多渠道配置，本项目通过config.gradle中配置的applicationId字段对渠道进行区分。
+需要渠道化的模块（有差异化的模块）通过修改sourceSets，根据不同的applicationId在编译的时候编译不同的客制化文件夹。
+模块有多渠道差异化需求的才进行多渠道客制化，否则不用进行多渠道配置客制化。
+具体多渠道客制化步骤：
+1. 在src下建立default和其它不同渠道对应的文件夹。
+2. 在config.gradle中配置default和其它不同渠道对应的build_versions的applicationId及相关配置项。
+3. 修改sourceSets，根据配置的applicationId指向不同的渠道文件夹
+sourceSets {
+        main {
+            switch ("${build_versions.applicationId}"){
+                case "com.pine.project1":
+                    java.srcDirs += ['src/project1/java']
+                    res.srcDirs += ['src/project1/res']
+                    break
+                default:
+                    java.srcDirs += ['src/default/java']
+                    res.srcDirs += ['src/default/res']
+                    break
+            }
+        }
+4. 将模块中渠道有差异化的实现代码写在default文件夹中。
+5. 拷贝default文件中的内容到各个渠道中，根据不同渠道的差异化需求在相对应的渠道文件夹中进行差异化修改。
+渠道化文件说明：
+main---模块主体源文件夹。所有渠道共有。
+default---默认渠道源文件夹，一般是差异化功能的全部默认实现。
+projectXxx---各客制化渠道源文件夹，对应不同渠道。为default的拷贝，并在此基础上进行自己渠道的客制化。
+
+
+base模块文件夹说明：
+ui---基本Activity和fragment封装。
+util---项目相关而具体业务无关的工具集合，此工具集合与tool模块的工具的主要区分依据是：是否与项目有关。
+       tool中的工具类要求严格做到与项目无关，是语言与数据处理级别的。
+widget---项目相关而具体业务无关的自定义小控件集合。与tool模块的区分依据同util文件夹。
+component---各种实用组件封装。
+permission---EasyPermission的进一步封装，已在基础ui中封装使用。
+http---http请求封装。
+list---列表的封装。
+architecture---编码架构封装：mvc，mvp，mvvm。
+access---准入条件封装，已在基础ui中封装使用。
+bean、exception---实体类及异常类集合。
+
 
 
 编码规范：
-1. 推荐所有业务模块使用MVP架构模式。
-2. bundle业务模块所有的资源必须以bundle名小写开头，例如login模块的xxx资源必须写为"login_xxx"。
-3. bundle业务模块所有的类必须以bundle名首字母大写开头，例如login模块的类Xxx必须写为"LoginXxx"。
-4. 所有bundle间的通信必须要统一采用router进行。如何新增模块通信（结合atlas的通信方式说明文档来理解）：
+1. bundle业务模块所有的资源必须以bundle名小写开头，例如login模块的xxx资源必须写为"login_xxx"。
+2. bundle业务模块所有的类必须以bundle名首字母大写开头，例如login模块的类Xxx必须写为"LoginXxx"。
+3. 所有bundle间的通信必须要统一使用router模块进行。如何新增模块通信（结合atlas的通信方式说明文档来理解）：
    a. 各自模块中的manifest文件中添加meta-data（可参考已有模块和atlas的通信方式说明文档）。
    b. 各自模块中编写XxxBundleRemote（可参考已有模块，基本内容都差不多）和XxxBundleRemoteService类（通信方法写在该类中，使用注解方式）。
-   c. router模块中继承IRouterManager编写各自模块的通信管理类（可参考已有模块，基本内容都差不多）。
-   d. 模块间通信使用方式：
-      RouterFactory.getXxxBundleManager().callYyCommand(Activity activity, final String commandName, final Bundle args, final IRouterCallback callback);
-5. 所有业务模块必须使用atlas的gradle插件进行构建。
-6. 编码时特别是编写公共类库时，请确认该类库的共性：
+   c. router模块中继承IRouterManager或者AtlasRouterManager编写各自模块的通信管理类（可参考已有模块，基本内容都差不多），编写通信命令常量类RouterXxxCommand。
+   d. AtlasRouterManagerFactory类中添加新模块的通信管理类的获取方法。
+   e. RouterManager类中添加新模块的atlas通信管理类的获取方法。
+   f. 模块间通信使用方式：
+     RouterManager.getXxxRouter().callYyCommand(Activity activity, final String commandName, final Bundle args, final IRouterCallback callback);
+4. 所有业务模块必须使用atlas的gradle插件进行构建。
+5. 编码时特别是编写公共类库时，请确认该类库的共性：
    a. 有项目共性，与具体业务无关的统一放在base模块中。
    b. 无项目共性，与业务无关的的统一放在tool模块中。
-7. 业务的Constants常量类请统一继承base模块的BaseConstants类。
-8. 业务的UrlConstants常量类统一继承base模块的UrlConstants类。
+6. 业务的Constants常量类请统一继承base模块的BaseConstants类。
+7. 业务的UrlConstants常量类统一继承base模块的UrlConstants类。
 
 
 注意事项：

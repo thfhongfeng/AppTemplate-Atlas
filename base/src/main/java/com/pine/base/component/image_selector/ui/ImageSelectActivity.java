@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pine.base.R;
-import com.pine.base.architecture.mvc.activity.BaseMvcActionBarTextMenuActivity;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.component.image_selector.ImageSelector;
 import com.pine.base.component.image_selector.ImageViewer;
@@ -32,6 +31,7 @@ import com.pine.base.component.image_selector.OnBackPressedListener;
 import com.pine.base.component.image_selector.bean.ImageFolderBean;
 import com.pine.base.component.image_selector.bean.ImageItemBean;
 import com.pine.base.permission.PermissionsAnnotation;
+import com.pine.base.ui.BaseActionBarTextMenuActivity;
 import com.pine.tool.util.LogUtils;
 
 import java.io.File;
@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @PermissionsAnnotation(Permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE})
-public class ImageSelectActivity extends BaseMvcActionBarTextMenuActivity {
+public class ImageSelectActivity extends BaseActionBarTextMenuActivity {
     public static final int DEFAULT_MAX_IMAGE_COUNT = 5;
     private static final int TAKE_PICTURE = 520;
     private static final int PREVIEW_PICTURE = 521;

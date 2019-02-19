@@ -1,6 +1,6 @@
 package com.pine.welcome.ui.activity;
 
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.welcome.R;
@@ -21,6 +21,7 @@ public class WelcomeActivity extends BaseMvpNoActionBarActivity<IWelcomeContract
 
     @Override
     protected void init() {
+        Toast.makeText(this, "这是default的客制化", Toast.LENGTH_SHORT).show();
         mPresenter.goMainHomeActivity();
     }
 }

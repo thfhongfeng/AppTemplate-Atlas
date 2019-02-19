@@ -43,7 +43,7 @@ public class ShareManager {
 
     public void init(Context context) {
         initTencent(BuildConfig.QQ_FOR_APP_ID, BuildConfig.WX_FOR_APP_ID, BuildConfig.WX_SECRET_KEY,
-                R.mipmap.config_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
+                R.mipmap.base_ic_launcher, BuildConfig.APPLICATION_ID, BuildConfig.BASE_URL);
         initSina(context, BuildConfig.WEI_BO_FOR_APP_KEY, BuildConfig.WEI_BO_REDIRECT_URL);
     }
 

@@ -7,6 +7,7 @@ build_versions.buildToolsVersion = "27.0.3"
 build_versions.minSdkVersion = 21
 build_versions.targetSdkVersion = 27
 
+// 多渠道配置：默认渠道
 build_versions.storeFile = "../template.jks"
 build_versions.storePassword = "pine123"
 build_versions.keyAlias = "AppTemplate"
@@ -17,6 +18,7 @@ build_versions.versionName = "1.0.1"
 build_versions.apk_head_name = "pine_app_template"
 build_versions.app_name = "App模板"
 
+//// 多渠道配置：project1渠道
 //build_versions.storeFile = "../project1.jks"
 //build_versions.storePassword = "pine123"
 //build_versions.keyAlias = "AppProject1"

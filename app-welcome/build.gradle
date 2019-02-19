@@ -20,6 +20,21 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            switch ("${build_versions.applicationId}") {
+                case "com.pine.project1":
+                    java.srcDirs += ['src/project1/java']
+                    res.srcDirs += ['src/project1/res']
+                    break
+                default:
+                    java.srcDirs += ['src/default/java']
+                    res.srcDirs += ['src/default/res']
+                    break
+            }
+        }
+    }
+
     resourcePrefix "wel_"
 }
 

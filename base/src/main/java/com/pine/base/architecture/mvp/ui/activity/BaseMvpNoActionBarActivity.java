@@ -1,9 +1,7 @@
 package com.pine.base.architecture.mvp.ui.activity;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OnKeyboardListener;

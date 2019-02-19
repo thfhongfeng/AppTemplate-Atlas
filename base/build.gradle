@@ -29,6 +29,16 @@ android {
                     'src/main/res/layout/dialog',
                     'src/main/res/layout/item'
             ]
+            switch ("${build_versions.applicationId}"){
+                case "com.pine.project1":
+                    java.srcDirs += ['src/project1/java']
+                    res.srcDirs += ['src/project1/res']
+                    break
+                default:
+                    java.srcDirs += ['src/default/java']
+                    res.srcDirs += ['src/default/res']
+                    break
+            }
             jniLibs.srcDir 'libs'
             jni.srcDirs = []    //disable automatic ndk-build
         }
