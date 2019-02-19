@@ -15,35 +15,6 @@ atlas的demo的github地址：https://github.com/alibaba/atlas/tree/master/atlas
 9. xxx-lib-yyy为 "xxx"模块对应的lib库"yyy"。
 
 
-模块多渠道配置说明：
-由于atlas不能进行多渠道配置，本项目通过config.gradle中配置的applicationId字段对渠道进行区分。
-需要渠道化的模块（有差异化的模块）通过修改sourceSets，根据不同的applicationId在编译的时候编译不同的客制化文件夹。
-模块有多渠道差异化需求的才进行多渠道客制化，否则不用进行多渠道配置客制化。
-具体多渠道客制化步骤：
-1. 在src下建立default和其它不同渠道对应的文件夹。
-2. 在config.gradle中配置default和其它不同渠道对应的build_versions的applicationId及相关配置项。
-3. 修改sourceSets，根据配置的applicationId指向不同的渠道文件夹
-sourceSets {
-        main {
-            switch ("${build_versions.applicationId}"){
-                case "com.pine.project1":
-                    java.srcDirs += ['src/project1/java']
-                    res.srcDirs += ['src/project1/res']
-                    break
-                default:
-                    java.srcDirs += ['src/default/java']
-                    res.srcDirs += ['src/default/res']
-                    break
-            }
-        }
-4. 将模块中渠道有差异化的实现代码写在default文件夹中。
-5. 拷贝default文件中的内容到各个渠道中，根据不同渠道的差异化需求在相对应的渠道文件夹中进行差异化修改。
-渠道化文件说明：
-main---模块主体源文件夹。所有渠道共有。
-default---默认渠道源文件夹，一般是差异化功能的全部默认实现。
-projectXxx---各客制化渠道源文件夹，对应不同渠道。为default的拷贝，并在此基础上进行自己渠道的客制化。
-
-
 base模块文件夹说明：
 ui---基本Activity和fragment封装。
 util---项目相关而具体业务无关的工具集合，此工具集合与tool模块的工具的主要区分依据是：是否与项目有关。
@@ -56,6 +27,36 @@ list---列表的封装。
 architecture---编码架构封装：mvc，mvp，mvvm。
 access---准入条件封装，已在基础ui中封装使用。
 bean、exception---实体类及异常类集合。
+
+
+模块多渠道配置说明：
+由于atlas不能进行多渠道配置，本项目通过config.gradle中配置的applicationId字段对渠道进行区分。
+需要渠道化的模块（有差异化的模块）通过修改sourceSets，根据不同的applicationId在编译的时候编译不同的客制化文件夹。
+模块有多渠道差异化需求的才进行多渠道客制化，否则不用进行多渠道客制化的配置。
+具体多渠道客制化步骤：
+1. 在src下建立default和其它不同渠道对应的文件夹。
+2. 在config.gradle中配置default和其它不同渠道对应的build_versions的applicationId及相关配置项。
+3. 修改sourceSets，根据配置的applicationId指向不同的渠道文件夹
+sourceSets {
+        main {
+            switch ("${build_versions.applicationId}") {
+                case "com.pine.project1":
+                    java.srcDirs += ['src/project1/java']
+                    res.srcDirs += ['src/project1/res']
+                    break
+                default:
+                    java.srcDirs += ['src/default/java']
+                    res.srcDirs += ['src/default/res']
+                    break
+            }
+        }
+    }
+4. 将模块中渠道有差异化的实现代码写在default文件夹中。
+5. 拷贝default文件中的内容到各个渠道中，根据不同渠道的差异化需求在相对应的渠道文件夹中进行差异化修改。
+渠道化文件夹说明：
+main---模块主体源文件夹。所有渠道共有。
+default---默认渠道源文件夹，一般是差异化功能的全部默认实现。
+projectXxx---各客制化渠道源文件夹，对应不同渠道。为default的拷贝，并在此基础上进行自己渠道的客制化。
 
 
 
