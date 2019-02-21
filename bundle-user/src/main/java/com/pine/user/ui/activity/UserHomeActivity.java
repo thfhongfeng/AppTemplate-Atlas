@@ -9,7 +9,7 @@ import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
 import com.pine.router.IRouterCallback;
 import com.pine.router.command.RouterLoginCommand;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 import com.pine.user.R;
 import com.pine.user.contract.IUserHomeContract;
 import com.pine.user.presenter.UserHomePresenter;
@@ -47,7 +47,7 @@ public class UserHomeActivity extends BaseMvpNoActionBarActivity<IUserHomeContra
                             }
 
                             @Override
-                            public boolean onFail(String errorInfo) {
+                            public boolean onFail(int failCode, String errorInfo) {
                                 return false;
                             }
                         });

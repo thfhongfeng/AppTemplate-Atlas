@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.bean.InputParamBean;
 import com.pine.login.LoginConstants;
@@ -30,6 +31,9 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
 
     @Override
     public void login() {
+        if (BaseApplication.isLogin()) {
+            return;
+        }
         InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
         InputParamBean<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
         if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||

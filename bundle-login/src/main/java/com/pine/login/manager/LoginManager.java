@@ -33,10 +33,7 @@ public class LoginManager {
     private static Map<String, HttpRequestBean> mNoAuthRequestMap = new HashMap<String, HttpRequestBean>();
 
     // 登录
-    public static boolean login(String mobile, String password, Callback callback) {
-        if (BaseApplication.isLogin()) {
-            return false;
-        }
+    public static void login(String mobile, String password, Callback callback) {
         String securityPwd = SecurityUtils.generateMD5(password);
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
@@ -46,29 +43,21 @@ public class LoginManager {
         mPassword = securityPwd;
 
         HttpRequestManager.clearCookie();
-        return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
+        HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.LOGIN_CODE, new LoginCallback(callback));
     }
 
     // 退出登录
-    public static boolean logout() {
+    public static void logout() {
         HttpRequestManager.clearCookie();
         clearLoginInfo();
         BaseApplication.setLogin(false);
-        return HttpRequestManager.setJsonRequest(mLogoutUrl, new HashMap<String, String>(), TAG,
+        HttpRequestManager.setJsonRequest(mLogoutUrl, new HashMap<String, String>(), TAG,
                 LoginCallback.LOGOUT_CODE, new LoginCallback());
     }
 
     // 自动登录
-    public static boolean autoLogin(Callback callback) {
-        if (BaseApplication.isLogin()) {
-            return false;
-        }
-        String mobile = SharePreferenceUtils.readStringFromCache(LoginConstants.LOGIN_MOBILE, "");
-        String password = SharePreferenceUtils.readStringFromCache(LoginConstants.LOGIN_PASSWORD, "");
-        if (mobile.length() == 0 || password.length() == 0) {
-            return false;
-        }
+    public static void autoLogin(String mobile, String password, Callback callback) {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginConstants.LOGIN_MOBILE, mobile);
         params.put(LoginConstants.LOGIN_PASSWORD, password);
@@ -77,7 +66,7 @@ public class LoginManager {
         mPassword = password;
 
         HttpRequestManager.clearCookie();
-        return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
+        HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.AUTO_LOGIN_CODE, new LoginCallback(callback));
     }
 

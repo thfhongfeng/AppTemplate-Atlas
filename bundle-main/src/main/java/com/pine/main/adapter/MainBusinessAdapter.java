@@ -14,7 +14,7 @@ import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
 import com.pine.main.R;
 import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.router.IRouterCallback;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 
 /**
  * Created by tanghongfeng on 2019/1/16
@@ -64,7 +64,7 @@ public class MainBusinessAdapter extends BaseNoPaginationListAdapter {
                                 }
 
                                 @Override
-                                public boolean onFail(String errorInfo) {
+                                public boolean onFail(int failCode, String errorInfo) {
                                     return false;
                                 }
                             });

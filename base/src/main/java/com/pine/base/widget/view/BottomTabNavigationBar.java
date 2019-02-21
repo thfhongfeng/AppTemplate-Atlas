@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.pine.base.R;
 import com.pine.router.command.RouterMainCommand;
 import com.pine.router.command.RouterUserCommand;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 
 /**
  * Created by tanghongfeng on 2018/9/13

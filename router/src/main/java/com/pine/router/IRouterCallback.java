@@ -13,5 +13,5 @@ public interface IRouterCallback {
      * @param errorInfo
      * @return true-跳过默认处理，只执行用户的处理；false-不跳过默认处理，先执行默认处理，再执行用户的处理
      */
-    boolean onFail(String errorInfo);
+    boolean onFail(int code, String errorInfo);
 }

@@ -1,4 +1,4 @@
-package com.pine.router.manager.atlas;
+package com.pine.router.impl.atlas.manager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,7 @@ import com.pine.config.switcher.ConfigBundleSwitcher;
 import com.pine.router.IRouterCallback;
 import com.pine.router.R;
 import com.pine.router.RouterConstants;
-import com.pine.router.manager.IRouterManager;
+import com.pine.router.impl.IRouterManager;
 import com.pine.tool.util.LogUtils;
 
 import static com.pine.router.RouterConstants.TYPE_DATA_COMMAND;
@@ -25,25 +25,22 @@ import static com.pine.router.RouterConstants.TYPE_UI_COMMAND;
  */
 
 public abstract class AtlasRouterManager implements IRouterManager {
-    protected final int FAIL_CODE_NULL_INTENT = 1;
-    protected final int FAIL_CODE_BUNDLE_NOT_OPEN = 2;
-    protected final int FAIL_CODE_REQUEST_FAIL = 3;
-    protected final int FAIL_CODE_REMOTE_FAIL = 4;
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
 
     private void callCommand(final String commandType, final Activity activity, final String commandName,
                              final Bundle args, final IRouterCallback callback) {
         if (getRemoteIntent() == null) {
             LogUtils.releaseLog(TAG, "this intent of " + ConfigBundleKey.USER_BUNDLE_KEY + " is null");
-            if (callback != null && !callback.onFail("intent is null")) {
-                onCommandFail(commandType, activity, FAIL_CODE_NULL_INTENT, "");
+            if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_INVALID, "intent is null")) {
+                onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_INVALID, "");
             }
             return;
         }
         if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.USER_BUNDLE_KEY)) {
             LogUtils.releaseLog(TAG, ConfigBundleKey.USER_BUNDLE_KEY + " is not opened");
-            if (callback != null && !callback.onFail(activity.getString(R.string.router_bundle_not_open))) {
-                onCommandFail(commandType, activity, FAIL_CODE_BUNDLE_NOT_OPEN, activity.getString(R.string.router_bundle_not_open));
+            if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_INVALID,
+                    activity.getString(R.string.router_bundle_not_open))) {
+                onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_INVALID, activity.getString(R.string.router_bundle_not_open));
             }
             return;
         }
@@ -61,9 +58,10 @@ public abstract class AtlasRouterManager implements IRouterManager {
                                             callback.onSuccess(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY));
                                             break;
                                         default:
-                                            if (!callback.onFail(bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
-                                                    .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY))) {
-                                                onCommandFail(commandType, activity, FAIL_CODE_REMOTE_FAIL,
+                                            if (!callback.onFail(IRouterManager.FAIL_CODE_ERROR,
+                                                    bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
+                                                            .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY))) {
+                                                onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_ERROR,
                                                         bundle.getBundle(RouterConstants.REMOTE_CALL_RESULT_KEY)
                                                                 .getString(RouterConstants.REMOTE_CALL_FAIL_MESSAGE_KEY));
                                             }
@@ -77,8 +75,8 @@ public abstract class AtlasRouterManager implements IRouterManager {
                     @Override
                     public void onFailed(String errorInfo) {
                         LogUtils.releaseLog(TAG, "request " + ConfigBundleKey.USER_BUNDLE_KEY + " onFailed");
-                        if (callback != null && !callback.onFail(errorInfo)) {
-                            onCommandFail(commandType, activity, FAIL_CODE_REQUEST_FAIL, errorInfo);
+                        if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_LOST, errorInfo)) {
+                            onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_LOST, errorInfo);
                         }
                     }
                 });

@@ -1,8 +1,8 @@
-package com.pine.router.manager;
+package com.pine.router.impl;
 
 import com.pine.config.BuildConfig;
 import com.pine.config.ConfigBundleKey;
-import com.pine.router.manager.atlas.AtlasRouterManagerFactory;
+import com.pine.router.impl.atlas.AtlasRouterManagerFactory;
 
 /**
  * Created by tanghongfeng on 2018/9/12

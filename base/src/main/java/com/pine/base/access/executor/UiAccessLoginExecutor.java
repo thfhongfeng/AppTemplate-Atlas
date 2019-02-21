@@ -9,7 +9,7 @@ import com.pine.base.BaseApplication;
 import com.pine.base.access.IUiAccessExecutor;
 import com.pine.router.IRouterCallback;
 import com.pine.router.command.RouterLoginCommand;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 
 /**
  * Created by tanghongfeng on 2018/9/16
@@ -41,7 +41,7 @@ public class UiAccessLoginExecutor implements IUiAccessExecutor {
                             }
 
                             @Override
-                            public boolean onFail(String errorInfo) {
+                            public boolean onFail(int failCode, String errorInfo) {
                                 if (activity != null && !activity.isFinishing()) {
                                     activity.finish();
                                 }

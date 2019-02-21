@@ -1,4 +1,4 @@
-package com.pine.router.manager.atlas;
+package com.pine.router.impl.atlas.manager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,17 +9,17 @@ import android.widget.Toast;
  * Created by tanghongfeng on 2018/9/12
  */
 
-public class AtlasRouterMainManager extends AtlasRouterManager {
-    private static volatile AtlasRouterMainManager mInstance;
+public class AtlasRouterBusinessDemoManager extends AtlasRouterManager {
+    private static volatile AtlasRouterBusinessDemoManager mInstance;
 
-    private AtlasRouterMainManager() {
+    private AtlasRouterBusinessDemoManager() {
     }
 
-    public static AtlasRouterMainManager getInstance() {
+    public static AtlasRouterBusinessDemoManager getInstance() {
         if (mInstance == null) {
-            synchronized (AtlasRouterMainManager.class) {
+            synchronized (AtlasRouterBusinessDemoManager.class) {
                 if (mInstance == null) {
-                    mInstance = new AtlasRouterMainManager();
+                    mInstance = new AtlasRouterBusinessDemoManager();
                 }
             }
         }
@@ -28,7 +28,7 @@ public class AtlasRouterMainManager extends AtlasRouterManager {
 
     @Override
     protected Intent getRemoteIntent() {
-        return new Intent("atlas.transaction.intent.action.main.MainBundleRemoteAction");
+        return new Intent("atlas.transaction.intent.action.business.DemoBundleRemoteAction");
     }
 
     @Override

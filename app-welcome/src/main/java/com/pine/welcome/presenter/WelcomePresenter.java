@@ -7,7 +7,7 @@ import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.router.IRouterCallback;
 import com.pine.router.command.RouterMainCommand;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.contract.IWelcomeContract;
 
@@ -46,7 +46,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
                             }
 
                             @Override
-                            public boolean onFail(String errorInfo) {
+                            public boolean onFail(int failCode, String errorInfo) {
                                 return false;
                             }
                         });

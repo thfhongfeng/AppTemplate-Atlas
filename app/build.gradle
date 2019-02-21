@@ -129,13 +129,13 @@ dependencies {
     compile build_dependency["constraint_layout"]
     // android官方 dependency end
 
-    // 第三方 dependency begin
-    // 第三方 dependency end
-
     // 主体基础模块 begin
     compile project(':base')
-    compile project(':app-welcome')
     // 主体基础模块 end
+
+    // 入口模块 begin
+    compile project(':app-welcome')
+    // 入口模块 end
 
     // atlas配置 begin
     compile(build_dependency["atlas_core"]) {
@@ -143,7 +143,6 @@ dependencies {
     }
     // bundle模块 begin
     bundleCompile project(':bundle-login')
-
     bundleCompile project(':bundle-main')
     bundleCompile project(':bundle-user')
 

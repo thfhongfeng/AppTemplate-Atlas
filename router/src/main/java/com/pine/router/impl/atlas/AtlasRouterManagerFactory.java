@@ -1,7 +1,14 @@
-package com.pine.router.manager.atlas;
+package com.pine.router.impl.atlas;
 
 import com.pine.config.ConfigBundleKey;
-import com.pine.router.manager.IRouterManager;
+import com.pine.router.impl.IRouterManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterBusinessDemoManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterBusinessMvcManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterBusinessMvpManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterBusinessMvvmManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterLoginManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterMainManager;
+import com.pine.router.impl.atlas.manager.AtlasRouterUserManager;
 
 /**
  * Created by tanghongfeng on 2019/1/14

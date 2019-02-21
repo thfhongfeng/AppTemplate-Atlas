@@ -18,7 +18,7 @@ import com.pine.config.ConfigBundleKey;
 import com.pine.config.switcher.ConfigBundleSwitcher;
 import com.pine.router.IRouterCallback;
 import com.pine.router.command.RouterLoginCommand;
-import com.pine.router.manager.RouterManager;
+import com.pine.router.impl.RouterManager;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.R;
 import com.pine.welcome.bean.BundleSwitcherEntity;
@@ -153,10 +153,12 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
 
     @Override
     public void autoLogin() {
-        if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.LOGIN_BUNDLE_KEY)) {
+        if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.LOGIN_BUNDLE_KEY) ||
+                BaseApplication.isLogin()) {
             if (isUiAlive()) {
                 goWelcomeActivity();
             }
+            return;
         }
         RouterManager.getLoginRouter().callOpCommand(BaseApplication.mCurResumedActivity,
                 RouterLoginCommand.autoLogin,
@@ -169,7 +171,7 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
                     }
 
                     @Override
-                    public boolean onFail(String errorInfo) {
+                    public boolean onFail(int failCode, String errorInfo) {
                         if (isUiAlive()) {
                             goWelcomeActivity();
                         }
