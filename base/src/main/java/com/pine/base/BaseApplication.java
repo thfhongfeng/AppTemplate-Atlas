@@ -12,6 +12,7 @@ import com.pine.base.access.executor.UiAccessLoginExecutor;
 import com.pine.base.access.executor.UiAccessVipLevelExecutor;
 import com.pine.base.component.share.manager.ShareManager;
 import com.pine.base.http.HttpRequestManager;
+import com.pine.router.RouterApplication;
 import com.pine.tool.util.LogUtils;
 
 /**
@@ -34,6 +35,8 @@ public class BaseApplication {
 
     public static void init(Application application) {
         mApplication = application;
+
+        RouterApplication.init(application);
 
         registerActivity();
 

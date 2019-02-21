@@ -26,6 +26,7 @@ public class AppUtils {
     }
 
     /**
+     * 检测当前应用是否是Debug版本
      * 在AndroidManifest.xml中最好不设置android:debuggable属性置，而是由打包方式来决定其值.
      *
      * @param context
@@ -257,21 +258,6 @@ public class AppUtils {
      */
     public static int getSDKVersion() {
         return android.os.Build.VERSION.SDK_INT;
-    }
-
-    /**
-     * 检测当前应用是否是Debug版本
-     *
-     * @param ctx 上下文
-     * @return 是否是Debug版本
-     */
-    public static boolean isDebuggable(Context ctx) {
-        try {
-            ApplicationInfo info = ctx.getApplicationInfo();
-            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        } catch (Exception e) {
-        }
-        return false;
     }
 
     /**

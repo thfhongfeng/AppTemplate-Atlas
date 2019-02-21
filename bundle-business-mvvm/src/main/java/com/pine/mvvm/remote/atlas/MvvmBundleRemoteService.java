@@ -16,7 +16,7 @@ public class MvvmBundleRemoteService {
     @RouterAnnotation(CommandName = RouterMvvmCommand.goMvvmHomeActivity)
     public Bundle goBusinessHomeActivity(Bundle args) {
         Bundle responseBundle = new Bundle();
-        Toast.makeText(BaseApplication.mCurResumedActivity, "暂无内容", Toast.LENGTH_SHORT);
+        Toast.makeText(BaseApplication.mCurResumedActivity, "暂无内容", Toast.LENGTH_SHORT).show();
         return responseBundle;
     }
 }

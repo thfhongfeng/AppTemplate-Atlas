@@ -32,7 +32,7 @@ public class TemplateApplication extends Application {
             builder.detectFileUriExposure();
         }
 
-        LogUtils.setDebuggable(AppUtils.isDebuggable(this));
+        LogUtils.setDebuggable(AppUtils.isApkDebuggable(this));
 
         Atlas.getInstance().addBundleListener(new BundleListener() {
             @Override
