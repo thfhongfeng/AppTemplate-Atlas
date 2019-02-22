@@ -23,8 +23,11 @@ import java.util.Map;
  */
 
 public class LoginManager {
+    public static final int MAX_PER_RE_LOGIN_COUNT = 3;
+    public static final int MAX_TOTAL_RE_LOGIN_COUNT = 50;
     private final static String TAG = LogUtils.makeLogTag(LoginManager.class);
-    public static int mReLoginCount = 0;
+    public static int mPerReLoginCount = 0;
+    public static int mTotalReLoginCount = 0;
     public static volatile boolean mIsReLoginProcessing = false;
     private static String mLoginUrl = LoginUrlConstants.Login;
     private static String mLogoutUrl = LoginUrlConstants.Logout;
@@ -88,13 +91,18 @@ public class LoginManager {
         mPassword = password;
 
         HttpRequestManager.clearCookie();
-        mReLoginCount++;
-        mIsReLoginProcessing = true;
-        return HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
+        boolean sendSuccess = HttpRequestManager.setJsonRequest(mLoginUrl, params, TAG,
                 LoginCallback.RE_LOGIN_CODE, new LoginCallback(null));
+        if (sendSuccess) {
+            mPerReLoginCount++;
+            mTotalReLoginCount++;
+            mIsReLoginProcessing = true;
+        }
+        return sendSuccess;
     }
 
     public static void saveLoginInfo(JSONObject jsonObject) {
+        mPerReLoginCount = 0;
         SharePreferenceUtils.saveToCache(LoginConstants.LOGIN_MOBILE, mMobile);
         SharePreferenceUtils.saveToCache(LoginConstants.LOGIN_PASSWORD, mPassword);
     }
