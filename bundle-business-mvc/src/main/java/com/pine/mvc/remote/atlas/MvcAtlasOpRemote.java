@@ -1,9 +1,9 @@
-package com.pine.demo.remote.atlas;
+package com.pine.mvc.remote.atlas;
 
 import android.os.Bundle;
 import android.taobao.atlas.remote.IRemote;
 
-import com.pine.demo.remote.DemoRemoteService;
+import com.pine.mvc.remote.MvcOpRemoteService;
 import com.pine.router.impl.atlas.AtlasRouterBundleRemote;
 
 import java.lang.reflect.Method;
@@ -12,12 +12,13 @@ import java.lang.reflect.Method;
  * Created by tanghongfeng on 2018/9/12
  */
 
-public class DemoBundleRemote extends AtlasRouterBundleRemote<DemoRemoteService> implements IRemote {
-    private static DemoRemoteService mRemoteService;
+public class MvcAtlasOpRemote extends AtlasRouterBundleRemote<MvcOpRemoteService> implements IRemote {
+
+    private static MvcOpRemoteService mRemoteService;
     private static Method[] mMethods;
 
     static {
-        mRemoteService = new DemoRemoteService();
+        mRemoteService = new MvcOpRemoteService();
         Class clazz = mRemoteService.getClass();
         mMethods = clazz.getMethods();
     }

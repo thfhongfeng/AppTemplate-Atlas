@@ -29,7 +29,7 @@ public abstract class AtlasRouterManager implements IRouterManager {
 
     private void callCommand(final String commandType, final Activity activity, final String commandName,
                              final Bundle args, final IRouterCallback callback) {
-        if (getRemoteIntent() == null) {
+        if (getRemoteIntent(commandType) == null) {
             LogUtils.releaseLog(TAG, "this intent of " + ConfigBundleKey.USER_BUNDLE_KEY + " is null");
             if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_INVALID, "intent is null")) {
                 onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_INVALID, "");
@@ -44,7 +44,7 @@ public abstract class AtlasRouterManager implements IRouterManager {
             }
             return;
         }
-        RemoteFactory.requestRemote(RemoteTransactor.class, activity, getRemoteIntent(),
+        RemoteFactory.requestRemote(RemoteTransactor.class, activity, getRemoteIntent(commandType),
                 new RemoteFactory.OnRemoteStateListener<RemoteTransactor>() {
 
                     @Override
@@ -100,7 +100,7 @@ public abstract class AtlasRouterManager implements IRouterManager {
         callCommand(TYPE_OP_COMMAND, activity, commandName, args, callback);
     }
 
-    protected abstract Intent getRemoteIntent();
+    protected abstract Intent getRemoteIntent(String commandType);
 
     protected abstract void onCommandFail(String commandType, Context context, int failCode, String message);
 }

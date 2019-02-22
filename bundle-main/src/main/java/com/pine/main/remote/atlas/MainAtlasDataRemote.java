@@ -3,7 +3,7 @@ package com.pine.main.remote.atlas;
 import android.os.Bundle;
 import android.taobao.atlas.remote.IRemote;
 
-import com.pine.main.remote.MainRemoteService;
+import com.pine.main.remote.MainDataRemoteService;
 import com.pine.router.impl.atlas.AtlasRouterBundleRemote;
 
 import java.lang.reflect.Method;
@@ -12,13 +12,13 @@ import java.lang.reflect.Method;
  * Created by tanghongfeng on 2018/9/12
  */
 
-public class MainBundleRemote extends AtlasRouterBundleRemote<MainRemoteService> implements IRemote {
+public class MainAtlasDataRemote extends AtlasRouterBundleRemote<MainDataRemoteService> implements IRemote {
 
-    private static MainRemoteService mRemoteService;
+    private static MainDataRemoteService mRemoteService;
     private static Method[] mMethods;
 
     static {
-        mRemoteService = new MainRemoteService();
+        mRemoteService = new MainDataRemoteService();
         Class clazz = mRemoteService.getClass();
         mMethods = clazz.getMethods();
     }

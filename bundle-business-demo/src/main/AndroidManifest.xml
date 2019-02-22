@@ -20,8 +20,14 @@
 
         <!-- atlas remote router begin -->
         <meta-data
-            android:name="atlas.transaction.intent.action.business.DemoBundleRemoteAction"
-            android:value="com.pine.demo.remote.atlas.DemoBundleRemote" />
+            android:name="atlas.transaction.intent.action.business.DemoUiRemoteAction"
+            android:value="com.pine.demo.remote.atlas.DemoAtlasUiRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.DemoDataRemoteAction"
+            android:value="com.pine.demo.remote.atlas.DemoAtlasDataRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.DemoOpRemoteAction"
+            android:value="com.pine.demo.remote.atlas.DemoAtlasOpRemote" />
         <!-- atlas remote router end -->
     </application>
 </manifest>

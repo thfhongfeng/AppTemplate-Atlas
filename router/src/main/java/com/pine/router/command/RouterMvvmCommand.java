@@ -5,5 +5,13 @@ package com.pine.router.command;
  */
 
 public interface RouterMvvmCommand {
+    // Ui command begin
     String goMvvmHomeActivity = "goMvpHomeActivity";
+    // Ui command end
+
+    // Data command begin
+    // Data command end
+
+    // Op command begin
+    // Op command end
 }

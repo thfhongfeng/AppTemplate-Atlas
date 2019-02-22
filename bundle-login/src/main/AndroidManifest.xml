@@ -18,8 +18,14 @@
 
         <!-- atlas remote router begin -->
         <meta-data
-            android:name="atlas.transaction.intent.action.login.LoginBundleRemoteAction"
-            android:value="com.pine.login.remote.atlas.LoginBundleRemote" />
+            android:name="atlas.transaction.intent.action.login.LoginUiRemoteAction"
+            android:value="com.pine.login.remote.atlas.LoginAtlasUiRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.login.LoginDataRemoteAction"
+            android:value="com.pine.login.remote.atlas.LoginAtlasDataRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.login.LoginOpRemoteAction"
+            android:value="com.pine.login.remote.atlas.LoginAtlasOpRemote" />
         <!-- atlas remote router end -->
     </application>
 

@@ -3,7 +3,7 @@ package com.pine.login.remote.atlas;
 import android.os.Bundle;
 import android.taobao.atlas.remote.IRemote;
 
-import com.pine.login.remote.LoginRemoteService;
+import com.pine.login.remote.LoginOpRemoteService;
 import com.pine.router.impl.atlas.AtlasRouterBundleRemote;
 
 import java.lang.reflect.Method;
@@ -12,13 +12,13 @@ import java.lang.reflect.Method;
  * Created by tanghongfeng on 2018/9/12
  */
 
-public class LoginBundleRemote extends AtlasRouterBundleRemote<LoginRemoteService> implements IRemote {
+public class LoginAtlasOpRemote extends AtlasRouterBundleRemote<LoginOpRemoteService> implements IRemote {
 
-    private static LoginRemoteService mRemoteService;
+    private static LoginOpRemoteService mRemoteService;
     private static Method[] mMethods;
 
     static {
-        mRemoteService = new LoginRemoteService();
+        mRemoteService = new LoginOpRemoteService();
         Class clazz = mRemoteService.getClass();
         mMethods = clazz.getMethods();
     }

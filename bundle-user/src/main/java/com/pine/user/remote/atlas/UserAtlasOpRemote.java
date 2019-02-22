@@ -1,10 +1,10 @@
-package com.pine.mvvm.remote.atlas;
+package com.pine.user.remote.atlas;
 
 import android.os.Bundle;
 import android.taobao.atlas.remote.IRemote;
 
-import com.pine.mvvm.remote.MvvmRemoteService;
 import com.pine.router.impl.atlas.AtlasRouterBundleRemote;
+import com.pine.user.remote.UserOpRemoteService;
 
 import java.lang.reflect.Method;
 
@@ -12,13 +12,13 @@ import java.lang.reflect.Method;
  * Created by tanghongfeng on 2018/9/12
  */
 
-public class MvvmBundleRemote extends AtlasRouterBundleRemote<MvvmRemoteService> implements IRemote {
+public class UserAtlasOpRemote extends AtlasRouterBundleRemote<UserOpRemoteService> implements IRemote {
 
-    private static MvvmRemoteService mRemoteService;
+    private static UserOpRemoteService mRemoteService;
     private static Method[] mMethods;
 
     static {
-        mRemoteService = new MvvmRemoteService();
+        mRemoteService = new UserOpRemoteService();
         Class clazz = mRemoteService.getClass();
         mMethods = clazz.getMethods();
     }

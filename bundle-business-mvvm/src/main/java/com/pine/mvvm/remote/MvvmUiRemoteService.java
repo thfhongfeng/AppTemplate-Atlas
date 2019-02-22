@@ -13,7 +13,7 @@ import com.pine.router.command.RouterMvvmCommand;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class MvvmRemoteService {
+public class MvvmUiRemoteService {
 
     @RouterAnnotation(CommandName = RouterMvvmCommand.goMvvmHomeActivity)
     public void goBusinessHomeActivity(Bundle args, @NonNull final IServiceCallback callback) {

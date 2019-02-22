@@ -48,8 +48,14 @@
 
         <!-- atlas remote router begin -->
         <meta-data
-            android:name="atlas.transaction.intent.action.business.MvpBundleRemoteAction"
-            android:value="com.pine.mvp.remote.atlas.MvpBundleRemote" />
+            android:name="atlas.transaction.intent.action.business.MvpUiRemoteAction"
+            android:value="com.pine.mvp.remote.atlas.MvpAtlasUiRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.MvpDataRemoteAction"
+            android:value="com.pine.mvp.remote.atlas.MvpAtlasDataRemote" />
+        <meta-data
+            android:name="atlas.transaction.intent.action.business.MvpOpRemoteAction"
+            android:value="com.pine.mvp.remote.atlas.MvpAtlasOpRemote" />
         <!-- atlas remote router end -->
     </application>
 

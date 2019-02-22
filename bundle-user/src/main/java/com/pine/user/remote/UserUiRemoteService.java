@@ -14,7 +14,7 @@ import com.pine.user.ui.activity.UserHomeActivity;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class UserRemoteService {
+public class UserUiRemoteService {
 
     @RouterAnnotation(CommandName = RouterUserCommand.goUserHomeActivity)
     public void goUserCenterActivity(Bundle args, @NonNull final IServiceCallback callback) {

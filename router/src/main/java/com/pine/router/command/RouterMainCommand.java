@@ -5,5 +5,13 @@ package com.pine.router.command;
  */
 
 public interface RouterMainCommand {
+    // Ui command begin
     String goMainHomeActivity = "goMainHomeActivity";
+    // Ui command end
+
+    // Data command begin
+    // Data command end
+
+    // Op command begin
+    // Op command end
 }
