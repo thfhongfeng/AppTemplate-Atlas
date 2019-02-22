@@ -6,6 +6,7 @@ import android.taobao.atlas.remote.IRemoteTransactor;
 import com.pine.router.IServiceCallback;
 import com.pine.router.RouterConstants;
 import com.pine.router.annotation.RouterAnnotation;
+import com.pine.tool.util.LogUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,6 +16,8 @@ import java.lang.reflect.Method;
  */
 
 public abstract class AtlasRouterBundleRemote<T> {
+    protected final String TAG = LogUtils.makeLogTag(this.getClass());
+
     protected Bundle call(T t, Method[] methods, String commandName,
                           Bundle args, final IRemoteTransactor.IResponse callback) {
         for (int i = 0; i < methods.length; i++) {

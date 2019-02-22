@@ -64,7 +64,8 @@ public class BundleSwitcherModel {
         String res = "{success:true,code:200,message:'',data:" +
                 "[{bundleKey:'login_bundle', open:true},{bundleKey:'main_bundle', open:true}," +
                 "{bundleKey:'user_bundle', open:true},{bundleKey:'business_mvc_bundle', open:true}," +
-                "{bundleKey:'business_mvp_bundle', open:true}]}";
+                "{bundleKey:'business_mvp_bundle', open:true},{bundleKey:'business_mvvm_bundle', open:true}," +
+                "{bundleKey:'business_demo_bundle', open:true}]}";
         try {
             return new JSONObject(res);
         } catch (JSONException e) {

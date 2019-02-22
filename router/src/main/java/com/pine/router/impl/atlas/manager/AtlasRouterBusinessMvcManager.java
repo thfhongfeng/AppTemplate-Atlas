@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.pine.config.ConfigBundleKey;
+
 import static com.pine.router.RouterConstants.TYPE_DATA_COMMAND;
 import static com.pine.router.RouterConstants.TYPE_OP_COMMAND;
 import static com.pine.router.RouterConstants.TYPE_UI_COMMAND;
@@ -28,6 +30,11 @@ public class AtlasRouterBusinessMvcManager extends AtlasRouterManager {
             }
         }
         return mInstance;
+    }
+
+    @Override
+    public String getBundleKey() {
+        return ConfigBundleKey.BUSINESS_MVC_BUNDLE_KEY;
     }
 
     @Override

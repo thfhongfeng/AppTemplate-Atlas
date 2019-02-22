@@ -8,7 +8,6 @@ import android.taobao.atlas.remote.IRemoteTransactor;
 import android.taobao.atlas.remote.RemoteFactory;
 import android.taobao.atlas.remote.transactor.RemoteTransactor;
 
-import com.pine.config.ConfigBundleKey;
 import com.pine.config.switcher.ConfigBundleSwitcher;
 import com.pine.router.IRouterCallback;
 import com.pine.router.R;
@@ -30,14 +29,14 @@ public abstract class AtlasRouterManager implements IRouterManager {
     private void callCommand(final String commandType, final Activity activity, final String commandName,
                              final Bundle args, final IRouterCallback callback) {
         if (getRemoteIntent(commandType) == null) {
-            LogUtils.releaseLog(TAG, "this intent of " + ConfigBundleKey.USER_BUNDLE_KEY + " is null");
+            LogUtils.releaseLog(TAG, "this intent of " + getBundleKey() + " is null");
             if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_INVALID, "intent is null")) {
                 onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_INVALID, "");
             }
             return;
         }
-        if (!ConfigBundleSwitcher.isBundleOpen(ConfigBundleKey.USER_BUNDLE_KEY)) {
-            LogUtils.releaseLog(TAG, ConfigBundleKey.USER_BUNDLE_KEY + " is not opened");
+        if (!ConfigBundleSwitcher.isBundleOpen(getBundleKey())) {
+            LogUtils.releaseLog(TAG, getBundleKey() + " is not opened");
             if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_INVALID,
                     activity.getString(R.string.router_bundle_not_open))) {
                 onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_INVALID, activity.getString(R.string.router_bundle_not_open));
@@ -74,7 +73,7 @@ public abstract class AtlasRouterManager implements IRouterManager {
 
                     @Override
                     public void onFailed(String errorInfo) {
-                        LogUtils.releaseLog(TAG, "request " + ConfigBundleKey.USER_BUNDLE_KEY + " onFailed");
+                        LogUtils.releaseLog(TAG, "request " + getBundleKey() + " onFailed");
                         if (callback != null && !callback.onFail(IRouterManager.FAIL_CODE_LOST, errorInfo)) {
                             onCommandFail(commandType, activity, IRouterManager.FAIL_CODE_LOST, errorInfo);
                         }
@@ -99,6 +98,8 @@ public abstract class AtlasRouterManager implements IRouterManager {
                               final Bundle args, final IRouterCallback callback) {
         callCommand(TYPE_OP_COMMAND, activity, commandName, args, callback);
     }
+
+    public abstract String getBundleKey();
 
     protected abstract Intent getRemoteIntent(String commandType);
 

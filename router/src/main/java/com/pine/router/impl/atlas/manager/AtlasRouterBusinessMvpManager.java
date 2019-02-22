@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.pine.config.ConfigBundleKey;
+
 import static com.pine.router.RouterConstants.TYPE_DATA_COMMAND;
 import static com.pine.router.RouterConstants.TYPE_OP_COMMAND;
 import static com.pine.router.RouterConstants.TYPE_UI_COMMAND;
@@ -41,6 +43,11 @@ public class AtlasRouterBusinessMvpManager extends AtlasRouterManager {
                 return new Intent("atlas.transaction.intent.action.business.MvpOpRemoteAction");
         }
         return null;
+    }
+
+    @Override
+    public String getBundleKey() {
+        return ConfigBundleKey.BUSINESS_MVP_BUNDLE_KEY;
     }
 
     @Override
