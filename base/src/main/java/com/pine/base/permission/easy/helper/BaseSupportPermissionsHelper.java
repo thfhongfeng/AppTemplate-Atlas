@@ -1,4 +1,4 @@
-package com.pine.base.permission.helper;
+package com.pine.base.permission.easy.helper;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
-import com.pine.base.permission.RationaleDialogFragmentCompat;
+import com.pine.base.permission.easy.RationaleDialogFragmentCompat;
 
 /**
  * Implementation of {@link PermissionHelper} for Support Library host classes.

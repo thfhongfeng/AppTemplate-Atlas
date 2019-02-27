@@ -1,11 +1,11 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 
-import com.pine.base.permission.helper.PermissionHelper;
+import com.pine.base.permission.easy.helper.PermissionHelper;
 
 import java.util.Arrays;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,7 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.pine.base.permission.helper.PermissionHelper;
+import com.pine.base.permission.easy.helper.PermissionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -183,7 +183,8 @@ public class EasyPermissions {
 
             // If 100% successful, call annotated methods
             if (!granted.isEmpty() && denied.isEmpty()) {
-                runAnnotatedMethods(object, requestCode);
+//                runAnnotatedMethods(object, requestCode);
+                ((PermissionCallbacks) object).onAllPermissionGranted(requestCode);
             }
         }
     }
@@ -346,6 +347,8 @@ public class EasyPermissions {
         void onPermissionsGranted(int requestCode, @NonNull List<String> perms);
 
         void onPermissionsDenied(int requestCode, @NonNull List<String> perms);
+
+        void onAllPermissionGranted(int requestCode);
     }
 
     /**

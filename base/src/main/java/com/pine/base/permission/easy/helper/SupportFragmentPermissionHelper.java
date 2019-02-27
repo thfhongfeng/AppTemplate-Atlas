@@ -1,4 +1,4 @@
-package com.pine.base.permission.helper;
+package com.pine.base.permission.easy.helper;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

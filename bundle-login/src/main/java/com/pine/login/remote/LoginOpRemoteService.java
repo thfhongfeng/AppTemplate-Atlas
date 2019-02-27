@@ -1,5 +1,6 @@
 package com.pine.login.remote;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -18,7 +19,7 @@ import com.pine.tool.util.SharePreferenceUtils;
 public class LoginOpRemoteService {
 
     @RouterAnnotation(CommandName = RouterLoginCommand.autoLogin)
-    public void autoLogin(Bundle args, @NonNull final IServiceCallback callback) {
+    public void autoLogin(@NonNull Activity activity, Bundle args, @NonNull final IServiceCallback callback) {
         final Bundle responseBundle = new Bundle();
         if (BaseApplication.isLogin()) {
             responseBundle.putBoolean("success", true);
@@ -46,7 +47,7 @@ public class LoginOpRemoteService {
     }
 
     @RouterAnnotation(CommandName = RouterLoginCommand.logout)
-    public void logout(Bundle args, @NonNull final IServiceCallback callback) {
+    public void logout(@NonNull Activity activity, Bundle args, @NonNull final IServiceCallback callback) {
         final Bundle responseBundle = new Bundle();
         LoginManager.logout();
         callback.onResponse(responseBundle);

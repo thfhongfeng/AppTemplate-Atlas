@@ -1,4 +1,4 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,16 +16,20 @@ import android.support.v7.app.AppCompatActivity;
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public class AppSettingsDialogHolderActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
     public static final String REQUEST_PERMISSIONS_KEY = "request_permission_key";
+    public static final String REQUEST_CODE_KEY = "request_code_key";
     private static final int APP_SETTINGS_RC = 7534;
     private AlertDialog mDialog;
     private int mIntentFlags;
+    private int mRequestCode;
     private String[] mPermissions;
 
     public static Intent createShowDialogIntent(Context context, AppSettingsDialog dialog,
+                                                int requestCode,
                                                 @NonNull String... permissions) {
         Intent intent = new Intent(context, AppSettingsDialogHolderActivity.class);
         intent.putExtra(AppSettingsDialog.EXTRA_APP_SETTINGS, dialog);
         intent.putExtra(REQUEST_PERMISSIONS_KEY, permissions);
+        intent.putExtra(REQUEST_CODE_KEY, requestCode);
         return intent;
     }
 
@@ -35,6 +39,7 @@ public class AppSettingsDialogHolderActivity extends AppCompatActivity implement
         AppSettingsDialog appSettingsDialog = AppSettingsDialog.fromIntent(getIntent(), this);
         mIntentFlags = appSettingsDialog.getIntentFlags();
         mDialog = appSettingsDialog.showDialog(this, this);
+        mRequestCode = getIntent().getIntExtra(REQUEST_CODE_KEY, -1);
         mPermissions = getIntent().getStringArrayExtra(REQUEST_PERMISSIONS_KEY);
     }
 
@@ -55,6 +60,7 @@ public class AppSettingsDialogHolderActivity extends AppCompatActivity implement
             startActivityForResult(intent, APP_SETTINGS_RC);
         } else if (which == Dialog.BUTTON_NEGATIVE) {
             Intent data = new Intent();
+            data.putExtra(REQUEST_CODE_KEY, mRequestCode);
             data.putExtra(REQUEST_PERMISSIONS_KEY, mPermissions);
             setResult(Activity.RESULT_CANCELED, data);
             finish();
@@ -70,6 +76,7 @@ public class AppSettingsDialogHolderActivity extends AppCompatActivity implement
             data = new Intent();
         }
         data.putExtra(REQUEST_PERMISSIONS_KEY, mPermissions);
+        data.putExtra(REQUEST_CODE_KEY, mRequestCode);
         setResult(resultCode, data);
         finish();
     }

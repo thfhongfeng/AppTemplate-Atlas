@@ -1,36 +1,38 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.StyleRes;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatDialogFragment;
 
 /**
- * {@link AppCompatDialogFragment} to display rationale for permission requests when the request
- * comes from a Fragment or Activity that can host a Fragment.
+ * {@link DialogFragment} to display rationale for permission requests when the request comes from
+ * a Fragment or Activity that can host a Fragment.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class RationaleDialogFragmentCompat extends AppCompatDialogFragment {
+public class RationaleDialogFragment extends DialogFragment {
 
-    public static final String TAG = "RationaleDialogFragmentCompat";
+    public static final String TAG = "RationaleDialogFragment";
 
     private EasyPermissions.PermissionCallbacks mPermissionCallbacks;
     private EasyPermissions.RationaleCallbacks mRationaleCallbacks;
+    private boolean mStateSaved = false;
 
-    public static RationaleDialogFragmentCompat newInstance(
-            @NonNull String rationaleMsg,
+    public static RationaleDialogFragment newInstance(
             @NonNull String positiveButton,
             @NonNull String negativeButton,
+            @NonNull String rationaleMsg,
             @StyleRes int theme,
             int requestCode,
             @NonNull String[] permissions) {
 
         // Create new Fragment
-        RationaleDialogFragmentCompat dialogFragment = new RationaleDialogFragmentCompat();
+        RationaleDialogFragment dialogFragment = new RationaleDialogFragment();
 
         // Initialize configuration as arguments
         RationaleDialogConfig config = new RationaleDialogConfig(
@@ -40,28 +42,17 @@ public class RationaleDialogFragmentCompat extends AppCompatDialogFragment {
         return dialogFragment;
     }
 
-    /**
-     * Version of {@link #show(FragmentManager, String)} that no-ops when an IllegalStateException
-     * would otherwise occur.
-     */
-    public void showAllowingStateLoss(FragmentManager manager, String tag) {
-        if (manager.isStateSaved()) {
-            return;
-        }
-
-        show(manager, tag);
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (getParentFragment() != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && getParentFragment() != null) {
             if (getParentFragment() instanceof EasyPermissions.PermissionCallbacks) {
                 mPermissionCallbacks = (EasyPermissions.PermissionCallbacks) getParentFragment();
             }
             if (getParentFragment() instanceof EasyPermissions.RationaleCallbacks) {
                 mRationaleCallbacks = (EasyPermissions.RationaleCallbacks) getParentFragment();
             }
+
         }
 
         if (context instanceof EasyPermissions.PermissionCallbacks) {
@@ -74,10 +65,34 @@ public class RationaleDialogFragmentCompat extends AppCompatDialogFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        mStateSaved = true;
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Version of {@link #show(FragmentManager, String)} that no-ops when an IllegalStateException
+     * would otherwise occur.
+     */
+    public void showAllowingStateLoss(FragmentManager manager, String tag) {
+        // API 26 added this convenient method
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (manager.isStateSaved()) {
+                return;
+            }
+        }
+
+        if (mStateSaved) {
+            return;
+        }
+
+        show(manager, tag);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mPermissionCallbacks = null;
-        mRationaleCallbacks = null;
     }
 
     @NonNull
@@ -92,6 +107,7 @@ public class RationaleDialogFragmentCompat extends AppCompatDialogFragment {
                 new RationaleDialogClickListener(this, config, mPermissionCallbacks, mRationaleCallbacks);
 
         // Create an AlertDialog
-        return config.createSupportDialog(getContext(), clickListener);
+        return config.createFrameworkDialog(getActivity(), clickListener);
     }
+
 }

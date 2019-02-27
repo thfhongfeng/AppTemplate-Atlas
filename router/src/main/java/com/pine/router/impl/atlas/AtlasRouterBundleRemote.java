@@ -1,5 +1,6 @@
 package com.pine.router.impl.atlas;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.taobao.atlas.remote.IRemoteTransactor;
 
@@ -18,7 +19,7 @@ import java.lang.reflect.Method;
 public abstract class AtlasRouterBundleRemote<T> {
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
 
-    protected Bundle call(T t, Method[] methods, String commandName,
+    protected Bundle call(T t, Method[] methods, Activity activity, String commandName,
                           Bundle args, final IRemoteTransactor.IResponse callback) {
         for (int i = 0; i < methods.length; i++) {
             RouterAnnotation annotation = methods[i].getAnnotation(RouterAnnotation.class);
@@ -27,7 +28,7 @@ public abstract class AtlasRouterBundleRemote<T> {
                 final Bundle responseBundle = new Bundle();
                 try {
                     responseBundle.putString(RouterConstants.REMOTE_CALL_STATE_KEY, RouterConstants.ON_SUCCEED);
-                    methods[i].invoke(t, args, new IServiceCallback() {
+                    methods[i].invoke(t, activity, args, new IServiceCallback() {
                         @Override
                         public void onResponse(Bundle bundle) {
                             if (bundle == null) {

@@ -51,7 +51,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
         <activity
-            android:name=".permission.AppSettingsDialogHolderActivity"
+            android:name=".permission.easy.AppSettingsDialogHolderActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>

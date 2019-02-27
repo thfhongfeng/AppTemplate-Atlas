@@ -2,22 +2,29 @@ package com.pine.base.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 
 import com.pine.base.R;
 import com.pine.base.access.UiAccessManager;
-import com.pine.base.permission.AfterPermissionGranted;
-import com.pine.base.permission.AppSettingsDialog;
-import com.pine.base.permission.AppSettingsDialogHolderActivity;
-import com.pine.base.permission.EasyPermissions;
+import com.pine.base.permission.IPermissionCallback;
+import com.pine.base.permission.PermissionBean;
+import com.pine.base.permission.PermissionTranslate;
 import com.pine.base.permission.PermissionsAnnotation;
+import com.pine.base.permission.easy.AppSettingsDialog;
+import com.pine.base.permission.easy.AppSettingsDialogHolderActivity;
+import com.pine.base.permission.easy.EasyPermissions;
+import com.pine.base.permission.easy.PermissionRequest;
 import com.pine.base.widget.ILifeCircleView;
 import com.pine.tool.util.LogUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +36,12 @@ import java.util.Map;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
-    public final int REQUEST_PERMISSION = 33333;
+    public final int REQUEST_ACCESS_PERMISSION = 33333;
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
     private boolean mUiAccessReady, mPermissionReady;
     private boolean onAllAccessRestrictionReleasedMethodCalled;
     private boolean mPrePause;
+    private HashMap<Integer, PermissionBean> mPermissionRequestMap = new HashMap<>();
     private Map<Integer, ILifeCircleView> mLifeCircleViewMap = new HashMap<>();
 
     @Override
@@ -58,10 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity
             if (permissions != null) {
                 if (!EasyPermissions.hasPermissions(this, permissions)) {
                     mPermissionReady = false;
-                    EasyPermissions.requestPermissions(
-                            this,
-                            getString(R.string.base_rationale_need),
-                            REQUEST_PERMISSION, permissions);
+                    requestPermission(REQUEST_ACCESS_PERMISSION, null, permissions);
                 }
             }
         }
@@ -155,6 +160,9 @@ public abstract class BaseActivity extends AppCompatActivity
         if (mLifeCircleViewMap != null && mLifeCircleViewMap.size() > 0) {
             mLifeCircleViewMap.clear();
         }
+        if (mPermissionRequestMap != null && mPermissionRequestMap.size() > 0) {
+            mPermissionRequestMap.clear();
+        }
         super.onDestroy();
     }
 
@@ -164,13 +172,30 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         LogUtils.d(TAG, "onActivityResult requestCode:" + requestCode +
                 ", resultCode:" + resultCode);
-        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            String[] permissions = data.getStringArrayExtra(AppSettingsDialogHolderActivity.REQUEST_PERMISSIONS_KEY);
-            if (!EasyPermissions.hasPermissions(this, permissions)) {
-                finish();
-            } else {
-                mPermissionReady = true;
-                tryOnAllRestrictionReleased();
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE && data != null) {
+            int permRequestCode = data.getIntExtra(AppSettingsDialogHolderActivity.REQUEST_CODE_KEY, -1);
+            if (permRequestCode != -1) {
+                String[] permissions = data.getStringArrayExtra(AppSettingsDialogHolderActivity.REQUEST_PERMISSIONS_KEY);
+                if (!EasyPermissions.hasPermissions(this, permissions)) {
+                    if (permRequestCode == REQUEST_ACCESS_PERMISSION) {
+                        finish();
+                    } else {
+                        PermissionBean bean = mPermissionRequestMap.get(permRequestCode);
+                        if (bean != null && bean.getCallback() != null) {
+                            List<String> denied = new ArrayList<>();
+                            for (int i = 0; i < permissions.length; i++) {
+                                String perm = permissions[i];
+                                if (ContextCompat.checkSelfPermission(this, perm)
+                                        != PackageManager.PERMISSION_GRANTED) {
+                                    denied.add(perm);
+                                }
+                            }
+                            bean.getCallback().onPermissionsDenied(permRequestCode, denied);
+                        }
+                    }
+                } else {
+                    onAllPermissionGranted(permRequestCode);
+                }
             }
         }
 
@@ -198,40 +223,78 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        LogUtils.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
+        LogUtils.d(TAG, "onPermissionsGranted: requestCode(" + requestCode + "),size:" + perms.size());
+        PermissionBean bean = mPermissionRequestMap.get(requestCode);
+        if (bean != null && bean.getCallback() != null) {
+            bean.getCallback().onPermissionsGranted(requestCode, perms);
+        }
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        LogUtils.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
+        LogUtils.d(TAG, "onPermissionsDenied: requestCode(" + requestCode + "),size:" + perms.size());
         String[] permArr = new String[perms.size()];
         for (int i = 0; i < perms.size(); i++) {
             permArr[i] = perms.get(i);
         }
         // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
         // This will display a dialog directing them to enable the permission in app settings.
+        PermissionBean bean = mPermissionRequestMap.get(requestCode);
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this).build(permArr).show();
+            new AppSettingsDialog.Builder(this)
+                    .setRationale(bean != null && bean.getGoSettingContent() != null ?
+                            bean.getGoSettingContent() : getDefaultGoSettingContent(perms))
+                    .setPermRequestCode(requestCode)
+                    .build(permArr).show();
         } else {
+            if (requestCode == REQUEST_ACCESS_PERMISSION) {
+                finish();
+            } else {
+                if (bean != null && bean.getCallback() != null) {
+                    bean.getCallback().onPermissionsDenied(requestCode, perms);
+                }
+            }
+        }
+    }
+
+    private String getDefaultGoSettingContent(@NonNull List<String> perms) {
+        String rational = "没有授予" + PermissionTranslate.translate(perms) +
+                "等权限，应用可能无法正常运行。请打开应用设置允许相应权限。";
+        return rational;
+    }
+
+    @Override
+    public void onRationaleAccepted(int requestCode) {
+        LogUtils.d(TAG, "onRationaleAccepted: requestCode(" + requestCode + ")");
+        PermissionBean bean = mPermissionRequestMap.get(requestCode);
+        if (bean != null && bean.getCallback() != null) {
+            bean.getCallback().onRationaleAccepted(requestCode);
+        }
+    }
+
+    @Override
+    public void onRationaleDenied(int requestCode) {
+        LogUtils.d(TAG, "onRationaleDenied: requestCode(" + requestCode + ")");
+        PermissionBean bean = mPermissionRequestMap.get(requestCode);
+        if (bean != null && bean.getCallback() != null) {
+            bean.getCallback().onRationaleDenied(requestCode);
+        }
+        if (REQUEST_ACCESS_PERMISSION == requestCode) {
             finish();
         }
     }
 
     @Override
-    public void onRationaleAccepted(int requestCode) {
-        LogUtils.d(TAG, "onRationaleAccepted:" + requestCode);
-    }
-
-    @Override
-    public void onRationaleDenied(int requestCode) {
-        LogUtils.d(TAG, "onRationaleDenied:" + requestCode);
-        finish();
-    }
-
-    @AfterPermissionGranted(REQUEST_PERMISSION)
-    public final void afterAllPermissionGranted() {
-        mPermissionReady = true;
-        tryOnAllRestrictionReleased();
+    public final void onAllPermissionGranted(int requestCode) {
+        LogUtils.d(TAG, "onAllPermissionGranted: requestCode(" + requestCode + ")");
+        PermissionBean bean = mPermissionRequestMap.get(requestCode);
+        if (bean != null && bean.getCallback() != null) {
+            bean.getCallback().onAllPermissionGranted(requestCode);
+        }
+        if (REQUEST_ACCESS_PERMISSION == requestCode) {
+            mPermissionReady = true;
+            tryOnAllRestrictionReleased();
+        }
     }
 
     private void tryOnAllRestrictionReleased() {
@@ -240,6 +303,25 @@ public abstract class BaseActivity extends AppCompatActivity
             onAllAccessRestrictionReleasedMethodCalled = true;
             onAllAccessRestrictionReleased();
         }
+    }
+
+    public void requestPermission(int requestCode, IPermissionCallback callback,
+                                  @Size(min = 1) @NonNull String... perms) {
+        PermissionBean bean = new PermissionBean(requestCode, perms);
+        bean.setRationaleContent(getString(R.string.base_rationale_need));
+        bean.setCallback(callback);
+        requestPermission(bean);
+    }
+
+    public void requestPermission(PermissionBean bean) {
+        EasyPermissions.requestPermissions(
+                new PermissionRequest.Builder(this, bean.getRequestCode(), bean.getPerms())
+                        .setRationale(bean.getRationaleContent())
+                        .setPositiveButtonText(bean.getRationalePositiveBtnText())
+                        .setNegativeButtonText(bean.getRationaleNegativeBtnText())
+                        .setTheme(bean.getRationaleTheme())
+                        .build());
+        mPermissionRequestMap.put(bean.getRequestCode(), bean);
     }
 
     public void attachCircleView(ILifeCircleView view) {

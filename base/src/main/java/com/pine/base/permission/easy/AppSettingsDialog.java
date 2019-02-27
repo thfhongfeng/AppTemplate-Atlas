@@ -1,4 +1,4 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -49,6 +49,7 @@ public class AppSettingsDialog implements Parcelable {
     private final String mPositiveButtonText;
     private final String mNegativeButtonText;
     private final int mRequestCode;
+    private final int mPermRequestCode;
     private final int mIntentFlags;
     private String[] mPermissions;
 
@@ -62,6 +63,7 @@ public class AppSettingsDialog implements Parcelable {
         mPositiveButtonText = in.readString();
         mNegativeButtonText = in.readString();
         mRequestCode = in.readInt();
+        mPermRequestCode = in.readInt();
         mIntentFlags = in.readInt();
     }
 
@@ -72,6 +74,7 @@ public class AppSettingsDialog implements Parcelable {
                               @Nullable String positiveButtonText,
                               @Nullable String negativeButtonText,
                               int requestCode,
+                              int permRequestCode,
                               int intentFlags,
                               @NonNull String... permissions) {
         setActivityOrFragment(activityOrFragment);
@@ -81,6 +84,7 @@ public class AppSettingsDialog implements Parcelable {
         mPositiveButtonText = positiveButtonText;
         mNegativeButtonText = negativeButtonText;
         mRequestCode = requestCode;
+        mPermRequestCode = permRequestCode;
         mIntentFlags = intentFlags;
         mPermissions = permissions;
     }
@@ -115,7 +119,8 @@ public class AppSettingsDialog implements Parcelable {
      * Display the built dialog.
      */
     public void show() {
-        startForResult(AppSettingsDialogHolderActivity.createShowDialogIntent(mContext, this, mPermissions));
+        startForResult(AppSettingsDialogHolderActivity.createShowDialogIntent(mContext,
+                this, mPermRequestCode, mPermissions));
     }
 
     /**
@@ -151,6 +156,7 @@ public class AppSettingsDialog implements Parcelable {
         dest.writeString(mPositiveButtonText);
         dest.writeString(mNegativeButtonText);
         dest.writeInt(mRequestCode);
+        dest.writeInt(mPermRequestCode);
         dest.writeInt(mIntentFlags);
     }
 
@@ -172,6 +178,7 @@ public class AppSettingsDialog implements Parcelable {
         private String mPositiveButtonText;
         private String mNegativeButtonText;
         private int mRequestCode = -1;
+        private int mPermRequestCode = -1;
         private boolean mOpenInNewTask = false;
 
         /**
@@ -295,6 +302,13 @@ public class AppSettingsDialog implements Parcelable {
             return this;
         }
 
+        @NonNull
+        public Builder setPermRequestCode(int perRequestCode) {
+            mPermRequestCode = perRequestCode;
+            return this;
+        }
+
+
         /**
          * Set whether the settings screen should be opened in a separate task. This is achieved by
          * setting {@link android.content.Intent#FLAG_ACTIVITY_NEW_TASK#FLAG_ACTIVITY_NEW_TASK} on
@@ -335,6 +349,7 @@ public class AppSettingsDialog implements Parcelable {
                     mPositiveButtonText,
                     mNegativeButtonText,
                     mRequestCode,
+                    mPermRequestCode,
                     intentFlags,
                     permissions);
         }

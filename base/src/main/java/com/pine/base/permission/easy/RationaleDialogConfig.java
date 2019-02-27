@@ -1,4 +1,4 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Dialog;
 import android.content.Context;

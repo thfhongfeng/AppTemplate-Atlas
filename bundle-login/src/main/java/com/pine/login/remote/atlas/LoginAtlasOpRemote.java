@@ -25,7 +25,7 @@ public class LoginAtlasOpRemote extends AtlasRouterBundleRemote<LoginOpRemoteSer
 
     @Override
     public Bundle call(String commandName, Bundle args, final IResponse callback) {
-        return call(mRemoteService, mMethods, commandName, args, callback);
+        return call(mRemoteService, mMethods, realHost, commandName, args, callback);
     }
 
     @Override

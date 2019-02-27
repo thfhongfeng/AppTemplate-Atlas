@@ -1,4 +1,4 @@
-package com.pine.base.permission.helper;
+package com.pine.base.permission.easy.helper;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,7 +9,7 @@ import android.support.annotation.StyleRes;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.pine.base.permission.RationaleDialogFragment;
+import com.pine.base.permission.easy.RationaleDialogFragment;
 
 /**
  * Permissions helper for {@link Activity}.

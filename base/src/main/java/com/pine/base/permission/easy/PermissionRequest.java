@@ -1,4 +1,4 @@
-package com.pine.base.permission;
+package com.pine.base.permission.easy;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 
 import com.pine.base.R;
-import com.pine.base.permission.helper.PermissionHelper;
+import com.pine.base.permission.easy.helper.PermissionHelper;
 
 import java.util.Arrays;
 
