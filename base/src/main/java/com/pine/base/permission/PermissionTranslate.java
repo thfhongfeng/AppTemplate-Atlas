@@ -2,6 +2,7 @@ package com.pine.base.permission;
 
 import android.Manifest;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
 
 import java.util.List;
 
@@ -11,6 +12,17 @@ import java.util.List;
 
 public class PermissionTranslate {
     public static String translate(@NonNull List<String> perms) {
+        String retStr = "";
+        for (String perm : perms) {
+            retStr += translate(perm) + ",";
+        }
+        if (retStr.length() > 0) {
+            retStr = retStr.substring(0, retStr.length() - 1);
+        }
+        return retStr;
+    }
+
+    public static String translate(@Size(min = 1) @NonNull String... perms) {
         String retStr = "";
         for (String perm : perms) {
             retStr += translate(perm) + ",";

@@ -13,15 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pine.base.R;
 import com.pine.base.access.UiAccessManager;
 import com.pine.base.permission.IPermissionCallback;
 import com.pine.base.permission.PermissionBean;
-import com.pine.base.permission.PermissionTranslate;
+import com.pine.base.permission.PermissionManager;
 import com.pine.base.permission.easy.AppSettingsDialog;
 import com.pine.base.permission.easy.AppSettingsDialogHolderActivity;
 import com.pine.base.permission.easy.EasyPermissions;
-import com.pine.base.permission.easy.PermissionRequest;
 import com.pine.tool.util.LogUtils;
 
 import java.util.ArrayList;
@@ -154,23 +152,11 @@ public abstract class BaseFragment extends Fragment
         // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
         // This will display a dialog directing them to enable the permission in app settings.
         PermissionBean bean = mPermissionRequestMap.get(requestCode);
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this)
-                    .setRationale(bean != null && bean.getGoSettingContent() != null ?
-                            bean.getGoSettingContent() : getDefaultGoSettingContent(perms))
-                    .setPermRequestCode(requestCode)
-                    .build(permArr).show();
-        } else {
+        if (!PermissionManager.showGoAppSettingsDialog(this, requestCode, bean, permArr)) {
             if (bean != null && bean.getCallback() != null) {
                 bean.getCallback().onPermissionsDenied(requestCode, perms);
             }
         }
-    }
-
-    private String getDefaultGoSettingContent(@NonNull List<String> perms) {
-        String rational = "没有授予" + PermissionTranslate.translate(perms) +
-                "等权限，应用可能无法正常运行。请打开应用设置允许相应权限。";
-        return rational;
     }
 
     @Override
@@ -200,23 +186,18 @@ public abstract class BaseFragment extends Fragment
         }
     }
 
+    public @NonNull
+    HashMap<Integer, PermissionBean> getPermissionRequestMap() {
+        return mPermissionRequestMap;
+    }
+
     public void requestPermission(int requestCode, IPermissionCallback callback,
                                   @Size(min = 1) @NonNull String... perms) {
-        PermissionBean bean = new PermissionBean(requestCode, perms);
-        bean.setRationaleContent(getString(R.string.base_rationale_need));
-        bean.setCallback(callback);
-        requestPermission(bean);
+        PermissionManager.requestPermission(this, requestCode, callback, perms);
     }
 
     public void requestPermission(PermissionBean bean) {
-        EasyPermissions.requestPermissions(
-                new PermissionRequest.Builder(this, bean.getRequestCode(), bean.getPerms())
-                        .setRationale(bean.getRationaleContent())
-                        .setPositiveButtonText(bean.getRationalePositiveBtnText())
-                        .setNegativeButtonText(bean.getRationaleNegativeBtnText())
-                        .setTheme(bean.getRationaleTheme())
-                        .build());
-        mPermissionRequestMap.put(bean.getRequestCode(), bean);
+        PermissionManager.requestPermission(this, bean);
     }
 
     public void startLoadingUi() {

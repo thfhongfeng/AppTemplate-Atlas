@@ -11,16 +11,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 
-import com.pine.base.R;
 import com.pine.base.access.UiAccessManager;
 import com.pine.base.permission.IPermissionCallback;
 import com.pine.base.permission.PermissionBean;
+import com.pine.base.permission.PermissionManager;
 import com.pine.base.permission.PermissionTranslate;
 import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.permission.easy.AppSettingsDialog;
 import com.pine.base.permission.easy.AppSettingsDialogHolderActivity;
 import com.pine.base.permission.easy.EasyPermissions;
-import com.pine.base.permission.easy.PermissionRequest;
 import com.pine.base.widget.ILifeCircleView;
 import com.pine.tool.util.LogUtils;
 
@@ -64,7 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity
         if (annotation != null) {
             String[] permissions = annotation.Permissions();
             if (permissions != null) {
-                if (!EasyPermissions.hasPermissions(this, permissions)) {
+                if (!hasPermissions(permissions)) {
                     mPermissionReady = false;
                     requestPermission(REQUEST_ACCESS_PERMISSION, null, permissions);
                 }
@@ -240,13 +239,7 @@ public abstract class BaseActivity extends AppCompatActivity
         // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
         // This will display a dialog directing them to enable the permission in app settings.
         PermissionBean bean = mPermissionRequestMap.get(requestCode);
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this)
-                    .setRationale(bean != null && bean.getGoSettingContent() != null ?
-                            bean.getGoSettingContent() : getDefaultGoSettingContent(perms))
-                    .setPermRequestCode(requestCode)
-                    .build(permArr).show();
-        } else {
+        if (!PermissionManager.showGoAppSettingsDialog(this, requestCode, bean, permArr)) {
             if (requestCode == REQUEST_ACCESS_PERMISSION) {
                 finish();
             } else {
@@ -255,12 +248,6 @@ public abstract class BaseActivity extends AppCompatActivity
                 }
             }
         }
-    }
-
-    private String getDefaultGoSettingContent(@NonNull List<String> perms) {
-        String rational = "没有授予" + PermissionTranslate.translate(perms) +
-                "等权限，应用可能无法正常运行。请打开应用设置允许相应权限。";
-        return rational;
     }
 
     @Override
@@ -305,23 +292,22 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
+    public @NonNull
+    HashMap<Integer, PermissionBean> getPermissionRequestMap() {
+        return mPermissionRequestMap;
+    }
+
+    public boolean hasPermissions(@Size(min = 1) @NonNull String... perms) {
+        return PermissionManager.hasPermissions(this, perms);
+    }
+
     public void requestPermission(int requestCode, IPermissionCallback callback,
                                   @Size(min = 1) @NonNull String... perms) {
-        PermissionBean bean = new PermissionBean(requestCode, perms);
-        bean.setRationaleContent(getString(R.string.base_rationale_need));
-        bean.setCallback(callback);
-        requestPermission(bean);
+        PermissionManager.requestPermission(this, requestCode, callback, perms);
     }
 
     public void requestPermission(PermissionBean bean) {
-        EasyPermissions.requestPermissions(
-                new PermissionRequest.Builder(this, bean.getRequestCode(), bean.getPerms())
-                        .setRationale(bean.getRationaleContent())
-                        .setPositiveButtonText(bean.getRationalePositiveBtnText())
-                        .setNegativeButtonText(bean.getRationaleNegativeBtnText())
-                        .setTheme(bean.getRationaleTheme())
-                        .build());
-        mPermissionRequestMap.put(bean.getRequestCode(), bean);
+        PermissionManager.requestPermission(this, bean);
     }
 
     public void attachCircleView(ILifeCircleView view) {
