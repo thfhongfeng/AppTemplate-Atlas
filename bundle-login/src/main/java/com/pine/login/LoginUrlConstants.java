@@ -10,10 +10,11 @@ public interface LoginUrlConstants extends BaseUrlConstants {
 //    String Login = BASE_URL + "";
 //    String Logout = BASE_URL + "";
 //    String Verify_Code_Image = BASE_URL + "";
+    String Register_Account = BASE_URL + "";
 
     // Test code begin
-    String Login = "http://10.10.96.154:8011/" + "/mobile/login.htm";
-    String Logout = "http://10.10.96.154:8011/" + "/mobile/logout.htm";
-    String Verify_Code_Image = "http://10.10.96.154:8011/" + "/picCode.htm";
+    String Login = "https://yanyangtian.purang.com/" + "/mobile/login.htm";
+    String Logout = "https://yanyangtian.purang.com/" + "/mobile/logout.htm";
+    String Verify_Code_Image = "http://yanyangtian.purang.com/" + "/picCode.htm";
     // Test code end
 }

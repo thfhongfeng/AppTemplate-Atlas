@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,6 @@ import com.pine.base.access.UiAccessManager;
 import com.pine.base.permission.IPermissionCallback;
 import com.pine.base.permission.PermissionBean;
 import com.pine.base.permission.PermissionManager;
-import com.pine.base.permission.PermissionTranslate;
 import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.permission.easy.AppSettingsDialog;
 import com.pine.base.permission.easy.AppSettingsDialogHolderActivity;
@@ -46,8 +46,8 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        beforeInitOnCreate();
-        setContentView();
+        beforeInitOnCreate(savedInstanceState);
+        setContentView(savedInstanceState);
 
         findViewOnCreate();
 
@@ -73,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity
         tryOnAllRestrictionReleased();
     }
 
-    protected void setContentView() {
+    protected void setContentView(Bundle savedInstanceState) {
         setContentView(getActivityLayoutResId());
     }
 
@@ -87,7 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity
     /**
      * onCreate中前置初始化
      */
-    protected void beforeInitOnCreate() {
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
 
     }
 

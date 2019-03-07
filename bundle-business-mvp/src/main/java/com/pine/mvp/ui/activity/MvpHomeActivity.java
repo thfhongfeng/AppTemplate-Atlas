@@ -1,6 +1,8 @@
 package com.pine.mvp.ui.activity;
 
 import android.Manifest;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -24,16 +26,15 @@ import com.pine.tool.widget.ViewPagerTabLayout;
  * Created by tanghongfeng on 2018/9/13
  */
 
-@PermissionsAnnotation(Permissions = {Manifest.permission.READ_CONTACTS,
-        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE})
+@PermissionsAnnotation(Permissions = {Manifest.permission.ACCESS_FINE_LOCATION})
 public class MvpHomeActivity extends BaseMvpActionBarImageMenuActivity<IMvpHomeContract.Ui, MvpHomePresenter>
         implements IMvpHomeContract.Ui {
     private ViewPagerTabLayout view_pager_tab_layout;
     private ViewPager view_pager;
 
     @Override
-    protected void beforeInitOnCreate() {
-        super.beforeInitOnCreate();
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
+        super.beforeInitOnCreate(savedInstanceState);
         setActionBarTag(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
 

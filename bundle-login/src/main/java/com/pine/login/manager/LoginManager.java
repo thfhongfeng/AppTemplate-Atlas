@@ -166,5 +166,7 @@ public class LoginManager {
 
     public interface Callback {
         boolean onLoginResponse(boolean isSuccess, String msg);
+
+        void onCancel();
     }
 }

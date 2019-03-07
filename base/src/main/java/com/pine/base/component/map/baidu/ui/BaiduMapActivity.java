@@ -1,5 +1,6 @@
 package com.pine.base.component.map.baidu.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.pine.base.R;
 import com.pine.base.component.map.MapSdkManager.MapType;
 import com.pine.base.component.map.baidu.location.BdLocationManager;
+import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.ui.BaseActionBarTextMenuActivity;
 import com.pine.tool.util.GPSUtils;
 
@@ -30,6 +32,7 @@ import com.pine.tool.util.GPSUtils;
  * Created by tanghongfeng on 2018/10/31
  */
 
+@PermissionsAnnotation(Permissions = {Manifest.permission.ACCESS_FINE_LOCATION})
 public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements View.OnClickListener {
     private MapView map_view;
     private ImageView location_iv;

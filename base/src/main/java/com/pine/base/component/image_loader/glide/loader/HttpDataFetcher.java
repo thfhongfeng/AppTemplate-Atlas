@@ -14,6 +14,7 @@ import com.bumptech.glide.util.ContentLengthInputStream;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Synthetic;
 import com.pine.base.component.image_loader.IImageDownloadListener;
+import com.pine.tool.util.LogUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,13 +31,12 @@ public class HttpDataFetcher implements DataFetcher<InputStream> {
     @VisibleForTesting
     static final HttpDataFetcher.HttpUrlConnectionFactory DEFAULT_CONNECTION_FACTORY =
             new HttpDataFetcher.DefaultHttpUrlConnectionFactory();
-    private static final String TAG = "HttpDataFetcher";
     private static final int MAXIMUM_REDIRECTS = 5;
     /**
      * Returned when a connection error prevented us from receiving an http error.
      */
     private static final int INVALID_STATUS_CODE = -1;
-
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
     private final GlideUrl glideUrl;
     private final int timeout;
     private final HttpDataFetcher.HttpUrlConnectionFactory connectionFactory;

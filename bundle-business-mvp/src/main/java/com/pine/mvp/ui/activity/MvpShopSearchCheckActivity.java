@@ -144,16 +144,10 @@ public class MvpShopSearchCheckActivity extends
     }
 
     @Override
-    public void setSwipeRefreshLayoutRefresh(boolean processing) {
+    public void setLoadingUiVisibility(boolean processing) {
         if (swipe_refresh_layout == null) {
             return;
         }
-        if (processing) {
-            if (!swipe_refresh_layout.isRefreshing()) {
-                swipe_refresh_layout.setRefreshing(processing);
-            }
-        } else {
-            swipe_refresh_layout.setRefreshing(processing);
-        }
+        swipe_refresh_layout.setRefreshing(processing);
     }
 }

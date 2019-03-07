@@ -1,7 +1,9 @@
 package com.pine.base.architecture.mvp.ui.activity;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
@@ -16,7 +18,7 @@ public abstract class BaseMvpActivity<V extends IBaseContract.Ui, P extends Base
 
     @CallSuper
     @Override
-    protected void beforeInitOnCreate() {
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
         // 创建并绑定presenter
         mPresenter = createPresenter();
         if (mPresenter == null) {
@@ -47,7 +49,7 @@ public abstract class BaseMvpActivity<V extends IBaseContract.Ui, P extends Base
     @Override
     protected final boolean parseIntentData() {
         if (mPresenter != null) {
-            return mPresenter.parseIntentData();
+            return mPresenter.parseInitData(getIntent().getExtras());
         }
         return false;
     }

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.StringRes;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
@@ -16,24 +15,16 @@ import com.pine.base.architecture.mvp.contract.IBaseContract;
 import com.pine.tool.util.LogUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 
 /**
  * Created by tanghongfeng on 2018/9/12
  */
 
 public abstract class BasePresenter<V extends IBaseContract.Ui> {
-    public enum UiState {
-        UI_STATE_UNDEFINE,
-        UI_STATE_ON_CREATE,
-        UI_STATE_ON_START,
-        UI_STATE_ON_RESUME,
-        UI_STATE_ON_PAUSE,
-        UI_STATE_ON_STOP,
-        UI_STATE_ON_DETACH
-    }
-
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
+
+    protected boolean mIsLoadProcessing;
+
     /**
      * UI的弱引用
      */
@@ -130,12 +121,20 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
         }
     }
 
+    public void setUiLoading(boolean uiLoading) {
+        mIsLoadProcessing = uiLoading;
+        if (!isUiAlive()) {
+            return;
+        }
+        getUi().setLoadingUiVisibility(uiLoading);
+    }
+
     /**
      * 用于分析传入参数是否非法
      *
      * @return true表示非法， false表示合法
      */
-    public abstract boolean parseIntentData();
+    public abstract boolean parseInitData(Bundle bundle);
 
     /**
      * UI状态回调
@@ -146,281 +145,36 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
     public abstract void onUiState(BasePresenter.UiState state);
 
     public void showShortToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        if (isUiAlive()) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showShortToast(@StringRes int resId) {
-        Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
+        if (isUiAlive()) {
+            Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showLongToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        if (isUiAlive()) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void showLongToast(@StringRes int resId) {
-        Toast.makeText(getContext(), resId, Toast.LENGTH_LONG).show();
+        if (isUiAlive()) {
+            Toast.makeText(getContext(), resId, Toast.LENGTH_LONG).show();
+        }
     }
 
-    /**
-     * 得到Bundle
-     *
-     * @return
-     */
-    public Bundle getBundleExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getBundleExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getBundle(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getBundle(key);
-            }
-        }
-        return null;
-    }
-
-    public String getStringExtra(String key, String defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                if (TextUtils.isEmpty(((Activity) mUiRef.get()).getIntent().getStringExtra(key))) {
-                    return defaultValue;
-                }
-                return ((Activity) mUiRef.get()).getIntent().getStringExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getString(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getString(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public String[] getStringArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getStringArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getStringArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getStringArray(key);
-            }
-        }
-        return null;
-    }
-
-    public ArrayList<String> getStringArrayListExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getStringArrayListExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getStringArrayList(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getStringArrayList(key);
-            }
-        }
-        return null;
-    }
-
-    public int getIntExtra(String key, int defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getIntExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getInt(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getInt(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public int[] getIntArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getIntArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getIntArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getIntArray(key);
-            }
-        }
-        return null;
-    }
-
-    public ArrayList<Integer> getIntegerArrayListExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getIntegerArrayListExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getIntegerArrayList(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getIntegerArrayList(key);
-            }
-        }
-        return null;
-    }
-
-    public boolean getBooleanExtra(String key, boolean defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getBooleanExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getBoolean(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getBoolean(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public boolean[] getBooleanArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getBooleanArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getBooleanArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getBooleanArray(key);
-            }
-        }
-        return null;
-    }
-
-    public byte getByteExtra(String key, byte defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getByteExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getByte(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getByte(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public byte[] getByteArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getByteArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getByteArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getByteArray(key);
-            }
-        }
-        return null;
-    }
-
-    public char getCharExtra(String key, char defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getCharExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getChar(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getChar(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public char[] getCharArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getCharArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getCharArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getCharArray(key);
-            }
-        }
-        return null;
-    }
-
-    public float getFloatExtra(String key, float defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getFloatExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getFloat(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getFloat(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public float[] getFloatArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getFloatArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getFloatArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getFloatArray(key);
-            }
-        }
-        return null;
-    }
-
-    public double getDoubleExtra(String key, double defaultValue) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getDoubleExtra(key, defaultValue);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((Fragment) mUiRef.get()).getArguments().getDouble(key, defaultValue);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        defaultValue : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getDouble(key, defaultValue);
-            }
-        }
-        return defaultValue;
-    }
-
-    public double[] getDoubleArrayExtra(String key) {
-        if (mUiRef.get() != null) {
-            if (mUiRef.get() instanceof Activity) {
-                return ((Activity) mUiRef.get()).getIntent().getDoubleArrayExtra(key);
-            } else if (mUiRef.get() instanceof Fragment) {
-                return ((Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((Fragment) mUiRef.get()).getArguments().getDoubleArray(key);
-            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
-                return ((android.support.v4.app.Fragment) mUiRef.get()).getArguments() == null ?
-                        null : ((android.support.v4.app.Fragment) mUiRef.get()).getArguments().getDoubleArray(key);
-            }
-        }
-        return null;
+    public enum UiState {
+        UI_STATE_UNDEFINE,
+        UI_STATE_ON_CREATE,
+        UI_STATE_ON_START,
+        UI_STATE_ON_RESUME,
+        UI_STATE_ON_PAUSE,
+        UI_STATE_ON_STOP,
+        UI_STATE_ON_DETACH
     }
 }

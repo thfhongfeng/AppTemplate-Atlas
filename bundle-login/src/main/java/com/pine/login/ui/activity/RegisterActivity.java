@@ -92,10 +92,8 @@ public class RegisterActivity extends
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.verify_code_iv) {
-
-        } else if (v.getId() == R.id.register_btn_tv) {
-
+        if (v.getId() == R.id.register_btn_tv) {
+            mPresenter.register();
         }
     }
 }

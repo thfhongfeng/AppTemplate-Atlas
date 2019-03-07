@@ -1,5 +1,7 @@
 package com.pine.demo;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -22,8 +24,8 @@ public class DemoHomeActivity extends BaseActionBarActivity {
     private DemoAdapter mDemoAdapter;
 
     @Override
-    protected void beforeInitOnCreate() {
-        super.beforeInitOnCreate();
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
+        super.beforeInitOnCreate(savedInstanceState);
         setActionBarTag(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
 

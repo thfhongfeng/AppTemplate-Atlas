@@ -8,4 +8,6 @@ public interface IModelAsyncResponse<T> {
     void onResponse(T t);
 
     boolean onFail(Exception e);
+
+    void onCancel();
 }

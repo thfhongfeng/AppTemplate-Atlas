@@ -1,5 +1,7 @@
 package com.pine.mvc.ui.activity;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,8 +15,8 @@ import com.pine.mvc.R;
 public class MvcHomeActivity extends BaseMvcActionBarActivity {
 
     @Override
-    protected void beforeInitOnCreate() {
-        super.beforeInitOnCreate();
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
+        super.beforeInitOnCreate(savedInstanceState);
         setActionBarTag(ACTION_BAR_CENTER_TITLE_TAG | ACTION_BAR_NO_GO_BACK_TAG);
     }
 

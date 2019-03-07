@@ -96,6 +96,13 @@ public class LoginCallback extends HttpJsonCallback {
         return consumed;
     }
 
+    @Override
+    public void onCancel(int what) {
+        if (mCallback != null) {
+            mCallback.onCancel();
+        }
+    }
+
     private void goLoginActivity() {
         Intent intent = new Intent(AppUtils.getApplicationByReflect(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

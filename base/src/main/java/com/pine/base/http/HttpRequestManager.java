@@ -163,6 +163,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
+                    callBack.onCancel(what);
                     return false;
                 }
             }
@@ -170,16 +171,9 @@ public class HttpRequestManager {
         mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in json queue - " + requestBean.getModuleTag() +
-                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
-                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
-        List<HttpCookie> cookies = getSessionCookie();
-        if (cookies != null && cookies.size() > 0) {
-            String cookiesStr = cookies.get(0).toString();
-            for (int i = 1; i < cookies.size(); i++) {
-                cookiesStr += "  " + cookies.get(i).toString();
-            }
-            LogUtils.d(TAG, "Request in json queue - Cookies:" + cookiesStr);
-        }
+                "(what:" + requestBean.getWhat() + ")" + "\r\n- url: " +
+                requestBean.getUrl() + "\r\n- params:" + requestBean.getParams() +
+                "\r\n- Cookies: " + getCookiesLog());
         mRequestManager.setJsonRequest(requestBean, getResponseListener(requestBean.getKey(), callBack));
         return true;
     }
@@ -270,6 +264,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
+                    callBack.onCancel(what);
                     return false;
                 }
             }
@@ -277,16 +272,9 @@ public class HttpRequestManager {
         mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in download queue - " + requestBean.getModuleTag() +
-                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
-                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
-        List<HttpCookie> cookies = getSessionCookie();
-        if (cookies != null && cookies.size() > 0) {
-            String cookiesStr = cookies.get(0).toString();
-            for (int i = 1; i < cookies.size(); i++) {
-                cookiesStr += "  " + cookies.get(i).toString();
-            }
-            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
-        }
+                "(what:" + requestBean.getWhat() + ")" + "\r\n- url: " +
+                requestBean.getUrl() + "\r\n -params: " + requestBean.getParams() +
+                "\r\n- Cookies: " + getCookiesLog());
         mRequestManager.setDownloadRequest(requestBean, getDownloadListener(requestBean.getKey(), callBack));
         return true;
     }
@@ -389,6 +377,7 @@ public class HttpRequestManager {
         if (mRequestInterceptorList != null) {
             for (int i = 0; i < mRequestInterceptorList.size(); i++) {
                 if (mRequestInterceptorList.get(i).onIntercept(what, requestBean)) {
+                    requestCallback.onCancel(what);
                     return false;
                 }
             }
@@ -396,16 +385,9 @@ public class HttpRequestManager {
         mLoadingRequestMap.put(requestBean.getKey(), requestBean);
 
         LogUtils.d(TAG, "Request in upload queue - " + requestBean.getModuleTag() +
-                "(requestCode:" + requestBean.getWhat() + ")" + " \r\n- url : " +
-                requestBean.getUrl() + " \r\n - params: " + requestBean.getParams());
-        List<HttpCookie> cookies = getSessionCookie();
-        if (cookies != null && cookies.size() > 0) {
-            String cookiesStr = cookies.get(0).toString();
-            for (int i = 1; i < cookies.size(); i++) {
-                cookiesStr += "  " + cookies.get(i).toString();
-            }
-            LogUtils.d(TAG, "Request in upload queue - Cookies:" + cookiesStr);
-        }
+                "(what:" + requestBean.getWhat() + ")" + "\r\n- url: " +
+                requestBean.getUrl() + "\r\n- params: " + requestBean.getParams() +
+                "\r\n- Cookies: " + getCookiesLog());
         mRequestManager.setUploadRequest(requestBean, getUploadListener(processCallback),
                 getResponseListener(requestBean.getKey(), requestCallback));
         return true;
@@ -428,8 +410,9 @@ public class HttpRequestManager {
             @Override
             public void onSucceed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onSucceed in json queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- response : " + response.getData());
+                        "(what:" + what + ")" + "\r\n- url: " + callBack.getUrl() +
+                        "\r\n- response: " + response.getData() +
+                        "\r\n- Cookies: " + getCookiesLog());
                 HttpRequestBean httpRequestBean = null;
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     httpRequestBean = mLoadingRequestMap.remove(requestKey);
@@ -448,8 +431,9 @@ public class HttpRequestManager {
             @Override
             public void onFailed(int what, HttpResponse response) {
                 LogUtils.d(TAG, "Response onFailed in json queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- response : " + response.getData());
+                        "(what:" + what + ")" + "\r\n- url: " + callBack.getUrl() +
+                        "\r\n- response: " + response.getData() +
+                        "\r\n- Cookies: " + getCookiesLog());
                 HttpRequestBean httpRequestBean = null;
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     if (mErrorRequestMap == null) {
@@ -491,8 +475,7 @@ public class HttpRequestManager {
             @Override
             public void onDownloadError(int what, Exception exception) {
                 LogUtils.d(TAG, "Response onDownloadError in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- exception : " + exception.toString());
+                        "(what:" + what + ")" + "\r\n- exception: " + exception.toString());
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     if (mErrorRequestMap == null) {
                         mErrorRequestMap = new HashMap<>();
@@ -511,10 +494,11 @@ public class HttpRequestManager {
             @Override
             public void onStart(int what, boolean isResume, long rangeSize, long allCount) {
                 LogUtils.d(TAG, "Response onStart in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- isResume : " + isResume +
-                        " \r\n- rangeSize : " + rangeSize +
-                        " \r\n- allCount : " + allCount);
+                        "(what:" + what + ")" + "\r\n- url: " + callBack.getUrl() +
+                        "\r\n- isResume: " + isResume +
+                        "\r\n- rangeSize: " + rangeSize +
+                        "\r\n- allCount: " + allCount +
+                        "\r\n- Cookies: " + getCookiesLog());
                 callBack.onStart(what, isResume, rangeSize, allCount);
             }
 
@@ -526,8 +510,7 @@ public class HttpRequestManager {
             @Override
             public void onFinish(int what, String filePath) {
                 LogUtils.d(TAG, "Response onFinish in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- filePath : " + filePath);
+                        "(what:" + what + ")" + "\r\n- filePath: " + filePath);
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     mLoadingRequestMap.remove(requestKey);
                 }
@@ -537,7 +520,7 @@ public class HttpRequestManager {
             @Override
             public void onCancel(int what) {
                 LogUtils.d(TAG, "Response onCancel in download queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                        "(what:" + what + ")");
                 if (mLoadingRequestMap != null && mLoadingRequestMap.containsKey(requestKey)) {
                     mLoadingRequestMap.remove(requestKey);
                 }
@@ -550,6 +533,9 @@ public class HttpRequestManager {
         return new IHttpResponseListener.OnUploadListener() {
             @Override
             public void onStart(int what, HttpRequestBean.HttpFileBean fileBean) {
+                LogUtils.d(TAG, "Response onStart in upload queue - " + callBack.getModuleTag() +
+                        "(what:" + what + ")" + "\r\n- url: " + callBack.getUrl() +
+                        "\r\n- Cookies: " + getCookiesLog());
                 callBack.onStart(what, fileBean);
             }
 
@@ -565,16 +551,15 @@ public class HttpRequestManager {
 
             @Override
             public void onFinish(int what, HttpRequestBean.HttpFileBean fileBean) {
-//                LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
-//                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl());
+                LogUtils.d(TAG, "Response onFinish in upload queue - " + callBack.getModuleTag() +
+                        "(what:" + what + ")");
                 callBack.onFinish(what, fileBean);
             }
 
             @Override
             public void onError(int what, HttpRequestBean.HttpFileBean fileBean, Exception exception) {
                 LogUtils.d(TAG, "Response onError in upload queue - " + callBack.getModuleTag() +
-                        "(requestCode:" + what + ")" + " \r\n- url : " + callBack.getUrl() +
-                        " \r\n- exception : " + exception.toString());
+                        "(what:" + what + ")" + "\r\n- exception: " + exception.toString());
                 if (!callBack.onError(what, fileBean, exception)) {
                     defaultDeduceErrorResponse(exception);
                 }
@@ -668,5 +653,17 @@ public class HttpRequestManager {
 
     public static void clearCookie() {
         mRequestManager.clearCookie();
+    }
+
+    private static String getCookiesLog() {
+        List<HttpCookie> cookies = getSessionCookie();
+        String cookiesStr = "";
+        if (cookies != null && cookies.size() > 0) {
+            cookiesStr = cookies.get(0).toString();
+            for (int i = 1; i < cookies.size(); i++) {
+                cookiesStr += "  " + cookies.get(i).toString();
+            }
+        }
+        return cookiesStr;
     }
 }

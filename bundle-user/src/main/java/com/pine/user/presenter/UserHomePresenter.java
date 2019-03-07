@@ -1,5 +1,7 @@
 package com.pine.user.presenter;
 
+import android.os.Bundle;
+
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.user.contract.IUserHomeContract;
 
@@ -10,7 +12,7 @@ import com.pine.user.contract.IUserHomeContract;
 public class UserHomePresenter extends BasePresenter<IUserHomeContract.Ui> implements IUserHomeContract.Presenter {
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 

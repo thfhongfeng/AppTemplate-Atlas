@@ -38,7 +38,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
     public final static String TYPE_TEXT = "text";
     // 子编辑条目类型image 图片加图片描述输入条目
     public final static String TYPE_IMAGE = "image";
-    private static final String TAG = LogUtils.makeLogTag(TextImageEditorView.class);
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
 
     // 编辑器索引
     private int mIndex;
@@ -187,19 +187,24 @@ public class TextImageEditorView extends UploadFileLinearLayout {
 
     private void refreshImageState(View view, FileUploadState state, int progress) {
         TextView loading_tv = view.findViewById(R.id.loading_tv);
-        View result_iv = view.findViewById(R.id.result_iv);
+        View result_tv = view.findViewById(R.id.result_tv);
         View state_rl = view.findViewById(R.id.state_rl);
         switch (state) {
             case UPLOAD_STATE_PREPARING:
             case UPLOAD_STATE_UPLOADING:
                 loading_tv.setText(progress + "%");
                 loading_tv.setVisibility(VISIBLE);
-                result_iv.setVisibility(GONE);
+                result_tv.setVisibility(GONE);
+                state_rl.setVisibility(VISIBLE);
+                break;
+            case UPLOAD_STATE_CANCEL:
+                loading_tv.setVisibility(GONE);
+                result_tv.setVisibility(VISIBLE);
                 state_rl.setVisibility(VISIBLE);
                 break;
             case UPLOAD_STATE_FAIL:
                 loading_tv.setVisibility(GONE);
-                result_iv.setVisibility(VISIBLE);
+                result_tv.setVisibility(VISIBLE);
                 state_rl.setVisibility(VISIBLE);
                 break;
             case UPLOAD_STATE_SUCCESS:
@@ -285,6 +290,15 @@ public class TextImageEditorView extends UploadFileLinearLayout {
 
     @Override
     public void onFileUploadProgress(FileUploadBean uploadBean) {
+        if (uploadBean != null && uploadBean.getAttachView() != null) {
+            copyUploadData(uploadBean);
+            refreshImageState(uploadBean.getAttachView(), uploadBean.getUploadState(),
+                    uploadBean.getUploadProgress());
+        }
+    }
+
+    @Override
+    public void onFileUploadCancel(FileUploadBean uploadBean) {
         if (uploadBean != null && uploadBean.getAttachView() != null) {
             copyUploadData(uploadBean);
             refreshImageState(uploadBean.getAttachView(), uploadBean.getUploadState(),

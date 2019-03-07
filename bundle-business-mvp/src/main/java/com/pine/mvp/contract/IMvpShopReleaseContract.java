@@ -48,8 +48,6 @@ public interface IMvpShopReleaseContract {
 
         @NonNull
         InputParamBean getShopImagesParam(String key);
-
-        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {

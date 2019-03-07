@@ -13,8 +13,6 @@ public interface IMvpShopSearchCheckContract {
         InputParamBean getSearchKey(String key);
 
         void goAllSelectMode();
-
-        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {

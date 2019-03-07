@@ -1,6 +1,7 @@
 package com.pine.mvp.presenter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
@@ -24,15 +25,14 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
     private String mId;
     private MvpTravelNoteModel mModel;
     private MvpTravelNoteListPaginationAdapter mMvpTravelNoteItemAdapter;
-    private boolean mIsLoadProcessing;
 
     public MvpTravelNoteListPresenter() {
         mModel = new MvpTravelNoteModel();
     }
 
     @Override
-    public boolean parseIntentData() {
-        mId = getStringExtra("id", "");
+    public boolean parseInitData(Bundle bundle) {
+        mId = bundle.getString("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();
             return true;
@@ -73,11 +73,11 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpTravelNoteItemAdapter.getPageSize()));
         params.put("id", mId);
-        startDataLoadUi();
-        if (!mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
+        setUiLoading(true);
+        mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteItemEntity> list) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (isUiAlive()) {
                     if (refresh) {
                         mMvpTravelNoteItemAdapter.setData(list);
@@ -89,25 +89,14 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
-    }
 
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 }

@@ -10,9 +10,7 @@ public interface IBaseContract {
     interface Ui {
         Activity getContextActivity();
 
-        void startLoadingUi();
-
-        void finishLoadingUi();
+        void setLoadingUiVisibility(boolean visibility);
     }
 
     interface Presenter {

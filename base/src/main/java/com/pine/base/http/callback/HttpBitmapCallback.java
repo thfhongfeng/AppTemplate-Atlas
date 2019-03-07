@@ -19,4 +19,5 @@ public abstract class HttpBitmapCallback extends HttpAbstractBaseCallback {
 
     public abstract boolean onError(int what, Exception e);
 
+    public abstract void onCancel(int what);
 }

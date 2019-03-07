@@ -36,7 +36,7 @@ public class FileUploadComponent {
     public static final int TYPE_IMAGE = 1;
     public static final int TYPE_WORD_DOC = 2;
     public static final int TYPE_TXT = 3;
-    private static final String TAG = LogUtils.makeLogTag(FileUploadComponent.class);
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
     private WeakReference<Context> mContext;
     private Map<Integer, Object> mRequestMap;
     private long mMaxFileSize = 1024 * 1024;
@@ -132,6 +132,16 @@ public class FileUploadComponent {
                         }
                         return false;
                     }
+
+                    @Override
+                    public void onCancel(int what) {
+                        mRequestMap.remove(uploadBean.hashCode());
+                        LogUtils.d(TAG, "onCancel what :" + what);
+                        if (callback != null) {
+                            callback.onCancel(uploadBean);
+                        }
+                        deleteTempFile(uploadBean);
+                    }
                 });
     }
 
@@ -153,6 +163,7 @@ public class FileUploadComponent {
         }
         final Map<Integer, Integer> progressMap = new HashMap<>();
         final int totalProgress = checkFileList.size() * 100;
+        mRequestMap.put(uploadBeanList.hashCode(), uploadBeanList);
         HttpRequestManager.setUploadRequest(url, params, fileKey, checkFileList,
                 uploadBeanList.hashCode(), uploadBeanList.hashCode(), new HttpUploadCallback() {
                     int preActualProgress = -10;
@@ -230,8 +241,17 @@ public class FileUploadComponent {
                         deleteTempFileList(uploadBeanList);
                         return false;
                     }
+
+                    @Override
+                    public void onCancel(int what) {
+                        mRequestMap.remove(uploadBeanList.hashCode());
+                        LogUtils.d(TAG, "onCancel what:" + what);
+                        if (callback != null) {
+                            callback.onCancel(uploadBeanList);
+                        }
+                        deleteTempFileList(uploadBeanList);
+                    }
                 });
-        mRequestMap.put(uploadBeanList.hashCode(), uploadBeanList);
     }
 
     private File checkFile(FileUploadBean fileBean, OneByOneUploadCallback callback) {
@@ -416,6 +436,9 @@ public class FileUploadComponent {
 
         // 文件整体上传进度回调
         void onProgress(List<FileUploadBean> uploadBeanList, int progress);
+
+        // 请求取消回调
+        void onCancel(List<FileUploadBean> uploadBeanList);
 
         // 请求出错回调
         void onFailed(List<FileUploadBean> uploadBeanList, String message);

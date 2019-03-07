@@ -1,10 +1,12 @@
 package com.pine.mvp.presenter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopDetailContract;
 import com.pine.mvp.model.MvpShopModel;
@@ -21,15 +23,14 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
         implements IMvpShopDetailContract.Presenter {
     private String mId;
     private MvpShopModel mModel;
-    private boolean mIsLoadProcessing;
 
     public MvpShopDetailPresenter() {
         mModel = new MvpShopModel();
     }
 
     @Override
-    public boolean parseIntentData() {
-        mId = getStringExtra("id", "");
+    public boolean parseInitData(Bundle bundle) {
+        mId = bundle.getString("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();
             return true;
@@ -49,11 +50,11 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
         }
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
-        startDataLoadUi();
-        if (!mModel.requestShopDetailData(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
+        setUiLoading(true);
+        mModel.requestShopDetailData(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
             @Override
             public void onResponse(MvpShopDetailEntity entity) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (isUiAlive()) {
                     getUi().setupShopDetail(entity);
                 }
@@ -61,18 +62,21 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
+
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 
     @Override
     public void goToShopH5Activity() {
         Intent intent = new Intent(getContext(), MvpWebViewActivity.class);
-        intent.putExtra("url", "");
+        intent.putExtra("url", MvpUrlConstants.H5_DefaultUrl);
         getContext().startActivity(intent);
     }
 
@@ -81,19 +85,5 @@ public class MvpShopDetailPresenter extends BasePresenter<IMvpShopDetailContract
         Intent intent = new Intent(getContext(), MvpTravelNoteListActivity.class);
         intent.putExtra("id", mId);
         getContext().startActivity(intent);
-    }
-
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
     }
 }

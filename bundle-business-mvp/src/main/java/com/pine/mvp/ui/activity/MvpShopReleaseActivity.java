@@ -43,7 +43,7 @@ import java.util.Map;
  * Created by tanghongfeng on 2018/10/23
  */
 
-@UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, Args = {""})
+//@UiAccessAnnotation(AccessTypes = {UiAccessType.LOGIN}, Args = {""})
 public class MvpShopReleaseActivity extends
         BaseMvpActionBarTextMenuActivity<IMvpShopReleaseContract.Ui, MvpShopReleasePresenter>
         implements IMvpShopReleaseContract.Ui, View.OnClickListener {
@@ -340,16 +340,10 @@ public class MvpShopReleaseActivity extends
     }
 
     @Override
-    public void setSwipeRefreshLayoutRefresh(boolean processing) {
+    public void setLoadingUiVisibility(boolean processing) {
         if (swipe_refresh_layout == null) {
             return;
         }
-        if (processing) {
-            if (!swipe_refresh_layout.isRefreshing()) {
-                swipe_refresh_layout.setRefreshing(processing);
-            }
-        } else {
-            swipe_refresh_layout.setRefreshing(processing);
-        }
+        swipe_refresh_layout.setRefreshing(processing);
     }
 }

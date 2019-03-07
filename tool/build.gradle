@@ -33,6 +33,7 @@ dependencies {
 
     // android官方 dependency begin
     compile build_dependency["appcompat_v7"]
+    compile build_dependency["constraint_layout"]
     compile build_dependency["support_design"]
     // android官方 dependency end
 

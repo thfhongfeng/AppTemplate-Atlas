@@ -17,4 +17,6 @@
     <string name="login_register_btn">注 册</string>
     <string name="login_register_agreement_before">点击注册默认您同意</string>
     <string name="login_register_agreement">《会员注册协议》</string>
+    <string name="login_register_success">注册成功</string>
+    <string name="login_register_fail">注册失败</string>
 </resources>

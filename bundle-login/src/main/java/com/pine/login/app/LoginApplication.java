@@ -7,7 +7,7 @@ import com.pine.base.http.HttpRequestManager;
 import com.pine.login.interceptor.LoginResponseInterceptor;
 
 /**
- * Created by tanghongfeng on 2018/9/14
+ * Created by tanghongfeng on 2018/9/28
  */
 
 // atlas特性:

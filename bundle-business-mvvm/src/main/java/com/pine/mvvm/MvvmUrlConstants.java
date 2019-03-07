@@ -20,7 +20,7 @@ public interface MvvmUrlConstants extends BaseUrlConstants {
 //    String Upload_File = BASE_URL + "";
 
     // Test code begin
-    String Upload_File = "http://10.10.96.154:8011/" + "/mobile/bizFile/addBizFile.htm";
+    String Upload_File = "https://yanyangtian.purang.com/" + "/mobile/bizFile/addBizFile.htm";
     String H5_DefaultUrl = "https://www.baidu.com";
     // Test code end
 }
