@@ -183,14 +183,15 @@ public class NoHttpRequestManager implements IHttpRequestManager {
                     cookie.setMaxAge(HeaderUtil.getMaxExpiryMillis());
                     setSessionId(cookie.getValue());
                 }
-                LogUtils.d(TAG, "setCookie url:" + uri.toString() +
+                LogUtils.d(TAG, "onCookieSave url:" + uri.toString() +
                         "\r\ncookie:" + cookie.toString());
             }
 
             // 当NoHttp的Cookie过期时被删除时此方法被调用
             @Override
             public void onRemoveCookie(URI uri, HttpCookie cookie) {
-
+                LogUtils.d(TAG, "onCookieRemove url:" + uri.toString() +
+                        "\r\ncookie:" + cookie.toString());
             }
         });
         // NoHttp初始化

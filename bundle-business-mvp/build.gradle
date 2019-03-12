@@ -31,11 +31,11 @@ android {
     sourceSets {
         main {
             res.srcDirs += [
-                    'src/main/res/layout/activity',
-                    'src/main/res/layout/fragment',
-                    'src/main/res/layout/widget',
-                    'src/main/res/layout/dialog',
-                    'src/main/res/layout/item'
+                    'src/main/res/layouts/activity',
+                    'src/main/res/layouts/fragment',
+                    'src/main/res/layouts/widget',
+                    'src/main/res/layouts/dialog',
+                    'src/main/res/layouts/item'
             ]
             jniLibs.srcDir 'libs'
             jni.srcDirs = []    //disable automatic ndk-build
@@ -55,17 +55,6 @@ repositories {
  */
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    // 测试 dependency begin
-    androidTestCompile(build_dependency["test_espresso_core"], {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile build_dependency["test_junit"]
-    // 测试 dependency end
-
-    // android官方 dependency begin
-    compile build_dependency["appcompat_v7"]
-    // android官方 dependency end
 
     // 主体基础模块 begin
     providedCompile project(':base')

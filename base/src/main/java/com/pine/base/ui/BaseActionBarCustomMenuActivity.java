@@ -1,6 +1,8 @@
 package com.pine.base.ui;
 
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageView;
@@ -14,12 +16,12 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
     private ImmersionBar mImmersionBar;
 
     @Override
-    protected void beforeInitOnCreate() {
+    protected void beforeInitOnCreate(@Nullable Bundle savedInstanceState) {
 
     }
 
     @Override
-    protected final void setContentView() {
+    protected final void setContentView(Bundle savedInstanceState) {
         setContentView(R.layout.base_activity_actionbar_custom_menu);
 
         ViewStub base_content_layout = findViewById(R.id.base_content_layout);
@@ -93,12 +95,8 @@ public abstract class BaseActionBarCustomMenuActivity extends BaseActivity {
         return R.layout.base_loading;
     }
 
-    public void startLoadingUi() {
+    public void setLoadingUiVisibility(boolean visibility) {
         hideSoftInputFromWindow();
-        findViewById(R.id.base_loading_layout).setVisibility(View.VISIBLE);
-    }
-
-    public void finishLoadingUi() {
-        findViewById(R.id.base_loading_layout).setVisibility(View.GONE);
+        findViewById(R.id.base_loading_layout).setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 }

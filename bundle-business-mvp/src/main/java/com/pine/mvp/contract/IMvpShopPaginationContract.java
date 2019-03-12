@@ -9,7 +9,7 @@ import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 
 public interface IMvpShopPaginationContract {
     interface Ui extends IBaseContract.Ui {
-        void setSwipeRefreshLayoutRefresh(boolean processing);
+
     }
 
     interface Presenter extends IBaseContract.Presenter {

@@ -1,7 +1,7 @@
 package com.pine.mvp.presenter;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
@@ -20,15 +20,13 @@ import java.util.HashMap;
 public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContract.Ui>
         implements IMvpShopReleaseContract.Presenter {
     private MvpShopModel mModel;
-    private boolean mIsLoadProcessing;
-
 
     public MvpShopReleasePresenter() {
         mModel = new MvpShopModel();
     }
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -132,39 +130,25 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
             params.put(images.getKey(), images.getValue());
         }
 
-        startDataLoadUi();
-        if (!mModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
+        setUiLoading(true);
+        mModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
             @Override
             public void onResponse(MvpShopDetailEntity entity) {
-                finishDataLoadUi();
-                if (isUiAlive()) {
-                    Toast.makeText(getContext(), R.string.mvp_shop_release_success, Toast.LENGTH_SHORT).show();
-                    finishUi();
-                    return;
-                }
+                setUiLoading(false);
+                showShortToast(R.string.mvp_shop_release_success);
+                finishUi();
             }
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
-    }
 
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 }

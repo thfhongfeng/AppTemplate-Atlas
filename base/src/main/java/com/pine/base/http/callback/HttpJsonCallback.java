@@ -34,4 +34,6 @@ public abstract class HttpJsonCallback extends HttpAbstractBaseCallback {
     public abstract void onResponse(int what, JSONObject jsonObject);
 
     public abstract boolean onFail(int what, Exception e);
+
+    public abstract void onCancel(int what);
 }

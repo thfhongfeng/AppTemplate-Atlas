@@ -9,7 +9,7 @@ import com.pine.mvp.adapter.MvpTravelNoteListPaginationAdapter;
 
 public interface IMvpTravelNoteListContract {
     interface Ui extends IBaseContract.Ui {
-        void setSwipeRefreshLayoutRefresh(boolean processing);
+
     }
 
     interface Presenter extends IBaseContract.Presenter {

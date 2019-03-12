@@ -1,7 +1,17 @@
 package com.pine.login.presenter;
 
+import android.os.Bundle;
+
+import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
+import com.pine.base.bean.InputParamBean;
+import com.pine.login.LoginConstants;
+import com.pine.login.R;
+import com.pine.login.bean.AccountBean;
 import com.pine.login.contract.IRegisterContract;
+import com.pine.login.model.AccountModel;
+
+import java.util.HashMap;
 
 /**
  * Created by tanghongfeng on 2018/11/15
@@ -9,8 +19,10 @@ import com.pine.login.contract.IRegisterContract;
 
 public class RegisterPresenter extends BasePresenter<IRegisterContract.Ui>
         implements IRegisterContract.Presenter {
+    private AccountModel mAccountModel = new AccountModel();
+
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -21,6 +33,40 @@ public class RegisterPresenter extends BasePresenter<IRegisterContract.Ui>
 
     @Override
     public void register() {
+        if (mIsLoadProcessing) {
+            return;
+        }
+        InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
+        InputParamBean<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
+        if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||
+                pwdBean.checkIsEmpty(R.string.login_input_empty_msg) ||
+                !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {
+            return;
+        }
+        HashMap<String, String> params = new HashMap<>();
+        params.put(mobileBean.getKey(), mobileBean.getValue());
+        params.put(pwdBean.getKey(), pwdBean.getValue());
+        setUiLoading(true);
+        mAccountModel.requestRegister(params, new IModelAsyncResponse<AccountBean>() {
+            @Override
+            public void onResponse(AccountBean accountBean) {
+                setUiLoading(false);
+                showShortToast(R.string.login_register_success);
+                finishUi();
+            }
 
+            @Override
+            public boolean onFail(Exception e) {
+                setUiLoading(false);
+                showShortToast(R.string.login_register_fail);
+                return false;
+            }
+
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+                showShortToast(R.string.login_register_fail);
+            }
+        });
     }
 }

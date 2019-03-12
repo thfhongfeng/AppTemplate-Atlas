@@ -1,8 +1,8 @@
 package com.pine.login.presenter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
@@ -20,7 +20,7 @@ import com.pine.login.ui.activity.RegisterActivity;
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -31,7 +31,7 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
 
     @Override
     public void login() {
-        if (BaseApplication.isLogin()) {
+        if (BaseApplication.isLogin() || mIsLoadProcessing) {
             return;
         }
         InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
@@ -41,23 +41,28 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
                 !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {
             return;
         }
-        getUi().startLoadingUi();
+        setUiLoading(true);
         LoginManager.login(mobileBean.getValue(), pwdBean.getValue(), new LoginManager.Callback() {
             @Override
             public boolean onLoginResponse(boolean isSuccess, String msg) {
                 if (isUiAlive()) {
-                    getUi().finishLoadingUi();
+                    setUiLoading(false);
                     if (!isSuccess) {
                         if (TextUtils.isEmpty(msg)) {
                             return false;
                         } else {
-                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                            showShortToast(msg);
                         }
                     } else {
                         finishUi();
                     }
                 }
                 return true;
+            }
+
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
             }
         });
     }

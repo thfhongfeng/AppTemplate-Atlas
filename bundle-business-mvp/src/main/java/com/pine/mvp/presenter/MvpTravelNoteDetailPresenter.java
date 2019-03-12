@@ -1,5 +1,6 @@
 package com.pine.mvp.presenter;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
@@ -24,15 +25,14 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
     private String mId;
     private MvpTravelNoteModel mModel;
     private MvpTravelNoteDetailComplexAdapter mTravelNoteDetailAdapter;
-    private boolean mIsLoadProcessing;
 
     public MvpTravelNoteDetailPresenter() {
         mModel = new MvpTravelNoteModel();
     }
 
     @Override
-    public boolean parseIntentData() {
-        mId = getStringExtra("id", "");
+    public boolean parseInitData(Bundle bundle) {
+        mId = bundle.getString("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();
             return true;
@@ -60,11 +60,11 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         }
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
-        startDataLoadUi();
-        if (!mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
+        setUiLoading(true);
+        mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (refresh) {
                     if (isUiAlive()) {
                         List<MvpTravelNoteDetailEntity> list = new ArrayList<>();
@@ -77,12 +77,15 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
+
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 
     @Override
@@ -98,11 +101,11 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mTravelNoteDetailAdapter.getPageSize()));
         params.put("id", mId);
-        startDataLoadUi();
-        if (!mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
+        setUiLoading(true);
+        mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteCommentEntity> list) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (isUiAlive()) {
                     if (refresh) {
                         mTravelNoteDetailAdapter.setTailData(list);
@@ -114,25 +117,14 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
-    }
 
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 }

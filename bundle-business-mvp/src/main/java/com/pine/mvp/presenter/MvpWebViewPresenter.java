@@ -1,5 +1,7 @@
 package com.pine.mvp.presenter;
 
+import android.os.Bundle;
+
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.component.share.bean.ShareBean;
 import com.pine.mvp.MvpUrlConstants;
@@ -16,8 +18,8 @@ public class MvpWebViewPresenter extends BasePresenter<IMvpWebViewContract.Ui>
     private String mH5Url;
 
     @Override
-    public boolean parseIntentData() {
-        mH5Url = getStringExtra("url", MvpUrlConstants.H5_DefaultUrl);
+    public boolean parseInitData(Bundle bundle) {
+        mH5Url = bundle.getString("url", MvpUrlConstants.H5_DefaultUrl);
         return false;
     }
 

@@ -40,7 +40,7 @@ import java.util.Map;
  */
 
 public abstract class UploadFileLinearLayout extends LinearLayout implements ILifeCircleView {
-    private static final String TAG = LogUtils.makeLogTag(UploadFileLinearLayout.class);
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
     // 每次选择文件最大允数
     private final int MAX_PER_UPLOAD_FILE_COUNT = 10;
     protected BaseActivity mActivity;
@@ -379,8 +379,17 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
                             }
 
                             @Override
-                            public void onCancel(FileUploadBean uploadBean) {
-
+                            public void onCancel(final FileUploadBean fileBean) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fileBean.setUploadState(FileUploadState.UPLOAD_STATE_CANCEL);
+                                        onFileUploadCancel(fileBean);
+                                    }
+                                });
                             }
 
                             @Override
@@ -485,6 +494,22 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
                             }
 
                             @Override
+                            public void onCancel(final List<FileUploadBean> fileBeanList) {
+                                if (mMainHandler == null) {
+                                    return;
+                                }
+                                mMainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (FileUploadBean fileBean : fileBeanList) {
+                                            fileBean.setUploadState(FileUploadState.UPLOAD_STATE_CANCEL);
+                                            onFileUploadCancel(fileBean);
+                                        }
+                                    }
+                                });
+                            }
+
+                            @Override
                             public void onFailed(final List<FileUploadBean> fileBeanList, String message) {
                                 if (mMainHandler == null) {
                                     return;
@@ -534,6 +559,8 @@ public abstract class UploadFileLinearLayout extends LinearLayout implements ILi
     public abstract void onFileUploadPrepare(List<FileUploadBean> uploadBeanList);
 
     public abstract void onFileUploadProgress(FileUploadBean uploadBean);
+
+    public abstract void onFileUploadCancel(FileUploadBean uploadBean);
 
     public abstract void onFileUploadFail(FileUploadBean uploadBean);
 

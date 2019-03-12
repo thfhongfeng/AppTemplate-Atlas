@@ -1,9 +1,9 @@
 package com.pine.mvp.presenter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.pine.base.BaseConstants;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
@@ -35,9 +35,7 @@ import java.util.Map;
 public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteReleaseContract.Ui>
         implements IMvpTravelNoteReleaseContract.Presenter {
     public final int REQUEST_CODE_SELECT_BELONG_SHOP = 1;
-
     private MvpTravelNoteModel mModel;
-    private boolean mIsLoadProcessing;
     private ArrayList<String> mBelongShopIdList;
     private ArrayList<String> mBelongShopNameList;
 
@@ -46,7 +44,7 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
     }
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -217,40 +215,25 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
             }
             params.put(contentBean.getKey(), contentArr.toString());
         }
-
-        startDataLoadUi();
-        if (!mModel.requestAddTravelNote(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
+        setUiLoading(true);
+        mModel.requestAddTravelNote(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
-                finishDataLoadUi();
-                if (isUiAlive()) {
-                    Toast.makeText(getContext(), R.string.mvp_note_release_success, Toast.LENGTH_SHORT).show();
-                    finishUi();
-                    return;
-                }
+                setUiLoading(false);
+                showShortToast(R.string.mvp_note_release_success);
+                finishUi();
             }
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
-    }
 
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 }

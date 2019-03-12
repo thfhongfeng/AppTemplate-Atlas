@@ -1,5 +1,6 @@
 package com.pine.base.component.image_selector.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -20,11 +21,13 @@ import com.pine.base.R;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.component.image_selector.ImageViewer;
 import com.pine.base.component.image_selector.bean.ImageItemBean;
+import com.pine.base.permission.PermissionsAnnotation;
 import com.pine.base.ui.BaseActionBarTextMenuActivity;
 import com.pine.tool.widget.ZoomImageView;
 
 import java.util.ArrayList;
 
+@PermissionsAnnotation(Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE})
 public class ImageDisplayActivity extends BaseActionBarTextMenuActivity {
     private ViewPager view_pager;
     private TextView choose_tv;

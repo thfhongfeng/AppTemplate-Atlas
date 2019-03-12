@@ -26,7 +26,7 @@ public class LoginResponseInterceptor implements IHttpResponseInterceptor {
                 BaseApplication.setLogin(false);
                 if (LoginManager.mPerReLoginCount >= MAX_PER_RE_LOGIN_COUNT ||
                         LoginManager.mTotalReLoginCount >= MAX_TOTAL_RE_LOGIN_COUNT ||
-                        !LoginManager.reLogin()) { // 自动登录失败
+                        !LoginManager.reLogin()) { // 发出自动登录失败
                     LoginManager.flushAllNoAuthRequest();
                     LoginManager.getNoAuthRequestMap().clear();
                     return false;
@@ -43,7 +43,7 @@ public class LoginResponseInterceptor implements IHttpResponseInterceptor {
                     BaseApplication.setLogin(false);
                     if (LoginManager.mPerReLoginCount >= MAX_PER_RE_LOGIN_COUNT ||
                             LoginManager.mTotalReLoginCount >= MAX_TOTAL_RE_LOGIN_COUNT ||
-                            !LoginManager.reLogin()) { // 自动登录失败
+                            !LoginManager.reLogin()) { // 发出自动登录失败
                         LoginManager.flushAllNoAuthRequest();
                         LoginManager.getNoAuthRequestMap().clear();
                     }

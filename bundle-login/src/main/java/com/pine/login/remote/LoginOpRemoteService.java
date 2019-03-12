@@ -43,6 +43,11 @@ public class LoginOpRemoteService {
                 callback.onResponse(responseBundle);
                 return true;
             }
+
+            @Override
+            public void onCancel() {
+
+            }
         });
     }
 

@@ -36,7 +36,7 @@ import java.util.List;
  */
 
 public class ImageUploadView extends UploadFileRecyclerView {
-    private static final String TAG = LogUtils.makeLogTag(ImageUploadView.class);
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
     private UploadImageAdapter mUploadImageAdapter;
     // RecyclerView列数（一行可容纳image数量）
     private int mColumnSize = 5;
@@ -104,6 +104,11 @@ public class ImageUploadView extends UploadFileRecyclerView {
 
     @Override
     public void onFileUploadProgress(FileUploadBean uploadBean) {
+        mUploadImageAdapter.notifyItemChanged(uploadBean.getOrderIndex());
+    }
+
+    @Override
+    public void onFileUploadCancel(FileUploadBean uploadBean) {
         mUploadImageAdapter.notifyItemChanged(uploadBean.getOrderIndex());
     }
 
@@ -369,6 +374,10 @@ public class ImageUploadView extends UploadFileRecyclerView {
                             loading_iv.setVisibility(View.VISIBLE);
                             loading_tv.setVisibility(VISIBLE);
                             loading_tv.setText(imageBean.getUploadProgress() + "%");
+                            break;
+                        case UPLOAD_STATE_CANCEL:
+                            state_rl.setVisibility(View.VISIBLE);
+                            fail_tv.setVisibility(View.VISIBLE);
                             break;
                         case UPLOAD_STATE_FAIL:
                             state_rl.setVisibility(View.VISIBLE);

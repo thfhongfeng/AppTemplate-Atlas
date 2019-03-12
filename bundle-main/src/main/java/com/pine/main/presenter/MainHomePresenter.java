@@ -1,5 +1,7 @@
 package com.pine.main.presenter;
 
+import android.os.Bundle;
+
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.main.bean.MainBusinessItemEntity;
@@ -23,7 +25,7 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
     }
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -45,6 +47,11 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
             @Override
             public boolean onFail(Exception e) {
                 return false;
+            }
+
+            @Override
+            public void onCancel() {
+
             }
         });
     }

@@ -40,8 +40,6 @@ public interface IMvpTravelNoteReleaseContract {
 
         @NonNull
         InputParamBean getNoteContentParam(String key);
-
-        void setSwipeRefreshLayoutRefresh(boolean processing);
     }
 
     interface Presenter extends IBaseContract.Presenter {

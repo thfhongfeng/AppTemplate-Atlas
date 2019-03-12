@@ -1,5 +1,7 @@
 package com.pine.mvp.presenter;
 
+import android.os.Bundle;
+
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.MvpConstants;
@@ -17,18 +19,15 @@ import java.util.HashMap;
 
 public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListContract.Ui>
         implements IMvpShopTreeListContract.Presenter {
-    private String mId;
     private MvpShopModel mModel;
     private MvpShopListPaginationTreeAdapter mMvpHomeItemAdapter;
-    private boolean mIsLoadProcessing;
 
     public MvpShopTreeListPresenter() {
         mModel = new MvpShopModel();
     }
 
     @Override
-    public boolean parseIntentData() {
-        mId = getStringExtra("id", "");
+    public boolean parseInitData(Bundle bundle) {
         return false;
     }
 
@@ -57,12 +56,11 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
         }
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpHomeItemAdapter.getPageSize()));
-        params.put("id", mId);
-        startDataLoadUi();
-        if (!mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
+        setUiLoading(true);
+        mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopAndProductEntity> list) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (isUiAlive()) {
                     if (refresh) {
                         mMvpHomeItemAdapter.setData(list);
@@ -74,25 +72,14 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
 
             @Override
             public boolean onFail(Exception e) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 return false;
             }
-        })) {
-            finishDataLoadUi();
-        }
-    }
 
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
+            @Override
+            public void onCancel() {
+                setUiLoading(false);
+            }
+        });
     }
 }

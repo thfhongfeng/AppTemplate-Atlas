@@ -2,6 +2,7 @@ package com.pine.mvp.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
@@ -31,14 +32,15 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     private MvpShopModel mModel;
     private MvpShopCheckListPaginationAdapter mAdapter;
     private boolean mSearchMode;
-    private boolean mIsLoadProcessing;
+    private ArrayList<String> mBelongShopIds;
 
     public MvpShopSearchCheckPresenter() {
         mModel = new MvpShopModel();
     }
 
     @Override
-    public boolean parseIntentData() {
+    public boolean parseInitData(Bundle bundle) {
+        mBelongShopIds = bundle.getStringArrayList(REQUEST_CHECKED_IDS_KEY);
         return false;
     }
 
@@ -50,7 +52,7 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     @Override
     public MvpShopCheckListPaginationAdapter getListAdapter() {
         if (mAdapter == null) {
-            mAdapter = new MvpShopCheckListPaginationAdapter(getStringArrayListExtra(REQUEST_CHECKED_IDS_KEY),
+            mAdapter = new MvpShopCheckListPaginationAdapter(mBelongShopIds,
                     MvpShopCheckListPaginationAdapter.SHOP_CHECK_VIEW_HOLDER);
         }
         return mAdapter;
@@ -77,11 +79,11 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
             params.put(searchKey.getKey(), searchKey.getValue());
         }
 
-        startDataLoadUi();
+        setUiLoading(true);
         mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> mvpShopItemEntities) {
-                finishDataLoadUi();
+                setUiLoading(false);
                 if (isUiAlive()) {
                     if (refresh) {
                         mAdapter.setData(mvpShopItemEntities, mSearchMode);
@@ -94,6 +96,11 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
             @Override
             public boolean onFail(Exception e) {
                 return false;
+            }
+
+            @Override
+            public void onCancel() {
+
             }
         });
     }
@@ -125,19 +132,5 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     @Override
     public void clearCurCheck() {
         mAdapter.clearCheckedData();
-    }
-
-    private void startDataLoadUi() {
-        mIsLoadProcessing = true;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(true);
-        }
-    }
-
-    private void finishDataLoadUi() {
-        mIsLoadProcessing = false;
-        if (isUiAlive()) {
-            getUi().setSwipeRefreshLayoutRefresh(false);
-        }
     }
 }

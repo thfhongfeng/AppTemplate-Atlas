@@ -28,13 +28,13 @@ import java.util.HashMap;
  */
 
 public class MainHomeModel {
-    private static final String TAG = LogUtils.makeLogTag(MainHomeModel.class);
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
     private static final int HTTP_QUERY_BUSINESS_LIST = 1;
 
-    public boolean requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainBusinessItemEntity>> callback) {
+    public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainBusinessItemEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
-        return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG,
+        HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(), TAG,
                 HTTP_QUERY_BUSINESS_LIST, httpStringCallback);
     }
 
@@ -59,6 +59,11 @@ public class MainHomeModel {
             @Override
             public boolean onFail(int what, Exception e) {
                 return callback.onFail(e);
+            }
+
+            @Override
+            public void onCancel(int what) {
+                callback.onCancel();
             }
         };
     }
