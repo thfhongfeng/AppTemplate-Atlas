@@ -65,3 +65,4 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 apk-files.txt
+.idea/modules.xml
