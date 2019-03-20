@@ -1,4 +1,4 @@
-package com.pine.login.model;
+package com.pine.welcome.model.net;
 
 import android.support.annotation.NonNull;
 
@@ -7,37 +7,46 @@ import com.google.gson.reflect.TypeToken;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.http.HttpRequestManager;
 import com.pine.base.http.callback.HttpJsonCallback;
-import com.pine.login.LoginConstants;
-import com.pine.login.LoginUrlConstants;
-import com.pine.login.bean.AccountBean;
 import com.pine.tool.util.LogUtils;
+import com.pine.welcome.WelcomeConstants;
+import com.pine.welcome.WelcomeUrlConstants;
+import com.pine.welcome.bean.VersionEntity;
+import com.pine.welcome.model.IVersionModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class AccountModel {
-    private final String TAG = LogUtils.makeLogTag(this.getClass());
-    private static final int HTTP_REGISTER = 1;
+/**
+ * Created by tanghongfeng on 2018/9/16
+ */
 
-    public void requestRegister(final HashMap<String, String> params,
-                                @NonNull final IModelAsyncResponse<AccountBean> callback) {
-        String url = LoginUrlConstants.Register_Account;
-        HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_REGISTER,
-                handleHttpResponse(callback));
+public class VersionModel implements IVersionModel {
+    private final String TAG = LogUtils.makeLogTag(this.getClass());
+    private static final int HTTP_QUERY_VERSION_INFO = 1;
+
+    protected VersionModel() {
+
+    }
+
+    public boolean requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
+        String url = WelcomeUrlConstants.Query_Version_Data;
+        HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
+        return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(),
+                TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
     }
 
     private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                if (what == HTTP_REGISTER) {
+                if (HTTP_QUERY_VERSION_INFO == what) {
                     // Test code begin
-                    jsonObject = getRegisterAccountData();
+                    jsonObject = getUpdateVersionData();
                     // Test code end
-                    if (jsonObject.optBoolean(LoginConstants.SUCCESS)) {
-                        T retData = new Gson().fromJson(jsonObject.optString(LoginConstants.DATA), new TypeToken<AccountBean>() {
+                    if (jsonObject.optBoolean(WelcomeConstants.SUCCESS)) {
+                        T retData = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA), new TypeToken<VersionEntity>() {
                         }.getType());
                         callback.onResponse(retData);
                     } else {
@@ -59,9 +68,12 @@ public class AccountModel {
     }
 
     // Test code begin
-    private JSONObject getRegisterAccountData() {
+    private JSONObject getUpdateVersionData() {
         String res = "{success:true,code:200,message:'',data:" +
-                "{id:'" + 100 + "',mobile:'测试注册用户', pwd:'111aaa'}}";
+                "{package:'com.pine.template', 'versionCode':2," +
+                "versionName:'1.0.2',minSupportedVersion:1," +
+                "force:false, fileName:'pine_app_template-V1.0.2-release.apk', " +
+                "path:'http://yanyangtian.purang.com/download/bsd_purang.apk'}}";
         try {
             return new JSONObject(res);
         } catch (JSONException e) {

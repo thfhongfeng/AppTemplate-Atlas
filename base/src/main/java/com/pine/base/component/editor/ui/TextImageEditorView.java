@@ -154,13 +154,13 @@ public class TextImageEditorView extends UploadFileLinearLayout {
                             mActivity.getString(R.string.base_delete_content_confirm_msg),
                             new DialogUtils.IActionListener() {
                                 @Override
-                                public void onConfirm() {
-                                    removeView(view);
+                                public void onLeftBtnClick() {
+
                                 }
 
                                 @Override
-                                public void onCancel() {
-
+                                public void onRightBtnClick() {
+                                    removeView(view);
                                 }
                             });
                 }

@@ -1,4 +1,4 @@
-package com.pine.mvp.model;
+package com.pine.mvp.model.net;
 
 import android.support.annotation.NonNull;
 
@@ -12,6 +12,7 @@ import com.pine.mvp.MvpUrlConstants;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.bean.MvpShopItemEntity;
+import com.pine.mvp.model.IMvpShopModel;
 import com.pine.tool.util.DecimalUtils;
 import com.pine.tool.util.GPSUtils;
 import com.pine.tool.util.LogUtils;
@@ -20,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -29,20 +29,26 @@ import java.util.Random;
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopModel {
+public class MvpShopModel implements IMvpShopModel {
     private final String TAG = LogUtils.makeLogTag(this.getClass());
     private static final int HTTP_ADD_SHOP = 1;
     private static final int HTTP_QUERY_SHOP_DETAIL = 2;
     private static final int HTTP_QUERY_SHOP_LIST = 3;
     private static final int HTTP_QUERY_SHOP_AND_PRODUCT_LIST = 4;
 
-    public void requestAddShop(final HashMap<String, String> params,
+    protected MvpShopModel() {
+
+    }
+
+    @Override
+    public void requestAddShop(final Map<String, String> params,
                                @NonNull final IModelAsyncResponse<MvpShopDetailEntity> callback) {
         String url = MvpUrlConstants.Add_Shop;
         HttpRequestManager.setJsonRequest(url, params, TAG, HTTP_ADD_SHOP,
                 handleHttpResponse(callback, null));
     }
 
+    @Override
     public void requestShopDetailData(final Map<String, String> params,
                                       @NonNull final IModelAsyncResponse<MvpShopDetailEntity> callback) {
         String url = MvpUrlConstants.Query_ShopDetail;
@@ -50,6 +56,7 @@ public class MvpShopModel {
                 handleHttpResponse(callback, null));
     }
 
+    @Override
     public void requestShopListData(final Map<String, String> params,
                                     @NonNull final IModelAsyncResponse<ArrayList<MvpShopItemEntity>> callback) {
         String url = MvpUrlConstants.Query_ShopList;
@@ -57,6 +64,7 @@ public class MvpShopModel {
                 handleHttpResponse(callback, params.get(MvpConstants.PAGE_NO)));
     }
 
+    @Override
     public void requestShopAndProductListData(Map<String, String> params,
                                               @NonNull final IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>> callback) {
         String url = MvpUrlConstants.Query_ShopAndProductList;

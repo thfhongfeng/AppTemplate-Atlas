@@ -13,7 +13,8 @@ import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopCheckListPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopSearchCheckContract;
-import com.pine.mvp.model.MvpShopModel;
+import com.pine.mvp.model.IMvpShopModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,13 +29,13 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
     public final static String RESULT_CHECKED_LIST_KEY = "result_checked_list_key";
     public final static String REQUEST_CHECKED_LIST_KEY = "request_checked_list_key";
 
-    private MvpShopModel mModel;
+    private IMvpShopModel mShopModel;
     private MvpShopCheckListPaginationAdapter mAdapter;
     private boolean mSearchMode;
     private ArrayList<MvpShopItemEntity> mBelongShopList;
 
     public MvpShopSearchCheckPresenter() {
-        mModel = new MvpShopModel();
+        mShopModel = MvpModelFactory.getMvpShopModel();
     }
 
     @Override
@@ -74,7 +75,7 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
         }
 
         setUiLoading(true);
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
+        mShopModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> mvpShopItemEntities) {
                 setUiLoading(false);

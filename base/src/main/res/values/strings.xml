@@ -55,8 +55,8 @@
     <string name="base_ui_access_login_forbidden">您需要登陆</string>
     <string name="base_ui_access_vip_level_forbidden">您需要成为%s级会员</string>
 
-    <string name="base_rationale_ask">没有授予相应权限，应用无法可能无法正常运行。</string>
-    <string name="base_rationale_ask_again">没有授予相应权限，应用无法可能无法正常运行。请打开应用设置允许相应权限。</string>
+    <string name="base_rationale_ask">没有授予相应权限，应用可能无法正常运行。</string>
+    <string name="base_rationale_ask_again">没有授予相应权限，应用可能无法正常运行。请打开应用设置允许相应权限。</string>
     <string name="base_title_settings_dialog">权限需求</string>
     <string name="base_rationale_need">需要授予相应权限(点击确定进行权限授予)</string>
 

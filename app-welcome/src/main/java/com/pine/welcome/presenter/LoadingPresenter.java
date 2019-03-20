@@ -24,8 +24,9 @@ import com.pine.welcome.bean.BundleSwitcherEntity;
 import com.pine.welcome.bean.VersionEntity;
 import com.pine.welcome.contract.ILoadingContract;
 import com.pine.welcome.manager.ApkVersionManager;
-import com.pine.welcome.model.BundleSwitcherModel;
-import com.pine.welcome.model.VersionModel;
+import com.pine.welcome.model.IBundleSwitcherModel;
+import com.pine.welcome.model.IVersionModel;
+import com.pine.welcome.model.WelModelFactory;
 import com.pine.welcome.ui.activity.WelcomeActivity;
 
 import java.io.File;
@@ -37,13 +38,13 @@ import java.util.ArrayList;
 
 public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> implements ILoadingContract.Presenter {
     private final static long LOADING_MAX_TIME = 2000;
-    private BundleSwitcherModel mBundleSwitcherModel;
-    private VersionModel mVersionModel;
+    private IBundleSwitcherModel mBundleSwitcherModel;
+    private IVersionModel mVersionModel;
     private long mStartTimeMillis;
 
     public LoadingPresenter() {
-        mBundleSwitcherModel = new BundleSwitcherModel();
-        mVersionModel = new VersionModel();
+        mBundleSwitcherModel = WelModelFactory.getBundleSwitcherModel();
+        mVersionModel = WelModelFactory.getVersionModel();
     }
 
     @Override

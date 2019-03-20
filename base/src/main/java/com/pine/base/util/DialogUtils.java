@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -70,37 +75,63 @@ public class DialogUtils {
     }
 
     /**
-     * 提示框
+     * 确认提示框
      *
-     * @param msg
+     * @param content
      * @param listener
      * @return
      */
-    public static Dialog showConfirmDialog(Context context, String msg, final IActionListener listener) {
+    public static Dialog showConfirmDialog(Context context, String content, final IActionListener listener) {
+        return showConfirmDialog(context, "", content,
+                context.getString(R.string.base_cancel), Color.parseColor("#999999"),
+                context.getString(R.string.base_confirm), Color.parseColor("#70B642"),
+                listener);
+    }
+
+    /**
+     * 提示框
+     *
+     * @param content
+     * @param listener
+     * @return
+     */
+    public static Dialog showConfirmDialog(Context context, String title, String content,
+                                           String leftBtnText, @ColorInt int leftColor,
+                                           String rightBtnText, @ColorInt int rightColor,
+                                           final IActionListener listener) {
         LayoutInflater inflaterDl = LayoutInflater.from(context);
-        LinearLayout layout = (LinearLayout) inflaterDl.inflate(R.layout.base_dialog_confirm, null);
+        RelativeLayout layout = (RelativeLayout) inflaterDl.inflate(R.layout.base_dialog_confirm, null);
         //对话框
         final Dialog dialog = new AlertDialog.Builder(context).create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
         dialog.getWindow().setContentView(layout);
-        TextView msg_tv = layout.findViewById(R.id.msg_tv);
-        msg_tv.setText(msg);
-        TextView cancel_btn_tv = layout.findViewById(R.id.cancel_btn_tv);
-        TextView confirm_btn_tv = layout.findViewById(R.id.confirm_btn_tv);
-        cancel_btn_tv.setOnClickListener(new View.OnClickListener() {
+        TextView title_tv = layout.findViewById(R.id.title_tv);
+        TextView content_tv = layout.findViewById(R.id.content_tv);
+        if (TextUtils.isEmpty(title)) {
+            title_tv.setVisibility(View.GONE);
+        } else {
+            title_tv.setText(title);
+        }
+        content_tv.setText(content);
+        TextView left_btn_tv = layout.findViewById(R.id.left_btn_tv);
+        TextView right_btn_tv = layout.findViewById(R.id.right_btn_tv);
+        left_btn_tv.setTextColor(leftColor);
+        right_btn_tv.setTextColor(rightColor);
+        left_btn_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onCancel();
+                    listener.onLeftBtnClick();
                 }
                 dialog.dismiss();
             }
         });
-        confirm_btn_tv.setOnClickListener(new View.OnClickListener() {
+        right_btn_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onConfirm();
+                    listener.onRightBtnClick();
                 }
                 dialog.dismiss();
             }
@@ -293,8 +324,8 @@ public class DialogUtils {
 
 
     public interface IActionListener {
-        void onConfirm();
+        void onLeftBtnClick();
 
-        void onCancel();
+        void onRightBtnClick();
     }
 }

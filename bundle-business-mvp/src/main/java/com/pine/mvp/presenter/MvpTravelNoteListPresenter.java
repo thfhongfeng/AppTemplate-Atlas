@@ -10,7 +10,8 @@ import com.pine.mvp.MvpConstants;
 import com.pine.mvp.adapter.MvpTravelNoteListPaginationAdapter;
 import com.pine.mvp.bean.MvpTravelNoteItemEntity;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
-import com.pine.mvp.model.MvpTravelNoteModel;
+import com.pine.mvp.model.IMvpTravelNoteModel;
+import com.pine.mvp.model.MvpModelFactory;
 import com.pine.mvp.ui.activity.MvpTravelNoteReleaseActivity;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ import java.util.HashMap;
 public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteListContract.Ui>
         implements IMvpTravelNoteListContract.Presenter {
     private String mId;
-    private MvpTravelNoteModel mModel;
+    private IMvpTravelNoteModel mTravelNoteModel;
     private MvpTravelNoteListPaginationAdapter mMvpTravelNoteItemAdapter;
 
     public MvpTravelNoteListPresenter() {
-        mModel = new MvpTravelNoteModel();
+        mTravelNoteModel = MvpModelFactory.getMvpTravelNoteModel();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MvpTravelNoteListPresenter extends BasePresenter<IMvpTravelNoteList
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpTravelNoteItemAdapter.getPageSize()));
         params.put("id", mId);
         setUiLoading(true);
-        mModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
+        mTravelNoteModel.requestTravelNoteListData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteItemEntity> list) {
                 setUiLoading(false);

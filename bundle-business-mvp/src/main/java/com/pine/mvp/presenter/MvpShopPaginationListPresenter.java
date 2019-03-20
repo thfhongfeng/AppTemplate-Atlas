@@ -9,7 +9,8 @@ import com.pine.mvp.MvpConstants;
 import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopPaginationContract;
-import com.pine.mvp.model.MvpShopModel;
+import com.pine.mvp.model.IMvpShopModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 
 public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPaginationContract.Ui>
         implements IMvpShopPaginationContract.Presenter {
-    private MvpShopModel mModel;
+    private IMvpShopModel mShopModel;
     private MvpShopListPaginationAdapter mMvpHomeItemAdapter;
 
     private ILocationListener mLocationListener = new ILocationListener() {
@@ -36,7 +37,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
     };
 
     public MvpShopPaginationListPresenter() {
-        mModel = new MvpShopModel();
+        mShopModel = MvpModelFactory.getMvpShopModel();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
             params.put("longitude", String.valueOf(location.getLongitude()));
         }
         setUiLoading(true);
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
+        mShopModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> list) {
                 setUiLoading(false);

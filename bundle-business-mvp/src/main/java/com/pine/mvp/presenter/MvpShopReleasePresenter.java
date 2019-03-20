@@ -8,7 +8,8 @@ import com.pine.base.bean.BaseInputParam;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopReleaseContract;
-import com.pine.mvp.model.MvpShopModel;
+import com.pine.mvp.model.IMvpShopModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.HashMap;
 
@@ -18,10 +19,10 @@ import java.util.HashMap;
 
 public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContract.Ui>
         implements IMvpShopReleaseContract.Presenter {
-    private MvpShopModel mModel;
+    private IMvpShopModel mShopModel;
 
     public MvpShopReleasePresenter() {
-        mModel = new MvpShopModel();
+        mShopModel = MvpModelFactory.getMvpShopModel();
     }
 
     @NonNull
@@ -127,7 +128,7 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
         }
 
         setUiLoading(true);
-        mModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
+        mShopModel.requestAddShop(params, new IModelAsyncResponse<MvpShopDetailEntity>() {
             @Override
             public void onResponse(MvpShopDetailEntity entity) {
                 setUiLoading(false);

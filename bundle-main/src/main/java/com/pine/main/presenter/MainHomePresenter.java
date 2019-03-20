@@ -4,7 +4,8 @@ import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.main.contract.IMainHomeContract;
-import com.pine.main.model.MainHomeModel;
+import com.pine.main.model.IMainHomeModel;
+import com.pine.main.model.MainModelFactory;
 
 import java.util.ArrayList;
 
@@ -13,18 +14,18 @@ import java.util.ArrayList;
  */
 
 public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> implements IMainHomeContract.Presenter {
-    private MainHomeModel mModel;
+    private IMainHomeModel mHomeModel;
     private String[] mGridViewNames;
     private ArrayList<String> mGridViewBundleList;
     private ArrayList<String> mGridViewCommandList;
 
     public MainHomePresenter() {
-        mModel = new MainHomeModel();
+        mHomeModel = MainModelFactory.getMainHomeModel();
     }
 
     @Override
     public void loadBusinessBundleData() {
-        mModel.requestBusinessListData(new IModelAsyncResponse<ArrayList<MainBusinessItemEntity>>() {
+        mHomeModel.requestBusinessListData(new IModelAsyncResponse<ArrayList<MainBusinessItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MainBusinessItemEntity> entityList) {
                 if (entityList != null && entityList.size() > 0 && isUiAlive()) {

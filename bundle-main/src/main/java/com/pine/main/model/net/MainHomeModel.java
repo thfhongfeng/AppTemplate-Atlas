@@ -1,4 +1,4 @@
-package com.pine.main.model;
+package com.pine.main.model.net;
 
 import android.support.annotation.NonNull;
 
@@ -11,6 +11,7 @@ import com.pine.config.ConfigBundleKey;
 import com.pine.main.MainConstants;
 import com.pine.main.MainUrlConstants;
 import com.pine.main.bean.MainBusinessItemEntity;
+import com.pine.main.model.IMainHomeModel;
 import com.pine.router.command.RouterDemoCommand;
 import com.pine.router.command.RouterMvcCommand;
 import com.pine.router.command.RouterMvpCommand;
@@ -27,10 +28,15 @@ import java.util.HashMap;
  * Created by tanghongfeng on 2018/9/13
  */
 
-public class MainHomeModel {
+public class MainHomeModel implements IMainHomeModel {
     private final String TAG = LogUtils.makeLogTag(this.getClass());
     private static final int HTTP_QUERY_BUSINESS_LIST = 1;
 
+    protected MainHomeModel() {
+
+    }
+
+    @Override
     public void requestBusinessListData(@NonNull final IModelAsyncResponse<ArrayList<MainBusinessItemEntity>> callback) {
         String url = MainUrlConstants.Query_BusinessList_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);

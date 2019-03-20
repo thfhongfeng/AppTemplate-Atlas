@@ -1,4 +1,4 @@
-package com.pine.welcome.model;
+package com.pine.welcome.model.net;
 
 import android.support.annotation.NonNull;
 
@@ -10,39 +10,47 @@ import com.pine.base.http.callback.HttpJsonCallback;
 import com.pine.tool.util.LogUtils;
 import com.pine.welcome.WelcomeConstants;
 import com.pine.welcome.WelcomeUrlConstants;
-import com.pine.welcome.bean.VersionEntity;
+import com.pine.welcome.bean.BundleSwitcherEntity;
+import com.pine.welcome.model.IBundleSwitcherModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by tanghongfeng on 2018/9/16
+ * Created by tanghongfeng on 2018/9/14
  */
 
-public class VersionModel {
+public class BundleSwitcherModel implements IBundleSwitcherModel {
     private final String TAG = LogUtils.makeLogTag(this.getClass());
-    private static final int HTTP_QUERY_VERSION_INFO = 1;
+    private static final int HTTP_REQUEST_QUERY_BUNDLE_SWITCHER = 1;
 
-    public boolean requestUpdateVersionData(@NonNull IModelAsyncResponse<VersionEntity> callback) {
-        String url = WelcomeUrlConstants.Query_Version_Data;
+    protected BundleSwitcherModel() {
+
+    }
+
+    @Override
+    public boolean requestBundleSwitcherData(@NonNull IModelAsyncResponse<ArrayList<BundleSwitcherEntity>> callback) {
+        String url = WelcomeUrlConstants.Query_BundleSwitcher_Data;
         HttpJsonCallback httpStringCallback = handleHttpResponse(callback);
         return HttpRequestManager.setJsonRequest(url, new HashMap<String, String>(),
-                TAG, HTTP_QUERY_VERSION_INFO, httpStringCallback);
+                TAG, HTTP_REQUEST_QUERY_BUNDLE_SWITCHER, httpStringCallback);
     }
 
     private <T> HttpJsonCallback handleHttpResponse(final IModelAsyncResponse<T> callback) {
         return new HttpJsonCallback() {
             @Override
             public void onResponse(int what, JSONObject jsonObject) {
-                if (HTTP_QUERY_VERSION_INFO == what) {
+                if (HTTP_REQUEST_QUERY_BUNDLE_SWITCHER == what) {
                     // Test code begin
-                    jsonObject = getUpdateVersionData();
+                    jsonObject = getBundleSwitcherData();
                     // Test code end
                     if (jsonObject.optBoolean(WelcomeConstants.SUCCESS)) {
-                        T retData = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA), new TypeToken<VersionEntity>() {
-                        }.getType());
+                        T retData = new Gson().fromJson(jsonObject.optString(WelcomeConstants.DATA),
+                                new TypeToken<ArrayList<BundleSwitcherEntity>>() {
+                                }.getType());
                         callback.onResponse(retData);
                     } else {
                         callback.onFail(new Exception(jsonObject.optString("message")));
@@ -63,12 +71,12 @@ public class VersionModel {
     }
 
     // Test code begin
-    private JSONObject getUpdateVersionData() {
+    private JSONObject getBundleSwitcherData() {
         String res = "{success:true,code:200,message:'',data:" +
-                "{package:'com.pine.template', 'versionCode':2," +
-                "versionName:'1.0.2',minSupportedVersion:1," +
-                "force:false, fileName:'pine_app_template-V1.0.2-release.apk', " +
-                "path:'http://yanyangtian.purang.com/download/bsd_purang.apk'}}";
+                "[{bundleKey:'login_bundle', open:true},{bundleKey:'main_bundle', open:true}," +
+                "{bundleKey:'user_bundle', open:true},{bundleKey:'business_mvc_bundle', open:true}," +
+                "{bundleKey:'business_mvp_bundle', open:true},{bundleKey:'business_mvvm_bundle', open:true}," +
+                "{bundleKey:'business_demo_bundle', open:true}]}";
         try {
             return new JSONObject(res);
         } catch (JSONException e) {

@@ -6,7 +6,8 @@ import com.pine.mvp.MvpConstants;
 import com.pine.mvp.adapter.MvpShopListPaginationTreeAdapter;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
 import com.pine.mvp.contract.IMvpShopTreeListContract;
-import com.pine.mvp.model.MvpShopModel;
+import com.pine.mvp.model.IMvpShopModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +18,11 @@ import java.util.HashMap;
 
 public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListContract.Ui>
         implements IMvpShopTreeListContract.Presenter {
-    private MvpShopModel mModel;
+    private IMvpShopModel mShopModel;
     private MvpShopListPaginationTreeAdapter mMvpHomeItemAdapter;
 
     public MvpShopTreeListPresenter() {
-        mModel = new MvpShopModel();
+        mShopModel = MvpModelFactory.getMvpShopModel();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class MvpShopTreeListPresenter extends BasePresenter<IMvpShopTreeListCont
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpHomeItemAdapter.getPageSize()));
         setUiLoading(true);
-        mModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
+        mShopModel.requestShopAndProductListData(params, new IModelAsyncResponse<ArrayList<MvpShopAndProductEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopAndProductEntity> list) {
                 setUiLoading(false);

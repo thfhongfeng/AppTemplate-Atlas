@@ -17,7 +17,8 @@ import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
 import com.pine.mvp.contract.IMvpTravelNoteReleaseContract;
-import com.pine.mvp.model.MvpTravelNoteModel;
+import com.pine.mvp.model.IMvpTravelNoteModel;
+import com.pine.mvp.model.MvpModelFactory;
 import com.pine.mvp.ui.activity.MvpShopSearchCheckActivity;
 
 import org.json.JSONArray;
@@ -36,11 +37,11 @@ import java.util.Map;
 public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteReleaseContract.Ui>
         implements IMvpTravelNoteReleaseContract.Presenter {
     public final int REQUEST_CODE_SELECT_BELONG_SHOP = 1;
-    private MvpTravelNoteModel mModel;
+    private IMvpTravelNoteModel mTravelNoteModel;
     private ArrayList<MvpShopItemEntity> mBelongShopList;
 
     public MvpTravelNoteReleasePresenter() {
-        mModel = new MvpTravelNoteModel();
+        mTravelNoteModel = MvpModelFactory.getMvpTravelNoteModel();
     }
 
     @NonNull
@@ -201,7 +202,7 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
             params.put(contentBean.getKey(), contentArr.toString());
         }
         setUiLoading(true);
-        mModel.requestAddTravelNote(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
+        mTravelNoteModel.requestAddTravelNote(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
                 setUiLoading(false);

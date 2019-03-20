@@ -83,6 +83,8 @@ app_third_sdk_provider.map_provider = "baidu"
 app_third_sdk_provider.image_loader_provider = "glide"
 // 第三方http请求框架提供者，默认使用nohttp(目前可供选择项：nohttp)
 app_third_sdk_provider.http_request_provider = "nohttp"
+// 业务数据源提供者，默认使用net(目前可供选择项：local、net)
+app_third_sdk_provider.data_source_provider = "net"
 
 ext.app_third_sdk_provider = app_third_sdk_provider
 

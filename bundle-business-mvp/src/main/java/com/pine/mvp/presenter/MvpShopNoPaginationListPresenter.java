@@ -5,7 +5,8 @@ import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpShopListNoPaginationAdapter;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.contract.IMvpShopNoPaginationListContract;
-import com.pine.mvp.model.MvpShopModel;
+import com.pine.mvp.model.IMvpShopModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,11 +17,11 @@ import java.util.HashMap;
 
 public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPaginationListContract.Ui>
         implements IMvpShopNoPaginationListContract.Presenter {
-    private MvpShopModel mModel;
+    private IMvpShopModel mShopModel;
     private MvpShopListNoPaginationAdapter mMvpHomeItemAdapter;
 
     public MvpShopNoPaginationListPresenter() {
-        mModel = new MvpShopModel();
+        mShopModel = MvpModelFactory.getMvpShopModel();
     }
 
     @Override
@@ -39,7 +40,7 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
         }
         HashMap<String, String> params = new HashMap<>();
         setUiLoading(true);
-        mModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
+        mShopModel.requestShopListData(params, new IModelAsyncResponse<ArrayList<MvpShopItemEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpShopItemEntity> list) {
                 setUiLoading(false);

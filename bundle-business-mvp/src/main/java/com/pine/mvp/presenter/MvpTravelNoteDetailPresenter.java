@@ -10,7 +10,8 @@ import com.pine.mvp.adapter.MvpTravelNoteDetailComplexAdapter;
 import com.pine.mvp.bean.MvpTravelNoteCommentEntity;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
 import com.pine.mvp.contract.IMvpTravelNoteDetailContract;
-import com.pine.mvp.model.MvpTravelNoteModel;
+import com.pine.mvp.model.IMvpTravelNoteModel;
+import com.pine.mvp.model.MvpModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +24,11 @@ import java.util.List;
 public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDetailContract.Ui>
         implements IMvpTravelNoteDetailContract.Presenter {
     private String mId;
-    private MvpTravelNoteModel mModel;
+    private IMvpTravelNoteModel mTravelNoteModel;
     private MvpTravelNoteDetailComplexAdapter mTravelNoteDetailAdapter;
 
     public MvpTravelNoteDetailPresenter() {
-        mModel = new MvpTravelNoteModel();
+        mTravelNoteModel = MvpModelFactory.getMvpTravelNoteModel();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         HashMap<String, String> params = new HashMap<>();
         params.put("id", mId);
         setUiLoading(true);
-        mModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
+        mTravelNoteModel.requestTravelNoteDetailData(params, new IModelAsyncResponse<MvpTravelNoteDetailEntity>() {
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
                 setUiLoading(false);
@@ -95,7 +96,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mTravelNoteDetailAdapter.getPageSize()));
         params.put("id", mId);
         setUiLoading(true);
-        mModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
+        mTravelNoteModel.requestTravelNoteCommentData(params, new IModelAsyncResponse<ArrayList<MvpTravelNoteCommentEntity>>() {
             @Override
             public void onResponse(ArrayList<MvpTravelNoteCommentEntity> list) {
                 setUiLoading(false);
