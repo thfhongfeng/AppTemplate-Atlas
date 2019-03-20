@@ -5,21 +5,12 @@
     android:background="#f8f8f8"
     android:orientation="vertical"
     android:paddingLeft="@dimen/dp_10"
-    android:paddingRight="@dimen/dp_10">
+    android:paddingTop="@dimen/dp_5"
+    android:paddingRight="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_5">
 
-    <TextView
-        android:id="@+id/day_tv"
+    <com.pine.base.component.editor.ui.TextImageDisplayView
+        android:id="@+id/day_tidv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp_5"
-        android:paddingTop="@dimen/dp_5"
-        android:textColor="#992328"
-        android:textSize="@dimen/sp_15" />
-
-    <TextView
-        android:id="@+id/content_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#333333"
-        android:textSize="@dimen/sp_14" />
+        android:layout_height="wrap_content"></com.pine.base.component.editor.ui.TextImageDisplayView>
 </LinearLayout>

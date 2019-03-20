@@ -3,7 +3,7 @@ package com.pine.login.contract;
 import android.support.annotation.NonNull;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 
 /**
  * Created by tanghongfeng on 2018/9/14
@@ -12,10 +12,10 @@ import com.pine.base.bean.InputParamBean;
 public interface ILoginContract {
     interface Ui extends IBaseContract.Ui {
         @NonNull
-        InputParamBean getUserMobileParam(String key);
+        BaseInputParam getUserMobileParam(String key);
 
         @NonNull
-        InputParamBean getUserPasswordParam(String key);
+        BaseInputParam getUserPasswordParam(String key);
     }
 
     interface Presenter extends IBaseContract.Presenter {

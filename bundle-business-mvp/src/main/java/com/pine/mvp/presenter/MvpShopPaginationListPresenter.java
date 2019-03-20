@@ -1,7 +1,5 @@
 package com.pine.mvp.presenter;
 
-import android.os.Bundle;
-
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.base.component.map.ILocationListener;
@@ -41,14 +39,9 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
         mModel = new MvpShopModel();
     }
 
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
     @Override
     public void onUiState(BasePresenter.UiState state) {
+        super.onUiState(state);
         switch (state) {
             case UI_STATE_ON_CREATE:
                 break;
@@ -86,7 +79,7 @@ public class MvpShopPaginationListPresenter extends BasePresenter<IMvpShopPagina
         HashMap<String, String> params = new HashMap<>();
         int pageNo = 1;
         if (!refresh) {
-            pageNo = mMvpHomeItemAdapter.getPageNo() + 1;
+            pageNo = mMvpHomeItemAdapter.getNextPageNo();
         }
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mMvpHomeItemAdapter.getPageSize()));

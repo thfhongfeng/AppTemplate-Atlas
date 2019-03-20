@@ -133,19 +133,19 @@ public class MvpWebViewActivity extends BaseMvpActionBarImageMenuActivity<IMvpWe
             @Override
             public void onShareSuccess(ShareBean shareBean) {
                 Toast.makeText(MvpWebViewActivity.this,
-                        R.string.mvp_share_wei_bo_success, Toast.LENGTH_SHORT).show();
+                        R.string.mvp_share_success, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onShareCancel(ShareBean shareBean) {
                 Toast.makeText(MvpWebViewActivity.this,
-                        R.string.mvp_share_wei_bo_cancel, Toast.LENGTH_SHORT).show();
+                        R.string.mvp_share_cancel, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onShareFail(ShareBean shareBean) {
                 Toast.makeText(MvpWebViewActivity.this,
-                        R.string.mvp_share_wei_bo_fail, Toast.LENGTH_SHORT).show();
+                        R.string.mvp_share_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }

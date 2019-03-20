@@ -22,13 +22,17 @@ public interface IMapManager {
 
     Intent getMapActivityIntent(Context context, MapSdkManager.MapType type);
 
+    Intent getMarkMapActivityIntent(Context context, double latitude, double longitude,
+                                    boolean canMark);
+
     /**
      * @param context
      * @param type
-     * @param latitude  Gcj_02坐标系
-     * @param longitude Gcj_02坐标系
+     * @param latitude  Gcj_02坐标系 纬度
+     * @param longitude Gcj_02坐标系 经度
+     * @param canMark   是否可以标记
      * @return
      */
-    Intent getMapActivityIntent(Context context, MapSdkManager.MapType type,
-                                double latitude, double longitude);
+    Intent getMarkMapActivityIntent(Context context, MapSdkManager.MapType type,
+                                    double latitude, double longitude, boolean canMark);
 }

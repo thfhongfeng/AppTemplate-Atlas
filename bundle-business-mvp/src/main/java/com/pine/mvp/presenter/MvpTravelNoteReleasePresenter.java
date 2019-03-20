@@ -1,19 +1,20 @@
 package com.pine.mvp.presenter;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.pine.base.BaseConstants;
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.bean.InputParamBean;
-import com.pine.base.component.editor.bean.EditorItemData;
-import com.pine.base.component.editor.ui.TextImageEditorView;
+import com.pine.base.bean.BaseInputParam;
+import com.pine.base.component.editor.bean.TextImageEditorItemData;
+import com.pine.base.component.editor.bean.TextImageItemEntity;
 import com.pine.base.component.uploader.bean.FileUploadBean;
 import com.pine.base.component.uploader.ui.UploadFileLinearLayout;
 import com.pine.mvp.R;
+import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
 import com.pine.mvp.contract.IMvpTravelNoteReleaseContract;
 import com.pine.mvp.model.MvpTravelNoteModel;
@@ -36,21 +37,10 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
         implements IMvpTravelNoteReleaseContract.Presenter {
     public final int REQUEST_CODE_SELECT_BELONG_SHOP = 1;
     private MvpTravelNoteModel mModel;
-    private ArrayList<String> mBelongShopIdList;
-    private ArrayList<String> mBelongShopNameList;
+    private ArrayList<MvpShopItemEntity> mBelongShopList;
 
     public MvpTravelNoteReleasePresenter() {
         mModel = new MvpTravelNoteModel();
-    }
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @NonNull
@@ -99,24 +89,26 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
     @Override
     public void selectBelongShop() {
         Intent intent = new Intent(getContext(), MvpShopSearchCheckActivity.class);
-        intent.putStringArrayListExtra(MvpShopSearchCheckPresenter.REQUEST_CHECKED_IDS_KEY, mBelongShopIdList);
+        intent.putParcelableArrayListExtra(MvpShopSearchCheckPresenter.REQUEST_CHECKED_LIST_KEY, mBelongShopList);
         getActivity().startActivityForResult(intent, REQUEST_CODE_SELECT_BELONG_SHOP);
     }
 
     @Override
     public void onBelongShopSelected(Intent data) {
-        mBelongShopIdList = data.getStringArrayListExtra(MvpShopSearchCheckPresenter.RESULT_CHECKED_IDS_KEY);
-        mBelongShopNameList = data.getStringArrayListExtra(MvpShopSearchCheckPresenter.RESULT_CHECKED_NAMES_KEY);
-        if (mBelongShopIdList != null && mBelongShopNameList != null &&
-                mBelongShopIdList.size() == mBelongShopNameList.size() && mBelongShopIdList.size() > 0) {
-            String ids = mBelongShopIdList.get(0);
-            String names = mBelongShopNameList.get(0);
-            for (int i = 1; i < mBelongShopIdList.size(); i++) {
-                ids += "," + mBelongShopIdList.get(i);
-                names += "," + mBelongShopNameList.get(i);
+        mBelongShopList = data.getParcelableArrayListExtra(MvpShopSearchCheckPresenter.RESULT_CHECKED_LIST_KEY);
+        String ids = "";
+        String names = "";
+        if (mBelongShopList != null) {
+            for (MvpShopItemEntity entity : mBelongShopList) {
+                ids += entity.getId() + ",";
+                names += entity.getName() + ",";
             }
-            getUi().setBelongShop(ids, names);
         }
+        if (!TextUtils.isEmpty(ids) && ids.lastIndexOf(",") == ids.length() - 1) {
+            ids = ids.substring(0, ids.length() - 1);
+            names = names.substring(0, names.length() - 1);
+        }
+        getUi().setBelongShop(ids, names);
     }
 
     @Override
@@ -126,21 +118,21 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
         }
         HashMap<String, String> params = new HashMap<>();
 
-        InputParamBean<String> title = getUi().getNoteTitleParam("title");
+        BaseInputParam<String> title = getUi().getNoteTitleParam("title");
         if (title.checkIsEmpty(R.string.mvp_note_release_title_need)) {
             return;
         } else {
             params.put(title.getKey(), title.getValue());
         }
 
-        InputParamBean<String> setOutDate = getUi().getNoteSetOutDateParam("setOutDate");
+        BaseInputParam<String> setOutDate = getUi().getNoteSetOutDateParam("setOutDate");
         if (setOutDate.checkIsEmpty(R.string.mvp_note_release_set_out_date_need)) {
             return;
         } else {
             params.put(setOutDate.getKey(), setOutDate.getValue());
         }
 
-        InputParamBean<String> dayCount = getUi().getNoteTravelDayCountParam("dayCount");
+        BaseInputParam<String> dayCount = getUi().getNoteTravelDayCountParam("dayCount");
         if (dayCount.checkIsEmpty(R.string.mvp_note_release_day_count_need) ||
                 !dayCount.checkNumberRange(R.string.mvp_note_release_day_count_incorrect,
                         1, Integer.MAX_VALUE)) {
@@ -149,50 +141,43 @@ public class MvpTravelNoteReleasePresenter extends BasePresenter<IMvpTravelNoteR
             params.put(dayCount.getKey(), dayCount.getValue());
         }
 
-        InputParamBean<String> belongShops = getUi().getNoteBelongShopsParam("belongShops");
+        BaseInputParam<MvpShopItemEntity> belongShops = getUi().getNoteBelongShopsParam("belongShops", mBelongShopList);
         if (belongShops.checkIsEmpty(R.string.mvp_note_release_belong_shops_need)) {
             return;
         } else {
-            params.put(belongShops.getKey(), belongShops.getValue());
+            params.put(belongShops.getKey(), new Gson().toJson(belongShops.getValue()));
         }
 
-        InputParamBean<String> belongShopNames = getUi().getNoteBelongShopNamesParam("belongShopNames");
-        if (belongShops.checkIsEmpty(R.string.mvp_note_release_belong_shops_need)) {
-            return;
-        } else {
-            params.put(belongShopNames.getKey(), belongShopNames.getValue());
-        }
-
-        InputParamBean<String> preface = getUi().getNotePrefaceParam("preface");
+        BaseInputParam<String> preface = getUi().getNotePrefaceParam("preface");
         if (preface.checkIsEmpty(R.string.mvp_note_release_preface_need)) {
             return;
         } else {
             params.put(preface.getKey(), preface.getValue());
         }
 
-        InputParamBean<List<List<EditorItemData>>> contentBean = getUi().getNoteContentParam("content");
+        BaseInputParam<List<List<TextImageEditorItemData>>> contentBean = getUi().getNoteContentParam("content");
         if (contentBean.checkIsEmpty(R.string.mvp_note_release_note_content_need)) {
             return;
         } else {
             JSONArray contentArr = new JSONArray();
             try {
                 for (int i = 0; i < contentBean.getValue().size(); i++) {
-                    List<EditorItemData> dayContentList = contentBean.getValue().get(i);
+                    List<TextImageEditorItemData> dayContentList = contentBean.getValue().get(i);
                     if (dayContentList == null || dayContentList.size() < 1) {
                         contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_need);
                         return;
                     }
                     JSONArray dayContentArr = new JSONArray();
                     for (int j = 0; j < dayContentList.size(); j++) {
-                        EditorItemData itemData = dayContentList.get(j);
+                        TextImageEditorItemData itemData = dayContentList.get(j);
                         switch (itemData.getType()) {
-                            case TextImageEditorView.TYPE_TEXT:
+                            case TextImageItemEntity.TYPE_TEXT:
                                 if (TextUtils.isEmpty(itemData.getText())) {
                                     contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_text_need);
                                     return;
                                 }
                                 break;
-                            case TextImageEditorView.TYPE_IMAGE:
+                            case TextImageItemEntity.TYPE_IMAGE:
                                 if (TextUtils.isEmpty(itemData.getRemoteFilePath())) {
                                     contentBean.toastAndTryScrollTo(R.string.mvp_note_release_day_note_image_need);
                                     return;

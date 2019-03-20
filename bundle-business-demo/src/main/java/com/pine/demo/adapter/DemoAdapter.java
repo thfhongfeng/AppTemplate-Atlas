@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.pine.base.BaseApplication;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.demo.R;
 import com.pine.demo.bean.DemoItemEntity;
 
@@ -49,7 +49,7 @@ public class DemoAdapter extends BaseNoPaginationListAdapter {
 
         @Override
         public void updateData(final DemoItemEntity content,
-                               BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+                               BaseListAdapterItemProperty propertyEntity, int position) {
             name_tv.setText(content.getName());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

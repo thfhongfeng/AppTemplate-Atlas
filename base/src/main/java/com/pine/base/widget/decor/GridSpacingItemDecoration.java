@@ -1,4 +1,4 @@
-package com.pine.base.widget.rv_space;
+package com.pine.base.widget.decor;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

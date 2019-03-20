@@ -18,13 +18,14 @@ public class MvpWebViewPresenter extends BasePresenter<IMvpWebViewContract.Ui>
     private String mH5Url;
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
+    public boolean parseIntentData(Bundle bundle) {
         mH5Url = bundle.getString("url", MvpUrlConstants.H5_DefaultUrl);
         return false;
     }
 
     @Override
     public void onUiState(BasePresenter.UiState state) {
+        super.onUiState(state);
         if (state == UiState.UI_STATE_ON_CREATE) {
             getUi().loadUrl(mH5Url);
         }

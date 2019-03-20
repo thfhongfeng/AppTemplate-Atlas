@@ -13,7 +13,7 @@ public interface IMvpTravelNoteDetailContract {
     }
 
     interface Presenter extends IBaseContract.Presenter {
-        void loadTravelNoteDetailData(boolean refresh);
+        void loadTravelNoteDetailData();
 
         void loadTravelNoteCommentData(boolean refresh);
 

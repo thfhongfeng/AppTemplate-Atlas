@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pine.base.R;
-import com.pine.base.component.editor.bean.EditorItemData;
+import com.pine.base.component.editor.bean.TextImageEditorItemData;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.component.uploader.FileUploadComponent;
 import com.pine.base.component.uploader.bean.FileUploadBean;
@@ -27,17 +27,14 @@ import com.pine.tool.util.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pine.base.component.editor.bean.TextImageItemEntity.TYPE_IMAGE;
+import static com.pine.base.component.editor.bean.TextImageItemEntity.TYPE_TEXT;
+
 /**
  * Created by tanghongfeng on 2018/11/13
  */
 
 public class TextImageEditorView extends UploadFileLinearLayout {
-    // 子编辑条目类型null 空条目
-    public final static String TYPE_NULL = "null";
-    // 子编辑条目类型text 文本输入条目
-    public final static String TYPE_TEXT = "text";
-    // 子编辑条目类型image 图片加图片描述输入条目
-    public final static String TYPE_IMAGE = "image";
     private final String TAG = LogUtils.makeLogTag(this.getClass());
 
     // 编辑器索引
@@ -94,10 +91,10 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         mInitChildViewCount++;
 
         mInitChildViewCount++;
-        addText(mInitChildViewCount - 1, new EditorItemData(TYPE_TEXT), false);
+        addText(mInitChildViewCount - 1, new TextImageEditorItemData(TYPE_TEXT), false);
     }
 
-    private void addText(int position, @NonNull EditorItemData data, boolean needFocus) {
+    private void addText(int position, @NonNull TextImageEditorItemData data, boolean needFocus) {
         final View view = LayoutInflater.from(mActivity).inflate(R.layout.base_text_image_editor_item_text, null);
 
         setupEditorView(position, view);
@@ -116,7 +113,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         }
     }
 
-    private void addImage(final int position, @NonNull EditorItemData data) {
+    private void addImage(final int position, @NonNull TextImageEditorItemData data) {
         final View view = LayoutInflater.from(mActivity).inflate(R.layout.base_text_image_editor_item_image, null);
 
         setupEditorView(position, view);
@@ -173,7 +170,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
             @Override
             public void onClick(View v) {
                 mCurAddNoteView = view;
-                addText(indexOfChild(view) + 1, new EditorItemData(TYPE_TEXT), true);
+                addText(indexOfChild(view) + 1, new TextImageEditorItemData(TYPE_TEXT), true);
             }
         });
         view.findViewById(R.id.add_image_btn_tv).setOnClickListener(new OnClickListener() {
@@ -222,11 +219,11 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         mTopTitleView.setVisibility(TextUtils.isEmpty(mTitle) ? GONE : VISIBLE);
     }
 
-    public List<EditorItemData> getValidImageDataList() {
-        List<EditorItemData> imageItemUrlList = new ArrayList<>();
+    public List<TextImageEditorItemData> getValidImageDataList() {
+        List<TextImageEditorItemData> imageItemUrlList = new ArrayList<>();
         if (getChildCount() > mInitChildViewCount) {
             for (int i = mInitChildViewCount; i < getChildCount(); i++) {
-                EditorItemData data = (EditorItemData) getChildAt(i).getTag();
+                TextImageEditorItemData data = (TextImageEditorItemData) getChildAt(i).getTag();
                 if (data != null && TYPE_IMAGE.equals(data.getType()) &&
                         (data.getUploadState() != FileUploadState.UPLOAD_STATE_UPLOADING ||
                                 data.getUploadState() == FileUploadState.UPLOAD_STATE_SUCCESS)) {
@@ -237,12 +234,12 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         return imageItemUrlList;
     }
 
-    public List<EditorItemData> getData() {
-        List<EditorItemData> data = new ArrayList<>();
+    public List<TextImageEditorItemData> getData() {
+        List<TextImageEditorItemData> data = new ArrayList<>();
         int childCount = getChildCount();
         for (int i = mInitChildViewCount; i < childCount; i++) {
             View view = getChildAt(i);
-            EditorItemData itemData = (EditorItemData) view.getTag();
+            TextImageEditorItemData itemData = (TextImageEditorItemData) view.getTag();
             if (itemData != null) {
                 EditText editText = view.findViewById(R.id.text_et);
                 itemData.setText(editText.getText().toString());
@@ -252,9 +249,9 @@ public class TextImageEditorView extends UploadFileLinearLayout {
         return data;
     }
 
-    public void setData(List<EditorItemData> data) {
+    public void setData(List<TextImageEditorItemData> data) {
         for (int i = 0; i < data.size(); i++) {
-            EditorItemData itemData = data.get(i);
+            TextImageEditorItemData itemData = data.get(i);
             if (itemData == null) {
                 continue;
             }
@@ -269,7 +266,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
 
     @Override
     public int getValidImageCount() {
-        List<EditorItemData> imageItemUrlList = getValidImageDataList();
+        List<TextImageEditorItemData> imageItemUrlList = getValidImageDataList();
         return imageItemUrlList == null ? 0 : imageItemUrlList.size();
     }
 
@@ -277,7 +274,7 @@ public class TextImageEditorView extends UploadFileLinearLayout {
     public void onFileUploadPrepare(List<FileUploadBean> uploadBeanList) {
         for (int i = 0; i < uploadBeanList.size(); i++) {
             FileUploadBean bean = uploadBeanList.get(i);
-            EditorItemData data = new EditorItemData(TYPE_IMAGE);
+            TextImageEditorItemData data = new TextImageEditorItemData(TYPE_IMAGE);
             data.setUploadState(bean.getUploadState());
             data.setUploadProgress(bean.getUploadProgress());
             data.setLocalFilePath(bean.getLocalFilePath());
@@ -359,8 +356,8 @@ public class TextImageEditorView extends UploadFileLinearLayout {
 
     private void copyUploadData(FileUploadBean uploadBean) {
         Object obj = uploadBean.getAttachView().getTag();
-        if (obj != null && obj instanceof EditorItemData) {
-            EditorItemData data = (EditorItemData) obj;
+        if (obj != null && obj instanceof TextImageEditorItemData) {
+            TextImageEditorItemData data = (TextImageEditorItemData) obj;
             data.setUploadState(uploadBean.getUploadState());
             data.setUploadProgress(uploadBean.getUploadProgress());
             data.setLocalFilePath(uploadBean.getLocalFilePath());

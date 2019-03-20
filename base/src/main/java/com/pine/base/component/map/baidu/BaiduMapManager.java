@@ -93,12 +93,21 @@ public class BaiduMapManager implements IMapManager {
 
     @Override
     public Intent getMapActivityIntent(Context context) {
-        return getMapActivityIntent(context, MapSdkManager.MapType.MAP_TYPE_NORMAL, -1, -1);
+        return getMapActivityIntent(context, MapSdkManager.MapType.MAP_TYPE_NORMAL);
     }
 
     @Override
     public Intent getMapActivityIntent(Context context, MapSdkManager.MapType mapType) {
-        return getMapActivityIntent(context, mapType, -1, -1);
+        Intent intent = new Intent(context, BaiduMapActivity.class);
+        intent.putExtra("mapTypeOrdinal", mapType.ordinal());
+        return intent;
+    }
+
+    @Override
+    public Intent getMarkMapActivityIntent(Context context, double latitude, double longitude,
+                                           boolean canMark) {
+        return getMarkMapActivityIntent(context, MapSdkManager.MapType.MAP_TYPE_NORMAL,
+                latitude, longitude, canMark);
     }
 
     /**
@@ -109,14 +118,15 @@ public class BaiduMapManager implements IMapManager {
      * @return
      */
     @Override
-    public Intent getMapActivityIntent(Context context, MapSdkManager.MapType mapType,
-                                       double latitude, double longitude) {
+    public Intent getMarkMapActivityIntent(Context context, MapSdkManager.MapType mapType,
+                                           double latitude, double longitude, boolean canMark) {
         Intent intent = new Intent(context, BaiduMapActivity.class);
         intent.putExtra("mapTypeOrdinal", mapType.ordinal());
         if (latitude != -1 && longitude != -1) {
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
         }
+        intent.putExtra("canMark", canMark);
         return intent;
     }
 }

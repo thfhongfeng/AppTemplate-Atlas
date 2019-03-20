@@ -20,12 +20,12 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/sub_title_tv"
+        android:id="@+id/set_out_date_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="@dimen/dp_5"
         android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
         android:textColor="#585858"
         android:textSize="@dimen/sp_12" />
 
@@ -44,7 +44,7 @@
             app:civ_border_width="@dimen/dp_2" />
 
         <TextView
-            android:id="@+id/name_tv"
+            android:id="@+id/author_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_5"
@@ -65,7 +65,7 @@
             android:layout_height="@dimen/dp_12"
             android:layout_marginLeft="@dimen/dp_10"
             android:scaleType="center"
-            android:src="@mipmap/base_ic_like_selected" />
+            android:src="@drawable/base_selector_is_like" />
 
         <TextView
             android:id="@+id/like_count_tv"
@@ -94,8 +94,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp_5"
         android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
         android:text="前言"
         android:textColor="#992328"
         android:textSize="@dimen/sp_15" />

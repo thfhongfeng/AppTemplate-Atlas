@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<V extends IBaseContract.Ui> {
     protected final String TAG = LogUtils.makeLogTag(this.getClass());
+    private UiState mUiState = UiState.UI_STATE_UNDEFINE;
 
     protected boolean mIsLoadProcessing;
 
@@ -46,7 +48,7 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
     @CallSuper
     public void detachUi() {
         if (mUiRef != null) {
-            onUiState(BasePresenter.UiState.UI_STATE_ON_DETACH);
+            onUiState(UiState.UI_STATE_ON_DETACH);
             mUiRef.clear();
         }
     }
@@ -116,9 +118,14 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
     }
 
     public final void finishUi() {
-        if (mUiRef.get() != null && mUiRef.get() instanceof Activity) {
-            ((Activity) mUiRef.get()).finish();
-        }
+        if (mUiRef.get() != null)
+            if (mUiRef.get() instanceof Activity) {
+                ((Activity) mUiRef.get()).finish();
+            } else if (mUiRef.get() instanceof Fragment) {
+                ((Fragment) mUiRef.get()).getActivity().finish();
+            } else if (mUiRef.get() instanceof android.support.v4.app.Fragment) {
+                ((android.support.v4.app.Fragment) mUiRef.get()).getActivity().finish();
+            }
     }
 
     public void setUiLoading(boolean uiLoading) {
@@ -134,7 +141,18 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
      *
      * @return true表示非法， false表示合法
      */
-    public abstract boolean parseInitData(Bundle bundle);
+    public boolean parseIntentData(@NonNull Bundle bundle) {
+        return false;
+    }
+
+    /**
+     * 用于分析传入参数是否非法，在View init之后调用
+     *
+     * @return
+     */
+    public void afterViewInit() {
+
+    }
 
     /**
      * UI状态回调
@@ -142,7 +160,14 @@ public abstract class BasePresenter<V extends IBaseContract.Ui> {
      * @param state UI_STATE_ON_CREATE,UI_STATE_ON_START,UI_STATE_ON_RESUME,UI_STATE_ON_PAUSE,
      *              UI_STATE_ON_STOP,UI_STATE_ON_DETACH
      */
-    public abstract void onUiState(BasePresenter.UiState state);
+    @CallSuper
+    public void onUiState(UiState state) {
+        mUiState = state;
+    }
+
+    public UiState getUiState() {
+        return mUiState;
+    }
 
     public void showShortToast(String message) {
         if (isUiAlive()) {

@@ -1,22 +1,57 @@
 package com.pine.mvp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by tanghongfeng on 2018/9/28
  */
 
-public class MvpShopItemEntity {
+public class MvpShopItemEntity implements Parcelable {
 
     /**
      * id :
      * name :
      * distance :
-     * imgUrl :
+     * mainImgUrl :
      */
 
     private String id;
     private String name;
     private String distance;
-    private String imgUrl;
+    private String mainImgUrl;
+
+    protected MvpShopItemEntity(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        distance = in.readString();
+        mainImgUrl = in.readString();
+    }
+
+    public static final Creator<MvpShopItemEntity> CREATOR = new Creator<MvpShopItemEntity>() {
+        @Override
+        public MvpShopItemEntity createFromParcel(Parcel in) {
+            return new MvpShopItemEntity(in);
+        }
+
+        @Override
+        public MvpShopItemEntity[] newArray(int size) {
+            return new MvpShopItemEntity[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(distance);
+        dest.writeString(mainImgUrl);
+    }
 
     public String getId() {
         return id;
@@ -42,11 +77,11 @@ public class MvpShopItemEntity {
         this.distance = distance;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getMainImgUrl() {
+        return mainImgUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setMainImgUrl(String mainImgUrl) {
+        this.mainImgUrl = mainImgUrl;
     }
 }

@@ -1,10 +1,8 @@
 package com.pine.login.presenter;
 
-import android.os.Bundle;
-
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.login.LoginConstants;
 import com.pine.login.R;
 import com.pine.login.bean.AccountBean;
@@ -22,22 +20,12 @@ public class RegisterPresenter extends BasePresenter<IRegisterContract.Ui>
     private AccountModel mAccountModel = new AccountModel();
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
-    }
-
-    @Override
     public void register() {
         if (mIsLoadProcessing) {
             return;
         }
-        InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
-        InputParamBean<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
+        BaseInputParam<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
+        BaseInputParam<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
         if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 pwdBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {

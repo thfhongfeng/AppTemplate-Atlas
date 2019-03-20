@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pine.base.component.editor.ui.TextImageDisplayView;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseComplexListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpTravelNoteCommentEntity;
 import com.pine.mvp.bean.MvpTravelNoteDetailEntity;
@@ -45,7 +46,7 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
                 adapterEntity = new BaseListAdapterItemEntity();
                 adapterEntity.setData(entity);
                 adapterEntity.getPropertyEntity().setItemViewType(TRAVEL_NOTE_HEAD_VIEW_HOLDER);
-                List<MvpTravelNoteDetailEntity.DaysBean> dayList = entity.getDays();
+                List<MvpTravelNoteDetailEntity.DayBean> dayList = entity.getDays();
                 adapterData.add(adapterEntity);
                 if (dayList != null) {
                     for (int j = 0; j < dayList.size(); j++) {
@@ -107,7 +108,7 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
         private Context mContext;
         private CircleImageView person_civ;
         private ImageView is_like_iv;
-        private TextView title_tv, sub_title_tv, name_tv, create_time_tv, like_count_tv, read_count_tv, preface_tv;
+        private TextView title_tv, set_out_date_tv, author_tv, create_time_tv, like_count_tv, read_count_tv, preface_tv;
 
         public TravelNoteHeadViewHolder(Context context, View itemView) {
             super(itemView);
@@ -115,8 +116,8 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
             person_civ = itemView.findViewById(R.id.person_civ);
             is_like_iv = itemView.findViewById(R.id.is_like_iv);
             title_tv = itemView.findViewById(R.id.title_tv);
-            sub_title_tv = itemView.findViewById(R.id.sub_title_tv);
-            name_tv = itemView.findViewById(R.id.name_tv);
+            set_out_date_tv = itemView.findViewById(R.id.set_out_date_tv);
+            author_tv = itemView.findViewById(R.id.author_tv);
             create_time_tv = itemView.findViewById(R.id.create_time_tv);
             like_count_tv = itemView.findViewById(R.id.like_count_tv);
             read_count_tv = itemView.findViewById(R.id.read_count_tv);
@@ -124,34 +125,34 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
         }
 
         @Override
-        public void updateData(MvpTravelNoteDetailEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
-            ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), person_civ);
+        public void updateData(MvpTravelNoteDetailEntity content, BaseListAdapterItemProperty propertyEntity, int position) {
+            ImageLoaderManager.getInstance().loadImage(mContext, content.getHeadImg(),
+                    R.mipmap.base_iv_portrait_default, -1, person_civ);
             title_tv.setText(content.getTitle());
-            sub_title_tv.setText(content.getSubTitle());
-            name_tv.setText(content.getName());
+            set_out_date_tv.setText(mContext.getString(R.string.mvp_travel_note_detail_set_out_date, content.getSetOutDate()));
+            author_tv.setText(content.getAuthor());
             create_time_tv.setText(content.getCreateTime());
-            is_like_iv.setSelected(content.isIsLike());
+            is_like_iv.setSelected(content.isLike());
             like_count_tv.setText(String.valueOf(content.getLikeCount()));
             read_count_tv.setText(String.valueOf(content.getReadCount()));
             preface_tv.setText(content.getPreface());
         }
     }
 
-    public class TravelNoteDayViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity.DaysBean> {
+    public class TravelNoteDayViewHolder extends BaseListViewHolder<MvpTravelNoteDetailEntity.DayBean> {
         private Context mContext;
-        private TextView day_tv, content_tv;
+        private TextImageDisplayView day_tv;
 
         public TravelNoteDayViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
-            day_tv = itemView.findViewById(R.id.day_tv);
-            content_tv = itemView.findViewById(R.id.content_tv);
+            day_tv = itemView.findViewById(R.id.day_tidv);
         }
 
         @Override
-        public void updateData(MvpTravelNoteDetailEntity.DaysBean content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
-            day_tv.setText(content.getDay());
-            content_tv.setText(content.getContent());
+        public void updateData(MvpTravelNoteDetailEntity.DayBean content, BaseListAdapterItemProperty propertyEntity, int position) {
+            day_tv.setTitle(content.getDay());
+            day_tv.setContent(content.getTextImageContentList());
         }
     }
 
@@ -164,28 +165,28 @@ public class MvpTravelNoteDetailComplexAdapter extends BaseComplexListAdapter<Mv
         }
 
         @Override
-        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(String content, BaseListAdapterItemProperty propertyEntity, int position) {
         }
     }
 
     public class TravelNoteCommentViewHolder extends BaseListViewHolder<MvpTravelNoteCommentEntity> {
         private Context mContext;
         private CircleImageView person_civ;
-        private TextView name_tv, create_time_tv, content_tv;
+        private TextView author_tv, create_time_tv, content_tv;
 
         public TravelNoteCommentViewHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
             person_civ = itemView.findViewById(R.id.person_civ);
-            name_tv = itemView.findViewById(R.id.name_tv);
+            author_tv = itemView.findViewById(R.id.author_tv);
             create_time_tv = itemView.findViewById(R.id.create_time_tv);
             content_tv = itemView.findViewById(R.id.content_tv);
         }
 
         @Override
-        public void updateData(MvpTravelNoteCommentEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(MvpTravelNoteCommentEntity content, BaseListAdapterItemProperty propertyEntity, int position) {
             ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), person_civ);
-            name_tv.setText(content.getName());
+            author_tv.setText(content.getAuthor());
             create_time_tv.setText(content.getCreateTime());
             content_tv.setText(content.getContent());
         }

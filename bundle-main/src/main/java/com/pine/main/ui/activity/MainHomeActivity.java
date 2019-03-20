@@ -4,7 +4,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpNoActionBarActivity;
-import com.pine.base.widget.rv_space.GridSpacingItemDecoration;
+import com.pine.base.widget.decor.GridSpacingItemDecoration;
 import com.pine.main.R;
 import com.pine.main.adapter.MainBusinessAdapter;
 import com.pine.main.bean.MainBusinessItemEntity;

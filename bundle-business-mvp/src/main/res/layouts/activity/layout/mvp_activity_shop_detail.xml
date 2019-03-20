@@ -14,17 +14,248 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/dp_30"
+            android:padding="@dimen/dp_20"
             android:text="Shop Detail" />
 
-        <TextView
-            android:id="@+id/description_tv"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
-            android:padding="@dimen/dp_20" />
+            android:paddingBottom="@dimen/dp_10">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_10"
+                    android:shrinkColumns="1">
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_name_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/name_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_type_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/type_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_online_date_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/online_date_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_contact_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/contact_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:maxLines="1"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_address_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/address_district_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:maxLines="1"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_address_marker_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/address_marker_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:maxLines="1"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_address_detail_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/address_street_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:gravity="top"
+                            android:lines="2"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="top"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_description_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/description_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:gravity="top"
+                            android:lines="3"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+
+                    <TableRow android:layout_margin="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="top"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:text="@string/mvp_shop_release_remark_label"
+                            android:textColor="#989898"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/remark_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/base_shape_round_f3f3f3"
+                            android:gravity="top"
+                            android:lines="3"
+                            android:padding="@dimen/dp_10"
+                            android:textColor="#929292"
+                            android:textSize="@dimen/sp_15" />
+                    </TableRow>
+                </TableLayout>
+
+                <com.pine.base.component.uploader.ui.ImageUploadView
+                    android:id="@+id/photo_iuv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_10"></com.pine.base.component.uploader.ui.ImageUploadView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
         <View
             android:layout_width="match_parent"

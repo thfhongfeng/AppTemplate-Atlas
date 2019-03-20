@@ -1,7 +1,5 @@
 package com.pine.main.presenter;
 
-import android.os.Bundle;
-
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.main.bean.MainBusinessItemEntity;
@@ -22,16 +20,6 @@ public class MainHomePresenter extends BasePresenter<IMainHomeContract.Ui> imple
 
     public MainHomePresenter() {
         mModel = new MainHomeModel();
-    }
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override

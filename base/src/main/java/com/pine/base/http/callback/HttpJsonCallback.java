@@ -24,7 +24,7 @@ public abstract class HttpJsonCallback extends HttpAbstractBaseCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             if (!onFail(what, e)) {
-                Application application = AppUtils.getApplicationByReflect();
+                Application application = AppUtils.getApplication();
                 Toast.makeText(application, application.getString(R.string.base_json_data_err),
                         Toast.LENGTH_SHORT).show();
             }

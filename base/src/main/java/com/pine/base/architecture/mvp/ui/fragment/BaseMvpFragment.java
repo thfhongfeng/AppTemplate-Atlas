@@ -47,7 +47,7 @@ public abstract class BaseMvpFragment<V extends IBaseContract.Ui, P extends Base
     @Override
     protected final boolean parseArguments() {
         if (mPresenter != null) {
-            return mPresenter.parseInitData(getArguments());
+            return mPresenter.parseIntentData(getArguments() == null ? new Bundle() : getArguments());
         }
         return false;
     }

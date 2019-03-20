@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarCustomMenuActivity;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
+import com.pine.mvp.adapter.MvpTravelNoteListPaginationAdapter;
 import com.pine.mvp.contract.IMvpTravelNoteListContract;
 import com.pine.mvp.presenter.MvpTravelNoteListPresenter;
 
@@ -60,7 +60,7 @@ public class MvpTravelNoteListActivity extends
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopListPaginationAdapter.isLastViewMoreView(recyclerView)) {
+                if (MvpTravelNoteListPaginationAdapter.isLastViewMoreView(recyclerView)) {
                     onLoadingMore();
                 }
             }

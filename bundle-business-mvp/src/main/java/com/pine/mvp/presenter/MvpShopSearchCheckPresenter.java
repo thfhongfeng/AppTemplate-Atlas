@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.mvp.MvpConstants;
 import com.pine.mvp.R;
 import com.pine.mvp.adapter.MvpShopCheckListPaginationAdapter;
@@ -25,34 +25,28 @@ import java.util.Map;
 
 public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchCheckContract.Ui>
         implements IMvpShopSearchCheckContract.Presenter {
-    public final static String RESULT_CHECKED_IDS_KEY = "result_checked_ids_key";
-    public final static String RESULT_CHECKED_NAMES_KEY = "result_checked_names_key";
-    public final static String REQUEST_CHECKED_IDS_KEY = "request_checked_ids_key";
+    public final static String RESULT_CHECKED_LIST_KEY = "result_checked_list_key";
+    public final static String REQUEST_CHECKED_LIST_KEY = "request_checked_list_key";
 
     private MvpShopModel mModel;
     private MvpShopCheckListPaginationAdapter mAdapter;
     private boolean mSearchMode;
-    private ArrayList<String> mBelongShopIds;
+    private ArrayList<MvpShopItemEntity> mBelongShopList;
 
     public MvpShopSearchCheckPresenter() {
         mModel = new MvpShopModel();
     }
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
-        mBelongShopIds = bundle.getStringArrayList(REQUEST_CHECKED_IDS_KEY);
+    public boolean parseIntentData(Bundle bundle) {
+        mBelongShopList = bundle.getParcelableArrayList(REQUEST_CHECKED_LIST_KEY);
         return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override
     public MvpShopCheckListPaginationAdapter getListAdapter() {
         if (mAdapter == null) {
-            mAdapter = new MvpShopCheckListPaginationAdapter(mBelongShopIds,
+            mAdapter = new MvpShopCheckListPaginationAdapter(mBelongShopList,
                     MvpShopCheckListPaginationAdapter.SHOP_CHECK_VIEW_HOLDER);
         }
         return mAdapter;
@@ -66,12 +60,12 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
         HashMap<String, String> params = new HashMap<>();
         int pageNo = 1;
         if (!refresh) {
-            pageNo = mAdapter.getPageNo() + 1;
+            pageNo = mAdapter.getNextPageNo();
         }
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mAdapter.getPageSize()));
 
-        InputParamBean<String> searchKey = getUi().getSearchKey("searchKey");
+        BaseInputParam<String> searchKey = getUi().getSearchKey("searchKey");
         if (TextUtils.isEmpty(searchKey.getValue())) {
             mSearchMode = false;
         } else {
@@ -115,15 +109,12 @@ public class MvpShopSearchCheckPresenter extends BasePresenter<IMvpShopSearchChe
                 showShortToast(R.string.mvp_shop_check_item_need);
                 return;
             }
-            ArrayList<String> ids = new ArrayList<>();
-            ArrayList<String> names = new ArrayList<>();
+            ArrayList<MvpShopItemEntity> list = new ArrayList<>();
             for (MvpShopItemEntity entity : checkedData.values()) {
-                ids.add(entity.getId());
-                names.add(entity.getName());
+                list.add(entity);
             }
             Intent intent = new Intent();
-            intent.putStringArrayListExtra(RESULT_CHECKED_IDS_KEY, ids);
-            intent.putStringArrayListExtra(RESULT_CHECKED_NAMES_KEY, names);
+            intent.putParcelableArrayListExtra(RESULT_CHECKED_LIST_KEY, list);
             getActivity().setResult(Activity.RESULT_OK, intent);
             finishUi();
         }

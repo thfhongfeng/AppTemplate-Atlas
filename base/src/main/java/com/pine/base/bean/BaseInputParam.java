@@ -13,20 +13,20 @@ import com.pine.tool.util.ViewActionUtils;
  * Created by tanghongfeng on 2018/11/8
  */
 
-public class InputParamBean<T> {
+public class BaseInputParam<T> {
     private Context context;
     private View containerView;
     private String key;
     private T value;
     private View inputView;
 
-    public InputParamBean(@NonNull Context context, @NonNull String key, T value) {
+    public BaseInputParam(@NonNull Context context, @NonNull String key, T value) {
         this.context = context;
         this.key = key;
         this.value = value;
     }
 
-    public InputParamBean(@NonNull Context context, @NonNull String key, T value,
+    public BaseInputParam(@NonNull Context context, @NonNull String key, T value,
                           View containerView, View inputView) {
         this.context = context;
         this.key = key;

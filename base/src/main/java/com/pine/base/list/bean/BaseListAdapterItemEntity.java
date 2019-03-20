@@ -7,7 +7,7 @@ package com.pine.base.list.bean;
 public class BaseListAdapterItemEntity<T> {
     private T data;
 
-    private BaseListAdapterItemPropertyEntity propertyEntity = new BaseListAdapterItemPropertyEntity();
+    private BaseListAdapterItemProperty propertyEntity = new BaseListAdapterItemProperty();
 
     public T getData() {
         return data;
@@ -17,7 +17,7 @@ public class BaseListAdapterItemEntity<T> {
         this.data = data;
     }
 
-    public BaseListAdapterItemPropertyEntity getPropertyEntity() {
+    public BaseListAdapterItemProperty getPropertyEntity() {
         return propertyEntity;
     }
 }

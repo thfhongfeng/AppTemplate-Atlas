@@ -31,18 +31,13 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
     }
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
+    public boolean parseIntentData(Bundle bundle) {
         mId = bundle.getString("id", "");
         if (TextUtils.isEmpty(mId)) {
             finishUi();
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override
@@ -54,7 +49,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
     }
 
     @Override
-    public void loadTravelNoteDetailData(final boolean refresh) {
+    public void loadTravelNoteDetailData() {
         if (mIsLoadProcessing) {
             return;
         }
@@ -65,14 +60,12 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
             @Override
             public void onResponse(MvpTravelNoteDetailEntity entity) {
                 setUiLoading(false);
-                if (refresh) {
-                    if (isUiAlive()) {
-                        List<MvpTravelNoteDetailEntity> list = new ArrayList<>();
-                        list.add(entity);
-                        mTravelNoteDetailAdapter.setHeadData(list);
-                    }
-                    loadTravelNoteCommentData(true);
+                if (isUiAlive()) {
+                    List<MvpTravelNoteDetailEntity> list = new ArrayList<>();
+                    list.add(entity);
+                    mTravelNoteDetailAdapter.setHeadData(list);
                 }
+                loadTravelNoteCommentData(true);
             }
 
             @Override
@@ -96,7 +89,7 @@ public class MvpTravelNoteDetailPresenter extends BasePresenter<IMvpTravelNoteDe
         HashMap<String, String> params = new HashMap<>();
         int pageNo = 1;
         if (!refresh) {
-            pageNo = mTravelNoteDetailAdapter.getPageNo() + 1;
+            pageNo = mTravelNoteDetailAdapter.getNextPageNo();
         }
         params.put(MvpConstants.PAGE_NO, String.valueOf(pageNo));
         params.put(MvpConstants.PAGE_SIZE, String.valueOf(mTravelNoteDetailAdapter.getPageSize()));

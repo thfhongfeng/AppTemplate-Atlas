@@ -87,6 +87,16 @@ public abstract class UploadFileRecyclerView extends RecyclerView implements ILi
         super(context, attrs, defStyle);
     }
 
+    public void initUpload(@NonNull BaseActivity activity, int fileType) {
+        mActivity = activity;
+        if (mActivity == null) {
+            throw new IllegalStateException("Activity should not be empty");
+        }
+        activity.attachCircleView(this);
+        mFileType = fileType;
+        mIsInit = true;
+    }
+
     protected void initUpload(@NonNull BaseActivity activity, @NonNull String uploadUrl,
                               int fileType, @NonNull OneByOneUploadAdapter adapter, int requestCodeSelectImage) {
         mActivity = activity;
@@ -221,7 +231,7 @@ public abstract class UploadFileRecyclerView extends RecyclerView implements ILi
     }
 
     /**
-     * 打开文件管理选择文件，最多mMaxFileCount张
+     * 打开文件管理选择文件，最多mMaxFileCount个
      */
     private void selectFiles() {
         int validCount = getValidImageCount();
@@ -233,9 +243,7 @@ public abstract class UploadFileRecyclerView extends RecyclerView implements ILi
         int allowCount = (mMaxFileCount - validCount > MAX_PER_UPLOAD_FILE_COUNT ?
                 MAX_PER_UPLOAD_FILE_COUNT : mMaxFileCount - validCount);
         LogUtils.d(TAG, "selectFiles allowCount:" + allowCount);
-//        ImageSelector.create()
-//                .count(mEnableCrop ? 1 : allowCount)
-//                .start(mActivity, REQUEST_CODE_SELECT_IMAGE);
+        // todo
     }
 
     protected void displayUploadObject(ArrayList<String> displayList, int position) {
@@ -254,10 +262,7 @@ public abstract class UploadFileRecyclerView extends RecyclerView implements ILi
     }
 
     private void displayFiles(ArrayList<String> displayList, int position) {
-//        ImageViewer.create()
-//                .origin(displayList)
-//                .position(position)
-//                .start(mActivity);
+        // todo
     }
 
     @Override

@@ -42,6 +42,7 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
     private boolean mBaiduMapSetup;
     private LatLng mMarkerLatLng, mInitLatLng;
     private int mMapType = BaiduMap.MAP_TYPE_NORMAL;
+    private boolean mCanMark;
 
     private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
         @Override
@@ -83,6 +84,7 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
                 mMapType = BaiduMap.MAP_TYPE_NONE;
                 break;
         }
+        mCanMark = getIntent().getBooleanExtra("canMark", false);
         double latitude = getIntent().getDoubleExtra("latitude", -1);
         double longitude = getIntent().getDoubleExtra("longitude", -1);
         double[] latLon = GPSUtils.gcj02_To_Bd09(latitude, longitude);
@@ -110,25 +112,29 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
                 return;
             }
         });
-        menuBtnTv.setText(R.string.base_done);
-        menuBtnTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mMarkerLatLng != null) {
-                    Intent intent = new Intent();
-                    double[] latLon = GPSUtils.bd09_To_Gcj02(mMarkerLatLng.latitude, mMarkerLatLng.longitude);
-                    intent.putExtra("latitude", latLon[0]);
-                    intent.putExtra("longitude", latLon[1]);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                    return;
-                } else {
-                    Toast.makeText(BaiduMapActivity.this, R.string.base_baidu_map_marker_need,
-                            Toast.LENGTH_SHORT).show();
-                    return;
+        if (mCanMark) {
+            menuBtnTv.setText(R.string.base_done);
+            menuBtnTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMarkerLatLng != null) {
+                        Intent intent = new Intent();
+                        double[] latLon = GPSUtils.bd09_To_Gcj02(mMarkerLatLng.latitude, mMarkerLatLng.longitude);
+                        intent.putExtra("latitude", latLon[0]);
+                        intent.putExtra("longitude", latLon[1]);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        return;
+                    } else {
+                        Toast.makeText(BaiduMapActivity.this, R.string.base_baidu_map_marker_need,
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            menuBtnTv.setVisibility(View.GONE);
+        }
     }
 
     private void setupBaiduMap() {
@@ -142,20 +148,22 @@ public class BaiduMapActivity extends BaseActionBarTextMenuActivity implements V
         MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true,
                 null);
         mBaiduMap.setMyLocationConfiguration(config);
-        //地图点击事件响应
-        mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                addMarker(latLng);
-            }
+        if (mCanMark) {
+            //地图点击事件响应
+            mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    addMarker(latLng);
+                }
 
-            @Override
-            public boolean onMapPoiClick(MapPoi mapPoi) {
-                //点击地图上的poi图标获取描述信息：mapPoi.getName()，经纬度：mapPoi.getPosition()
-                addMarker(mapPoi.getPosition());
-                return false;
-            }
-        });
+                @Override
+                public boolean onMapPoiClick(MapPoi mapPoi) {
+                    //点击地图上的poi图标获取描述信息：mapPoi.getName()，经纬度：mapPoi.getPosition()
+                    addMarker(mapPoi.getPosition());
+                    return false;
+                }
+            });
+        }
         if (mInitLatLng != null) {
             addMarker(mInitLatLng);
         }

@@ -52,6 +52,7 @@ public class PicVerifyCodeImageView extends AppCompatImageView {
 
     public void onResume() {
         this.setScaleType(ScaleType.FIT_XY);
+        String url = mUrl + "?" + Math.random() * 100000;
         ImageLoaderManager.getInstance().downloadListener(new IImageDownloadListener() {
             @Override
             public void onRequest(URL url, Map<String, String> requestHeaders) {
@@ -68,7 +69,7 @@ public class PicVerifyCodeImageView extends AppCompatImageView {
             public void onFail(int statusCode, String s) {
                 LogUtils.d("PicVerifyCodeIv", "onFail statusCode :" + statusCode);
             }
-        }).loadImage(mContext, mUrl + "?" + Math.random() * 100000, this);
+        }).loadImage(mContext, url, this);
     }
 
     public HashMap<String, String> getCookies() {

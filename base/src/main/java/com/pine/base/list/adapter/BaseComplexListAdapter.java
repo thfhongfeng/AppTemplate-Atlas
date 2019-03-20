@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.pine.base.R;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,15 +93,15 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         int topSize = mHeadNoPaginationData == null ? 0 : mHeadNoPaginationData.size();
         int bottomSize = mTailPaginationData == null ? 0 : mTailPaginationData.size();
         if (topSize == 0 && bottomSize == 0) {
-            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            holder.updateData("", new BaseListAdapterItemProperty(), position);
             return;
         }
         if (isMoreView(position)) {
-            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            holder.updateData("", new BaseListAdapterItemProperty(), position);
             return;
         }
         if (isCompleteView(position)) {
-            holder.updateData("", new BaseListAdapterItemPropertyEntity(), position);
+            holder.updateData("", new BaseListAdapterItemProperty(), position);
             return;
         }
         if (mHeadNoPaginationData != null && position < mHeadNoPaginationData.size()) {
@@ -213,6 +213,10 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         return mPageNo.get();
     }
 
+    public int getNextPageNo() {
+        return mPageNo.get() + 1;
+    }
+
     public int getPageSize() {
         return mPageSize.get();
     }
@@ -242,7 +246,7 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         }
 
         @Override
-        public void updateData(String tipsValue, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(String tipsValue, BaseListAdapterItemProperty propertyEntity, int position) {
             if (!TextUtils.isEmpty(tipsValue)) {
                 tips.setText(tipsValue);
             }
@@ -267,7 +271,7 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         }
 
         @Override
-        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(String content, BaseListAdapterItemProperty propertyEntity, int position) {
 
         }
     }
@@ -287,7 +291,7 @@ public abstract class BaseComplexListAdapter<T, B> extends RecyclerView.Adapter<
         }
 
         @Override
-        public void updateData(String content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(String content, BaseListAdapterItemProperty propertyEntity, int position) {
 
         }
     }

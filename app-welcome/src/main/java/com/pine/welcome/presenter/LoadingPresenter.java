@@ -47,14 +47,9 @@ public class LoadingPresenter extends BasePresenter<ILoadingContract.Ui> impleme
     }
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
+    public boolean parseIntentData(Bundle bundle) {
         mStartTimeMillis = System.currentTimeMillis();
         return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override

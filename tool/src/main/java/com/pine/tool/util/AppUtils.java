@@ -20,6 +20,7 @@ import java.util.List;
  */
 
 public class AppUtils {
+    private static Application mApplication;
 
     private AppUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -41,7 +42,10 @@ public class AppUtils {
         return false;
     }
 
-    public static Application getApplicationByReflect() {
+    public static Application getApplication() {
+        if (mApplication != null) {
+            return mApplication;
+        }
         try {
             @SuppressLint("PrivateApi")
             Class<?> activityThread = Class.forName("android.app.ActivityThread");
@@ -50,7 +54,8 @@ public class AppUtils {
             if (app == null) {
                 throw new NullPointerException("you should init first");
             }
-            return (Application) app;
+            mApplication = (Application) app;
+            return mApplication;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -61,6 +66,10 @@ public class AppUtils {
             e.printStackTrace();
         }
         throw new NullPointerException("u should init first");
+    }
+
+    public static Context getApplicationContext() {
+        return getApplication().getApplicationContext();
     }
 
     /**

@@ -13,10 +13,9 @@ import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BasePaginationTreeListAdapter;
 import com.pine.base.list.bean.BaseListAdapterItemEntity;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopAndProductEntity;
-import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
 
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public class MvpShopListPaginationTreeAdapter extends BasePaginationTreeListAdap
         return viewHolder;
     }
 
-    public class ShopViewHolder extends BaseListViewHolder<MvpShopItemEntity> {
+    public class ShopViewHolder extends BaseListViewHolder<MvpShopAndProductEntity> {
         private Context mContext;
         private LinearLayout container;
         private ImageView photo_iv;
@@ -89,8 +88,8 @@ public class MvpShopListPaginationTreeAdapter extends BasePaginationTreeListAdap
         }
 
         @Override
-        public void updateData(final MvpShopItemEntity content, final BaseListAdapterItemPropertyEntity propertyEntity, final int position) {
-            ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
+        public void updateData(final MvpShopAndProductEntity content, final BaseListAdapterItemProperty propertyEntity, final int position) {
+            ImageLoaderManager.getInstance().loadImage(mContext, content.getMainImgUrl(), photo_iv);
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;
@@ -134,7 +133,7 @@ public class MvpShopListPaginationTreeAdapter extends BasePaginationTreeListAdap
 
         @Override
         public void updateData(final MvpShopAndProductEntity.ProductsBean content,
-                               BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+                               BaseListAdapterItemProperty propertyEntity, int position) {
             if (!propertyEntity.isItemViewNeedShow()) {
                 container.setVisibility(View.GONE);
                 return;

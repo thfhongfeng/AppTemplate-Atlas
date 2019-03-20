@@ -62,7 +62,7 @@ public class LoginCallback extends HttpJsonCallback {
                 if (mCallback != null) {
                     if (!mCallback.onLoginResponse(false, jsonObject == null ?
                             "" : jsonObject.optString(LoginConstants.MESSAGE)) && LOGIN_CODE == what) {
-                        Toast.makeText(AppUtils.getApplicationByReflect(), "登陆失败！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppUtils.getApplication(), "登陆失败！", Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (AUTO_LOGIN_CODE != what) {
@@ -77,7 +77,7 @@ public class LoginCallback extends HttpJsonCallback {
             }
             if (mCallback != null) {
                 if (mCallback.onLoginResponse(true, "") && LOGIN_CODE == what) {
-                    Toast.makeText(AppUtils.getApplicationByReflect(), "登陆成功！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppUtils.getApplication(), "登陆成功！", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -104,8 +104,8 @@ public class LoginCallback extends HttpJsonCallback {
     }
 
     private void goLoginActivity() {
-        Intent intent = new Intent(AppUtils.getApplicationByReflect(), LoginActivity.class);
+        Intent intent = new Intent(AppUtils.getApplication(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        AppUtils.getApplicationByReflect().startActivity(intent);
+        AppUtils.getApplication().startActivity(intent);
     }
 }

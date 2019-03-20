@@ -8,12 +8,14 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.pine.base.access.UiAccessManager;
 import com.pine.base.permission.IPermissionCallback;
@@ -214,5 +216,21 @@ public abstract class BaseFragment extends Fragment
         if (imm != null) {
             imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
         }
+    }
+
+    public void showShortToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showShortToast(@StringRes int resId) {
+        Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showLongToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    public void showLongToast(@StringRes int resId) {
+        Toast.makeText(getContext(), resId, Toast.LENGTH_LONG).show();
     }
 }

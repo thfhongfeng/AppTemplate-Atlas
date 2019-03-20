@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BasePaginationListAdapter;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpTravelNoteItemEntity;
 import com.pine.mvp.ui.activity.MvpTravelNoteDetailActivity;
@@ -49,7 +49,7 @@ public class MvpTravelNoteListPaginationAdapter extends BasePaginationListAdapte
         }
 
         @Override
-        public void updateData(final MvpTravelNoteItemEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+        public void updateData(final MvpTravelNoteItemEntity content, BaseListAdapterItemProperty propertyEntity, int position) {
             title_tv.setText(content.getTitle());
             create_time_tv.setText(content.getCreateTime());
             itemView.setOnClickListener(new View.OnClickListener() {

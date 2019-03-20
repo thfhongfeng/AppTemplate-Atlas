@@ -2,23 +2,22 @@ package com.pine.base.component.editor.bean;
 
 import android.support.annotation.NonNull;
 
-import com.pine.base.component.uploader.bean.FileUploadState;
+public class TextImageItemEntity {
+    // 子View条目类型null 空条目
+    public final static String TYPE_NULL = "null";
+    // 子View条目类型text 文本输入条目
+    public final static String TYPE_TEXT = "text";
+    // 子View条目类型image 图片加图片描述输入条目
+    public final static String TYPE_IMAGE = "image";
 
-/**
- * Created by tanghongfeng on 2018/11/14
- */
-
-public class EditorItemData {
     private String type;
     private String index;
     private String text;
     private String localFilePath;
     private String remoteFilePath;
-    private int uploadProgress;
-    private FileUploadState uploadState = FileUploadState.UPLOAD_STATE_DEFAULT;
     private int orderNum;
 
-    public EditorItemData(@NonNull String type) {
+    public TextImageItemEntity(@NonNull String type) {
         this.type = type;
     }
 
@@ -56,22 +55,6 @@ public class EditorItemData {
 
     public void setRemoteFilePath(String remoteFilePath) {
         this.remoteFilePath = remoteFilePath;
-    }
-
-    public int getUploadProgress() {
-        return uploadProgress;
-    }
-
-    public void setUploadProgress(int uploadProgress) {
-        this.uploadProgress = uploadProgress;
-    }
-
-    public FileUploadState getUploadState() {
-        return uploadState;
-    }
-
-    public void setUploadState(FileUploadState uploadState) {
-        this.uploadState = uploadState;
     }
 
     public int getOrderNum() {

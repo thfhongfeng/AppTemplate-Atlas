@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
 import com.pine.login.presenter.LoginPresenter;
@@ -58,12 +58,12 @@ public class LoginActivity extends BaseMvpActionBarActivity<ILoginContract.Ui, L
     }
 
     @Override
-    public InputParamBean getUserMobileParam(String key) {
-        return new InputParamBean(this, key, mobile_et.getText().toString());
+    public BaseInputParam getUserMobileParam(String key) {
+        return new BaseInputParam(this, key, mobile_et.getText().toString());
     }
 
     @Override
-    public InputParamBean getUserPasswordParam(String key) {
-        return new InputParamBean(this, key, password_et.getText().toString());
+    public BaseInputParam getUserPasswordParam(String key) {
+        return new BaseInputParam(this, key, password_et.getText().toString());
     }
 }

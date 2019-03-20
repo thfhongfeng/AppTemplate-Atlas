@@ -1,7 +1,5 @@
 package com.pine.mvp.presenter;
 
-import android.os.Bundle;
-
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.adapter.MvpShopListNoPaginationAdapter;
@@ -23,16 +21,6 @@ public class MvpShopNoPaginationListPresenter extends BasePresenter<IMvpShopNoPa
 
     public MvpShopNoPaginationListPresenter() {
         mModel = new MvpShopModel();
-    }
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override

@@ -241,16 +241,10 @@
                 android:textColor="#929292"
                 android:textSize="@dimen/sp_13" />
 
-            <LinearLayout
-                android:id="@+id/day_note_ll"
+            <com.pine.mvp.widget.view.MvpNoteEditorView
+                android:id="@+id/mnev_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/dp_10"
-                android:paddingLeft="@dimen/dp_12"
-                android:paddingRight="@dimen/dp_16">
-
-            </LinearLayout>
+                android:layout_height="wrap_content"></com.pine.mvp.widget.view.MvpNoteEditorView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

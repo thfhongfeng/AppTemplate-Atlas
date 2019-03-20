@@ -7,7 +7,7 @@ import com.pine.base.BaseUrlConstants;
  */
 
 public interface LoginUrlConstants extends BaseUrlConstants {
-//    String Login = BASE_URL + "";
+    //    String Login = BASE_URL + "";
 //    String Logout = BASE_URL + "";
 //    String Verify_Code_Image = BASE_URL + "";
     String Register_Account = BASE_URL + "";

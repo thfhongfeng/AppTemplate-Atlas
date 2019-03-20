@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.pine.base.architecture.mvp.ui.fragment.BaseMvpFragment;
 import com.pine.mvp.R;
-import com.pine.mvp.adapter.MvpShopListPaginationAdapter;
+import com.pine.mvp.adapter.MvpShopListPaginationTreeAdapter;
 import com.pine.mvp.contract.IMvpShopTreeListContract;
 import com.pine.mvp.presenter.MvpShopTreeListPresenter;
 
@@ -52,7 +52,7 @@ public class MvpShopTreeListFragment extends BaseMvpFragment<IMvpShopTreeListCon
         recycle_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (MvpShopListPaginationAdapter.isLastViewMoreView(recyclerView)) {
+                if (MvpShopListPaginationTreeAdapter.isLastViewMoreView(recyclerView)) {
                     onLoadingMore();
                 }
             }

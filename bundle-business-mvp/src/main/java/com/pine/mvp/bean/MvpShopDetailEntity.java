@@ -15,10 +15,12 @@ public class MvpShopDetailEntity {
      * mobile :
      * latitude :
      * longitude :
-     * address :
+     * addressDistrict :
      * addressZipCode :
+     * addressStreet :
      * distance :
-     * imgUrl :
+     * mainImgUrl :
+     * imgUrls :
      * description :
      * remark :
      */
@@ -29,12 +31,14 @@ public class MvpShopDetailEntity {
     private String typeName;
     private String onlineDate;
     private String mobile;
-    private double latitude;
-    private double longitude;
-    private String address;
+    private String latitude;
+    private String longitude;
+    private String addressDistrict;
     private String addressZipCode;
+    private String addressStreet;
     private String distance;
-    private String imgUrl;
+    private String mainImgUrl;
+    private String imgUrls;
     private String description;
     private String remark;
 
@@ -86,28 +90,28 @@ public class MvpShopDetailEntity {
         this.mobile = mobile;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAddressDistrict() {
+        return addressDistrict;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddressDistrict(String addressDistrict) {
+        this.addressDistrict = addressDistrict;
     }
 
     public String getAddressZipCode() {
@@ -118,6 +122,14 @@ public class MvpShopDetailEntity {
         this.addressZipCode = addressZipCode;
     }
 
+    public String getAddressStreet() {
+        return addressStreet;
+    }
+
+    public void setAddressStreet(String addressStreet) {
+        this.addressStreet = addressStreet;
+    }
+
     public String getDistance() {
         return distance;
     }
@@ -126,12 +138,20 @@ public class MvpShopDetailEntity {
         this.distance = distance;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getMainImgUrl() {
+        return mainImgUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setMainImgUrl(String mainImgUrl) {
+        this.mainImgUrl = mainImgUrl;
+    }
+
+    public String getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(String imgUrls) {
+        this.imgUrls = imgUrls;
     }
 
     public String getDescription() {

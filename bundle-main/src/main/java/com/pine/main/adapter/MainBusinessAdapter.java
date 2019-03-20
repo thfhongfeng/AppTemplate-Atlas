@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.pine.base.BaseApplication;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.main.R;
 import com.pine.main.bean.MainBusinessItemEntity;
 import com.pine.router.IRouterCallback;
@@ -51,7 +51,7 @@ public class MainBusinessAdapter extends BaseNoPaginationListAdapter {
 
         @Override
         public void updateData(final MainBusinessItemEntity content,
-                               BaseListAdapterItemPropertyEntity propertyEntity, int position) {
+                               BaseListAdapterItemProperty propertyEntity, int position) {
             name_tv.setText(content.getName());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

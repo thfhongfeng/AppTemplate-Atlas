@@ -97,9 +97,9 @@ public class PathUtils {
      */
     public static String getInternalAppPath() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            return AppUtils.getApplicationByReflect().getApplicationInfo().dataDir;
+            return AppUtils.getApplication().getApplicationInfo().dataDir;
         }
-        return AppUtils.getApplicationByReflect().getDataDir().getAbsolutePath();
+        return AppUtils.getApplication().getDataDir().getAbsolutePath();
     }
 
     /**
@@ -109,9 +109,9 @@ public class PathUtils {
      */
     public static String getInternalAppCodeCachePath() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return AppUtils.getApplicationByReflect().getApplicationInfo().dataDir + "/code_cache";
+            return AppUtils.getApplication().getApplicationInfo().dataDir + "/code_cache";
         }
-        return AppUtils.getApplicationByReflect().getCodeCacheDir().getAbsolutePath();
+        return AppUtils.getApplication().getCodeCacheDir().getAbsolutePath();
     }
 
     /**
@@ -120,7 +120,7 @@ public class PathUtils {
      * @return the path of /data/data/app_package_name/cache
      */
     public static String getInternalAppCachePath() {
-        return AppUtils.getApplicationByReflect().getCacheDir().getAbsolutePath();
+        return AppUtils.getApplication().getCacheDir().getAbsolutePath();
     }
 
     /**
@@ -129,7 +129,7 @@ public class PathUtils {
      * @return the path of /data/data/app_package_name/databases
      */
     public static String getInternalAppDbsPath() {
-        return AppUtils.getApplicationByReflect().getApplicationInfo().dataDir + "/databases";
+        return AppUtils.getApplication().getApplicationInfo().dataDir + "/databases";
     }
 
     /**
@@ -138,7 +138,7 @@ public class PathUtils {
      * @return the path of /data/data/app_package_name/files
      */
     public static String getInternalAppFilesPath() {
-        return AppUtils.getApplicationByReflect().getFilesDir().getAbsolutePath();
+        return AppUtils.getApplication().getFilesDir().getAbsolutePath();
     }
 
     /**
@@ -147,7 +147,7 @@ public class PathUtils {
      * @return the path of /data/data/app_package_name/shared_prefs
      */
     public static String getInternalAppSpPath() {
-        return AppUtils.getApplicationByReflect().getApplicationInfo().dataDir + "shared_prefs";
+        return AppUtils.getApplication().getApplicationInfo().dataDir + "shared_prefs";
     }
 
     /**
@@ -157,9 +157,9 @@ public class PathUtils {
      */
     public static String getInternalAppNoBackupFilesPath() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return AppUtils.getApplicationByReflect().getApplicationInfo().dataDir + "no_backup";
+            return AppUtils.getApplication().getApplicationInfo().dataDir + "no_backup";
         }
-        return AppUtils.getApplicationByReflect().getNoBackupFilesDir().getAbsolutePath();
+        return AppUtils.getApplication().getNoBackupFilesDir().getAbsolutePath();
     }
 
     /**
@@ -168,7 +168,7 @@ public class PathUtils {
      * @return the path of /storage/emulated/0/Android/data/app_package_name/cache
      */
     public static String getExternalAppCachePath() {
-        return AppUtils.getApplicationByReflect().getExternalCacheDir().getAbsolutePath();
+        return AppUtils.getApplication().getExternalCacheDir().getAbsolutePath();
     }
 
     /**
@@ -263,14 +263,14 @@ public class PathUtils {
         File appCacheDir = null;
         if (!isExternalStorageDisable()) {
             if (TextUtils.isEmpty(type)) {
-                appCacheDir = AppUtils.getApplicationByReflect().getExternalFilesDir(null);
+                appCacheDir = AppUtils.getApplication().getExternalFilesDir(null);
             } else {
-                appCacheDir = AppUtils.getApplicationByReflect().getExternalFilesDir(type);
+                appCacheDir = AppUtils.getApplication().getExternalFilesDir(type);
             }
 
             if (appCacheDir == null) {// 有些手机需要通过自定义目录
                 appCacheDir = new File(Environment.getExternalStorageDirectory(),
-                        "Android/data/" + AppUtils.getApplicationByReflect().getPackageName() + "/files/" + type);
+                        "Android/data/" + AppUtils.getApplication().getPackageName() + "/files/" + type);
             }
 
             if (appCacheDir == null) {
@@ -315,9 +315,9 @@ public class PathUtils {
     public static File getInternalAppFileDirectory(String type) {
         File appCacheDir = null;
         if (TextUtils.isEmpty(type)) {
-            appCacheDir = AppUtils.getApplicationByReflect().getFilesDir();// /data/data/app_package_name/files
+            appCacheDir = AppUtils.getApplication().getFilesDir();// /data/data/app_package_name/files
         } else {
-            appCacheDir = new File(AppUtils.getApplicationByReflect().getFilesDir(), type);// /data/data/app_package_name/files/type
+            appCacheDir = new File(AppUtils.getApplication().getFilesDir(), type);// /data/data/app_package_name/files/type
         }
 
         if (!appCacheDir.exists() && !appCacheDir.mkdirs()) {
@@ -344,7 +344,7 @@ public class PathUtils {
         if (isExternalStorageDisable()) {
             return "";
         }
-        return AppUtils.getApplicationByReflect().getObbDir().getAbsolutePath();
+        return AppUtils.getApplication().getObbDir().getAbsolutePath();
     }
 
     private static boolean isExternalStorageDisable() {

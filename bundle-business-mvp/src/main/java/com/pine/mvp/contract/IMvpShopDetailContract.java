@@ -15,6 +15,8 @@ public interface IMvpShopDetailContract {
     interface Presenter extends IBaseContract.Presenter {
         void loadShopDetailData();
 
+        void showMarkerInMap();
+
         void goToShopH5Activity();
 
         void goToTravelNoteListActivity();

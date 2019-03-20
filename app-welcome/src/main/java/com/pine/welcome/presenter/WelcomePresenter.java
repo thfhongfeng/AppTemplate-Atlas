@@ -22,16 +22,6 @@ public class WelcomePresenter extends BasePresenter<IWelcomeContract.Ui> impleme
     }
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
-    }
-
-    @Override
     public void goMainHomeActivity() {
         new Handler().postDelayed(new Runnable() {
             @Override

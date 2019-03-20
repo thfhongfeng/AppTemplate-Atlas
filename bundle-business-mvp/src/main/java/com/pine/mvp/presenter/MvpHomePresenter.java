@@ -1,7 +1,6 @@
 package com.pine.mvp.presenter;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
 import com.pine.mvp.contract.IMvpHomeContract;
@@ -13,16 +12,6 @@ import com.pine.mvp.ui.activity.MvpShopReleaseActivity;
 
 public class MvpHomePresenter extends BasePresenter<IMvpHomeContract.Ui>
         implements IMvpHomeContract.Presenter {
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
-    }
 
     @Override
     public void goToAddShopActivity() {

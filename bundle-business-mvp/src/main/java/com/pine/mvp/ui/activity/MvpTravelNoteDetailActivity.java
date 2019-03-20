@@ -83,7 +83,7 @@ public class MvpTravelNoteDetailActivity extends BaseMvpActionBarActivity<IMvpTr
 
     @Override
     public void onRefresh() {
-        mPresenter.loadTravelNoteDetailData(true);
+        mPresenter.loadTravelNoteDetailData();
     }
 
     public void onLoadingMore() {

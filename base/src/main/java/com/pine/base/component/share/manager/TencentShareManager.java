@@ -79,7 +79,7 @@ public class TencentShareManager {
             return false;
         }
         if (mIwxApi == null) {
-            mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplicationByReflect(), WX_FOR_APP_ID, true);
+            mIwxApi = WXAPIFactory.createWXAPI(AppUtils.getApplication(), WX_FOR_APP_ID, true);
             mIwxApi.registerApp(WX_FOR_APP_ID);
         }
         if (!mIwxApi.isWXAppInstalled()) {

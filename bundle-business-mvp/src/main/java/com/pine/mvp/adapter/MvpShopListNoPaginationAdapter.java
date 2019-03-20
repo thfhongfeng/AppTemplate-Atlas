@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.pine.base.component.image_loader.ImageLoaderManager;
 import com.pine.base.list.BaseListViewHolder;
 import com.pine.base.list.adapter.BaseNoPaginationListAdapter;
-import com.pine.base.list.bean.BaseListAdapterItemPropertyEntity;
+import com.pine.base.list.bean.BaseListAdapterItemProperty;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopItemEntity;
 import com.pine.mvp.ui.activity.MvpShopDetailActivity;
@@ -58,8 +58,8 @@ public class MvpShopListNoPaginationAdapter extends BaseNoPaginationListAdapter 
         }
 
         @Override
-        public void updateData(final MvpShopItemEntity content, BaseListAdapterItemPropertyEntity propertyEntity, int position) {
-            ImageLoaderManager.getInstance().loadImage(mContext, content.getImgUrl(), photo_iv);
+        public void updateData(final MvpShopItemEntity content, BaseListAdapterItemProperty propertyEntity, int position) {
+            ImageLoaderManager.getInstance().loadImage(mContext, content.getMainImgUrl(), photo_iv);
             title_tv.setText(content.getName());
             String distanceStr = content.getDistance();
             if (TextUtils.isEmpty(distanceStr)) {

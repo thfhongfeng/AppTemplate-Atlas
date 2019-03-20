@@ -49,7 +49,8 @@ public abstract class BaseMvpActivity<V extends IBaseContract.Ui, P extends Base
     @Override
     protected final boolean parseIntentData() {
         if (mPresenter != null) {
-            return mPresenter.parseInitData(getIntent().getExtras());
+            return mPresenter.parseIntentData(getIntent().getExtras() == null ?
+                    new Bundle() : getIntent().getExtras());
         }
         return false;
     }
@@ -59,6 +60,7 @@ public abstract class BaseMvpActivity<V extends IBaseContract.Ui, P extends Base
     protected void afterInit() {
         if (mPresenter != null) {
             mPresenter.onUiState(BasePresenter.UiState.UI_STATE_ON_CREATE);
+            mPresenter.afterViewInit();
         }
     }
 

@@ -10,8 +10,8 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10">
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,8 +29,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_name_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -55,8 +55,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_type_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -94,8 +94,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_online_date_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -132,8 +132,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_contact_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -155,14 +155,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_address_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
                     <TextView
-                        android:id="@+id/address_tv"
+                        android:id="@+id/address_district_tv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -178,8 +178,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_address_marker_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -201,14 +201,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_address_detail_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
 
                     <EditText
-                        android:id="@+id/address_detail_et"
+                        android:id="@+id/address_street_et"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -226,8 +226,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="top"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_description_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />
@@ -251,8 +251,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="top"
-                        android:paddingBottom="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:text="@string/mvp_shop_release_remark_label"
                         android:textColor="#989898"
                         android:textSize="@dimen/sp_15" />

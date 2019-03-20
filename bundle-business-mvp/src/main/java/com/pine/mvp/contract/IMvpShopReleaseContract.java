@@ -3,7 +3,7 @@ package com.pine.mvp.contract;
 import android.support.annotation.NonNull;
 
 import com.pine.base.architecture.mvp.contract.IBaseContract;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 
 import java.util.HashMap;
 
@@ -14,40 +14,43 @@ import java.util.HashMap;
 public interface IMvpShopReleaseContract {
     interface Ui extends IBaseContract.Ui {
         @NonNull
-        InputParamBean getShopNameParam(String key);
+        BaseInputParam getShopNameParam(String key);
 
         @NonNull
-        InputParamBean getShopTypeParam(String key);
+        BaseInputParam getShopTypeParam(String key);
 
         @NonNull
-        InputParamBean getShopTypeNameParam(String key);
+        BaseInputParam getShopTypeNameParam(String key);
 
         @NonNull
-        InputParamBean getShopOnlineDateParam(String key);
+        BaseInputParam getShopOnlineDateParam(String key);
 
         @NonNull
-        InputParamBean getShopContactMobileParam(String key);
+        BaseInputParam getShopContactMobileParam(String key);
 
         @NonNull
-        InputParamBean getShopAddressParam(String key);
+        BaseInputParam getShopAddressParam(String key);
 
         @NonNull
-        InputParamBean getShopAddressZipCodeParam(String key);
+        BaseInputParam getShopAddressZipCodeParam(String key);
 
         @NonNull
-        InputParamBean getShopLocationParam(String key);
+        BaseInputParam getShopLocationLonParam(String key);
 
         @NonNull
-        InputParamBean getShopDetailAddressParam(String key);
+        BaseInputParam getShopLocationLatParam(String key);
 
         @NonNull
-        InputParamBean getShopDescriptionParam(String key);
+        BaseInputParam getShopDetailAddressParam(String key);
 
         @NonNull
-        InputParamBean getShopRemarkParam(String key);
+        BaseInputParam getShopDescriptionParam(String key);
 
         @NonNull
-        InputParamBean getShopImagesParam(String key);
+        BaseInputParam getShopRemarkParam(String key);
+
+        @NonNull
+        BaseInputParam getShopImagesParam(String key);
     }
 
     interface Presenter extends IBaseContract.Presenter {

@@ -56,7 +56,7 @@ public class HttpRequestManager {
         if (context != null) {
             mApplicationContext = context;
         } else {
-            mApplicationContext = AppUtils.getApplicationByReflect();
+            mApplicationContext = AppUtils.getApplication();
         }
         mRequestManager = HttpRequestManagerFactory.getRequestManager();
         mRequestManager.init(context, head);

@@ -21,7 +21,7 @@ public class SharePreferenceUtils {
     // 应用本次启动SharePreference，生命周期为本次APP启动周期（APP每次重新启动时清理）
     public static final String THIS_STARTUP_SP = "this_startup_share_preference";
 
-    private static Application mApplication = AppUtils.getApplicationByReflect();
+    private static Application mApplication = AppUtils.getApplication();
 
     private SharePreferenceUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

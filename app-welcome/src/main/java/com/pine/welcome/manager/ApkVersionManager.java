@@ -55,7 +55,7 @@ public class ApkVersionManager {
     private void startDownloadTask() {
         if (TextUtils.isEmpty(mDownloadDir)) {
             if (mListener != null) {
-                mListener.onDownloadError(new MessageException(AppUtils.getApplicationByReflect()
+                mListener.onDownloadError(new MessageException(AppUtils.getApplication()
                         .getString(R.string.wel_version_get_download_path_fail, mDownloadDir)));
             }
             return;

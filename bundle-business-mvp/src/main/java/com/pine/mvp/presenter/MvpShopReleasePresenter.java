@@ -1,11 +1,10 @@
 package com.pine.mvp.presenter;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.pine.base.architecture.mvp.model.IModelAsyncResponse;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.mvp.R;
 import com.pine.mvp.bean.MvpShopDetailEntity;
 import com.pine.mvp.contract.IMvpShopReleaseContract;
@@ -23,16 +22,6 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
 
     public MvpShopReleasePresenter() {
         mModel = new MvpShopModel();
-    }
-
-    @Override
-    public boolean parseInitData(Bundle bundle) {
-        return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @NonNull
@@ -62,35 +51,35 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
         }
         HashMap<String, String> params = new HashMap<>();
 
-        InputParamBean<String> name = getUi().getShopNameParam("name");
+        BaseInputParam<String> name = getUi().getShopNameParam("name");
         if (name.checkIsEmpty(R.string.mvp_shop_release_name_need)) {
             return;
         } else {
             params.put(name.getKey(), name.getValue());
         }
 
-        InputParamBean<String> type = getUi().getShopTypeParam("type");
+        BaseInputParam<String> type = getUi().getShopTypeParam("type");
         if (type.checkIsEmpty(R.string.mvp_shop_release_type_need)) {
             return;
         } else {
             params.put(type.getKey(), type.getValue());
         }
 
-        InputParamBean<String> typeName = getUi().getShopTypeNameParam("typeName");
+        BaseInputParam<String> typeName = getUi().getShopTypeNameParam("typeName");
         if (typeName.checkIsEmpty(R.string.mvp_shop_release_type_need)) {
             return;
         } else {
             params.put(typeName.getKey(), typeName.getValue());
         }
 
-        InputParamBean<String> onlineDate = getUi().getShopOnlineDateParam("onlineDate");
+        BaseInputParam<String> onlineDate = getUi().getShopOnlineDateParam("onlineDate");
         if (onlineDate.checkIsEmpty(R.string.mvp_shop_release_online_date_need)) {
             return;
         } else {
             params.put(onlineDate.getKey(), onlineDate.getValue());
         }
 
-        InputParamBean<String> mobile = getUi().getShopContactMobileParam("mobile");
+        BaseInputParam<String> mobile = getUi().getShopContactMobileParam("mobile");
         if (mobile.checkIsEmpty(R.string.mvp_shop_release_contact_need) ||
                 !mobile.checkIsPhone(R.string.mvp_shop_release_mobile_incorrect_format)) {
             return;
@@ -98,32 +87,39 @@ public class MvpShopReleasePresenter extends BasePresenter<IMvpShopReleaseContra
             params.put(mobile.getKey(), mobile.getValue());
         }
 
-        InputParamBean<String> address = getUi().getShopAddressParam("address");
+        BaseInputParam<String> address = getUi().getShopAddressParam("address");
         if (address.checkIsEmpty(R.string.mvp_shop_release_address_need)) {
             return;
         } else {
             params.put(address.getKey(), address.getValue());
         }
 
-        InputParamBean<String> addressZipCode = getUi().getShopAddressZipCodeParam("addressZipCode");
+        BaseInputParam<String> addressZipCode = getUi().getShopAddressZipCodeParam("addressZipCode");
         if (addressZipCode.checkIsEmpty(R.string.mvp_shop_release_address_need)) {
             return;
         } else {
             params.put(addressZipCode.getKey(), addressZipCode.getValue());
         }
 
-        InputParamBean<String> location = getUi().getShopLocationParam("location");
-        if (location.checkIsEmpty(R.string.mvp_shop_release_address_location_need)) {
+        BaseInputParam<String> latitude = getUi().getShopLocationLatParam("latitude");
+        if (latitude.checkIsEmpty(R.string.mvp_shop_release_address_location_need)) {
             return;
         } else {
-            params.put(location.getKey(), location.getValue());
+            params.put(latitude.getKey(), latitude.getValue());
+        }
+
+        BaseInputParam<String> longitude = getUi().getShopLocationLonParam("longitude");
+        if (longitude.checkIsEmpty(R.string.mvp_shop_release_address_location_need)) {
+            return;
+        } else {
+            params.put(longitude.getKey(), longitude.getValue());
         }
 
         params.put("detailAddress", getUi().getShopDetailAddressParam("detailAddress").getValue().toString());
         params.put("description", getUi().getShopDescriptionParam("description").getValue().toString());
         params.put("remark", getUi().getShopRemarkParam("remark").getValue().toString());
 
-        InputParamBean<String> images = getUi().getShopImagesParam("images");
+        BaseInputParam<String> images = getUi().getShopImagesParam("imgUrls");
         if (images.checkIsEmpty(R.string.mvp_shop_release_photo_image_need)) {
             return;
         } else {

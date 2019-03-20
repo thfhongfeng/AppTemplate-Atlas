@@ -1,9 +1,9 @@
 <resources>
     <string name="mvp_home_title">Business Mvp</string>
 
-    <string name="mvp_share_wei_bo_success">分享成功</string>
-    <string name="mvp_share_wei_bo_cancel">分享取消</string>
-    <string name="mvp_share_wei_bo_fail">分享失败</string>
+    <string name="mvp_share_success">分享成功</string>
+    <string name="mvp_share_cancel">分享取消</string>
+    <string name="mvp_share_fail">分享失败</string>
 
     <string name="mvp_spread">展开</string>
     <string name="mvp_fold">折叠</string>
@@ -40,6 +40,7 @@
     <string name="mvp_travel_note_list_title">Business Mvp Travel Note List</string>
 
     <string name="mvp_travel_note_detail_title">Business Mvp Travel Note Detail</string>
+    <string name="mvp_travel_note_detail_set_out_date">%s出发</string>
 
     <string name="mvp_note_release_title">Business Mvp Travel Note Release</string>
     <string name="mvp_note_release_confirm_menu">确认添加</string>

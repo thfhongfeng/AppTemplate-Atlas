@@ -17,7 +17,7 @@ import com.pine.base.BaseConstants;
 import com.pine.base.access.UiAccessAnnotation;
 import com.pine.base.access.UiAccessType;
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarTextMenuActivity;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.base.component.map.MapSdkManager;
 import com.pine.base.component.uploader.bean.FileUploadBean;
 import com.pine.base.component.uploader.ui.ImageUploadView;
@@ -51,8 +51,8 @@ public class MvpShopReleaseActivity extends
     private SwipeRefreshLayout swipe_refresh_layout;
     private NestedScrollView nested_scroll_view;
     private LinearLayout type_ll, online_date_ll;
-    private EditText name_et, address_detail_et, description_et, remark_et;
-    private TextView type_tv, online_date_tv, contact_tv, address_tv, address_marker_tv;
+    private EditText name_et, address_street_et, description_et, remark_et;
+    private TextView type_tv, online_date_tv, contact_tv, address_district_tv, address_marker_tv;
     private ImageUploadView photo_iuv;
     private InputTextDialog mContactInputDialog;
     private DateSelectDialog mOnLineDateSelectDialog;
@@ -74,9 +74,9 @@ public class MvpShopReleaseActivity extends
         type_tv = findViewById(R.id.type_tv);
         online_date_tv = findViewById(R.id.online_date_tv);
         contact_tv = findViewById(R.id.contact_tv);
-        address_tv = findViewById(R.id.address_tv);
+        address_district_tv = findViewById(R.id.address_district_tv);
         address_marker_tv = findViewById(R.id.address_marker_tv);
-        address_detail_et = findViewById(R.id.address_detail_et);
+        address_street_et = findViewById(R.id.address_street_et);
         description_et = findViewById(R.id.description_et);
         remark_et = findViewById(R.id.remark_et);
         photo_iuv = findViewById(R.id.photo_iuv);
@@ -87,7 +87,7 @@ public class MvpShopReleaseActivity extends
         type_ll.setOnClickListener(this);
         online_date_ll.setOnClickListener(this);
         contact_tv.setOnClickListener(this);
-        address_tv.setOnClickListener(this);
+        address_district_tv.setOnClickListener(this);
         address_marker_tv.setOnClickListener(this);
 
         swipe_refresh_layout.setColorSchemeResources(
@@ -168,6 +168,7 @@ public class MvpShopReleaseActivity extends
                 double latitude = DecimalUtils.format(data.getDoubleExtra("latitude", 0d), 6);
                 double longitude = DecimalUtils.format(data.getDoubleExtra("longitude", 0d), 6);
                 address_marker_tv.setText(latitude + "," + longitude);
+                address_marker_tv.setTag(new double[]{latitude, longitude});
             }
         }
     }
@@ -218,15 +219,15 @@ public class MvpShopReleaseActivity extends
                         });
             }
             mContactInputDialog.show();
-        } else if (v.getId() == R.id.address_tv) {
+        } else if (v.getId() == R.id.address_district_tv) {
             if (mProvinceSelectDialog == null) {
                 mProvinceSelectDialog = DialogUtils.createProvinceSelectDialog(this,
                         new ProvinceSelectDialog.IDialogDateSelected() {
                             @Override
                             public void onSelected(String provinceName, String cityName,
                                                    String districtName, String zipCode) {
-                                address_tv.setText(provinceName + cityName + districtName);
-                                address_tv.setTag(zipCode);
+                                address_district_tv.setText(provinceName + cityName + districtName);
+                                address_district_tv.setTag(zipCode);
                             }
                         });
             }
@@ -243,8 +244,8 @@ public class MvpShopReleaseActivity extends
                     latLng[1] = DecimalUtils.format(latLngStr[1].trim(), 6);
                 }
             }
-            startActivityForResult(MapSdkManager.getInstance().getMapActivityIntent(this,
-                    MapSdkManager.MapType.MAP_TYPE_NORMAL, latLng[0], latLng[1]),
+            startActivityForResult(MapSdkManager.getInstance().getMarkMapActivityIntent(this,
+                    MapSdkManager.MapType.MAP_TYPE_NORMAL, latLng[0], latLng[1], true),
                     REQUEST_CODE_BAIDU_MAP);
         }
     }
@@ -254,87 +255,104 @@ public class MvpShopReleaseActivity extends
     }
 
     @Override
-    public InputParamBean getShopNameParam(String key) {
-        return new InputParamBean(this, key, name_et.getText().toString(),
+    public BaseInputParam getShopNameParam(String key) {
+        return new BaseInputParam(this, key, name_et.getText().toString(),
                 nested_scroll_view, name_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopTypeParam(String key) {
-        return new InputParamBean(this, key,
+    public BaseInputParam getShopTypeParam(String key) {
+        return new BaseInputParam(this, key,
                 type_tv.getTag() == null ? "" : type_tv.getTag().toString(),
                 nested_scroll_view, type_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopTypeNameParam(String key) {
-        return new InputParamBean(this, key, type_tv.getText().toString(),
+    public BaseInputParam getShopTypeNameParam(String key) {
+        return new BaseInputParam(this, key, type_tv.getText().toString(),
                 nested_scroll_view, type_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopOnlineDateParam(String key) {
-        return new InputParamBean(this, key, online_date_tv.getText().toString(),
+    public BaseInputParam getShopOnlineDateParam(String key) {
+        return new BaseInputParam(this, key, online_date_tv.getText().toString(),
                 nested_scroll_view, online_date_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopContactMobileParam(String key) {
-        return new InputParamBean(this, key, contact_tv.getText().toString(),
+    public BaseInputParam getShopContactMobileParam(String key) {
+        return new BaseInputParam(this, key, contact_tv.getText().toString(),
                 nested_scroll_view, contact_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopLocationParam(String key) {
-        return new InputParamBean(this, key, address_marker_tv.getText().toString(),
+    public BaseInputParam getShopAddressParam(String key) {
+        return new BaseInputParam(this, key, address_district_tv.getText().toString(),
+                nested_scroll_view, address_district_tv);
+    }
+
+    @NonNull
+    @Override
+    public BaseInputParam getShopAddressZipCodeParam(String key) {
+        return new BaseInputParam(this,
+                key, address_district_tv.getTag() == null ? "" : address_district_tv.getTag().toString(),
+                nested_scroll_view, address_district_tv);
+    }
+
+    @NonNull
+    @Override
+    public BaseInputParam getShopLocationLonParam(String key) {
+        double[] locationLonLat = (double[]) address_marker_tv.getTag();
+        String lon = "";
+        if (locationLonLat != null && locationLonLat.length == 2) {
+            lon = String.valueOf(locationLonLat[1]);
+        }
+        return new BaseInputParam(this, key, lon,
                 nested_scroll_view, address_marker_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopAddressParam(String key) {
-        return new InputParamBean(this, key, address_tv.getText().toString(),
-                nested_scroll_view, address_tv);
+    public BaseInputParam getShopLocationLatParam(String key) {
+        double[] locationLonLat = (double[]) address_marker_tv.getTag();
+        String lat = "";
+        if (locationLonLat != null && locationLonLat.length == 2) {
+            lat = String.valueOf(locationLonLat[0]);
+        }
+        return new BaseInputParam(this, key, lat,
+                nested_scroll_view, address_marker_tv);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopAddressZipCodeParam(String key) {
-        return new InputParamBean(this,
-                key, address_tv.getTag() == null ? "" : address_tv.getTag().toString(),
-                nested_scroll_view, address_tv);
+    public BaseInputParam getShopDetailAddressParam(String key) {
+        return new BaseInputParam(this, key, address_street_et.getText().toString(),
+                nested_scroll_view, address_street_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopDetailAddressParam(String key) {
-        return new InputParamBean(this, key, address_detail_et.getText().toString(),
-                nested_scroll_view, address_detail_et);
-    }
-
-    @NonNull
-    @Override
-    public InputParamBean getShopDescriptionParam(String key) {
-        return new InputParamBean(this, key, description_et.getText().toString(),
+    public BaseInputParam getShopDescriptionParam(String key) {
+        return new BaseInputParam(this, key, description_et.getText().toString(),
                 nested_scroll_view, description_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopRemarkParam(String key) {
-        return new InputParamBean(this, key, remark_et.getText().toString(),
+    public BaseInputParam getShopRemarkParam(String key) {
+        return new BaseInputParam(this, key, remark_et.getText().toString(),
                 nested_scroll_view, remark_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getShopImagesParam(String key) {
-        return new InputParamBean(this,
+    public BaseInputParam getShopImagesParam(String key) {
+        return new BaseInputParam(this,
                 key, photo_iuv.getNewUploadImageRemoteString(","),
                 nested_scroll_view, photo_iuv);
     }

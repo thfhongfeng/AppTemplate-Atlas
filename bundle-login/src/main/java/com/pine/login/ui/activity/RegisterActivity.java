@@ -8,7 +8,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.pine.base.architecture.mvp.ui.activity.BaseMvpActionBarActivity;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.base.widget.view.PicVerifyCodeImageView;
 import com.pine.login.LoginUrlConstants;
 import com.pine.login.R;
@@ -64,29 +64,29 @@ public class RegisterActivity extends
 
     @NonNull
     @Override
-    public InputParamBean getUserMobileParam(String key) {
-        return new InputParamBean(this, key, mobile_et.getText().toString(),
+    public BaseInputParam getUserMobileParam(String key) {
+        return new BaseInputParam(this, key, mobile_et.getText().toString(),
                 scroll_view, mobile_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getVerificationCodeParam(String key) {
-        return new InputParamBean(this, key, verify_code_et.getText().toString(),
+    public BaseInputParam getVerificationCodeParam(String key) {
+        return new BaseInputParam(this, key, verify_code_et.getText().toString(),
                 scroll_view, verify_code_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getUserPasswordParam(String key) {
-        return new InputParamBean(this, key, password_et.getText().toString(),
+    public BaseInputParam getUserPasswordParam(String key) {
+        return new BaseInputParam(this, key, password_et.getText().toString(),
                 scroll_view, password_et);
     }
 
     @NonNull
     @Override
-    public InputParamBean getUserConfirmPasswordParam(String key) {
-        return new InputParamBean(this, key, confirm_pwd_et.getText().toString(),
+    public BaseInputParam getUserConfirmPasswordParam(String key) {
+        return new BaseInputParam(this, key, confirm_pwd_et.getText().toString(),
                 scroll_view, confirm_pwd_et);
     }
 

@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.pine.base.BaseApplication;
 import com.pine.base.architecture.mvp.presenter.BasePresenter;
-import com.pine.base.bean.InputParamBean;
+import com.pine.base.bean.BaseInputParam;
 import com.pine.login.LoginConstants;
 import com.pine.login.R;
 import com.pine.login.contract.ILoginContract;
@@ -20,13 +20,8 @@ import com.pine.login.ui.activity.RegisterActivity;
 public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements ILoginContract.Presenter {
 
     @Override
-    public boolean parseInitData(Bundle bundle) {
+    public boolean parseIntentData(Bundle bundle) {
         return false;
-    }
-
-    @Override
-    public void onUiState(BasePresenter.UiState state) {
-
     }
 
     @Override
@@ -34,8 +29,8 @@ public class LoginPresenter extends BasePresenter<ILoginContract.Ui> implements 
         if (BaseApplication.isLogin() || mIsLoadProcessing) {
             return;
         }
-        InputParamBean<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
-        InputParamBean<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
+        BaseInputParam<String> mobileBean = getUi().getUserMobileParam(LoginConstants.LOGIN_MOBILE);
+        BaseInputParam<String> pwdBean = getUi().getUserPasswordParam(LoginConstants.LOGIN_PASSWORD);
         if (mobileBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 pwdBean.checkIsEmpty(R.string.login_input_empty_msg) ||
                 !mobileBean.checkIsPhone(R.string.login_mobile_incorrect_format)) {
