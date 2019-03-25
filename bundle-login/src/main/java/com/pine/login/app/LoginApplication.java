@@ -28,6 +28,6 @@ public class LoginApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        HttpRequestManager.setGlobalResponseInterceptor(new LoginResponseInterceptor());
+        HttpRequestManager.addGlobalResponseInterceptor(new LoginResponseInterceptor());
     }
 }

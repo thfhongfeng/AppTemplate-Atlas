@@ -64,14 +64,14 @@ public class HttpRequestManager {
         mErrorRequestMap = new HashMap<>();
     }
 
-    public static void setGlobalResponseInterceptor(IHttpResponseInterceptor interceptor) {
+    public static void addGlobalResponseInterceptor(IHttpResponseInterceptor interceptor) {
         if (!mResponseInterceptorList.contains(interceptor)) {
             mResponseInterceptorList.add(interceptor);
             LogUtils.releaseLog(TAG, "Global response interceptor: " + interceptor.getClass() + " was added");
         }
     }
 
-    public static void setGlobalRequestInterceptor(IHttpRequestInterceptor interceptor) {
+    public static void addGlobalRequestInterceptor(IHttpRequestInterceptor interceptor) {
         if (!mRequestInterceptorList.contains(interceptor)) {
             mRequestInterceptorList.add(interceptor);
             LogUtils.releaseLog(TAG, "Global request interceptor: " + interceptor.getClass() + " was added");
